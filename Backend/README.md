@@ -113,7 +113,7 @@ REQUEST: View Device Consumption
 }
 ```
 
-RESPONSE: view Device Consumption 
+RESPONSE: View Device Consumption 
     
   * Successful
 ```javascript
@@ -204,7 +204,7 @@ RESPONSE: View Generators
 ```javascript
 {
   "success":true,
-  "data":[{"generator_name":"Solar Power System","generator_type":"Solar Power","generator_state":true},...,                                      {"generator_name":"Diesel Generator","generator_type":"Standby Generator","generator_state":false}]
+  "data":[{"generator_name":"Solar Power System","generator_type":"Solar Power","generator_state":true},...,{"generator_name":"Diesel Generator","generator_type":"Standby Generator","generator_state":false}]
 }
 ```
 
@@ -225,7 +225,7 @@ REQUEST: View Generator Generation
 }
 ```
 
-RESPONSE: view Generator Generation 
+RESPONSE: View Generator Generation 
     
   * Successful
 ```javascript
