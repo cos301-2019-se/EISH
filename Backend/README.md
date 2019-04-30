@@ -1,4 +1,4 @@
-# COS301-Phase3
+# COS301-Capstone Project Phase 1
 
 ## API Documentation
     
@@ -64,7 +64,7 @@ RESPONSE: View Devices
 ```javascript
 {
   "success":true,
-  "data":[{"device_name":"Fridge","device_type":"Fridge","device_state":true},...,                                      {"device_name":"Bedroom Light","device_type":"Light","device_state":false}]
+  "data":[{"device_name":"Fridge","device_type":"Fridge","device_state":true},...,{"device_name":"Bedroom Light","device_type":"Light","device_state":false}]
 }
 ```
 
@@ -158,7 +158,7 @@ RESPONSE: Total Home Consumption
   }
 ```
 
-#Implement functionalities below if there is time.
+### Implement functionalities below if there is time.
 
 REQUEST: Add Generation Device
 ```javascript
