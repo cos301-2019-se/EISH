@@ -8,15 +8,15 @@
 
 | Endpoint  | API              | Method 	|Option Parameter| Parameters  | Response   | 
 |:--------: |:------------     | :--:  	  | ----------- |-------------|----------|
-| /api/devices         |Add Device   | POST   	| add_device      |option: string <br/> devicename: string <br/> publish_topic: string <br/> subscribe_topic: string <br/> max_watts:  int <br/> device_type: string <br/>| success: boolean <br> data: string |
-| /api/devices          |View Device | POST     | view_devices  |option: string <br/> devicename: string | status: string <br> message: string|
-|  /api/devices           |Control Device | POST   	| control_device  |option: string <br/> devicename: string | status: string <br> message: string  |
-|  /api/devices           |View Device Consumption         | POST   	| device_consumption    |option: string <br/> devicename: string | email: string <br> name: string <br> surname: string  |
-| /api/devices            |View Total Home Consumption         | POST   	| total_home_consumption    |option: string <br/> clientId: string | email: string <br> name: string <br> surname: string  |
-|  /api/devices           |Add Generator Device        | POST   	| add_generator    |option: string <br/> devicename: string | email: string <br> name: string <br> surname: string  |
-|  /api/devices           |View Generators       | POST   	|  view_generators  |option: string <br/> devicename: string | email: string <br> name: string <br> surname: string  |
-|  /api/devices           |View Generator Generation       | POST   	| generator_generation    |option: string <br/> devicename: string | email: string <br> name: string <br> surname: string  |
-|  /api/devices          |Total Home Generation       | POST   	| total_home_generation    |option: string <br/> devicename: string | email: string <br> name: string <br> surname: string  |
+| /api/devices         |Add Device   | POST   	| add_device      |option: string <br/> device_name: string <br/> publish_topic: string <br/> subscribe_topic: string <br/> max_watts:  int <br/> min_watts: <br/> device_type: string <br/>| success: boolean <br/> data: string |
+| /api/devices          |View Device | POST     | view_devices  |option: string  | success: boolean <br> data: array of objects|
+|  /api/devices           |Control Device | POST   	| control_device  |option: string <br/> device_name: string <br/> device_state: boolean| success: boolean <br/> data: object  |
+|  /api/devices           |View Device Consumption         | POST   	| device_consumption    |option: string <br/> device_name: string <br/> start_date: timestamp <br/> end_date: timestamp | success: boolean <br> data: array of objects|
+| /api/devices            |View Total Home Consumption         | POST   	| total_home_consumption    |option: string <br/>start_date: timestamp <br/> end_date: timestamp  | success: boolean <br> data: array of objects |
+|  /api/generators           |Add Generator Device        | POST   	| add_generator    |option: string <br/> device_name: string <br/> publish_topic: string <br/> subscribe_topic: string <br/> max_watts:  int <br/> min_watts: <br/> device_type: string <br/> |success: boolean <br/> data: string |
+|  /api/generators           |View Generators       | POST   	|  view_generators  |option: string <br/> device_name: string |  success: boolean <br> data: array of objects |
+|  /api/generators          |View Generator Generation       | POST   	| generator_generation    |option: string <br/> device_name: string <br/> start_date: timestamp <br/> end_date: timestamp | success: boolean <br> data: array of objects|
+|  /api/devices          |Total Home Generation       | POST   	| total_home_generation    |option: string <br/>start_date: timestamp <br/> end_date: timestamp  | success: boolean <br> data: array of objects |
 
 ### Example Usage
 
