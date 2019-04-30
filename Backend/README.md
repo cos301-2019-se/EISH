@@ -50,3 +50,222 @@ RESPONSE: Add Device
     "data":"Failed to insert Fridge."
   }
 ```
+
+REQUEST: View Devices
+```javascript
+{
+    "option":"view_devices",
+}
+```
+
+RESPONSE: View Devices 
+    
+  * Successful
+```javascript
+{
+  "success":true,
+  "data":[{"device_name":"Fridge","device_type":"Fridge","device_state":true},...,                                      {"device_name":"Bedroom Light","device_type":"Light","device_state":false}]
+}
+```
+
+  * Failed
+```javascript
+  {
+    "success":false,
+    "data":"Failed to retrieve devices."
+  }
+```
+
+REQUEST: Control Device
+```javascript
+{
+    "option":"control_device",
+    "device_name":"Fridge",
+    "device_state":false
+}
+```
+
+RESPONSE: Control Device 
+    
+  * Successful
+```javascript
+{
+  "success":true,
+  "data":{"device_name":"Fridge", "device_state":false}
+}
+```
+
+  * Failed
+```javascript
+  {
+    "success":false,
+    "data":"Couldn't turn off Fridge OR Fridge not found."
+  }
+```
+
+REQUEST: View Device Consumption
+```javascript
+{
+    "option":"device_consumption",
+    "device_name":"Fridge",
+    "start_date":15321484654,
+    "end_date":18548484654
+}
+```
+
+RESPONSE: view Device Consumption 
+    
+  * Successful
+```javascript
+{
+  "success":true,
+  "data":[{"date_time":15321484654, "consumption":150},...,{"date_time":18548484654, "consumption":181}]
+}
+```
+
+  * Failed
+```javascript
+  {
+    "success":false,
+    "data":"Consumption data between 15321484654 and 18548484654 not found."
+  }
+```
+
+REQUEST: Total Home Consumption
+```javascript
+{
+    "option":"total_home_consumption",
+    "start_date":15321484654,
+    "end_date":18548484654
+}
+```
+
+RESPONSE: Total Home Consumption 
+    
+  * Successful
+```javascript
+{
+  "success":true,
+  "data":[{"date_time":15321484654, "consumption":1680},...,{"date_time":18548484654, "consumption":1912}]
+}
+```
+
+  * Failed
+```javascript
+  {
+    "success":false,
+    "data":"Consumption data between 15321484654 and 18548484654 not found."
+  }
+```
+
+#Implement functionalities below if there is time.
+
+REQUEST: Add Generation Device
+```javascript
+{
+    "option":"add_generator",
+    "generator_name":"Solar Power System",
+    "publish_topic":"stat/solar-power/POWER",
+    "subscribe_topic":"cmnd/solar-power/Power",
+    "min_capacity_watt":1384,
+    "max_capacity_watt":3254,
+    "generator_type":"Solar Power"
+}
+```
+
+RESPONSE: Add Generation Device 
+    
+  * Successful
+```javascript
+{
+  "success":true,
+  "data":"Solar Power System successfully inserted."
+}
+```
+
+  * Failed
+```javascript
+  {
+    "success":false,
+    "data":"Failed to insert Solar Power System."
+  }
+```
+
+REQUEST: View Generators
+```javascript
+{
+    "option":"view_generators",
+}
+```
+
+RESPONSE: View Generators 
+    
+  * Successful
+```javascript
+{
+  "success":true,
+  "data":[{"generator_name":"Solar Power System","generator_type":"Solar Power","generator_state":true},...,                                      {"generator_name":"Diesel Generator","generator_type":"Standby Generator","generator_state":false}]
+}
+```
+
+  * Failed
+```javascript
+  {
+    "success":false,
+    "data":"Failed to retrieve generators."
+  }
+```
+REQUEST: View Generator Generation
+```javascript
+{
+    "option":"generator_generation",
+    "generator_name":"Solar Power System",
+    "start_date":15321484654,
+    "end_date":18548484654
+}
+```
+
+RESPONSE: view Generator Generation 
+    
+  * Successful
+```javascript
+{
+  "success":true,
+  "data":[{"date_time":15321484654, "generation":240},...,{"date_time":18548484654, "generation":181}]
+}
+```
+
+  * Failed
+```javascript
+  {
+    "success":false,
+    "data":"Generation data between 15321484654 and 18548484654 not found."
+  }
+```
+
+REQUEST: Total Home Generation
+```javascript
+{
+    "option":"total_home_consumption",
+    "start_date":15321484654,
+    "end_date":18548484654
+}
+```
+
+RESPONSE: Total Home Generation 
+    
+  * Successful
+```javascript
+{
+  "success":true,
+  "data":[{"date_time":15321484654, "generation":2640},...,{"date_time":18548484654, "generation":1713}]
+}
+```
+
+  * Failed
+```javascript
+  {
+    "success":false,
+    "data":"Generation data between 15321484654 and 18548484654 not found."
+  }
+```
