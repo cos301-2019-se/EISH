@@ -7,15 +7,15 @@
 
 | Endpoint  | API              | Method 	|Option Parameter| Parameters  | Response   | 
 |:--------: |:------------     | :--:  	  | ----------- |-------------|----------|
-| /         |Add Device   | POST   	| insert      |option: string <br/> name: string <br/> surname: string <br/> email: string <br/> phoneNumber:  string <br/> address: string <br/>| status: string <br> message: string |
-|           |View Device | POST     | deactivate  |option: string <br/> clientId: string | status: string <br> message: string|
-|           |Control Device | POST   	| reactivate  |option: string <br/> clientId: string | status: string <br> message: string  |
-|           |View Device Consumption         | POST   	| getEmail    |option: string <br/> clientId: string | email: string <br> name: string <br> surname: string  |
-|           |View Total Home Consumption         | POST   	| getEmail    |option: string <br/> clientId: string | email: string <br> name: string <br> surname: string  |
-|           |Add Generator Device        | POST   	| getEmail    |option: string <br/> clientId: string | email: string <br> name: string <br> surname: string  |
-|           |View Generators       | POST   	| getEmail    |option: string <br/> clientId: string | email: string <br> name: string <br> surname: string  |
-|           |View Generator Generation       | POST   	| getEmail    |option: string <br/> clientId: string | email: string <br> name: string <br> surname: string  |
-|           |Total Home Generation       | POST   	| getEmail    |option: string <br/> clientId: string | email: string <br> name: string <br> surname: string  |
+| /         |Add Device   | POST   	| add_device      |option: string <br/> name: string <br/> surname: string <br/> email: string <br/> phoneNumber:  string <br/> address: string <br/>| status: string <br> message: string |
+|           |View Device | POST     | view_devices  |option: string <br/> clientId: string | status: string <br> message: string|
+|           |Control Device | POST   	| control_device  |option: string <br/> clientId: string | status: string <br> message: string  |
+|           |View Device Consumption         | POST   	| device_consumption    |option: string <br/> clientId: string | email: string <br> name: string <br> surname: string  |
+|           |View Total Home Consumption         | POST   	| total_home_consumption    |option: string <br/> clientId: string | email: string <br> name: string <br> surname: string  |
+|           |Add Generator Device        | POST   	| add_generator    |option: string <br/> clientId: string | email: string <br> name: string <br> surname: string  |
+|           |View Generators       | POST   	|  view_generators  |option: string <br/> clientId: string | email: string <br> name: string <br> surname: string  |
+|           |View Generator Generation       | POST   	| generator_generation    |option: string <br/> clientId: string | email: string <br> name: string <br> surname: string  |
+|           |Total Home Generation       | POST   	| total_home_generation    |option: string <br/> clientId: string | email: string <br> name: string <br> surname: string  |
 
 
 ### Example Usage
