@@ -18,9 +18,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Device{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "device_id", columnDefinition ="serial" ,updatable = false,nullable = false )
-    private int device_id;
+    private long device_id;
 
     @Column(name="device_name", columnDefinition = "text", updatable = true,nullable = false)
     private String device_name;
