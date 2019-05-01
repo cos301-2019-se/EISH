@@ -1,0 +1,34 @@
+
+<div class="container pages pb5">
+
+  <div class="col-sm-5">
+      <h4>Active Devices</h4>
+    <!-- view device list and manage -->
+    <div *ngFor="let device of deviceList">
+      <ul> 
+        <li  *ngIf="device.device_state == true" ngClick="openModal()">
+           <a> {{device.device_name}}</a>
+        </li>
+      </ul>
+    </div>   
+  </div>
+  
+  <div class="col-sm-5">
+    <!-- view device list and manage -->
+    <h4>Off Devices</h4>
+    <div *ngFor="let device of deviceList">
+      <ul> 
+        <li *ngIf="device.device_state == false">
+            {{device.device_name}}
+        </li>
+      </ul>
+    </div>   
+  </div>
+
+  <div class="col-sm-2">
+    <!-- add device -->
+    <app-modal> </app-modal>
+
+  </div>
+
+</div>
