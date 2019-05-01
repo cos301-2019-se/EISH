@@ -20,7 +20,7 @@ public class Device{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "device_id", columnDefinition ="serial" ,updatable = false,nullable = false )
-    private long device_id;
+    private int device_id;
 
     @Column(name="device_name", columnDefinition = "text", updatable = true,nullable = false)
     private String device_name;
