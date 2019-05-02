@@ -25,7 +25,7 @@ public class Controller {
     @Autowired
     ObjectMapper mapper;
 
-    private List<MqttDevice> mqttDevices;
+    //private List<MqttDevice> mqttDevices;
 
     public Controller() {
         //initialize mqtt devices with data in the database, such as name, topics, ect...

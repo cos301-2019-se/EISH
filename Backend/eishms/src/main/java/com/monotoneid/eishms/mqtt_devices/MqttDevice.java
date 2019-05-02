@@ -1,6 +1,16 @@
 package com.monotoneid.eishms.mqtt_devices;
 
+import java.util.UUID;
+
+import com.monotoneid.eishms.model.Device;
+
+import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttToken;
 
 
 //If you wanna code this resources are
@@ -14,14 +24,36 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 //Whoever you are I believe in you!!! 
 
 public class MqttDevice {
-    private String device_name;
-    private String publish_topic;
-    private String subscribe_topic;
-    private boolean device_state;
-    private String clientId; 
-    private MqttAsyncClient asyncClient;
+    private Device device;
+    private String asyncClientId; 
+    private IMqttAsyncClient asyncClient;
+    private IMqttToken connectToken; 
     //private DeviceConsumptionRepository dcr; //take as pointer from controller and store here! via constructor
-    
+    public MqttDevice(Device dev) {
+        this.device = dev;
+        asyncClientId = UUID.randomUUID().toString();
+        try {
+            asyncClient = new MqttAsyncClient("tcp://127.0.0.1:1883", asyncClientId);
+            MqttConnectOptions options = new MqttConnectOptions();
+            this.connectToken = asyncClient.connect(options);
+            this.connectToken.setActionCallback(new ConnectionCallback());
+        } catch(MqttException e) {
+            e.printStackTrace();
+        }
+        
+    }
+
+    public class ConnectionCallback implements IMqttActionListener {
+        @Override
+        public void onFailure(IMqttToken asyncActionToken, java.lang.Throwable exception) {
+
+        }
+
+        @Override
+        public void onSuccess(IMqttToken asyncActionToken) {
+            
+        }
+    }
 
     //check actual device state, if on start monitoring/subscribe power usage and enter in database
     //(so subscribe callback must contain logic to write to database!)
@@ -31,6 +63,5 @@ public class MqttDevice {
     //once the device has completed the action notify frontend
 
     //monitor device state if state changes notify frontend via websockests
-
 
 }
