@@ -21,6 +21,43 @@ function closeModal() {
 	backModal.style.display = 'none';		
 }
 
+var buttonCreate = document.getElementById("createDevice");
+
+buttonCreate.addEventListener('click', () => {
+	sendDevice();
+});
+
+var xhr = new XMLHttpRequest();
+
+function sendDevice(){
+	var info = null;
+    
+	var deviceName = document.getElementById('devName');
+	var devPublish = document.getElementById('devPubTopic');
+	var devSubscribe = document.getElementById('devSubTopic');
+	var devMinWatt = document.getElementById('devName');
+	var devMaxWatt = document.getElementById('devName');
+	info = {device_name:deviceName.value,
+			device_publish: devPublish.value,
+			device_subscribe: devSubscribe.value,
+			device_minWatt: devMinWatt.value,
+			device_maxWatt: devMaxWatt.value};
+	var myObj = JSON.stringify(info);
+
+	xhr.open('POST', 'http://localhost:3000');
+	xhr.setRequestHeader('Content-Type', 'application/json');
+	xhr.onreadystatechange = function() {
+    	if (xhr.status == 200) {
+        	alert('Device received ' + xhr.responseText);
+    	}
+   		else if (xhr.status !== 200) {
+        	alert('Request failed.  Returned status of ' + xhr.status);
+    	}
+	};
+	xhr.send(myObj);
+}
+
+
 function main() {
 	var controls = [document.getElementById('crtSolarBtn'), 
 					document.getElementById('crtBatteryBtn'), 

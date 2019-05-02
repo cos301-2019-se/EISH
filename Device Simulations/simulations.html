@@ -3,6 +3,7 @@
 <head>
 	<title>Power Simulations</title>
 	<link rel="stylesheet" type="text/css" href="./simulations.css">
+	
 </head>
 <body>
 	<div style="display: none" class="modal">
@@ -11,6 +12,22 @@
 			<div class="top-bar">
 				<div class="bar-title"><p>Create Device</p></div>
 				<div class="close-btn" id="closeDevice"></div>
+				<div class="formData">
+					<form >
+						<label for="deviceName">Device Name</label><br>
+						<input id="devName" type="text" name="deviceName"><br><br>
+						<label id="devPubTopic" for="pubTopic">Publish Topic</label><br>
+						<input type="text" name="pubTopic"><br><br>
+						<label id="devSubTopic" for="subTopic">Subscribe Topic</label><br>
+						<input type="text" name="subTopic"><br><br>
+						<label id="devMinWatt" for="minWatt">Min Watt</label><br>
+						<input type="text" name="minWatt"><br><br>
+						<label id="devMaxWatt" for="maxWatt">Max Watt</label><br>
+						<input type="text" name="maxWatt"><br>
+						<br>
+						<button id="createDevice" >Create</button>
+					</form>
+				</div>
 			</div>
 		</div>
 		<div style="display: none" class="form-solar">
@@ -23,15 +40,15 @@
 			<div class="top-bar">
 				<div class="bar-title"><p>Create Battery</p></div>
 				<div class="close-btn" id="closeBattery"></div>
-				<div class="battery-form">
+				<div class="formData">
 					<form>
-						<label for="battery_name">Battery Name:</label>
-						<input type="text" name="battery_name"><br>
-						<label for="storage_capacity">Storage Capacity:</label>
-						<input type="text" name="storage_capacity"><br>
-						<label for="output_capacity">Output Capacity</label>
-						<input type="text" name="output_capacity">
-
+						<label for="battery_name">Battery Name:</label><br>
+						<input type="text" name="battery_name"><br><br>
+						<label for="storage_capacity">Storage Capacity:</label><br>
+						<input type="text" name="storage_capacity"><br><br>
+						<label for="output_capacity">Output Capacity</label><br>
+						<input type="text" name="output_capacity"><br><br>
+						<button id="createDevice">Create</button>
 					</form>
 				</div>
 			</div>
@@ -85,6 +102,6 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript" src="simulations.js"></script>
+	<script type="text/javascript" src="simulations.js"></script>	
 </body>
 </html>
