@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Power Simulations</title>
+	<link rel="stylesheet" type="text/css" href="./simulations.css">
+</head>
+<body>
+	<div style="display: none" class="modal">
+		<div class="modal-space"></div>
+		<div style="display: none" class="form-device">
+			<div class="top-bar">
+				<div class="bar-title"><p>Create Device</p></div>
+				<div class="close-btn" id="closeDevice"></div>
+			</div>
+		</div>
+		<div style="display: none" class="form-solar">
+			<div class="top-bar">
+				<div class="bar-title"><p>Create Solar Power System</p></div>
+				<div class="close-btn" id="closeSolar"></div>
+			</div>
+		</div>
+		<div style="display: none" class="form-battery">
+			<div class="top-bar">
+				<div class="bar-title"><p>Create Battery</p></div>
+				<div class="close-btn" id="closeBattery"></div>
+				<div class="battery-form">
+					<form>
+						<label for="battery_name">Battery Name:</label>
+						<input type="text" name="battery_name"><br>
+						<label for="storage_capacity">Storage Capacity:</label>
+						<input type="text" name="storage_capacity"><br>
+						<label for="output_capacity">Output Capacity</label>
+						<input type="text" name="output_capacity">
+
+					</form>
+				</div>
+			</div>
+		</div>
+		<div style="display: none" class="form-config">
+			<div class="top-bar">
+				<div class="bar-title"><p>Configure WiFi Relay</p></div>
+				<div class="close-btn" id="closeConfig"></div>
+			</div>
+		</div>
+	</div>
+	<div class="site-header">
+		<h1>Power Simualtions</h1>
+	</div>
+	<div class="toolbox">
+		<div class="cmd-btn" id="crtSolarBtn">
+			<p>Create Solar Power</p>	
+		</div>
+		<div class="cmd-btn" id="crtBatteryBtn">
+			<p>Create Battery</p>	
+		</div>
+		<div class="cmd-btn" id="crtDeviceBtn">
+			<p>Create Device</p>	
+		</div>
+	</div>
+	<div class="device-workspace" id="workspace">
+		<div class="device-row">
+			<div class="device-box">
+				<div class="device-image"><img src="img/hairdryer.png" height="100" width="100"></div>
+				<div class="device-name"><p>Hairdryer</p></div>
+			</div>
+			<div class="device-box">
+				<div class="device-image"><img src="img/iron.png" height="100" width="100"></div>
+				<div class="device-name"><p>Iron</p></div>
+			</div>
+			<div class="device-box">
+				<div class="device-image"><img src="img/stove.png" height="100" width="100"></div>
+				<div class="device-name"><p>Stove</p></div>
+			</div>
+			<div class="device-box">
+				<div class="device-image"><img src="img/refrigerator.png" height="100" width="100"></div>
+				<div class="device-name"><p>Refrigerator</p></div>
+			</div>
+			<div class="device-box">
+				<div class="device-image"><img src="img/printer.png" height="100" width="100"></div>
+				<div class="device-name"><p>Printer</p></div>
+			</div>
+			<div class="device-box">
+				<div class="device-image"><img src="img/alarm-clock.png" height="100" width="100"></div>
+				<div class="device-name"><p>Alarm Clock</p></div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="simulations.js"></script>
+</body>
+</html>
