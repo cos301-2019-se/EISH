@@ -7,10 +7,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.monotoneid.eishms.model.Device;
 import com.monotoneid.eishms.model.DeviceRequestBody;
+import com.monotoneid.eishms.mqtt_devices.MqttDevice;
 import com.monotoneid.eishms.repository.DevicesRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,17 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class Controller {
     @Autowired
     private DevicesRepository devicesRepository;
-    private int number;
+    
     @Autowired
     ObjectMapper mapper;
 
-    public Controller() {
-        number = 2;
-    }
+    private List<MqttDevice> mqttDevices;
 
-    @GetMapping
-    public String getNumber() {
-        return "Mr KK your number is " + Integer.toString(this.number);
+    public Controller() {
+        //initialize mqtt devices with data in the database, such as name, topics, ect...
     }
 
     @PostMapping("/devices")
@@ -42,7 +39,7 @@ public class Controller {
         } else  if (drb.getOption().matches("view_devices")) {
             objectNode = viewDevices();
         } else if (drb.getOption().matches("control_device")) {
-
+            //find the correct device in mqttDevices and call the method that controls the physical device
         } else if (drb.getOption().matches("device_consumption")) {
 
         } else if (drb.getOption().matches("device_consumption")) {
@@ -52,17 +49,6 @@ public class Controller {
         }
         return objectNode;
     }
-
-    // @PostMapping("/devices")
-    // public ObjectNode postRequest(@RequestBody DeviceRequestBody drb) {
-    //     ArrayNode aa = mapper.createArrayNode();
-    //     ObjectNode objectNode = mapper.createObjectNode();
-    //     if (drb.getOption().matches("add_device")) {
-    //         objectNode.put("success", true);
-    //         objectNode.put("data", aa);
-    //     }
-    //     return objectNode;
-    // }
 
     public ObjectNode addDevice(String device_name, String publish_topic, String subscribe_topic, int max_watt, int min_watt, String device_type, boolean device_state) {
         ObjectNode objectNode = mapper.createObjectNode();
