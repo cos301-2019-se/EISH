@@ -13,18 +13,22 @@ public class DeviceRequestBody {
     private boolean device_state;
     private long start_date;
     private long end_date;
-
+    
     public DeviceRequestBody(@JsonProperty("option") String o, @JsonProperty("device_name") String dn,
                             @JsonProperty("publish_topic") String pt, @JsonProperty("subscribe_topic") String st,
                             @JsonProperty("max_watt") int max, @JsonProperty("min_watt") int min,
-                            @JsonProperty("device_type") String dt) {
+                            @JsonProperty("device_type") String dt, @JsonProperty("start_date") long sd, 
+                            @JsonProperty("end_date") long ed, @JsonProperty("device_state") boolean ds) {
         this.option = o;
         this.device_name = dn;
         this.publish_topic = pt;
         this.subscribe_topic = st;
         this.max_watt = max;
         this.min_watt = min;
-        this.device_type = dt;                        
+        this.device_type = dt;
+        this.start_date = sd;
+        this.end_date = ed;    
+        this.device_state = ds;                    
     }
 
     public String getOption() {
@@ -53,5 +57,17 @@ public class DeviceRequestBody {
 
     public String getDeviceType() {
         return this.device_type;
+    }
+
+    public boolean getDeviceState() {
+        return this.device_state;
+    }
+
+    public long getStartDate() {
+        return this.start_date;
+    }
+
+    public long getEndDate() {
+        return this.end_date;
     }
 }
