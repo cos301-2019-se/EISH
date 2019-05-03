@@ -16,9 +16,9 @@
 2. Add your feature
 3. Commit
 4. Checkout into developmenrt ```git checkout development```
-5. ```git pull origin development```
+5. Pull the development branch ```git pull origin development```
 6. Checkout into the specific branch: e.g ```git checkout backend```
-8. ```git merge development```
+8. Merge with development ```git merge development```
 9. Resolve your merge conflicts
 10. Git push origin specific branch: e.g ```git push origin backend```
 11. Create a pull request on github into **development**
