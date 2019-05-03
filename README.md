@@ -42,7 +42,7 @@
 |**About:**| I know what I want in life and what to do to get it. I&#39;m determined to succeed in all that I do. Aware of my weaknesses, but very much willing to make full use of my strengths. Confident and Honest|
 |**Position:** |Bachelor of Information Technology Student|
 |**Interests:** |Overall Computer Security, Hacking, IoT,  Football|
-|**Skills:**|Java, C++, C#, JavaScript, TypeScript,PHP, SQL, NodeJS, Web development, Fortinet (NSE level 1 and 2)|
+|**Skills:**|Java, C++, C#, JavaScript, TypeScript,PHP, SQL, NodeJS, Web development, Fortinet (NSE level 1, 2 and 3)|
 
 |Team Member | Details | 
 | :---         | :---         |    
