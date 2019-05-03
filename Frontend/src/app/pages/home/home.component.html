@@ -1,0 +1,25 @@
+<div class="container pages pb5">
+    <div class="class row">
+        <div class="col-sm-4">
+            total generation and total consumption
+        </div>
+        <div class="col-sm-4">
+            <button type="button" class="btn btn-light" routerLink="/devices">Manage Devices</button>
+            <ul> 
+                <li *ngFor="let device of deviceList">
+                    {{device.device_name}}
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-4">
+                <button type="button" class="btn btn-light" routerLink="/generators">Manage Devices</button>
+            <ul> 
+                <li *ngFor="let device of generatorList">
+                    {{device.generator_name}}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
