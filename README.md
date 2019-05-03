@@ -18,10 +18,10 @@
 4. Checkout into developmenrt ```git checkout development```
 5. Pull the development branch ```git pull origin development```
 6. Checkout into the specific branch: e.g ```git checkout backend```
-8. Merge with development ```git merge development```
-9. Resolve your merge conflicts
-10. Git push origin specific branch: e.g ```git push origin backend```
-11. Create a pull request on github into **development**
+7. Merge with development ```git merge development```
+8. Resolve your merge conflicts
+9. Git push origin specific branch: e.g ```git push origin backend```
+10. Create a pull request on github into **development**
 
 ## Team Members
 
