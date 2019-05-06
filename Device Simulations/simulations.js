@@ -1,5 +1,7 @@
 // Variable Defenitions
 var openedModal = null;
+//var RowInformation = {rank: 0, name: '', numberOfChildren: 6};
+var availableRows = [];
 
 /* Function Defenitions Section */
 function openModal(modalClass) {
@@ -21,40 +23,136 @@ function closeModal() {
 	backModal.style.display = 'none';		
 }
 
-var buttonCreate = document.getElementById("createDevice");
+function addRow() {
+	var rRank = availableRows.length;
+	var rName = 'deviceRow' + availableRows.length;
+	var rNumberOfChildren = 0;
+	availableRows.push({rank: rRank, name: rName, numberOfChildren: rNumberOfChildren});
 
-buttonCreate.addEventListener('click', () => {
-	sendDevice();
-});
+	var workspace = document.getElementById('workspace');
+	var newRow = document.createElement('div');
+	newRow.id = rName;
+	newRow.className = 'device-row';
+	workspace.appendChild(newRow);
+}
 
-var xhr = new XMLHttpRequest();
+function deviceIcon(deviceType) {
+	return 'img/'+deviceType+'.png';
+}
 
-function sendDevice(){
-	var info = null;
-    
-	var deviceName = document.getElementById('devName');
-	var devPublish = document.getElementById('devPubTopic');
-	var devSubscribe = document.getElementById('devSubTopic');
-	var devMinWatt = document.getElementById('devName');
-	var devMaxWatt = document.getElementById('devName');
-	info = {device_name:deviceName.value,
-			device_publish: devPublish.value,
-			device_subscribe: devSubscribe.value,
-			device_minWatt: devMinWatt.value,
-			device_maxWatt: devMaxWatt.value};
-	var myObj = JSON.stringify(info);
+function getAvailableRow() {
+	for (var i = 0; i < availableRows.length; i++)
+		if (availableRows[i].numberOfChildren < 6)
+			return availableRows[i];
 
-	xhr.open('POST', 'http://localhost:3000');
-	xhr.setRequestHeader('Content-Type', 'application/json');
-	xhr.onreadystatechange = function() {
-    	if (xhr.status == 200) {
-        	alert('Device received ' + xhr.responseText);
-    	}
-   		else if (xhr.status !== 200) {
-        	alert('Request failed.  Returned status of ' + xhr.status);
-    	}
-	};
-	xhr.send(myObj);
+	addRow();
+	return availableRows[availableRows.length-1];		
+}
+
+function addDeviceBox(type, deviceInfo) {
+	var currentRow = getAvailableRow();
+	var boxRow = document.getElementById(currentRow.name);
+	
+	var newBox = document.createElement('div');
+	newBox.className = 'device-box';
+	
+	var powerStateBox = document.createElement('div');
+	powerStateBox.className = 'device-name';
+	
+	var powerStateLabel = document.createElement('p');
+	powerStateLabel.innerHTML = deviceInfo.deviceState;
+
+	powerStateBox.appendChild(powerStateLabel);
+
+	var newDevImg = document.createElement('div');
+	newDevImg.className = 'device-image';
+	
+	var newImg = document.createElement('img');
+	newImg.src = deviceIcon(deviceInfo.deviceType);
+	newImg.height = '80';
+	newImg.width = '80';
+
+	newDevImg.appendChild(newImg);
+	
+	var newDevName = document.createElement('div');
+	newDevName.className = 'device-name';
+	
+	var newName = document.createElement('p');
+	newName.innerHTML = deviceInfo.deviceName;
+
+	newDevName.appendChild(newName);
+
+	newBox.appendChild(powerStateBox);
+	newBox.appendChild(newDevImg);
+	newBox.appendChild(newDevName);
+
+	//Extra things depending on the type
+	if (type == "create solar power") {
+
+	} else if (type == "create battery") {
+
+	} else if (type == "create device") {
+		var powerLabel = document.createElement('div');
+		powerLabel.className = 'device-name';
+	
+		var powerUsage = document.createElement('p');
+		powerUsage.innerHTML = 'Power Usage';
+
+		var powerUse = document.createElement('p');
+		powerUse.id = "powerUsage"; //remember to update with websocket
+		powerUse.innerHTML = '0w';
+
+		powerLabel.appendChild(powerUsage);
+		powerLabel.appendChild(powerUse);
+
+		var powerState = document.createElement('div');
+		powerState.className = 'device-state';
+		powerState.id = "powerState";
+
+		var powerButton = document.createElement('div');
+		powerButton.className = 'power-button';
+		powerButton.id = 'powerButton';
+
+		var powerIcon = document.createElement('img');
+		powerIcon.src = 'img/power-button.png';
+		powerIcon.height = '30';
+		powerIcon.width = '30';
+
+		powerButton.appendChild(powerIcon);
+		powerState.appendChild(powerButton);
+
+		newBox.appendChild(powerLabel);
+		newBox.appendChild(powerState);
+	} 
+
+	boxRow.appendChild(newBox);
+	currentRow.numberOfChildren++;
+}
+
+function sendDeviceData(deviceInfo) {
+
+}
+
+function addDevice() {
+	var device_name = document.getElementsByName('deviceName')[0].value;
+	var topic_ = document.getElementsByName('topic')[0].value;
+	var min_watt = document.getElementsByName('minWatt')[0].value;
+	var max_watt = document.getElementsByName('maxWatt')[0].value;
+	var device_type = document.getElementsByName('deviceType')[0].value;
+	var device_state = document.getElementsByName('deviceState')[0].value;
+
+	console.log(device_name); 
+	console.log({deviceName: device_name, deviceType: device_type, deviceState: device_state});
+	addDeviceBox("create device", {deviceName: device_name, deviceType: device_type, deviceState: device_state});
+	sendDeviceData({deviceName: device_name, deviceState: (device_state == 'ON'?true:false), topic: topic_, minWatt: Number.parseInt(min_watt), maxWatt: Number.parseInt(max_watt), consumption: 0});
+} 
+
+function addBattery() {
+
+}
+
+function addSolarSystem() {
+
 }
 
 
@@ -65,7 +163,8 @@ function main() {
 					document.getElementById('closeDevice'),
 					document.getElementById('closeSolar'),
 					document.getElementById('closeBattery'),
-					document.getElementById('closeConfig')];
+					document.getElementById('closeConfig'),
+					document.getElementById('createDeviceButton')];
 
 	controls[0].addEventListener('click', ()=> {
 		openModal('form-solar');
@@ -81,6 +180,11 @@ function main() {
 		controls[i].addEventListener('click', ()=> {
 			closeModal();
 		}, false);
+
+	controls[7].addEventListener('click', () => {
+		addDevice();
+	});
+	//add event listener for create buttons in forms	
 }
 
 main();
