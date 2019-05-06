@@ -15,10 +15,8 @@ client.on('connect',()=>{
 	setInterval(publishConsumption(client),timeInterval);
 })
 
-client.on('message',(topic, message) => 
-{
-	if(topic == "cmnd/sonoff-fridge/Power")
-	{
+client.on('message', (topic, message) => {
+	if(topic == "cmnd/sonoff-fridge/Power"){
 		var msg = message.toString()
 		if(msg =="")
 		{
