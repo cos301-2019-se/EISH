@@ -7,9 +7,10 @@ module.exports = class Device {
         this.consumption = object.consumption;
         this.state = object.state;
         this.client = client;
+        this.timeInterval = 30000;
     }
     getCurrentConsumption() {
-        if (this.state == "ON")
+        if (this.state == true)
             this.consumption = this.randomConsumption(this.minWatt, this.maxWatt);
         else {
             this.consumption = 0;
@@ -18,38 +19,39 @@ module.exports = class Device {
     }
     publishConsumption(){
         var currentCon = getCurrentConsumption();
-        client.publish("cmnd/" + this.topic + "/Status", { "Power": currentCon });
+        this.client.publish("cmnd/" + this.topic + "/Status", JSON.stringify({ "Power": currentCon }));
     };
     randomConsumption(minWatt, maxWatt){
         return Math.random() * (maxWatt - minWatt) + minWatt;
     };
-    configure(client)
+    configure()
     {
-        client.on('connect', () => {
-            client.subscribe("cmnd/" + this.topic + "/Power");
-            client.subscribe("cmnd/" + this.topic + "/Status");
-            setInterval(publishConsumption(client), timeInterval);
+        this.client.on('connect', () => {
+            this.client.subscribe("cmnd/" + this.topic + "/Power");
+            this.client.subscribe("cmnd/" + this.topic + "/Status");
+            setInterval(this.publishConsumption, this.timeInterval);
         });
-        client.on('message', (topic, message) => {
+        this.client.on('message', (topic, message) => {
             if (topic == "cmnd/" + this.topic + "/Power") {
                 var msg = message.toString();
                 if (msg == "") {
-                    client.publish("cmnd/" + this.topic + "/RESULT", { "POWER": deviceState ? "ON" : "OFF" });
-                    client.publish("stat/" + this.topic + "/POWER", deviceState ? "ON" : "OFF");
+                    console.log("empty message sent to topic")
+                    this.client.publish("cmnd/" + this.topic + "/RESULT", JSON.stringify({ "POWER": this.state ? "ON" : "OFF" }));
+                    this.client.publish("stat/" + this.topic + "/POWER", this.state ? "ON" : "OFF");
                 }
                 else if (msg == "TOGGLE") {
-                    deviceState = !deviceState;
-                    client.publish("cmnd/" + this.topic + "/RESULT", { "POWER": deviceState ? "ON" : "OFF" });
-                    client.publish("stat/" + this.topic + "/POWER", deviceState ? "ON" : "OFF");
+                    console.log("toggle message sent to topic")
+                    this.state = !this.state;
+                    this.client.publish("cmnd/" + this.topic + "/RESULT", JSON.stringify({ "POWER": this.state ? "ON" : "OFF" }));
+                    this.client.publish("stat/" + this.topic + "/POWER", this.state ? "ON" : "OFF");
                 }
             }
             if (topic == "cmnd/" + this.topic + "/Status") {
                 var msg = message.toString();
                 if (msg == "9") {
-                    publishConsumption(client);
+                    publishConsumption();
                 }
             }
         });
     }
 }
-//module.exports.device;
