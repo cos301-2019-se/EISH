@@ -1,11 +1,12 @@
 module.exports = class Device {
     constructor(object, client) {
-        this.name = object.deviceName;
+        this.name = object.name;
         this.topic = object.topic;
-        this.minWatt = object.minWatts;
+        this.minWatt = object.minWatt;
         this.maxWatt = object.maxWatt;
         this.consumption = object.consumption;
         this.state = object.state;
+        this.type = object.type;
         this.client = client;
         this.timeInterval = 30000;
     }

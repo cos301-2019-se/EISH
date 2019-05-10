@@ -1,41 +1,102 @@
-var express = require('express')
-var bodyParser = require('body-parser')
+var express = require('express');
+var bodyParser = require('body-parser');
 var mqtt = require('mqtt');
+var jsonfile = require('jsonfile');
+var fs = require('fs');
+var Device = require('./deviceClass');
 
 //inits
-const app = express()
-const port = 3000
+const app = express();
+const port = 3000;
+
+var client = mqtt.connect('mqtt://127.0.0.1:1883');
+var activeDevices = [];
+var file = 'devices.json';
 
 //uses
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
-
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 //setup
-app.listen(port,()=>
-    console.log(`Communication Module: listening on port ${port}!`)
-)
-app.get("/", function(req,res){
-    return res.send("What now bitch")
-})
-app.post("/", function(req,res){
-    console.log(req.body)
-    var device = req.body
-    device['device_consumption'] = randomConsumption(device['min_watt'],device['max_watt'])
-    var resMsg = ('{"Consumption": "' + device['device_consumption'] + '" }')
-    console.log(resMsg)
-    sendToMQTTBroker(device['device_name'],resMsg)
-    return res.send(resMsg)
+app.listen(port,()=> {
+    loadDevices();
+    console.log(`Communication Module: listening on port ${port}!`);
 })
 
-function sendToMQTTBroker(device_name,device_consumption){
-    var client = mqtt.connect('mqtt://127.0.0.1:1883')
-    client.on('connect',() => {
-        var topic = "sonoff-"+device_name+"/device-info"
-        client.publish(topic,device_consumption)
-    })
+app.get("/view/devices", function(req,res) {
+    var  displayInfo = getDevicesDisplayInfo();
+    return res.send(displayInfo);
+})
+
+app.post("/add/device", function(req,res) {
+    var device = new Device(req.body,client);
+    device.configure();
+    appendDevice(device);
+    return res.send(device.name + " has been successfully created!");
+})
+
+/**
+ * Appends JSON device object to devices.json
+ * @param device 
+ */
+function appendDevice(device) {
+    if (!fs.existsSync(file)) {
+        initialiseDevicesFile();
+    }
+
+    activeDevices.push(device);
+    var fileObj = jsonfile.readFileSync(file);
+    device.client = null;
+    fileObj['data'].push(device);
+    writeToDevicesFile(fileObj);
+    console.log("Device was appended to file.");
 }
 
-function randomConsumption(min, max){
-	return Math.round(Math.random()* (max-min)+min)
+/**
+ * loads the devices from device.json into devices[]
+ */
+function loadDevices() {
+    if (!fs.existsSync(file)) {
+        initialiseDevicesFile(); 
+    }
+    var fileObj = jsonfile.readFileSync(file);
+    for(var i = 0; i < fileObj['data'].length; i++) {
+        var device = new Device(fileObj['data'][i],client);
+        device.configure();    
+        activeDevices.push(device);
+    }
+}
+
+/**
+ * Makes array with data relevant for the device box on the interface side
+ * Send data for Device box 
+ * Load through the devices array
+ */
+function getDevicesDisplayInfo(){
+    var deviceObjs = [];
+    var deviceObj = null;
+    for(var i = 0; i < activeDevices.length; i++){
+        deviceObj = {
+            name: activeDevices[i].name,
+            type: activeDevices[i].type,
+            state: activeDevices[i].state
+        }
+        deviceObjs.push(deviceObj);
+    }
+    return deviceObjs;
+}
+
+/**
+ * Initialises the json log file
+ */
+function initialiseDevicesFile() {
+    var header = { List: "Devices", data: [] };
+    writeToDevicesFile(header);
+    console.log("Devices file has been initialised.");
+}
+
+function writeToDevicesFile(jsonObj) {
+    jsonfile.writeFileSync(file, jsonObj, { flag: "w+" }, function(err) {
+      if (err) console.error(err);
+    });
 }
