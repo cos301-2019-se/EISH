@@ -1,7 +1,7 @@
 // Variable Defenitions
 var openedModal = null;
-//var RowInformation = {rank: 0, name: '', numberOfChildren: 6};
 var availableRows = [];
+var devices = [];
 
 /* Function Defenitions Section */
 function openModal(modalClass) {
@@ -60,6 +60,7 @@ function addDeviceBox(type, deviceInfo) {
 	powerStateBox.className = 'device-name';
 	
 	var powerStateLabel = document.createElement('p');
+	powerStateLabel.id = 'powerStateLabel' + devices.length;
 	powerStateLabel.innerHTML = deviceInfo.deviceState;
 
 	powerStateBox.appendChild(powerStateLabel);
@@ -69,8 +70,8 @@ function addDeviceBox(type, deviceInfo) {
 	
 	var newImg = document.createElement('img');
 	newImg.src = deviceIcon(deviceInfo.deviceType);
-	newImg.height = '80';
-	newImg.width = '80';
+	newImg.height = '100';
+	newImg.width = '100';
 
 	newDevImg.appendChild(newImg);
 	
@@ -99,7 +100,7 @@ function addDeviceBox(type, deviceInfo) {
 		powerUsage.innerHTML = 'Power Usage';
 
 		var powerUse = document.createElement('p');
-		powerUse.id = "powerUsage"; //remember to update with websocket
+		powerUse.id = "powerUsage" + devices.length; //remember to update with websocket
 		powerUse.innerHTML = '0w';
 
 		powerLabel.appendChild(powerUsage);
@@ -107,11 +108,18 @@ function addDeviceBox(type, deviceInfo) {
 
 		var powerState = document.createElement('div');
 		powerState.className = 'device-state';
-		powerState.id = "powerState";
+		powerState.id = 'powerState';
 
 		var powerButton = document.createElement('div');
 		powerButton.className = 'power-button';
-		powerButton.id = 'powerButton';
+		powerButton.id = 'powerButton' + devices.length;
+
+		var device_socket = new WebSocket('ws://localhost:3000');
+		device_socket.addEventListener('open', () => {
+			device_socket.send(JSON.stringify({type: 'name', deviceName: deviceInfo.deviceName}));
+		});
+		
+		addToDevices({deviceName: deviceInfo.deviceName, deviceState: (deviceInfo.deviceState == 'ON'), deviceUsage: powerUse, powerLabel: powerStateLabel, powerBtn : powerButton, deviceSocket: device_socket});
 
 		var powerIcon = document.createElement('img');
 		powerIcon.src = 'img/power-button.png';
@@ -129,8 +137,66 @@ function addDeviceBox(type, deviceInfo) {
 	currentRow.numberOfChildren++;
 }
 
-function sendDeviceData(deviceInfo) {
+function addToDevices(deviceObject) {
+	devices.push(deviceObject);
+	
+	deviceObject.deviceSocket.addEventListener('message', (event) => {
+		var responseObject = JSON.parse(event.data);
+		if (responseObject.type == 'consumption' && deviceObject.deviceState)
+			deviceObject.deviceUsage.innerHTML = responseObject.consumption + 'w';
+		if (responseObject.type == 'command')
+			if (responseObject.powerState != deviceObject.deviceState) //this is assuming that power is sent as a boolean and not ON and OFF
+				toggleDevice(deviceObject);	
+	});
 
+	deviceObject.powerBtn.addEventListener('click', () => {
+		toggleDevice(deviceObject); 
+		//send a message to the server
+		deviceObject.deviceSocket.send(JSON.stringify({type: 'command',Power : deviceObject.deviceState}));
+	}); 
+}
+
+function toggleDevice(deviceObject) {
+	deviceObject.deviceState = !deviceObject.deviceState;
+	deviceObject.powerLabel.innerHTML = deviceObject.deviceState?'ON':'OFF';
+	deviceObject.powerLabel.style = 'color: ' + (deviceObject.deviceState?'red':'#565656') + ';';
+	if (!deviceObject.deviceState) deviceObject.deviceUsage.innerHTML = '0w'; 
+}
+
+function sendDeviceData(deviceInfo) {
+	var ajaxRequest = requestObject();
+	var urlEndPoint = 'http://localhost:3000/add/device';
+
+	ajaxRequest.onreadystatechange = () => {
+		if (this.readyState == 4 && this.status == 200) {
+			addDeviceBox("create device", {deviceName: deviceInfo.deviceName, deviceType: deviceInfo.deviceType, deviceState: (deviceInfo.deviceState?'ON':'OFF')});		
+			alert(this.responseText);
+		}
+	};
+
+	ajaxRequest.setRequestHeader('Content-Type','application/json');
+	ajaxRequest.open('POST', urlEndPoint, true);
+	ajaxRequest.send(deviceInfo);
+}
+
+function requestObject() {
+	var XMLRequestObject;
+
+	try {
+		XMLRequestObject = new XMLHttpRequest();
+	} catch(e) {
+		try {
+			XMLRequestObject = new ActiveXObject("Msxml2.XMLHTTP");
+		} catch(e) {
+			try {
+				XMLRequestObject = new ActiveXObject("Microsoft.XMLHTTP");
+			} catch(e) {
+				return null;
+			}
+		}
+	}
+
+	return XMLRequestObject;
 }
 
 function addDevice() {
@@ -141,10 +207,10 @@ function addDevice() {
 	var device_type = document.getElementsByName('deviceType')[0].value;
 	var device_state = document.getElementsByName('deviceState')[0].value;
 
-	console.log(device_name); 
-	console.log({deviceName: device_name, deviceType: device_type, deviceState: device_state});
-	addDeviceBox("create device", {deviceName: device_name, deviceType: device_type, deviceState: device_state});
-	sendDeviceData({deviceName: device_name, deviceState: (device_state == 'ON'?true:false), topic: topic_, minWatt: Number.parseInt(min_watt), maxWatt: Number.parseInt(max_watt), consumption: 0});
+	//console.log(device_name); 
+	//console.log({deviceName: device_name, deviceType: device_type, deviceState: device_state});
+	//addDeviceBox("create device", {deviceName: device_name, deviceType: device_type, deviceState: device_state});
+	sendDeviceData({deviceName: device_name, deviceType: device_type, deviceState: (device_state == 'ON'?true:false), topic: topic_, minWatt: Number.parseInt(min_watt), maxWatt: Number.parseInt(max_watt), consumption: 0});
 } 
 
 function addBattery() {
@@ -156,6 +222,22 @@ function addSolarSystem() {
 }
 
 
+function loadDevices() {
+	var ajaxRequest = requestObject();
+	var urlEndPoint = 'http://localhost:3000/view/devices';
+
+	ajaxRequest.onreadystatechange = () => {
+		if (this.readyState == 4 && this.status == 200) {
+			var responseObject = JSON.parse(this.responseText);
+			//loop through this object array and create device box
+		}
+	};
+
+	//ajaxRequest.setRequestHeader('Content-Type','application/json');
+	ajaxRequest.open('GET', urlEndPoint, true);
+	ajaxRequest.send();
+}
+
 function main() {
 	var controls = [document.getElementById('crtSolarBtn'), 
 					document.getElementById('crtBatteryBtn'), 
@@ -165,6 +247,8 @@ function main() {
 					document.getElementById('closeBattery'),
 					document.getElementById('closeConfig'),
 					document.getElementById('createDeviceButton')];
+
+	loadDevices();
 
 	controls[0].addEventListener('click', ()=> {
 		openModal('form-solar');

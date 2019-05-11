@@ -4,6 +4,7 @@ var mqtt = require('mqtt');
 var jsonfile = require('jsonfile');
 var fs = require('fs');
 var Device = require('./deviceClass');
+var path = require('path');
 
 //inits
 const app = express();
@@ -18,10 +19,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //setup
-app.listen(port,()=> {
+var server = app.listen(port,()=> {
     loadDevices();
     console.log(`Communication Module: listening on port ${port}!`);
 })
+
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname + '/simulation.html'));
+});
 
 app.get("/view/devices", function(req,res) {
     var  displayInfo = getDevicesDisplayInfo();
@@ -34,6 +39,19 @@ app.post("/add/device", function(req,res) {
     appendDevice(device);
     return res.send(device.name + " has been successfully created!");
 })
+
+const wss = new SocketServer({server});
+
+wss.on('connection', (ws) => {
+	ws.on('message', (message) => {
+		var msgJson = JSON.parse(message);
+		if (msgJson.type == 'name')
+			activeDevices.forEach((device) => {
+				if (device.deviceName == msgJson.deviceName)
+					device.setSocket(ws);
+			});
+	});
+});
 
 /**
  * Appends JSON device object to devices.json

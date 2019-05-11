@@ -9,7 +9,9 @@ module.exports = class Device {
         this.type = object.type;
         this.client = client;
         this.timeInterval = 30000;
+        this.socket = null;
     }
+
     getCurrentConsumption() {
         if (this.state == true)
             this.consumption = this.randomConsumption(this.minWatt, this.maxWatt);
@@ -18,13 +20,31 @@ module.exports = class Device {
         }
         return this.consumption;
     }
+
     publishConsumption(){
         var currentCon = getCurrentConsumption();
         this.client.publish("cmnd/" + this.topic + "/Status", JSON.stringify({ "Power": currentCon }));
+        this.socket.send(JSON.stringify({type: "consumption", "consumption": currentCon}));
     };
+
     randomConsumption(minWatt, maxWatt){
         return Math.random() * (maxWatt - minWatt) + minWatt;
     };
+
+    setSocket(deviceSocket) {
+        this.socket = deviceSocket;
+        this.socket.on('message', (message) => {
+            var responseObject = JSON.parse(message);
+            if (responseObject.type == 'command') {
+                if (responseObject.Power != this.state){
+                    this.state = !this.state;
+                    this.client.publish("cmnd/" + this.topic + "/RESULT", JSON.stringify({ "POWER": this.state ? "ON" : "OFF" }));
+                    this.client.publish("stat/" + this.topic + "/POWER", this.state ? "ON" : "OFF");
+                }
+            }
+        });
+    }
+
     configure()
     {
         this.client.on('connect', () => {
@@ -43,6 +63,7 @@ module.exports = class Device {
                 else if (msg == "TOGGLE") {
                     console.log("toggle message sent to topic")
                     this.state = !this.state;
+                    this.socket.send(JSON.stringify({"type": "command","powerState": this.state}));
                     this.client.publish("cmnd/" + this.topic + "/RESULT", JSON.stringify({ "POWER": this.state ? "ON" : "OFF" }));
                     this.client.publish("stat/" + this.topic + "/POWER", this.state ? "ON" : "OFF");
                 }

@@ -79,21 +79,23 @@ h1 {
 }
 
 .device-image {
-	width: 120px;
-	height: 120px;
+	width: 100px;
+	height: 100px;
 	margin-right: auto;
 	margin-left: auto;
 }
 
 .device-name {
 	width: 100%;
-	height: 30px;
+	/*height: 30px;*/
 }
 
 .device-name p {
 	text-align: center;
 	font-weight: bold;
 	color: #565656;
+	padding-top: 5px;
+	padding-bottom: 3px;
 	margin: 0px;
 }
 
@@ -236,4 +238,16 @@ div[class|='form'] {
 	margin-left: auto;
 	margin-right: auto; 
 	display: inline-block;
+}
+
+.device-state {
+	width: 100%;
+}
+
+.power-button {
+	width: 30px;
+	height: 30px;
+	margin-right: auto;
+	margin-left: auto;
+	cursor: pointer;
 }
