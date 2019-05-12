@@ -11,7 +11,7 @@ var path = require('path');
 const app = express();
 const port = 3000;
 
-var client = mqtt.connect('mqtt://127.0.0.1:1883');
+//var client = mqtt.connect('mqtt://127.0.0.1:1883');
 var activeDevices = [];
 var file = 'devices.json';
 
@@ -68,15 +68,14 @@ function appendDevice(deviceInfo) {
         initialiseDevicesFile();
     }
 
-    var device = new Device(deviceInfo,client);
-
+    var device = new Device(deviceInfo,mqtt);
+    device.configure();
     var fileObj = jsonfile.readFileSync(file);
     var tempClient = device.client;
     device.client = null;
     fileObj['data'].push(device);
     writeToDevicesFile(fileObj);
     device.client = tempClient;
-    device.configure();
     activeDevices.push(device);
     console.log("Device was appended to file.");
 }
@@ -90,7 +89,7 @@ function loadDevices() {
     }
     var fileObj = jsonfile.readFileSync(file);
     for(var i = 0; i < fileObj['data'].length; i++) {
-        var device = new Device(fileObj['data'][i],client);
+        var device = new Device(fileObj['data'][i],mqtt);
         device.configure();    
         activeDevices.push(device);
     }

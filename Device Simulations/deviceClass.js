@@ -1,5 +1,5 @@
 module.exports = class Device {
-    constructor(object, client) {
+    constructor(object, mqtt) {
         this.name = object.name;
         this.topic = object.topic;
         this.minWatt = object.minWatt;
@@ -7,7 +7,7 @@ module.exports = class Device {
         this.consumption = object.consumption;
         this.state = object.state;
         this.type = object.type;
-        this.client = client;
+        this.client = mqtt.connect('mqtt://127.0.0.1:1883');
         this.timeInterval = 1000;
         this.socket = null;
     }
