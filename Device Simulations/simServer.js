@@ -39,11 +39,9 @@ app.get("/view/devices", function(req,res) {
 })
 
 app.post("/add/device", function(req,res) {
-    var device = new Device(req.body,client);
-    device.configure();
-    appendDevice(device);
-    return res.send(device.name + " has been successfully created!");
-   //return res.send("Device has been successfully created!");
+    appendDevice(req.body);
+    //return res.send(device.name + " has been successfully created!");
+    return res.send("Device has been successfully created!");
 })
 
 const wss = new SocketServer({server});
@@ -65,16 +63,21 @@ wss.on('connection', (ws) => {
  * Appends JSON device object to devices.json
  * @param device 
  */
-function appendDevice(device) {
+function appendDevice(deviceInfo) {
     if (!fs.existsSync(file)) {
         initialiseDevicesFile();
     }
 
-    activeDevices.push(device);
+    var device = new Device(deviceInfo,client);
+
     var fileObj = jsonfile.readFileSync(file);
+    var tempClient = device.client;
     device.client = null;
     fileObj['data'].push(device);
     writeToDevicesFile(fileObj);
+    device.client = tempClient;
+    device.configure();
+    activeDevices.push(device);
     console.log("Device was appended to file.");
 }
 
@@ -88,7 +91,6 @@ function loadDevices() {
     var fileObj = jsonfile.readFileSync(file);
     for(var i = 0; i < fileObj['data'].length; i++) {
         var device = new Device(fileObj['data'][i],client);
-        //console.log(fileObj['data'][i]);
         device.configure();    
         activeDevices.push(device);
     }
@@ -108,7 +110,6 @@ function getDevicesDisplayInfo(){
             type: activeDevices[i].type,
             state: activeDevices[i].state
         }
-        //console.log(deviceObj);
         deviceObjs.push(deviceObj);
     }
     return deviceObjs;
@@ -123,6 +124,10 @@ function initialiseDevicesFile() {
     console.log("Devices file has been initialised.");
 }
 
+/**
+ * Performs the operation of writing the device into the devices.json file
+ * @param jsonObj 
+ */
 function writeToDevicesFile(jsonObj) {
     jsonfile.writeFileSync(file, jsonObj, { flag: "w+" }, function(err) {
       if (err) console.error(err);
