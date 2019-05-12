@@ -40,7 +40,7 @@ module.exports = class Device {
             if (responseObject.type == 'command') {
                 if (responseObject.Power != this.state){
                     this.state = !this.state;
-                    console.log(this.client);
+                    //console.log(this.client);
                     if (this.client != null) {
                         this.client.publish("cmnd/" + this.topic + "/RESULT", JSON.stringify({ "POWER": this.state ? "ON" : "OFF" }));
                         this.client.publish("stat/" + this.topic + "/POWER", this.state ? "ON" : "OFF");
