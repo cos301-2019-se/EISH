@@ -168,15 +168,16 @@ function sendDeviceData(deviceInfo) {
 	var urlEndPoint = 'http://localhost:3000/add/device';
 
 	ajaxRequest.onreadystatechange = () => {
-		if (this.readyState == 4 && this.status == 200) {
+		if (ajaxRequest.readyState == 4 && ajaxRequest.status == 200) {
+			//console.log(ajaxRequest.responseText);
+			//alert(ajaxRequest.responseText);
 			addDeviceBox("create device", {deviceName: deviceInfo.deviceName, deviceType: deviceInfo.deviceType, deviceState: (deviceInfo.deviceState?'ON':'OFF')});		
-			alert(this.responseText);
 		}
 	};
 
-	ajaxRequest.setRequestHeader('Content-Type','application/json');
 	ajaxRequest.open('POST', urlEndPoint, true);
-	ajaxRequest.send(deviceInfo);
+	ajaxRequest.setRequestHeader('Content-Type','application/json');
+	ajaxRequest.send(JSON.stringify({name: deviceInfo.deviceName, type: deviceInfo.deviceType, state: (deviceInfo.deviceState == 'ON'?true:false), topic: deviceInfo.topic, minWatt: Number.parseInt(deviceInfo.minWatt), maxWatt: Number.parseInt(deviceInfo.maxWatt), consumption: 0}));
 }
 
 function requestObject() {
@@ -227,9 +228,13 @@ function loadDevices() {
 	var urlEndPoint = 'http://localhost:3000/view/devices';
 
 	ajaxRequest.onreadystatechange = () => {
-		if (this.readyState == 4 && this.status == 200) {
-			var responseObject = JSON.parse(this.responseText);
+		if (ajaxRequest.readyState == 4 && ajaxRequest.status == 200) {
+			var responseObject = JSON.parse(ajaxRequest.responseText);
 			//loop through this object array and create device box
+			//console.log(responseObject);
+			for (var i=0; i < responseObject.length; i++) {
+				addDeviceBox("create device", {deviceName: responseObject[i].name, deviceType: responseObject[i].type, deviceState: (responseObject[i].state?'ON':'OFF')});			
+			}
 		}
 	};
 

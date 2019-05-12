@@ -8,7 +8,7 @@ module.exports = class Device {
         this.state = object.state;
         this.type = object.type;
         this.client = client;
-        this.timeInterval = 30000;
+        this.timeInterval = 1000;
         this.socket = null;
     }
 
@@ -21,25 +21,30 @@ module.exports = class Device {
         return this.consumption;
     }
 
-    publishConsumption(){
-        var currentCon = getCurrentConsumption();
-        this.client.publish("cmnd/" + this.topic + "/Status", JSON.stringify({ "Power": currentCon }));
-        this.socket.send(JSON.stringify({type: "consumption", "consumption": currentCon}));
+    publishConsumption(deviceObject){
+        var currentCon = deviceObject.getCurrentConsumption();
+        deviceObject.client.publish("cmnd/" + deviceObject.topic + "/Status", JSON.stringify({ "Power": currentCon }));
+        if (deviceObject.socket != null)
+            deviceObject.socket.send(JSON.stringify({type: "consumption", "consumption": currentCon}));
     };
 
     randomConsumption(minWatt, maxWatt){
-        return Math.random() * (maxWatt - minWatt) + minWatt;
+        return parseInt(Math.random() * (maxWatt - minWatt) + minWatt);
     };
 
     setSocket(deviceSocket) {
         this.socket = deviceSocket;
         this.socket.on('message', (message) => {
             var responseObject = JSON.parse(message);
+            //console.log(responseObject);
             if (responseObject.type == 'command') {
                 if (responseObject.Power != this.state){
                     this.state = !this.state;
-                    this.client.publish("cmnd/" + this.topic + "/RESULT", JSON.stringify({ "POWER": this.state ? "ON" : "OFF" }));
-                    this.client.publish("stat/" + this.topic + "/POWER", this.state ? "ON" : "OFF");
+                    console.log(this.client);
+                    if (this.client != null) {
+                        this.client.publish("cmnd/" + this.topic + "/RESULT", JSON.stringify({ "POWER": this.state ? "ON" : "OFF" }));
+                        this.client.publish("stat/" + this.topic + "/POWER", this.state ? "ON" : "OFF");
+                    }
                 }
             }
         });
@@ -50,7 +55,7 @@ module.exports = class Device {
         this.client.on('connect', () => {
             this.client.subscribe("cmnd/" + this.topic + "/Power");
             this.client.subscribe("cmnd/" + this.topic + "/Status");
-            setInterval(this.publishConsumption, this.timeInterval);
+            setInterval(this.publishConsumption, this.timeInterval, this);
         });
         this.client.on('message', (topic, message) => {
             if (topic == "cmnd/" + this.topic + "/Power") {

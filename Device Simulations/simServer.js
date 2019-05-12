@@ -1,4 +1,5 @@
 var express = require('express');
+var SocketServer = require('ws').Server;
 var bodyParser = require('body-parser');
 var mqtt = require('mqtt');
 var jsonfile = require('jsonfile');
@@ -24,13 +25,17 @@ var server = app.listen(port,()=> {
     console.log(`Communication Module: listening on port ${port}!`);
 })
 
+//Serving simulations.html web page
 app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname + '/simulation.html'));
+    res.set('Content-Type', 'text/html');
+    res.sendFile(path.join(__dirname + '/simulations.html'));
 });
+
+app.use(express.static(path.join(__dirname, '')))
 
 app.get("/view/devices", function(req,res) {
     var  displayInfo = getDevicesDisplayInfo();
-    return res.send(displayInfo);
+    return res.send(JSON.stringify(displayInfo));
 })
 
 app.post("/add/device", function(req,res) {
@@ -38,6 +43,7 @@ app.post("/add/device", function(req,res) {
     device.configure();
     appendDevice(device);
     return res.send(device.name + " has been successfully created!");
+   //return res.send("Device has been successfully created!");
 })
 
 const wss = new SocketServer({server});
@@ -47,8 +53,10 @@ wss.on('connection', (ws) => {
 		var msgJson = JSON.parse(message);
 		if (msgJson.type == 'name')
 			activeDevices.forEach((device) => {
-				if (device.deviceName == msgJson.deviceName)
-					device.setSocket(ws);
+				if (device.name == msgJson.deviceName) {
+                    //console.log("Found the device");
+                    device.setSocket(ws);
+                }
 			});
 	});
 });
@@ -80,6 +88,7 @@ function loadDevices() {
     var fileObj = jsonfile.readFileSync(file);
     for(var i = 0; i < fileObj['data'].length; i++) {
         var device = new Device(fileObj['data'][i],client);
+        //console.log(fileObj['data'][i]);
         device.configure();    
         activeDevices.push(device);
     }
@@ -99,6 +108,7 @@ function getDevicesDisplayInfo(){
             type: activeDevices[i].type,
             state: activeDevices[i].state
         }
+        //console.log(deviceObj);
         deviceObjs.push(deviceObj);
     }
     return deviceObjs;
