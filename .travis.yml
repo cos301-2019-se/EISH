@@ -11,7 +11,7 @@ matrix:
       before_script:
         - cd Backend/eishms
         - psql -c "create database consumptionDB;" -U postgres
-        - sudo -u postgres psql -c "ALTER ROLE postgres WITH password 'postgres'"
+        - sudo -u postgres psql -c "ALTER ROLE postgres WITH password '12345'"
       script:
         - ./gradlew build
       services:
@@ -31,7 +31,7 @@ matrix:
         - cd Frontend
         - npm install -g @angular/cli
       script:
-        - ng lint
+        #- ng lint
         - ng build
       deploy:
         provider: heroku
