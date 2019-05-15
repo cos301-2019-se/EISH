@@ -8,7 +8,7 @@
 
 | Endpoint  | API              | Method 	| Parameters  | Response   | 
 |:--------: |:------------     | :--:  	  | -------------|----------|
-| /api/add/device         |Add Device   | POST   	|device_name: string <br/> topic: string <br/> max_watts:  int <br/> min_watts: int <br/> device_type: string <br/> priority: HIGH/MEDIUM/LOW <br/> auto_start: boolean <br/>|data: string |
+| /api/add/device         |Add Device   | POST   	|device_name: string <br/> topic: string <br/> max_watts:  int <br/> min_watts: int <br/> device_type: string <br/> device_priority: HIGH/MEDIUM/LOW <br/> auto_start: boolean <br/>|data: string |
 | /api/view/devices          |View Devices | GET     |  |data: array of objects|
 |  /api/control/device/{device_name}           |Control Device | PATCH   	|device_state: boolean|data: object  |
 |  /api/view/device/consumption/{device_name}           |View Device Consumption         | GET   	|start_date: timestamp <br/> end_date: timestamp |data: array of objects|
@@ -28,7 +28,7 @@ REQUEST: Add Device
     "min_watt":100,
     "max_watt":200,
     "device_type":"Fridge",
-    "priority": "HIGH",
+    "device_priority": "HIGH",
     "auto_start": false
 }
 ```
