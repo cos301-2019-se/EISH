@@ -13,7 +13,7 @@ matrix:
         - psql -c "create database consumptionDB;" -U postgres
         - sudo -u postgres psql -c "ALTER ROLE postgres WITH password '12345'"
       script:
-        - ./gradlew build --scan
+        - ./gradlew build --info
       services:
         - postgresql
       after_failure:
@@ -31,7 +31,7 @@ matrix:
 
       before_script:
         - cd Frontend
-        - npm install -g @angular/cli
+        - npm install
       script:
         #- ng lint
         - ng build
