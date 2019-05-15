@@ -1,40 +1,41 @@
 matrix:
-  - language: java
-    jdk: oraclejdk8
-    before_script:
-      - cd Backend/eishms
-    script:
-      - ./gradlew build
+  include:
+    - language: java
+      jdk: oraclejdk8
+      before_script:
+        - cd Backend/eishms
+      script:
+        - ./gradlew build
 
-  - language: node_js
-    node_js:
-      - "9"
-    dist: trusty
-    sudo: required
+    - language: node_js
+      node_js:
+        - "9"
+      dist: trusty
+      sudo: required
 
-    branches:
-      only:
-        - master
+      branches:
+        only:
+          - master
 
-    before_script:
-      - cd Frontend
-      - npm install -g @angular/cli
-    script:
-      - ng lint
-      - ng build
-    deploy:
-      provider: heroku
-      api_key:
-        secure: 7f504e09-2888-4583-a328-e953228f4213
-      app: eish-ui      
+      before_script:
+        - cd Frontend
+        - npm install -g @angular/cli
+      script:
+        - ng lint
+        - ng build
+      deploy:
+        provider: heroku
+        api_key:
+          secure: 7f504e09-2888-4583-a328-e953228f4213
+        app: eish-ui      
 
-  - language: node_js
-    node_js: 
-      - "stable"
-    cache:
-      directories:
-        - "node_modules"
-    before_script:
-      - cd "Device Simulations"    
-    script:
-      - npm run test  
+    - language: node_js
+      node_js: 
+        - "stable"
+      cache:
+        directories:
+          - "node_modules"
+      before_script:
+        - cd "Device Simulations"    
+      script:
+        - npm run test  
