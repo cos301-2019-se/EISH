@@ -1,11 +1,18 @@
+sudo: enabled
 matrix:
   include:
     - language: java
       jdk: oraclejdk8
+      addons:
+        postgresql: "9.5"
       before_script:
         - cd Backend/eishms
+        - psql -c "create database consumptionDB;" -U postgres
+        - sudo -u postgres psql -c "ALTER ROLE postgres WITH password '12345'" 
       script:
         - ./gradlew build
+      services:
+        - postgresql
 
     - language: node_js
       node_js:
