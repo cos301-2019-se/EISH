@@ -13,9 +13,11 @@ matrix:
         - psql -c "create database consumptionDB;" -U postgres
         - sudo -u postgres psql -c "ALTER ROLE postgres WITH password '12345'"
       script:
-        - ./gradlew build
+        - ./gradlew build --stacktrace
       services:
         - postgresql
+      after_failure:
+        - cat target/surefire-reports/*.txt  
 
     - language: node_js
       node_js:
