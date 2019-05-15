@@ -3,4 +3,4 @@ jdk: oraclejdk8
 before_script:
   - cd Backend/eishms
 script:
-  - gradlew build
+  - ./gradlew build
