@@ -12,12 +12,10 @@ matrix:
         - postgresql
       before_script:
         - cd Backend/eishms
-        - psql -c "create database consumptionDB;" -U postgres
+        - psql -c 'create database consumptionDB;' -U postgres
         - sudo -u postgres psql -c "ALTER ROLE postgres WITH password '12345'"
       script:
-        - ./gradlew build --info
-      after_failure:
-        - cat target/surefire-reports/*.txt  
+        - ./gradlew build  
 
     - language: node_js
       node_js:
