@@ -13,7 +13,7 @@ matrix:
         - psql -c "create database consumptionDB;" -U postgres
         - sudo -u postgres psql -c "ALTER ROLE postgres WITH password '12345'"
       script:
-        - ./gradlew build --stacktrace
+        - ./gradlew build --scan
       services:
         - postgresql
       after_failure:
