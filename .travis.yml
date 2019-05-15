@@ -11,7 +11,7 @@ matrix:
       before_script:
         - cd Backend/eishms
         - psql -c "create database consumptionDB;" -U postgres
-        - sudo -u postgres psql -c "ALTER ROLE postgres WITH password '12345'
+        - sudo -u postgres psql -c "ALTER ROLE postgres WITH password '12345'"
       script:
         - ./gradlew build
       services:
