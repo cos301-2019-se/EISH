@@ -8,14 +8,14 @@ matrix:
       jdk: oraclejdk8
       addons:
         postgresql: "9.5"
+      services:
+        - postgresql
       before_script:
         - cd Backend/eishms
         - psql -c "create database consumptionDB;" -U postgres
         - sudo -u postgres psql -c "ALTER ROLE postgres WITH password '12345'"
       script:
         - ./gradlew build --info
-      services:
-        - postgresql
       after_failure:
         - cat target/surefire-reports/*.txt  
 
