@@ -10,12 +10,12 @@
 |:--------: |:------------     | :--:  	  | -------------|----------|
 | /api/add/device         |Add Device   | POST   	|device_name: string <br/> topic: string <br/> max_watts:  int <br/> min_watts: int <br/> device_type: string <br/> device_priority: HIGH/MEDIUM/LOW <br/> auto_start: boolean <br/>|data: string |
 | /api/view/devices          |View Devices | GET     |  |data: array of objects|
-|  /api/control/device/{device_name}           |Control Device | PATCH   	|device_state: boolean|data: object  |
-|  /api/view/device/consumption/{device_name}           |View Device Consumption         | GET   	|start_date: timestamp <br/> end_date: timestamp |data: array of objects|
+|  /api/control/device/{device_id}           |Control Device | PATCH   	|device_state: boolean|data: object  |
+|  /api/view/device/consumption/{device_id}           |View Device Consumption         | GET   	|start_date: timestamp <br/> end_date: timestamp |data: array of objects|
 | /api/view/home/consumption            |View Total Home Consumption         | GET   	|start_date: timestamp <br/> end_date: timestamp  |data: array of objects |
 |  /api/add/generator           |Add Generator Device        | POST   	| generator_name: string <br/> generator_topic: string <br/> max_capacity:  int <br/> min_capacity: int <br/> generator_type: string <br/> |data: string |
 |  /api/view/generators           |View Generators       | GET   	| |data: array of objects |
-|  /api/view/generator/generation/{generator_name}         |View Generator Generation       | GET   	| start_date: timestamp <br/> end_date: timestamp | data: array of objects|
+|  /api/view/generator/generation/{generator_id}         |View Generator Generation       | GET   	| start_date: timestamp <br/> end_date: timestamp | data: array of objects|
 |  /api/view/home/generation          |Total Home Generation       | GET   	| start_date: timestamp <br/> end_date: timestamp  |data: array of objects |
 
 ### Example Usage
