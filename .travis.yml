@@ -35,12 +35,12 @@ matrix:
       script:
         - ng lint
         - ng build
-        - ng serve
-      deploy:
-        provider: heroku
-        api_key:
-          secure: 7f504e09-2888-4583-a328-e953228f4213
-        app: eish-ui      
+      #  - ng serve
+      #deploy:
+      #  provider: heroku
+      #  api_key:
+      #    secure: 7f504e09-2888-4583-a328-e953228f4213
+      #  app: eish-ui      
 
     - language: node_js
       node_js: 
@@ -51,4 +51,4 @@ matrix:
       before_script:
         - cd "Device Simulations"    
       script:
-        - npm run test  
+        - npm run   
