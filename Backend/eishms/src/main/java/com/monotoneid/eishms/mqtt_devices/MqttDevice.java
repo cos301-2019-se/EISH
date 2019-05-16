@@ -2,7 +2,7 @@ package com.monotoneid.eishms.mqtt_devices;
 
 import java.util.UUID;
 
-import com.monotoneid.eishms.model.Device;
+import com.monotoneid.eishms.model.Devices;
 
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
@@ -24,12 +24,12 @@ import org.eclipse.paho.client.mqttv3.MqttToken;
 //Whoever you are I believe in you!!! 
 
 public class MqttDevice {
-    private Device device;
+    private Devices device;
     private String asyncClientId; 
     private IMqttAsyncClient asyncClient;
     private IMqttToken connectToken; 
     //private DeviceConsumptionRepository dcr; //take as pointer from controller and store here! via constructor
-    public MqttDevice(Device dev) {
+    public MqttDevice(Devices dev) {
         this.device = dev;
         asyncClientId = UUID.randomUUID().toString();
         try {
