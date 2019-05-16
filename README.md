@@ -1,4 +1,4 @@
-# EISH
+# EISH [![Build Status](https://travis-ci.org/cos301-2019-se/EISH.svg?branch=master)](https://travis-ci.org/cos301-2019-se/EISH)
 # MonoToneID
 ### EISH: Energy Intrinsic Smart Home
 The EISH system is an artificially intelligent system.EISH system will primarily monitor the energy generation capacity of smart homes and the consumption of this energy. EISH's AI component will measure and predict the generation capacity of smart homes. EISH's AI component will be trained to learn the habits of the residents of smart homes by considering individual devices. This knowledge will be used to suggest and prioritise appliances to optimise energy consumption and cost.
