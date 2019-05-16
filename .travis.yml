@@ -14,9 +14,9 @@ matrix:
         - cd Backend/eishms
         - psql -c 'create database consumptionDB;' -U postgres
         #- psql -c "CREATE USER foo WITH PASSWORD 'bar';" -U postgres
-        - sudo -u postgres psql -c "ALTER ROLE postgres WITH password '12345'"
+        #- sudo -u postgres psql -c "ALTER ROLE postgres WITH password '12345'"
       script:
-        - ./gradlew build  --info
+        - ./gradlew build --info
 
     - language: node_js
       node_js:
