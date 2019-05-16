@@ -1,14 +1,20 @@
 # EISH
 # MonoToneID
 ### EISH: Energy Intrinsic Smart Home
+The EISH system is an artificially intelligent system.EISH system will primarily monitor the energy generation capacity of smart homes and the consumption of this energy. EISH's AI component will measure and predict the generation capacity of smart homes. EISH's AI component will be trained to learn the habits of the residents of smart homes by considering individual devices. This knowledge will be used to suggest and prioritise appliances to optimise energy consumption and cost.
 
 ### <a href="https://github.com/cos301-2019-se/EISH" target="_blank">Github</a>
+
+
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/" target="_blank">User Manual</a>
+
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/" target="_blank">Coding Standards</a>
+
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/SoftwareRequirementSpecification/SRS_EISH.pdf" target="_blank">Software Requirement Specification</a>
 
 ### <a href="https://trello.com/b/HwwqggZa/monotoneid" target="_blank">Administration Management Board</a>
 
 ### <a href="https://trello.com/b/zj2DTdGW/project-development" target="_blank">Project Management Board</a>
-
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/SoftwareRequirementSpecification/SRS_EISH.pdf" target="_blank">Software Requirement Specification</a>
 
 ## Contributing
 
