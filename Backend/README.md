@@ -1,4 +1,4 @@
-# COS301-Capstone Project Phase 1
+
 
 ## API Documentation
     
@@ -13,7 +13,7 @@
 |  /api/control/device/{device_id}           |Control Device | PATCH   	|device_state: boolean|data: object  |
 |  /api/view/device/consumption/{device_id}           |View Device Consumption         | GET   	|start_date: timestamp <br/> end_date: timestamp |data: array of objects|
 | /api/view/home/consumption            |View Total Home Consumption         | GET   	|start_date: timestamp <br/> end_date: timestamp  |data: array of objects |
-|  /api/add/generator           |Add Generator Device        | POST   	| generator_name: string <br/> generator_topic: string <br/> max_capacity:  int <br/> min_capacity: int <br/> generator_type: string <br/> |data: string |
+|  /api/add/generator           |Add Generator Device        | POST   	| generator_name: string <br/> generator_topic: string <br/> max_capacity_watts:  int <br/> min_capacity_watts: int <br/> generator_type: string <br/> |data: string |
 |  /api/view/generators           |View Generators       | GET   	| |data: array of objects |
 |  /api/view/generator/generation/{generator_id}         |View Generator Generation       | GET   	| start_date: timestamp <br/> end_date: timestamp | data: array of objects|
 |  /api/view/home/generation          |Total Home Generation       | GET   	| start_date: timestamp <br/> end_date: timestamp  |data: array of objects |
@@ -25,8 +25,8 @@ REQUEST: Add Device
 {
     "device_name":"Fridge",
     "topic":"sonoff-fridge",
-    "min_watt":100,
-    "max_watt":200,
+    "min_watts":100,
+    "max_watts":200,
     "device_type":"Fridge",
     "device_priority": "HIGH",
     "auto_start": false
@@ -113,8 +113,8 @@ REQUEST: Add Generation Device
 {
     "generator_name":"Solar Power System",
     "generator_topic":"solar-power",
-    "min_capacity_watt":1384,
-    "max_capacity_watt":3254,
+    "min_capacity_watts":1384,
+    "max_capacity_watts":3254,
     "generator_type":"Solar Power"
 }
 ```
