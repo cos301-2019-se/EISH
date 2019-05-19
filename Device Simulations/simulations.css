@@ -79,22 +79,23 @@ h1 {
 }
 
 .device-image {
-	width: 120px;
-	height: 120px;
-	margin-top: 10%;
+	width: 100px;
+	height: 100px;
 	margin-right: auto;
 	margin-left: auto;
 }
 
 .device-name {
 	width: 100%;
-	height: 30px;
+	/*height: 30px;*/
 }
 
 .device-name p {
 	text-align: center;
 	font-weight: bold;
 	color: #565656;
+	padding-top: 5px;
+	padding-bottom: 3px;
 	margin: 0px;
 }
 
@@ -168,26 +169,85 @@ div[class|='form'] {
 	cursor: pointer;
 }
 
-.formData{
-	/*display: inline block;*/ 
+.form {
+	width: 100%;
+}
+
+.button-holder {
+	width: 100%;
+	height: 40px;
+	padding-top: 50px;
+	padding-bottom: 50px;
+	background-color: transparent;
+}
+
+.create-button {
+	width: 150px;
+	height: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: #16d809;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 0.3em;
+	cursor: pointer;
+}
+
+.create-button:hover {
+	/*background-color: #3ed234;*/
+	background-color: #74d86d;
+	color: #bfbfbf;
+}
+
+.create-button p {
+	margin: 0px;
 	text-align: center;
-	margin-top: 20%;
-	
+	font-weight: bold;
+	color: white;
 }
-input[type="text"] {
+
+.device-form {
+	width: 200px;
+	padding-top: 20px;
+	margin-right: auto;
+	margin-left: auto; 
+}
+
+.device-form input {
+	width: 200px;
+	height: 20px;
+	padding-left: 5px;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 15px;
+	border: 1px solid lightgrey;
+	border-radius: .3em;
 	outline: none;
-	border: none;
-	border-bottom: 2px solid lightgrey;
 }
 
-input[type="text"]:focus {
-	border-bottom: 2px solid lightblue;
+.device-form input:focus {
+	height: 20px;
+	border: 1px solid #74d86d;
 }
 
-#createDevice{
-	border-radius: 5px;
-	width: 160px;
-	height: 50px;
-	background-color: lightblue;
+.device-form label {
+	text-align: center;
+	margin: 0px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin-left: auto;
+	margin-right: auto; 
+	display: inline-block;
+}
 
+.device-state {
+	width: 100%;
+}
+
+.power-button {
+	width: 30px;
+	height: 30px;
+	margin-right: auto;
+	margin-left: auto;
+	cursor: pointer;
 }
