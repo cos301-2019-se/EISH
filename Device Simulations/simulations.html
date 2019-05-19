@@ -3,7 +3,6 @@
 <head>
 	<title>Power Simulations</title>
 	<link rel="stylesheet" type="text/css" href="./simulations.css">
-	
 </head>
 <body>
 	<div style="display: none" class="modal">
@@ -12,45 +11,86 @@
 			<div class="top-bar">
 				<div class="bar-title"><p>Create Device</p></div>
 				<div class="close-btn" id="closeDevice"></div>
-				<div class="formData">
-					<form >
+			</div>
+			<div class="form">
+					<form class="device-form">
 						<label for="deviceName">Device Name</label><br>
-						<input id="devName" type="text" name="deviceName"><br><br>
-						<label id="devPubTopic" for="pubTopic">Publish Topic</label><br>
-						<input type="text" name="pubTopic"><br><br>
-						<label id="devSubTopic" for="subTopic">Subscribe Topic</label><br>
-						<input type="text" name="subTopic"><br><br>
-						<label id="devMinWatt" for="minWatt">Min Watt</label><br>
-						<input type="text" name="minWatt"><br><br>
-						<label id="devMaxWatt" for="maxWatt">Max Watt</label><br>
-						<input type="text" name="maxWatt"><br>
-						<br>
-						<button id="createDevice" >Create</button>
+						<input type="text" name="deviceName" value=""><br>
+						<label for="topic">Topic</label><br>
+						<input type="text" name="topic" value=""><br>
+						<label for="minWatt">Min Watt</label><br>
+						<input type="text" name="minWatt" value=""><br>
+						<label for="maxWatt">Max Watt</label><br>
+						<input type="text" name="maxWatt" value=""><br>
+						<label for="deviceType">Device Type</label><br>
+						<select name="deviceType">
+							<option value="custom">Custom</option>
+							<option value="air-conditioning">Air Conditioner</option>
+							<option value="blender">Blender</option>	
+							<option value="coffee-maker">Coffee Maker</option>	
+							<option value="dishwasher">Dishwasher</option>	
+							<option value="desktop-computer">Desktop Computer</option>	
+							<option value="fan">Fan</option>	
+							<option value="food-steamer">Food Steamer</option>	
+							<option value="fridge">Fridge</option>	
+							<option value="game-console">Game Console</option>	
+							<option value="hairdryer">Hairdryer</option>	
+							<option value="iron">Iron</option>	
+							<option value="juicer">Juicer</option>	
+							<option value="kettle">Kettle</option>	
+							<option value="lamp">Lamp</option>
+							<option value="laptop">Laptop</option>
+							<option value="light">Light</option>	
+							<option value="microwave-oven">Microwave Oven</option>	
+							<option value="mixer">Mixer</option>	
+							<option value="multicooker">Multicooker</option>	
+							<option value="music-player">Music System</option>	
+							<option value="oven">Oven</option>	
+							<option value="printer">Printer</option>	
+							<option value="refrigerator">Refrigerator</option>	
+							<option value="shaver">Shaver</option>	
+							<option value="stove">Stove</option>	
+							<option value="toaster">Toaster</option>	
+							<option value="television">Television</option>	
+							<option value="vaccum-cleaner">Vaccum Cleaner</option>	
+							<option value="washing-machine">Washing Machine</option>	
+						</select><br>
+						<label for="deviceState">Device State</label><br>
+						<select name="deviceState">
+							<option value="OFF">OFF</option>
+							<option value="ON">ON</option>
+						</select><br>
+						<div class="button-holder">
+							<div class="create-button" id="createDeviceButton"><p>Create Device</p></div>
+						</div>
 					</form>
 				</div>
-			</div>
 		</div>
 		<div style="display: none" class="form-solar">
 			<div class="top-bar">
 				<div class="bar-title"><p>Create Solar Power System</p></div>
 				<div class="close-btn" id="closeSolar"></div>
 			</div>
+			<div class="form">
+				<form class="solar-form">
+	
+				</form>
+			</div>
 		</div>
 		<div style="display: none" class="form-battery">
 			<div class="top-bar">
 				<div class="bar-title"><p>Create Battery</p></div>
 				<div class="close-btn" id="closeBattery"></div>
-				<div class="formData">
-					<form>
-						<label for="battery_name">Battery Name:</label><br>
-						<input type="text" name="battery_name"><br><br>
-						<label for="storage_capacity">Storage Capacity:</label><br>
-						<input type="text" name="storage_capacity"><br><br>
-						<label for="output_capacity">Output Capacity</label><br>
-						<input type="text" name="output_capacity"><br><br>
-						<button id="createDevice">Create</button>
-					</form>
-				</div>
+			</div>
+			<div class="form">
+				<form class="battery-form">
+					<label for="battery_name">Battery Name:</label>
+					<input type="text" name="battery_name"><br>
+					<label for="storage_capacity">Storage Capacity:</label>
+					<input type="text" name="storage_capacity"><br>
+					<label for="output_capacity">Output Capacity</label>
+					<input type="text" name="output_capacity">
+				</form>
 			</div>
 		</div>
 		<div style="display: none" class="form-config">
@@ -61,7 +101,7 @@
 		</div>
 	</div>
 	<div class="site-header">
-		<h1>Power Simualtions</h1>
+		<h1>Smart Home Simualtions</h1>
 	</div>
 	<div class="toolbox">
 		<div class="cmd-btn" id="crtSolarBtn">
@@ -75,33 +115,8 @@
 		</div>
 	</div>
 	<div class="device-workspace" id="workspace">
-		<div class="device-row">
-			<div class="device-box">
-				<div class="device-image"><img src="img/hairdryer.png" height="100" width="100"></div>
-				<div class="device-name"><p>Hairdryer</p></div>
-			</div>
-			<div class="device-box">
-				<div class="device-image"><img src="img/iron.png" height="100" width="100"></div>
-				<div class="device-name"><p>Iron</p></div>
-			</div>
-			<div class="device-box">
-				<div class="device-image"><img src="img/stove.png" height="100" width="100"></div>
-				<div class="device-name"><p>Stove</p></div>
-			</div>
-			<div class="device-box">
-				<div class="device-image"><img src="img/refrigerator.png" height="100" width="100"></div>
-				<div class="device-name"><p>Refrigerator</p></div>
-			</div>
-			<div class="device-box">
-				<div class="device-image"><img src="img/printer.png" height="100" width="100"></div>
-				<div class="device-name"><p>Printer</p></div>
-			</div>
-			<div class="device-box">
-				<div class="device-image"><img src="img/alarm-clock.png" height="100" width="100"></div>
-				<div class="device-name"><p>Alarm Clock</p></div>
-			</div>
-		</div>
+		
 	</div>
-	<script type="text/javascript" src="simulations.js"></script>	
+	<script type="text/javascript" src="simulations.js"></script>
 </body>
 </html>
