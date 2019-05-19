@@ -15,7 +15,7 @@ client.on('connect',()=>{
 	setInterval(publishConsumption(client),timeInterval);
 })
 
-client.on('message', function (topic, message)=>{
+client.on('message', (topic, message) => {
 	if(topic == "cmnd/sonoff-fridge/Power"){
 		var msg = message.toString()
 		if(msg =="")
@@ -34,12 +34,12 @@ client.on('message', function (topic, message)=>{
 		var msg = message.toString()
 		if(msg == "8")
 		{
-
+			publishConsumption(client);
 		}
 	}
 
 	
-})
+});
 
 function publishConsumption(client)
 {
@@ -71,3 +71,4 @@ function randomConsumption(min, max)
 }
 module.exports.publishConsumption;
 module.exports.randomConsumption;
+
