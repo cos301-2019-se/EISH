@@ -24,13 +24,9 @@ import org.eclipse.paho.client.mqttv3.MqttToken;
 //please asynchronous client MqttAsyncClient
 
 public class MqttDevice {
-<<<<<<< HEAD
-    private Device device;
     private String consumptionMessage;
     private String powerMessage;
-=======
     private Devices device;
->>>>>>> a236417ed17ac853269dae2566af10cdf4384950
     private String asyncClientId; 
     private IMqttAsyncClient asyncClient;
     private IMqttToken connectToken; 
@@ -49,7 +45,7 @@ public class MqttDevice {
                     //this means that we have successfully connected to the browser
                     try {
                         asyncClient.
-                        subscribe("cmnd/" + device.getSubscribeTopic() + "/Status", 0).
+                        subscribe("cmnd/" + device.getDeviceTopic() + "/Status", 0).
                         setActionCallback(new IMqttActionListener() {
                                 @Override
                                 public void onSuccess(IMqttToken asyncActionToken2) {
@@ -66,7 +62,7 @@ public class MqttDevice {
                                 }
                         });
                         asyncClient.
-                        subscribe("cmnd/" + device.getSubscribeTopic() + "/RESULT", 0).
+                        subscribe("cmnd/" + device.getDeviceTopic() + "/RESULT", 0).
                         setActionCallback(new IMqttActionListener() {
                                 @Override
                                 public void onSuccess(IMqttToken asyncActionToken3) {
@@ -104,7 +100,7 @@ public class MqttDevice {
         if (!connectToken.isComplete())
             return;
         try {
-            asyncClient.publish("cmnd/" + device.getPublishTopic() + "/Power", new MqttMessage("TOGGLE".getBytes()));    //
+            asyncClient.publish("cmnd/" + device.getDeviceTopic() + "/Power", new MqttMessage("TOGGLE".getBytes()));    //
         } catch(MqttException e) {
             e.printStackTrace();
         }

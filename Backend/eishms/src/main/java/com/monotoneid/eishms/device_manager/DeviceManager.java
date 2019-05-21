@@ -5,11 +5,11 @@ import java.util.List;
 
 import com.monotoneid.eishms.repository.DevicesRepository;
 import com.monotoneid.eishms.mqtt_devices.MqttDevice;
-import com.monotoneid.eishms.model.Device;
+import com.monotoneid.eishms.model.Devices;
 
 public class DeviceManager {
     public DeviceManager(DevicesRepository deviceRepo /*, DeviceConsumptionRepo devConRepo*/) {
-        List<Device> deviceModels = deviceRepo.findAll();
+        List<Devices> deviceModels = deviceRepo.findAll();
         
         devices = new ArrayList<MqttDevice>();
         deviceModels.forEach((device) -> {
