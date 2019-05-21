@@ -15,6 +15,7 @@ import com.monotoneid.eishms.repository.DeviceConsumptionRepository;
 import com.monotoneid.eishms.repository.GeneratorGenerationRepository;
 import com.monotoneid.eishms.repository.GeneratorsRepository;
 import com.monotoneid.eishms.exception.DevicesDoesNotExistException;
+import com.monotoneid.eishms.device_manager.DeviceManager;
 import com.monotoneid.eishms.exception.DeviceConsumptionDoesNotExistException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,11 @@ public class EndPointController{
     @Autowired
     ObjectMapper mapper;
 
+    @Autowired
+    private DeviceManager dm;
+
+    public EndPointController() {
+    }
     //Get Mapping
     @GetMapping("/view/devices")
     public ObjectNode getDevices() {
@@ -211,6 +217,12 @@ public class EndPointController{
     
    */
     
+
+  @GetMapping("/mqtt")
+  public String getMqttStuff() {
+    dm.singleToggle();
+    return "Published to Topic";
+  }
 
 /*
     

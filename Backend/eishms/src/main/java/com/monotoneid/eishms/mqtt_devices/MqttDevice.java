@@ -33,6 +33,7 @@ public class MqttDevice {
     public MqttDevice(Devices dev) {
         this.device = dev;
         asyncClientId = UUID.randomUUID().toString();
+        System.out.println("Initializing mqttDevice!!!");
         try {
             asyncClient = new MqttAsyncClient("tcp://127.0.0.1:1883", asyncClientId);
             MqttConnectOptions options = new MqttConnectOptions();
@@ -42,6 +43,7 @@ public class MqttDevice {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     //this means that we have successfully connected to the browser
+                    System.out.println("The client is connected the broker!");
                     try {
                         asyncClient.
                         subscribe("cmnd/" + device.getDeviceTopic() + "/Status", 0).
@@ -93,6 +95,10 @@ public class MqttDevice {
             e.printStackTrace();
         }
         
+    }
+
+    public String getComp() {
+        return consumptionMessage;
     }
 
     public void toggle() {

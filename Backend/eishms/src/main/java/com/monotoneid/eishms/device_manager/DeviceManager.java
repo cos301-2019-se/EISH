@@ -4,10 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.monotoneid.eishms.repository.DevicesRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.monotoneid.eishms.mqtt_devices.MqttDevice;
 import com.monotoneid.eishms.model.Devices;
 
+@Component("DeviceManager")
 public class DeviceManager {
+
+    private ArrayList<MqttDevice> devices;
+
     public DeviceManager(DevicesRepository deviceRepo /*, DeviceConsumptionRepo devConRepo*/) {
         List<Devices> deviceModels = deviceRepo.findAll();
         
@@ -24,5 +32,13 @@ public class DeviceManager {
             currDev.toggle();
     }
 
-    private ArrayList<MqttDevice> devices;
+    public String getMessage() {
+        return devices.get(0).getComp();
+    }
+
+    public void singleToggle() {
+        devices.get(0).toggle();
+    }
+
+    
 }
