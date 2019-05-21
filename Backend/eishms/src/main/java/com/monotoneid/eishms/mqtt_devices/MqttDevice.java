@@ -10,6 +10,7 @@ import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttToken;
 
 
@@ -21,10 +22,11 @@ import org.eclipse.paho.client.mqttv3.MqttToken;
 //https://www.oracle.com/corporate/features/simple-messaging-with-mqtt.html a bit complicated but you'll manage
 
 //please asynchronous client MqttAsyncClient
-//Whoever you are I believe in you!!! 
 
 public class MqttDevice {
     private Devices device;
+    private String consumptionMessage;
+    private String powerMessage;
     private String asyncClientId; 
     private IMqttAsyncClient asyncClient;
     private IMqttToken connectToken; 
@@ -36,23 +38,77 @@ public class MqttDevice {
             asyncClient = new MqttAsyncClient("tcp://127.0.0.1:1883", asyncClientId);
             MqttConnectOptions options = new MqttConnectOptions();
             this.connectToken = asyncClient.connect(options);
-            this.connectToken.setActionCallback(new ConnectionCallback());
+            this.connectToken.setActionCallback(new IMqttActionListener() {
+
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    //this means that we have successfully connected to the browser
+                    try {
+                        asyncClient.
+                        subscribe("cmnd/" + device.getDeviceTopic() + "/Status", 0).
+                        setActionCallback(new IMqttActionListener() {
+                                @Override
+                                public void onSuccess(IMqttToken asyncActionToken2) {
+                                    try {
+                                        consumptionMessage = asyncActionToken2.getResponse().getPayload().toString();
+                                        System.out.println(consumptionMessage);
+                                    } catch(MqttException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                @Override
+                                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+
+                                }
+                        });
+                        asyncClient.
+                        subscribe("cmnd/" + device.getDeviceTopic() + "/RESULT", 0).
+                        setActionCallback(new IMqttActionListener() {
+                                @Override
+                                public void onSuccess(IMqttToken asyncActionToken3) {
+                                    try {
+                                        powerMessage = asyncActionToken3.getResponse().getPayload().toString();
+                                        System.out.println(powerMessage);
+                                    } catch(MqttException e) {
+                                        e.printStackTrace();
+                                    } 
+                                }
+                                @Override
+                                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+
+                                }
+                        });
+                    } catch(MqttException e) {
+                        e.printStackTrace();
+                    }
+                    
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+
+                }
+                
+            });
         } catch(MqttException e) {
             e.printStackTrace();
         }
         
     }
 
-    public class ConnectionCallback implements IMqttActionListener {
-        @Override
-        public void onFailure(IMqttToken asyncActionToken, java.lang.Throwable exception) {
-
+    public void toggle() {
+        if (!connectToken.isComplete())
+            return;
+        try {
+            asyncClient.publish("cmnd/" + device.getDeviceTopic() + "/Power", new MqttMessage("TOGGLE".getBytes()));    //
+        } catch(MqttException e) {
+            e.printStackTrace();
         }
+        
+    }
 
-        @Override
-        public void onSuccess(IMqttToken asyncActionToken) {
-            
-        }
+    public long getDeviceID() {
+        return device.getDeviceId();
     }
 
     //check actual device state, if on start monitoring/subscribe power usage and enter in database
