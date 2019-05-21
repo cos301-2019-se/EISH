@@ -4,24 +4,21 @@
 
 ### <a href="https://github.com/cos301-2019-se/EISH" target="_blank">Github</a>
 
-### <a href="https://trello.com/b/HwwqggZa/monotoneid" target="_blank">Administration Management Board</a>
+### Documentation
 
-### <a href="https://trello.com/b/zj2DTdGW/project-development" target="_blank">Project Management Board</a>
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/" target="_blank">Architectural Designs</a>
+
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/" target="_blank">User Manual</a>
+
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/" target="_blank">Coding Standards</a>
 
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/SoftwareRequirementSpecification/SRS_EISH.pdf" target="_blank">Software Requirement Specification</a>
 
-## Contributing
+### Project Management Tools
 
-1. Pull the specific branch: e.g ```git pull origin background```
-2. Add your feature
-3. Commit
-4. Checkout into developmenrt ```git checkout development```
-5. Pull the development branch ```git pull origin development```
-6. Checkout into the specific branch: e.g ```git checkout backend```
-7. Merge with development ```git merge development```
-8. Resolve your merge conflicts
-9. Git push origin specific branch: e.g ```git push origin backend```
-10. Create a pull request on github into **development**
+### <a href="https://trello.com/b/HwwqggZa/monotoneid" target="_blank">Administration Management Board</a>
+
+### <a href="https://trello.com/b/zj2DTdGW/project-development" target="_blank">Project Management Board</a>
 
 ## Team Members
 
