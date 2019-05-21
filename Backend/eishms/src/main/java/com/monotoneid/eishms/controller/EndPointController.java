@@ -2,6 +2,7 @@ package com.monotoneid.eishms.controller;
 
 import java.util.List;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -26,11 +27,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
 @RequestMapping("api")
 @RestController
-public class EndPointController{
+public class EndPointController {
 
     @Autowired
     private DevicesRepository devicesRepository;
@@ -44,7 +43,7 @@ public class EndPointController{
     @Autowired
     ObjectMapper mapper;
 
-    //Get Mapping
+    // Get Mapping
     @GetMapping("/view/devices")
     public ObjectNode getDevices() {
         List<Devices> allDevices = devicesRepository.findAll();
@@ -53,7 +52,7 @@ public class EndPointController{
         ArrayNode arrayObjects = mapper.createArrayNode();
 
         Devices curDevice;
-        for (int i=0; i < allDevices.size(); i++) {
+        for (int i = 0; i < allDevices.size(); i++) {
             curDevice = allDevices.get(i);
             insideObjects.put("device_id", curDevice.getDeviceId());
             insideObjects.put("device_name", curDevice.getDeviceName());
@@ -65,19 +64,20 @@ public class EndPointController{
         objectNode.put("data", arrayObjects);
         return objectNode;
     }
+
     @GetMapping("/view/generators")
-    public ObjectNode getGenerators(){
+    public ObjectNode getGenerators() {
         List<Generators> allGenerators = generatorsRepository.findAll();
         ObjectNode objectNode = mapper.createObjectNode();
         ObjectNode insideObjects = mapper.createObjectNode();
         ArrayNode arrayObjects = mapper.createArrayNode();
 
         Generators currentGenerator;
-        for(int i=0;i<allGenerators.size();i++){
-            currentGenerator=allGenerators.get(i);
+        for (int i = 0; i < allGenerators.size(); i++) {
+            currentGenerator = allGenerators.get(i);
             insideObjects.put("generator_name", currentGenerator.getGeneratorName());
             insideObjects.put("generator_type", currentGenerator.getGeneratorType());
-            //insideObjects.put("generator_state", currentGenerator.getGeneratorState());
+            // insideObjects.put("generator_state", currentGenerator.getGeneratorState());
             arrayObjects.add(insideObjects);
             insideObjects = mapper.createObjectNode();
 
@@ -85,21 +85,23 @@ public class EndPointController{
         objectNode.put("data", arrayObjects);
         return objectNode;
     }
-    /*
+
     @GetMapping("/view/device/consumption/{device_id}")
-    public ObjectNode viewDeviceConsumptionFromToTime(@PathVariable(value = "device_id") Long device_id,@RequestBody DeviceRequestBody drb){
+    public ObjectNode viewDeviceConsumptionFromToTime(@PathVariable(value = "device_id") Long device_id,
+            @RequestBody DeviceRequestBody drb) {
         ObjectNode objectNode = mapper.createObjectNode();
         ObjectNode insideObjects = mapper.createObjectNode();
         ArrayNode arrayObjects = mapper.createArrayNode();
-
-         
-        List<DeviceConsumption> alldeviceconsumption= deviceconsumptionRepository.findAllById()
-                                                    .orElseThrow(() -> new DeviceConsumptionDoesNotExistException(device_id));
-       
-        
-
         DeviceConsumption currentDeviceConsumption;
+        Devices currentDevice=devicesRepository.findById(device_id)
+                                          .orElseThrow(() -> new DeviceConsumptionDoesNotExistException(device_id));
+        //currentDevice.get
+        List<DeviceConsumption> alldeviceconsumption= currentDevice.getDeviceConsumption();
+        //getDeviceConsumption();
+                System.out.println("size of list " + alldeviceconsumption.size());
 
+      // List<DeviceConsumption> alldeviceconsumption = deviceconsumptionRepository.getAllDeviceConsumptionByUsingId(device_id);
+        
         for(int i=0;i<alldeviceconsumption.size();i++){
             currentDeviceConsumption=alldeviceconsumption.get(i);
             insideObjects.put("date_time",currentDeviceConsumption.getTimeOfConsumption());
@@ -108,10 +110,11 @@ public class EndPointController{
             insideObjects = mapper.createObjectNode();
         }
       
+
         objectNode.put("data",arrayObjects);
         return objectNode;
     }
-  */
+  
 
    
    @GetMapping("/")
@@ -178,6 +181,7 @@ public class EndPointController{
     }
     else if(currentDevice.getDeviceState()==true && newDeviceState==false){
         currentDevice.setDeviceState(false);
+        //deviceManager.toggle();
     }
     else{
         objectNode.put("data", "Object already in " + currentDevice.getDeviceState() + " state.");
