@@ -21,6 +21,7 @@ import org.eclipse.paho.client.mqttv3.MqttToken;
 //https://www.baeldung.com/websockets-spring
 //https://www.oracle.com/corporate/features/simple-messaging-with-mqtt.html a bit complicated but you'll manage
 
+
 public class MqttDevice {
     private Devices device;
     private String consumptionMessage;
