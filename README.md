@@ -6,6 +6,7 @@ The EISH system is an artificially intelligent system.EISH system will primarily
 ### <a href="https://github.com/cos301-2019-se/EISH" target="_blank">Github</a>
 
 ### Documentation
+
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/" target="_blank">Architectural Designs</a>
 
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/" target="_blank">User Manual</a>
@@ -15,6 +16,7 @@ The EISH system is an artificially intelligent system.EISH system will primarily
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/SoftwareRequirementSpecification/SRS_EISH.pdf" target="_blank">Software Requirement Specification</a>
 
 ### Project Management Tools
+
 ### <a href="https://trello.com/b/HwwqggZa/monotoneid" target="_blank">Administration Management Board</a>
 
 ### <a href="https://trello.com/b/zj2DTdGW/project-development" target="_blank">Project Management Board</a>
