@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.monotoneid.eishms.device_manager.DeviceManager;
 import com.monotoneid.eishms.model.Device;
 import com.monotoneid.eishms.model.DeviceRequestBody;
 import com.monotoneid.eishms.mqtt_devices.MqttDevice;
@@ -26,9 +27,11 @@ public class Controller {
     ObjectMapper mapper;
 
     //private List<MqttDevice> mqttDevices;
+    private DeviceManager deviceManager;
 
     public Controller() {
         //initialize mqtt devices with data in the database, such as name, topics, ect...
+        deviceManager = new DeviceManager(devicesRepository);
     }
 
     @PostMapping("/devices")
