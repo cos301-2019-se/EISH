@@ -9,6 +9,7 @@ enum Priority{
 public class DeviceRequestBody {
 
     
+    private long device_id;
     private String device_name;
     private String topic;
     private int max_watts;
@@ -29,7 +30,8 @@ public class DeviceRequestBody {
     public DeviceRequestBody(){}
     
     
-    public DeviceRequestBody(@JsonProperty("device_name") String dn,
+    public DeviceRequestBody(@JsonProperty("device_id") long di,
+                            @JsonProperty("device_name") String dn,
                             @JsonProperty("topic") String t,
                             @JsonProperty("max_watts") int max,
                             @JsonProperty("min_watts") int min,
@@ -45,6 +47,7 @@ public class DeviceRequestBody {
                             @JsonProperty("max_capacity_watts") int maxcw,
                             @JsonProperty("generator_topic") String gentopic) {
         
+        this.device_id = di;
         this.device_name = dn;
         this.topic = t;
         this.max_watts = max;
@@ -77,7 +80,9 @@ public class DeviceRequestBody {
                           
     }
 
-  
+    public long getDeviceID() {
+        return this.device_id;
+    }
     public String getDeviceName() {
         return this.device_name;
     }

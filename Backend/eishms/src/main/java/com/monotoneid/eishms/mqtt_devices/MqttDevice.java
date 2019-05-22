@@ -6,13 +6,13 @@ import com.monotoneid.eishms.model.Devices;
 
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.MqttToken;
-
 
 //If you wanna code this resources are
 //http://www.yasith.me/2016/04/setting-up-mqtt-client-using-eclipse.html to get started
@@ -21,10 +21,11 @@ import org.eclipse.paho.client.mqttv3.MqttToken;
 //https://www.baeldung.com/websockets-spring
 //https://www.oracle.com/corporate/features/simple-messaging-with-mqtt.html a bit complicated but you'll manage
 
-
 public class MqttDevice {
     private Devices device;
     private String consumptionMessage;
+    private String consumptionTopic;
+    private String stateTopic;
     private String powerMessage;
     private String asyncClientId; 
     private IMqttAsyncClient asyncClient;
@@ -33,79 +34,53 @@ public class MqttDevice {
     public MqttDevice(Devices dev) {
         this.device = dev;
         asyncClientId = UUID.randomUUID().toString();
-        System.out.println("Initializing mqttDevice!!!");
+        consumptionTopic = "cmnd/" + device.getDeviceTopic() + "/Status";
+        stateTopic = "cmnd/" + device.getDeviceTopic() + "/RESULT";
         try {
             asyncClient = new MqttAsyncClient("tcp://127.0.0.1:1883", asyncClientId);
             MqttConnectOptions options = new MqttConnectOptions();
             this.connectToken = asyncClient.connect(options);
-            this.connectToken.setActionCallback(new IMqttActionListener() {
-
+            System.out.println("Initializing mqttDevice "+ this.device.getDeviceName());
+            this.connectToken.waitForCompletion();
+            System.out.println(this.device.getDeviceName() +" connected to broker!");
+            asyncClient.subscribe(consumptionTopic, 0).waitForCompletion();
+            asyncClient.subscribe(stateTopic, 0).waitForCompletion();
+            System.out.println("Done with subscribing");
+            asyncClient.setCallback(new MqttCallback(){
+            
                 @Override
-                public void onSuccess(IMqttToken asyncActionToken) {
-                    //this means that we have successfully connected to the browser
-                    System.out.println("The client is connected the broker!");
-                    try {
-                        asyncClient.
-                        subscribe("cmnd/" + device.getDeviceTopic() + "/Status", 0).
-                        setActionCallback(new IMqttActionListener() {
-                                @Override
-                                public void onSuccess(IMqttToken asyncActionToken2) {
-                                    try {
-                                        consumptionMessage = asyncActionToken2.getResponse().getPayload().toString();
-                                        System.out.println(consumptionMessage);
-                                    } catch(MqttException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                @Override
-                                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-
-                                }
-                        });
-                        asyncClient.
-                        subscribe("cmnd/" + device.getDeviceTopic() + "/RESULT", 0).
-                        setActionCallback(new IMqttActionListener() {
-                                @Override
-                                public void onSuccess(IMqttToken asyncActionToken3) {
-                                    try {
-                                        powerMessage = asyncActionToken3.getResponse().getPayload().toString();
-                                        System.out.println(powerMessage);
-                                    } catch(MqttException e) {
-                                        e.printStackTrace();
-                                    } 
-                                }
-                                @Override
-                                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-
-                                }
-                        });
-                    } catch(MqttException e) {
-                        e.printStackTrace();
+                public void messageArrived(String topic, MqttMessage message) throws Exception {
+                    if (topic.matches(consumptionTopic)) {
+                        System.out.println(device.getDeviceName() +" consumption: " + message.toString());
+                    } 
+                    if (topic.matches(stateTopic)) {
+                        System.out.println(device.getDeviceName() +" state: " + message.toString());
                     }
+                    //System.out.println("Message arrived from " + topic + " and is " + message.getPayload().toString());            
+                }
+            
+                @Override
+                public void deliveryComplete(IMqttDeliveryToken token) {
                     
                 }
-
+            
                 @Override
-                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-
+                public void connectionLost(Throwable cause) {
+                    
                 }
-                
             });
         } catch(MqttException e) {
+            System.out.println("The client is connected the broker!");
             e.printStackTrace();
         }
         
-    }
-
-    public String getComp() {
-        return consumptionMessage;
     }
 
     public void toggle() {
         if (!connectToken.isComplete())
             return;
         try {
-            asyncClient.publish("cmnd/" + device.getDeviceTopic() + "/Power", new MqttMessage("TOGGLE".getBytes()));    //
+            asyncClient.publish("cmnd/" + this.device.getDeviceTopic() + "/Power", new MqttMessage("TOGGLE".getBytes()));    //
         } catch(MqttException e) {
             e.printStackTrace();
         }

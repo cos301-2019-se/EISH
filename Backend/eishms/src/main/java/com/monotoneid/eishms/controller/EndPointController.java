@@ -142,6 +142,8 @@ public class EndPointController{
         newDevice.setDeviceAutoStart(drb.getDeviceAutoStart());
         newDevice.setDeviceState(drb.getDeviceState());
         newDevice.setDevicePriority(drb.getDevicePriority());
+        
+        dm.addDevice(newDevice);
 
         if ((returnDevice = devicesRepository.save(newDevice)) != null) {
             objectNode.put("data", returnDevice.getDeviceName() + " successfully inserted.");
@@ -151,6 +153,7 @@ public class EndPointController{
 
         return objectNode;
    }
+   
    @PostMapping("/add/generator")
    public ObjectNode addGenerator(@RequestBody DeviceRequestBody drb){
     ObjectNode objectNode = mapper.createObjectNode();
@@ -170,29 +173,22 @@ public class EndPointController{
     }
     return objectNode;
    }
-   @PatchMapping("/control/device/{device_id}")
-   public ObjectNode controlDevice(@PathVariable(value = "device_id") Long device_id,@RequestBody DeviceRequestBody drb){
-    Devices currentDevice=devicesRepository.findById(device_id)
-                                          .orElseThrow(() -> new DeviceConsumptionDoesNotExistException(device_id));
 
-    boolean newDeviceState =drb.getDeviceState();
+   @PatchMapping("/control/device")
+   public ObjectNode controlDevice(/*@PathVariable(value = "device_id") Long device_id*/ @RequestBody DeviceRequestBody drb){
+    Devices currentDevice = devicesRepository.findById(drb.getDeviceID())
+                                          .orElseThrow(() -> new DeviceConsumptionDoesNotExistException(drb.getDeviceID()));
+
     ObjectNode objectNode = mapper.createObjectNode();
     ObjectNode insideObjects = mapper.createObjectNode();
     Devices returnDevice;
-    if(currentDevice.getDeviceState()==false && newDeviceState==true){
-        currentDevice.setDeviceState(true);
-    }
-    else if(currentDevice.getDeviceState()==true && newDeviceState==false){
-        currentDevice.setDeviceState(false);
-    }
-    else{
-        objectNode.put("data", "Object already in " + currentDevice.getDeviceState() + " state.");
-        return objectNode; 
-    }
+    dm.toggle(currentDevice.getDeviceId());
+    currentDevice.setDeviceState(!currentDevice.getDeviceState());
+    insideObjects.put("device_id", currentDevice.getDeviceId());
     insideObjects.put("device_name", currentDevice.getDeviceName());
     insideObjects.put("device_state", currentDevice.getDeviceState());
      
-    if((returnDevice=devicesRepository.save(currentDevice))!=null){
+    if((returnDevice = devicesRepository.save(currentDevice)) != null){
         objectNode.put("data",insideObjects);
     }else{
         objectNode.put("data", "Failed to update " + currentDevice.getDeviceName() + ".");
@@ -216,13 +212,6 @@ public class EndPointController{
      
     
    */
-    
-
-  @GetMapping("/mqtt")
-  public String getMqttStuff() {
-    dm.singleToggle();
-    return "Published to Topic";
-  }
 
 /*
     
