@@ -1,34 +1,48 @@
 
-<div class="container pages pb5">
+<div class="container  pages pb5">
 
-  <div class="col-sm-5">
+  <div class="col-sm-4">
       <h4>Active Devices</h4>
-    <!-- view device list and manage -->
-    <div *ngFor="let device of deviceList">
-      <ul> 
-        <li  *ngIf="device.device_state == true" ngClick="openModal()">
-           <a> {{device.device_name}}</a>
-        </li>
-      </ul>
-    </div>   
+    <table class="table">
+      <tr  *ngFor="let device of deviceList |async">
+        <td *ngIf="device.state == 'on'" class="text-left">{{device.device_name}} </td>
+        <td *ngIf="device.state == 'on'">
+            <div href="#" class="btn btn-md" (click)="switchOff(device)">
+                <span class="glyphicon glyphicon-off"></span>
+            </div>
+        </td>
+        <td *ngIf="device.state == 'on'">
+          <div href="#" class="btn btn-md" >
+              <span class="glyphicon glyphicon-info-sign"></span>
+          </div>
+      </td>
+      </tr>
+    </table>   
   </div>
-  
-  <div class="col-sm-5">
-    <!-- view device list and manage -->
+
+  <div class="col-sm-4">    
     <h4>Off Devices</h4>
-    <div *ngFor="let device of deviceList">
-      <ul> 
-        <li *ngIf="device.device_state == false">
-            {{device.device_name}}
-        </li>
-      </ul>
-    </div>   
+    <table class="table">
+      <tr *ngFor="let device of deviceList | async">
+        <td *ngIf="device.state == 'off'" class="text-left">{{device.device_name}} </td>
+        <td *ngIf="device.state == 'off'">
+            <div href="#" class="btn btn-md"(click)="switchOn(device)">
+                <span class="glyphicon glyphicon-off"></span>
+            </div>
+        </td>
+        <td *ngIf="device.state == 'off'">
+          <div href="#" class="btn btn-md">
+              <span class="glyphicon glyphicon-info-sign"></span>
+          </div>
+      </td>
+      </tr>
+    </table>  
   </div>
 
-  <div class="col-sm-2">
-    <!-- add device -->
-    <app-modal> </app-modal>
+  <div class="col-sm-1"> </div>
 
+  <div class="col-sm-3">
+    <app-modal> </app-modal>
   </div>
 
 </div>

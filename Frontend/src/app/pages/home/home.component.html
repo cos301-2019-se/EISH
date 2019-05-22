@@ -1,25 +1,47 @@
 <div class="container pages pb5">
     <div class="class row">
-        <div class="col-sm-4">
-            total generation and total consumption
+        <div class="col-sm-4" >
+           
+            <google-chart #chart1
+                [title]="title"
+                [type]="type"
+                [data]="data"
+                [columnNames]="columnNames"
+                [options]="options">
+            </google-chart>
         </div>
-        <div class="col-sm-4">
-            <button type="button" class="btn btn-light" routerLink="/devices">Manage Devices</button>
-            <ul> 
-                <li *ngFor="let device of deviceList">
-                    {{device.device_name}}
-                </li>
-            </ul>
+        <div class="col-sm-4" > 
+            <google-chart #chart2
+                [title]="title"
+                [type]="type"
+                [data]="data"
+                [columnNames]="columnNames"
+                [options]="options">
+            </google-chart>
         </div>
-        <div class="col-sm-4">
-                <button type="button" class="btn btn-light" routerLink="/generators">Manage Devices</button>
-            <ul> 
-                <li *ngFor="let device of generatorList">
-                    {{device.generator_name}}
-                </li>
-            </ul>
+            <div class="col-sm-4">
+                <button type="button" class="btn btn-light" routerLink="/devices"> Devices</button>
+                <ul> 
+                    <li *ngFor="let device of deviceList | async">
+                        {{device.device_name}}
+                    </li>
+                </ul>
+            </div>
         </div>
+
+       <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4"> </div>
+            <div class="col-sm-4">
+                    <button type="button" class="btn btn-light" routerLink="/generators"> Generators</button>
+                    <ul> 
+                        <li *ngFor="let device of generatorList | async">
+                            {{device.generator_name}}
+                        </li>
+                    </ul>
+            </div>
     </div>
 </div>
+
 
 

@@ -1,26 +1,45 @@
-import { Component, OnInit } from '@angular/core';
-import {HomeComponent} from '../home/home.component';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+
+import {HttpClient} from '@angular/common/http';
+import { RequestsService } from 'src/app/requests.service';
+import { Observable } from 'rxjs';
+import {Generator} from '../generators/generators.component';
+
+export interface Device{
+  device_name: string,
+  topic: string,
+  min_watts: DoubleRange, 
+  max_watts: DoubleRange,
+  device_type: string,
+  state: string
+}
+
 
 @Component({
   selector: 'app-devices',
   templateUrl: './devices.component.html',
   styleUrls: ['./devices.component.css']
+  
 })
 export class DevicesComponent implements OnInit {
 
-  constructor() { }
+  public deviceList: Observable<Device []>;
+  public generatorList : Observable<Generator [] >;
+  device:any;
+
+  constructor(service: RequestsService) { 
+    this.deviceList = service.getDevicesList();
+    this.generatorList = service.getGeneratorList();
+  
+  }
 
   ngOnInit() {
+    
   }
-  deviceList = [
-    {"device_name":"Fridge","device_type":"Fridge","device_state":true},
-    {"device_name":"Microwave","device_type":"Microwave","device_state":true},
-    {"device_name":"Toaster","device_type":"Toaster","device_state":false},
-    {"device_name":"Dining Room Light","device_type":"Light","device_state":true},
-    {"device_name":"Bedroom Light","device_type":"Light","device_state":false}
-  ];
 
-  openModal(): void{
-    console.log('Works');
+   
+
+
   }
-}
+
+

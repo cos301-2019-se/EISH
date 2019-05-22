@@ -1,34 +1,44 @@
-<form class="form-horizontal" action="" method="">
-            
+<form #deviceForm="ngForm" (submit)="addDevice()" class="form-horizontal">
+           
   <div class="form-group">
     <label class="col-sm-4" for="device_name"> Device Name:</label>
     <div class="col-sm-6">
-        <input type="text" class="form-control" id="device_name">
+        <input type="text" [(ngModel)]="device_name" [ngModelOptions]="{standalone: true}" class="form-control" id="device_name">
     </div>
   </div>
-  
+
+    <div class="form-group">
+        <label class="col-sm-4" for="topic">Topic:</label>
+        <div class="col-sm-6">
+            <input type="text" [(ngModel)]="topic" [ngModelOptions]="{standalone: true}" class="form-control" id="topic">
+        </div>
+      </div>
+
   <div class="form-group">
     <label class="col-sm-4" for="minWatt">Minimum Watts:</label>
     <div class="col-sm-6">
-        <input type="number" class="form-control" id="minWatt">
+        <input type="number" [(ngModel)]="minWatt"  [ngModelOptions]="{standalone: true}" class="form-control" id="minWatt">
     </div>
   </div>
 
   <div class="form-group">
       <label class="col-sm-4" for="maxWatt">Maximum Watts:</label>
       <div class="col-sm-6">
-          <input type="number" class="form-control" id="maxWatt">
+          <input type="number" [(ngModel)]="maxWatt"  [ngModelOptions]="{standalone: true}" class="form-control" id="maxWatt">
       </div> 
   </div>
   <br>
   <div class="form-group">
       <label class="col-sm-4" for="device_type">Device Type:</label>
       <div class="col-sm-6">
-          <select class="form-control">
+          <select [(ngModel)]="device_type"   [ngModelOptions]="{standalone: true}"class="form-control">
               <option>Fridge</option>
-              <option>Microwave</option>
+              <option>Alarm Clock</option>
               <option>Light</option>
-              <option>Toaster</option>
+              <option>Hairdyer</option>
+              <option>Iron</option>
+              <option>Stove</option>
+              <option>Kettle</option>
             </select>
       </div>
       

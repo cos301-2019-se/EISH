@@ -1,4 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import { RequestsService } from 'src/app/requests.service';
+import {Device} from 'src/app/pages/devices/devices.component';
+import {Generator} from 'src/app/pages/generators/generators.component';
+
+import { GoogleChartsModule } from 'angular-google-charts';
+
 
 @Component({
   selector: 'app-home',
@@ -6,24 +14,32 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  home = HomeComponent;
-  constructor() { }
+  
+  public deviceList: Observable<Device []>;
+  public generatorList : Observable<Generator [] >;
+
+  title = 'Current Battery Capacity';
+    type = 'PieChart';
+    data = [
+      ['Battery Filled',     85],
+      ['Empty',      15]
+    ];
+    columnNames =  ['Task', 'Hours per Day'];
+    options = { 
+      colors: ['#54B754','#DCDCDC'],
+      pieHole: 0.4   
+    };
+    
+  constructor(service: RequestsService) { 
+    this.deviceList = service.getDevicesList();
+    this.generatorList = service.getGeneratorList();
+  }
 
   ngOnInit() {
-
+   
   }
-   deviceList = [
-    {"device_name":"Fridge","device_type":"Fridge","device_state":true},
-    {"device_name":"Microwave","device_type":"Microwave","device_state":true},
-    {"device_name":"Toaster","device_type":"Toaster","device_state":false},
-    {"device_name":"Dining Room Light","device_type":"Light","device_state":true},
-    {"device_name":"Bedroom Light","device_type":"Light","device_state":false}
-  ];
 
-  generatorList = [
-    {"generator_name":"Solar Power System","generator_type":"Solar Power","generator_state":true},
-    {"generator_name":"Diesel Generator","generator_type":"Standby Generator","generator_state":false}
-];
-
-
+   drawBatteryChart() {
+    
+  }
 }
