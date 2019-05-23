@@ -11,8 +11,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository()
 public interface DeviceConsumptionRepository extends JpaRepository<DeviceConsumption,Long> {
-   // @Query("SELECT consumption_id,device_id,consumption,timeofconsumption FROM deviceconsumption WHERE device_id=:device_id")
-   // List<DeviceConsumption> getAllDeviceConsumptionByUsingId(@Param("device_id") Long device_id);
+   
 }
 
 

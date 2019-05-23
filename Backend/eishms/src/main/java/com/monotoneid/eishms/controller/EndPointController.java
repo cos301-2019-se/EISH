@@ -2,7 +2,6 @@ package com.monotoneid.eishms.controller;
 
 import java.util.List;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -15,16 +14,19 @@ import com.monotoneid.eishms.model.DeviceRequestBody;
 import com.monotoneid.eishms.repository.DeviceConsumptionRepository;
 import com.monotoneid.eishms.repository.GeneratorGenerationRepository;
 import com.monotoneid.eishms.repository.GeneratorsRepository;
+import com.monotoneid.eishms.services.DeviceConsumptionService;
 import com.monotoneid.eishms.exception.DevicesDoesNotExistException;
 import com.monotoneid.eishms.exception.DeviceConsumptionDoesNotExistException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("api")
@@ -39,13 +41,18 @@ public class EndPointController {
     private GeneratorGenerationRepository generatorgenerationRepository;
     @Autowired
     private GeneratorsRepository generatorsRepository;
+   // @Autowired
+   // private DeviceConsumptionService deviceconsumptionservice;
+
+    private long start_date=0, end_date=0; 
 
     @Autowired
     ObjectMapper mapper;
 
     // Get Mapping
     @GetMapping("/view/devices")
-    public ObjectNode getDevices() {
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ArrayNode getDevices() {
         List<Devices> allDevices = devicesRepository.findAll();
         ObjectNode objectNode = mapper.createObjectNode();
         ObjectNode insideObjects = mapper.createObjectNode();
@@ -61,12 +68,13 @@ public class EndPointController {
             arrayObjects.add(insideObjects);
             insideObjects = mapper.createObjectNode();
         }
-        objectNode.put("data", arrayObjects);
-        return objectNode;
+       // objectNode.put("data", arrayObjects);
+        return arrayObjects;
     }
 
     @GetMapping("/view/generators")
-    public ObjectNode getGenerators() {
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ArrayNode getGenerators() {
         List<Generators> allGenerators = generatorsRepository.findAll();
         ObjectNode objectNode = mapper.createObjectNode();
         ObjectNode insideObjects = mapper.createObjectNode();
@@ -82,13 +90,15 @@ public class EndPointController {
             insideObjects = mapper.createObjectNode();
 
         }
-        objectNode.put("data", arrayObjects);
-        return objectNode;
+        //objectNode.put("data", arrayObjects);
+        return arrayObjects;
     }
 
-    @GetMapping("/view/device/consumption/{device_id}")
-    public ObjectNode viewDeviceConsumptionFromToTime(@PathVariable(value = "device_id") Long device_id,
-            @RequestBody DeviceRequestBody drb) {
+    @GetMapping(value="/view/device/consumption/{device_id}",params={"start_date","end_date"})
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ArrayNode viewDeviceConsumptionFromToTime(@PathVariable(value = "device_id") Long device_id,@RequestParam(value="start_date") long start_dateInput,@RequestParam(value="end_date") long end_dateInput) {
+        start_date=start_dateInput;
+        end_date=end_dateInput;
         ObjectNode objectNode = mapper.createObjectNode();
         ObjectNode insideObjects = mapper.createObjectNode();
         ArrayNode arrayObjects = mapper.createArrayNode();
@@ -104,29 +114,37 @@ public class EndPointController {
         
         for(int i=0;i<alldeviceconsumption.size();i++){
             currentDeviceConsumption=alldeviceconsumption.get(i);
+            if(start_date>=0 && end_date>=0){
+            if(currentDeviceConsumption.getTimeOfConsumption()<= end_date && currentDeviceConsumption.getTimeOfConsumption()>= start_date ){
             insideObjects.put("date_time",currentDeviceConsumption.getTimeOfConsumption());
             insideObjects.put("consumption",currentDeviceConsumption.getConsumption());
             arrayObjects.add(insideObjects);
             insideObjects = mapper.createObjectNode();
+            }
+        }
         }
       
 
-        objectNode.put("data",arrayObjects);
-        return objectNode;
+        //objectNode.put("data",arrayObjects);
+        return arrayObjects;
     }
   
 
-   
-   @GetMapping("/")
+   /*
+   @GetMapping("/enterconsumption")
    public ObjectNode start(){
     ObjectNode objectNode = mapper.createObjectNode();
     ArrayNode arrayObjects = mapper.createArrayNode();
+    
+    
+        DeviceConsumptionService.insertDeviceConsumption(1, (float) 102.8, 1532148465);
     objectNode.put("testing get endpoint", arrayObjects);
     return objectNode;
    }
-
+   */
    //Post Mapping
    @PostMapping("/add/device")
+   @CrossOrigin(origins = "http://localhost:4200")
    public ObjectNode addDevice(@RequestBody DeviceRequestBody drb){
         ObjectNode objectNode = mapper.createObjectNode();
         Devices newDevice = new Devices();
@@ -149,6 +167,7 @@ public class EndPointController {
         return objectNode;
    }
    @PostMapping("/add/generator")
+   @CrossOrigin(origins = "http://localhost:4200")
    public ObjectNode addGenerator(@RequestBody DeviceRequestBody drb){
     ObjectNode objectNode = mapper.createObjectNode();
     Generators newGenerator = new Generators();
@@ -168,6 +187,7 @@ public class EndPointController {
     return objectNode;
    }
    @PatchMapping("/control/device/{device_id}")
+   @CrossOrigin(origins = "http://localhost:4200")
    public ObjectNode controlDevice(@PathVariable(value = "device_id") Long device_id,@RequestBody DeviceRequestBody drb){
     Devices currentDevice=devicesRepository.findById(device_id)
                                           .orElseThrow(() -> new DeviceConsumptionDoesNotExistException(device_id));

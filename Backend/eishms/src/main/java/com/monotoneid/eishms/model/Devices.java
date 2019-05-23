@@ -56,6 +56,17 @@ public class Devices{
    //@Enumerated(EnumType.STRING)
     //@Column(name="device_priority")
     private int device_priority;
+    public Devices(){}
+    public Devices(String devicename,String deviceTopic,int minwat,int maxwat,String devicetype, int priority, boolean das,boolean ds){
+        this.setDeviceName(devicename);
+        this.setDeviceTopic(deviceTopic);
+        this.setDeviceAutoStart(das);
+        this.setDeviceMaxWatt(maxwat);
+        this.setDeviceMinWatt(minwat);
+        this.setDeviceType(devicetype);
+        this.setDevicePriority(priority);
+        this.setDeviceState(ds);
+    }
 
     //getters
     public long getDeviceId(){
