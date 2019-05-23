@@ -50,4 +50,4 @@ matrix:
         before_script:
           - cd "Device Simulations"    
         script:
-          - npm run   
+          - npm run  
