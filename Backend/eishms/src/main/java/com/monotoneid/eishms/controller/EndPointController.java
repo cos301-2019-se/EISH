@@ -19,6 +19,7 @@ import com.monotoneid.eishms.device_manager.DeviceManager;
 import com.monotoneid.eishms.exception.DeviceConsumptionDoesNotExistException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RequestMapping("api")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class EndPointController{
 
@@ -52,7 +54,7 @@ public class EndPointController{
     }
     //Get Mapping
     @GetMapping("/view/devices")
-    public ObjectNode getDevices() {
+    public ArrayNode getDevices() {
         List<Devices> allDevices = devicesRepository.findAll();
         ObjectNode objectNode = mapper.createObjectNode();
         ObjectNode insideObjects = mapper.createObjectNode();
@@ -68,11 +70,13 @@ public class EndPointController{
             arrayObjects.add(insideObjects);
             insideObjects = mapper.createObjectNode();
         }
-        objectNode.put("data", arrayObjects);
-        return objectNode;
+       // objectNode.put("data", arrayObjects);
+        //return objectNode;
+        return arrayObjects;
     }
     @GetMapping("/view/generators")
-    public ObjectNode getGenerators(){
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ArrayNode getGenerators(){
         List<Generators> allGenerators = generatorsRepository.findAll();
         ObjectNode objectNode = mapper.createObjectNode();
         ObjectNode insideObjects = mapper.createObjectNode();
@@ -88,8 +92,9 @@ public class EndPointController{
             insideObjects = mapper.createObjectNode();
 
         }
-        objectNode.put("data", arrayObjects);
-        return objectNode;
+        //objectNode.put("data", arrayObjects);
+        //return objectNode;
+        return arrayObjects;
     }
     /*
     @GetMapping("/view/device/consumption/{device_id}")
@@ -130,6 +135,7 @@ public class EndPointController{
 
    //Post Mapping
    @PostMapping("/add/device")
+   @CrossOrigin(origins = "http://localhost:4200")
    public ObjectNode addDevice(@RequestBody DeviceRequestBody drb){
         ObjectNode objectNode = mapper.createObjectNode();
         Devices newDevice = new Devices();
@@ -155,6 +161,7 @@ public class EndPointController{
    }
    
    @PostMapping("/add/generator")
+   @CrossOrigin(origins = "http://localhost:4200")
    public ObjectNode addGenerator(@RequestBody DeviceRequestBody drb){
     ObjectNode objectNode = mapper.createObjectNode();
     Generators newGenerator = new Generators();
@@ -175,6 +182,7 @@ public class EndPointController{
    }
 
    @PatchMapping("/control/device")
+   @CrossOrigin(origins = "http://localhost:4200")
    public ObjectNode controlDevice(/*@PathVariable(value = "device_id") Long device_id*/ @RequestBody DeviceRequestBody drb){
     Devices currentDevice = devicesRepository.findById(drb.getDeviceID())
                                           .orElseThrow(() -> new DeviceConsumptionDoesNotExistException(drb.getDeviceID()));

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.monotoneid.eishms.model.Devices;
 
+import org.apache.tomcat.util.json.JSONParser;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -13,6 +14,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONObject;
 
 //If you wanna code this resources are
 //http://www.yasith.me/2016/04/setting-up-mqtt-client-using-eclipse.html to get started
@@ -52,7 +54,11 @@ public class MqttDevice {
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     if (topic.matches(consumptionTopic)) {
                         System.out.println(device.getDeviceName() +" consumption: " + message.toString());
-                    } 
+                        // ObjectMapper mapper = new ObjectMapper();
+                        // try {
+                            
+                        //}
+                    }
                     if (topic.matches(stateTopic)) {
                         System.out.println(device.getDeviceName() +" state: " + message.toString());
                     }
