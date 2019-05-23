@@ -32,6 +32,14 @@ public class DeviceConsumption{
     @Column(name = "timeofconsumption", columnDefinition = "bigint", updatable = true, nullable = false)
     private long timeofconsumption;
 
+   // private long newDeviceId;
+
+    public DeviceConsumption(){}
+    public DeviceConsumption(float c,long t){
+        this.setConsumption(c);
+        this.setConsumptionTime(t);
+    }
+
     //getters
     public long getConsumptionId(){
         return consumption_id;
@@ -50,6 +58,12 @@ public class DeviceConsumption{
     public void setConsumption(float c){
         this.consumption=c;
     }
+    public void setConsumptionTime(long t){
+        this.timeofconsumption=t;
+    }
+  //  public void setDeviceConsumptionID(long d){
+  //      this.newDeviceId=d;
+   // }
 
 
     
