@@ -10,6 +10,15 @@ import { HomeComponent } from './pages/home/home.component';
 import { ModalComponent } from './template/modal/modal.component';
 import { DeviceFormComponent } from './template/forms/device-form/device-form.component';
 import { GeneratorFormComponent } from './template/forms/generator-form/generator-form.component';
+import { DeviceViewComponent } from './template/modal/device-view/device-view.component';
+import { HttpClientModule } from '@angular/common/http'; 
+ import {RequestsService  } from "./requests.service";
+import { GoogleChartsModule } from 'angular-google-charts';
+
+ import { FormsModule }   from '@angular/forms';
+import {GenModalComponent} from './template/modal/gen-modal/gen-modal.component';
+
+import { ChartsComponent } from './charts/charts.component';
 
 @NgModule({
   declarations: [
@@ -20,13 +29,19 @@ import { GeneratorFormComponent } from './template/forms/generator-form/generato
     HomeComponent,
     ModalComponent,
     DeviceFormComponent,
-    GeneratorFormComponent
+    GeneratorFormComponent,
+    DeviceViewComponent,
+    GenModalComponent,
+    ChartsComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    GoogleChartsModule, 
+    FormsModule
   ],
-  providers: [],
+  providers: [RequestsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

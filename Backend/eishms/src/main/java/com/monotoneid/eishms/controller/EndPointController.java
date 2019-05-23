@@ -16,6 +16,7 @@ import com.monotoneid.eishms.repository.GeneratorGenerationRepository;
 import com.monotoneid.eishms.repository.GeneratorsRepository;
 import com.monotoneid.eishms.services.DeviceConsumptionService;
 import com.monotoneid.eishms.exception.DevicesDoesNotExistException;
+import com.monotoneid.eishms.device_manager.DeviceManager;
 import com.monotoneid.eishms.exception.DeviceConsumptionDoesNotExistException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("api")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class EndPointController {
 
@@ -48,6 +50,12 @@ public class EndPointController {
 
     @Autowired
     ObjectMapper mapper;
+
+    @Autowired
+    private DeviceManager dm;
+
+    public EndPointController() {
+    }
 
     // Get Mapping
     @GetMapping("/view/devices")
@@ -157,6 +165,8 @@ public class EndPointController {
         newDevice.setDeviceAutoStart(drb.getDeviceAutoStart());
         newDevice.setDeviceState(drb.getDeviceState());
         newDevice.setDevicePriority(drb.getDevicePriority());
+        
+        dm.addDevice(newDevice);
 
         if ((returnDevice = devicesRepository.save(newDevice)) != null) {
             objectNode.put("data", returnDevice.getDeviceName() + " successfully inserted.");
@@ -166,6 +176,7 @@ public class EndPointController {
 
         return objectNode;
    }
+   
    @PostMapping("/add/generator")
    @CrossOrigin(origins = "http://localhost:4200")
    public ObjectNode addGenerator(@RequestBody DeviceRequestBody drb){
@@ -186,31 +197,23 @@ public class EndPointController {
     }
     return objectNode;
    }
-   @PatchMapping("/control/device/{device_id}")
-   @CrossOrigin(origins = "http://localhost:4200")
-   public ObjectNode controlDevice(@PathVariable(value = "device_id") Long device_id,@RequestBody DeviceRequestBody drb){
-    Devices currentDevice=devicesRepository.findById(device_id)
-                                          .orElseThrow(() -> new DeviceConsumptionDoesNotExistException(device_id));
 
-    boolean newDeviceState =drb.getDeviceState();
+   @PatchMapping("/control/device")
+   @CrossOrigin(origins = "http://localhost:4200")
+   public ObjectNode controlDevice(/*@PathVariable(value = "device_id") Long device_id*/ @RequestBody DeviceRequestBody drb){
+    Devices currentDevice = devicesRepository.findById(drb.getDeviceID())
+                                          .orElseThrow(() -> new DeviceConsumptionDoesNotExistException(drb.getDeviceID()));
+
     ObjectNode objectNode = mapper.createObjectNode();
     ObjectNode insideObjects = mapper.createObjectNode();
     Devices returnDevice;
-    if(currentDevice.getDeviceState()==false && newDeviceState==true){
-        currentDevice.setDeviceState(true);
-    }
-    else if(currentDevice.getDeviceState()==true && newDeviceState==false){
-        currentDevice.setDeviceState(false);
-        //deviceManager.toggle();
-    }
-    else{
-        objectNode.put("data", "Object already in " + currentDevice.getDeviceState() + " state.");
-        return objectNode; 
-    }
+    dm.toggle(currentDevice.getDeviceId());
+    currentDevice.setDeviceState(!currentDevice.getDeviceState());
+    insideObjects.put("device_id", currentDevice.getDeviceId());
     insideObjects.put("device_name", currentDevice.getDeviceName());
     insideObjects.put("device_state", currentDevice.getDeviceState());
      
-    if((returnDevice=devicesRepository.save(currentDevice))!=null){
+    if((returnDevice = devicesRepository.save(currentDevice)) != null){
         objectNode.put("data",insideObjects);
     }else{
         objectNode.put("data", "Failed to update " + currentDevice.getDeviceName() + ".");
@@ -234,7 +237,6 @@ public class EndPointController {
      
     
    */
-    
 
 /*
     
