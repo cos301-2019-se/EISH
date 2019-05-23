@@ -9,9 +9,9 @@ create table Devices(
 	device_type text not null,
 	device_state boolean not null,
 	device_autostart boolean not null,
-	device_priority int not null CHECK(0<=device_priority<=2)
+	device_priority int not null CHECK(0<=device_priority AND device_priority<=2)
 );
-insert into Devices(device_name,device_topic,device_min_watt,device_max_watt,device_type,device_state,device_autostart,device_priority) values('lg fridge','cmnd/sonoff-fridge/power',100,200,'Fridge',false,false,2);
+insert into Devices(device_name,device_topic,device_min_watt,device_max_watt,device_type,device_state,device_autostart,device_priority) values('LG Fridge','lg-fridge',100,200,'Fridge',false,false,1);
 select * from Devices;
 
 
