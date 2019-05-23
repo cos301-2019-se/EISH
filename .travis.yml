@@ -2,7 +2,7 @@ sudo: enabled
 branches:
   only:
     - master
-    - Development
+    #- Development
 matrix:
   include:
     - language: java
