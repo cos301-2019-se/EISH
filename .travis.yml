@@ -7,7 +7,7 @@ matrix:
   include:
     - name: SpringBootBackend
       language: java
-        jdk: oraclejdk9
+        jdk: oraclejdk8
         services:
           - postgresql
         addons:
