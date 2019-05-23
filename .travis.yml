@@ -2,10 +2,12 @@ sudo: enabled
 branches:
   only:
     - master
+    - Development
 matrix:
   include:
     - language: java
-      jdk: oraclejdk8
+      name: SpringBoot
+      jdk: oraclejdk11
       services:
         - postgresql
       addons:
@@ -18,6 +20,7 @@ matrix:
         - ./gradlew build --info
 
     - language: node_js
+      name: AngularSPA
       node_js:
         - "stable"
       dist: trusty
@@ -43,6 +46,7 @@ matrix:
       #  app: eish-ui      
 
     - language: node_js
+      name: Simulations
       node_js: 
         - "stable"
       cache:
