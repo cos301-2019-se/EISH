@@ -5,8 +5,9 @@ branches:
     - Development
 matrix:
   include:
+    - name: SpringBootBackend
     - language: java
-      jdk: oraclejdk8
+      jdk: oraclejdk9
       services:
         - postgresql
       addons:
@@ -17,7 +18,7 @@ matrix:
         - sudo -u postgres psql -c "ALTER ROLE postgres WITH password '12345';"
       script:
         - ./gradlew build --info
-
+    - name : AngularFrontEnd
     - language: node_js
       node_js:
         - "stable"
@@ -43,7 +44,7 @@ matrix:
       #  api_key:
       #    secure: 7f504e09-2888-4583-a328-e953228f4213
       #  app: eish-ui      
-
+    - name: EISHSimulations
     - language: node_js
       node_js: 
         - "stable"
