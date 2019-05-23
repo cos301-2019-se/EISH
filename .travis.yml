@@ -2,12 +2,10 @@ sudo: enabled
 branches:
   only:
     - master
-    #- Development
 matrix:
   include:
     - language: java
-        jdk: oraclejdk8
-      #name: SpringBootBackend
+      jdk: oraclejdk8
       services:
         - postgresql
       addons:
@@ -18,17 +16,19 @@ matrix:
         - sudo -u postgres psql -c "ALTER ROLE postgres WITH password '12345';"
       script:
         - ./gradlew build --info
-          
+
     - language: node_js
       node_js:
         - "stable"
-      #name : AngularFrontEnd
       dist: trusty
       sudo: required
 
+      branches:
+        only:
+          - master
       cache:
-      directories:
-        - "node_modules"
+        directories:
+          - "node_modules"
       before_script:
         - cd Frontend
         - npm install
@@ -41,14 +41,14 @@ matrix:
       #  api_key:
       #    secure: 7f504e09-2888-4583-a328-e953228f4213
       #  app: eish-ui      
+
     - language: node_js
       node_js: 
         - "stable"
-      #name: EISHSimulations
       cache:
-      directories:
-        - "node_modules"
+        directories:
+          - "node_modules"
       before_script:
-       - cd "Device Simulations"    
+        - cd "Device Simulations"    
       script:
-        - npm run  
+        - npm run   
