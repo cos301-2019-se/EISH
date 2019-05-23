@@ -16,6 +16,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { GoogleChartsModule } from 'angular-google-charts';
 
  import { FormsModule }   from '@angular/forms';
+import {GenModalComponent} from './template/modal/gen-modal/gen-modal.component';
+
+import { ChartsComponent } from './charts/charts.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,9 @@ import { GoogleChartsModule } from 'angular-google-charts';
     ModalComponent,
     DeviceFormComponent,
     GeneratorFormComponent,
-    DeviceViewComponent
+    DeviceViewComponent,
+    GenModalComponent,
+    ChartsComponent
   ],
   imports: [
     BrowserModule,

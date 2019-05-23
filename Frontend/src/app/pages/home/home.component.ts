@@ -5,8 +5,11 @@ import { RequestsService } from 'src/app/requests.service';
 import {Device} from 'src/app/pages/devices/devices.component';
 import {Generator} from 'src/app/pages/generators/generators.component';
 
-import { GoogleChartsModule } from 'angular-google-charts';
+import { Chart } from 'chart.js';
+import {ChartsComponent} from 'src/app/charts/charts.component'
+import { Consumption } from 'src/app/consumption.component';
 
+import { map } from 'rxjs-compat/operator/map';
 
 @Component({
   selector: 'app-home',
@@ -14,32 +17,33 @@ import { GoogleChartsModule } from 'angular-google-charts';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  
+  /*
+  * Variables:
+  */
+   
   public deviceList: Observable<Device []>;
   public generatorList : Observable<Generator [] >;
+  public consumptionList : Observable<Consumption[]>;
+  service: RequestsService;
+  charts: ChartsComponent;
+  
+  public consumption: Array<Consumption>
 
-  title = 'Current Battery Capacity';
-    type = 'PieChart';
-    data = [
-      ['Battery Filled',     85],
-      ['Empty',      15]
-    ];
-    columnNames =  ['Task', 'Hours per Day'];
-    options = { 
-      colors: ['#54B754','#DCDCDC'],
-      pieHole: 0.4   
-    };
-    
-  constructor(service: RequestsService) { 
-    this.deviceList = service.getDevicesList();
-    this.generatorList = service.getGeneratorList();
+  constructor(service: RequestsService, cc: ChartsComponent) { 
+    this.service = service;
+    this.charts = cc;
   }
 
   ngOnInit() {
-   
+    
+    this.deviceList = this.service.getDevicesList()
+    this.generatorList = this.service.getGeneratorList();
+    this.charts.drawBatteryCapacity();
+    this.printConsumption();
+    this.charts.drawTotalConsumption();
   }
 
-   drawBatteryChart() {
+  printConsumption(){
     
   }
 }

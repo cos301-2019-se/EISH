@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-export interface Generator{
-  generator_name: string,
-  topic: string,
-  min_capacity: DoubleRange, 
-  max_capacity: DoubleRange,
+export class Generator{
+  generator_name: string
+  generator_topic: string
+  min_capacity_watts: number
+  max_capacity_watts: number
   generator_type: string
+
+  constructor(){}
  }
 
 @Component({

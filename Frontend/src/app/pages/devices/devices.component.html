@@ -1,17 +1,36 @@
 
 <div class="container  pages pb5">
 
+    <div class="col-sm-4">
+        <h4>Active Devices</h4>
+      <table class="table">
+        <tr  *ngFor="let device of deviceList |async">
+          <td *ngIf="device.device_state == 1" class="text-left">{{device.device_name}} </td>
+          <td *ngIf="device.device_state == 1">
+              <div href="#" class="btn btn-md" (click)="control(device)">
+                  <span class="glyphicon glyphicon-off"></span>
+              </div>
+          </td>
+          <td *ngIf="device.device_state == 1">
+            <div href="#" class="btn btn-md" >
+                <span class="glyphicon glyphicon-info-sign"></span>
+            </div>
+        </td>
+        </tr>
+      </table>   
+    </div>
+
   <div class="col-sm-4">
-      <h4>Active Devices</h4>
+      <h4>In-active Devices</h4>
     <table class="table">
       <tr  *ngFor="let device of deviceList |async">
-        <td *ngIf="device.state == 'on'" class="text-left">{{device.device_name}} </td>
-        <td *ngIf="device.state == 'on'">
-            <div href="#" class="btn btn-md" (click)="switchOff(device)">
+        <td *ngIf="device.device_state == 0" class="text-left">{{device.device_name}} </td>
+        <td *ngIf="device.device_state == 0">
+            <div href="#" class="btn btn-md" (click)="control(device)">
                 <span class="glyphicon glyphicon-off"></span>
             </div>
         </td>
-        <td *ngIf="device.state == 'on'">
+        <td *ngIf="device.device_state == 0">
           <div href="#" class="btn btn-md" >
               <span class="glyphicon glyphicon-info-sign"></span>
           </div>
@@ -20,24 +39,6 @@
     </table>   
   </div>
 
-  <div class="col-sm-4">    
-    <h4>Off Devices</h4>
-    <table class="table">
-      <tr *ngFor="let device of deviceList | async">
-        <td *ngIf="device.state == 'off'" class="text-left">{{device.device_name}} </td>
-        <td *ngIf="device.state == 'off'">
-            <div href="#" class="btn btn-md"(click)="switchOn(device)">
-                <span class="glyphicon glyphicon-off"></span>
-            </div>
-        </td>
-        <td *ngIf="device.state == 'off'">
-          <div href="#" class="btn btn-md">
-              <span class="glyphicon glyphicon-info-sign"></span>
-          </div>
-      </td>
-      </tr>
-    </table>  
-  </div>
 
   <div class="col-sm-1"> </div>
 
