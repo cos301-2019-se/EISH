@@ -9,6 +9,8 @@ The EISH system is an artificially intelligent system.EISH system will primarily
 
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH_Demo2.pdf" target="_blank">Software Requirement Specification AND Architectural Design </a>
 
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH.pdf" target="_blank">Software Requirement Specification Demo1</a>
+
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/User_Manual.pdf" target="_blank">User Manual</a>
 
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/Coding_Standards.pdf" target="_blank">Coding Standards</a>
