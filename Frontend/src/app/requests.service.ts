@@ -59,6 +59,10 @@ export class RequestsService {
     }
 
     getTotalConsumption(): Observable<Consumption []> {
-      return this.http.get<Consumption []>(this.URL + 'consumption');
+      return this.http.get<Consumption []>(this.URL + '/view/home/consumption');
+    } 
+
+    getDeviceConsumption(deviceID): Observable<Consumption []>{
+      return this.http.get<Consumption []>(this.URL + '/view/device/consumption/' + deviceID);
     }
   }

@@ -12,13 +12,15 @@ import { DeviceFormComponent } from './template/forms/device-form/device-form.co
 import { GeneratorFormComponent } from './template/forms/generator-form/generator-form.component';
 import { DeviceViewComponent } from './template/modal/device-view/device-view.component';
 import { HttpClientModule } from '@angular/common/http'; 
- import {RequestsService  } from "./requests.service";
+import {RequestsService  } from "./requests.service";
 import { GoogleChartsModule } from 'angular-google-charts';
 
- import { FormsModule }   from '@angular/forms';
+import { FormsModule }   from '@angular/forms';
 import {GenModalComponent} from './template/modal/gen-modal/gen-modal.component';
 
 import { ChartsComponent } from './charts/charts.component';
+import { MaterialModule } from "./material";
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -33,13 +35,16 @@ import { ChartsComponent } from './charts/charts.component';
     DeviceViewComponent,
     GenModalComponent,
     ChartsComponent
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     GoogleChartsModule, 
-    FormsModule
+    FormsModule,
+    MaterialModule, 
+    BrowserAnimationsModule
   ],
   providers: [RequestsService],
   bootstrap: [AppComponent]

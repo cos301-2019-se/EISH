@@ -17,102 +17,121 @@ export class ChartsComponent implements OnInit {
 
   batteryChart = [];
   consumptionChart = [];
+  totalConsumption = [];
+  deviceGraph = [];
   constructor() { }
   
   ngOnInit() {
   }
 
 drawTotalConsumption(){
-  /*var data = [
-        "date_time": 1549749600,
-        "consumption": 1000
-    },
-    {
-        "device_id": 1,
-        "date_time": 1550613600,
-        "consumption": 500
-    },
-    {
-        "device_id": 2,
-        "date_time": 1551304800,
-        "consumption": 1000
-    },
-    {
-        "device_id": 3,
-        "date_time": 1551391200,
-        "consumption": 200
-    },
-    {
-        "device_id": 3,
-        "date_time": 1552168800,
-        "consumption": 1250
-    },
-    {
-        "device_id": 1,
-        "date_time": 1553983200,
-        "consumption": 100
-    }
-  ]*/
-   /*var graphLabels =[];
-     data.forEach(element =>{
-       var date = new Date(element.date_time*1000).toLocaleDateString();
-      graphLabels.push(date);
-    })
-    /*var yAxis = [];
-    data.forEach(element =>{
-      yAxis.push(element.consumption)
-    })
-    console.log(yAxis)
-    */
-    /*var dataConsumption = [];
-    data.forEach(element =>{
-      dataConsumption.push({"x" : element.date_time, "y" : element.consumption})
-    });
+    this.totalConsumption = new Chart('totalConsumption',{
+      type: 'line',
+  data: {
+    labels: ["17 May", "18 May", "19 May", "20 May", "22 May", "23 May", "24 May"],
+    datasets: [{ 
+        data: [1150,114,108,106,10,1111,133,221,0],
+        label: "Fridge",
+        borderColor: "#008000",
+        fill: false
+      }, 
+    ]
+  },
+    options: {
+        legend: {
+          display: false
+        }
+      }
     
-   console.log(dataConsumption)
-   console.log(graphLabels)
-    this.consumptionChart = new Chart(
-      'totalConsumption', {
-        type: 'line',
+  });
+}
+drawDeviceConsumption(){
+ this.consumptionChart = new Chart('deviceConsumption', {
+  type: 'line',
+  data: {
+    labels: ["17 May", "18 May", "19 May", "20 May", "22 May", "23 May", "24 May"],
+    datasets: [{ 
+        data: [860,114,106,106,107,111,133,221,783,900],
+        label: "Fridge",
+        borderColor: "#DCDCDC",
+        fill: false
+      }, { 
+        data: [282,350,411,502,635,809,947,1402,370,527],
+        label: "Light",
+        borderColor: "#1B982C",
+        fill: false
+      }, { 
+        data: [168,170,178,190,203,276,408,547,675,734],
+        label: "Kettle",
+        borderColor: "#000000",
+        fill: false
+      }, { 
+        data: [400,200,100,160,240,380,74,167,508,784],
+        label: "Blender", 
+        borderColor:  "#DCDCDC",
+        fill: false
+      }, { 
+        data: [600,500,600,1086,700,260,820,1702,3102,433],
+        label:"Iron",
+        borderColor: "#008000",
+        fill: false
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: "Device consumption (watts)", 
+      position: 'bottom'
+    },
+    legend: {
+      display: false
+    },
+    scales: {
+      xAxes: [{
+              display: true,
+              scaleLabel: {
+                  display: true,
+                  labelString: 'Day'
+              }
+          }],
+      yAxes: [{
+              display: true,
+              ticks: {
+                  beginAtZero: true,
+                  steps: 10,
+                  stepValue: 5,
+                  max: 1400
+              }
+          }]
+  }
+  }
+});
+}
+
+drawDeviceGraph(){
+  this.deviceGraph = new Chart('devicesGraph', {
+    responsive:true,
+    maintainAspectRatio: false,
+    type: 'bar',
     data: {
-        datasets: [{
-            data: dataConsumption
-        }]
+      labels: ["Fridge", "Light", "Kettle", "Blender", "Iron"],
+      datasets: [
+        {
+          label: "Consumption (watts)",
+          backgroundColor: ["#008000", "#DCDCDC","#000000","#1B982C","#DCDCDC"],
+          data: [2478,5267,734,784,433]
+        }
+      ]
     },
     options: {
-      legend: {
-        display:false
-      },
-        scales: {
-            xAxes: [{
-                type: 'time',
-               DisplayFormats: {
-                  'millisecond': 'MMM DD',
-                  'second': 'MMM DD',
-                  'minute': 'MMM DD',
-                  'hour': 'MMM DD',
-                  'day': 'MMM DD',
-                  'week': 'MMM DD',
-                  'month': 'MMM DD',
-                  'quarter': 'MMM DD',
-                  'year': 'MMM DD',
-               }
-            }]
-        }
-    }
-  });*/
-}
-format_date(data:Consumption[]) : {}{
-  var newData = {};
+      legend: { display: false }
 
- data.forEach(element =>
- {  var date = new Date(element.date_time*1000);
-    let formatted_date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() 
-   
-  })
-  return newData;
+    }
+});
 }
-  drawBatteryCapacity(){
+
+drawBatteryCapacity(){
     
     this.batteryChart = new Chart('batteryCapacity', {
       type: 'doughnut',

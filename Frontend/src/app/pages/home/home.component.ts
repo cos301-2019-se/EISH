@@ -39,8 +39,10 @@ export class HomeComponent implements OnInit {
     this.deviceList = this.service.getDevicesList()
     this.generatorList = this.service.getGeneratorList();
     this.charts.drawBatteryCapacity();
-    this.printConsumption();
     this.charts.drawTotalConsumption();
+    this.charts.drawDeviceGraph();
+    this.charts.drawDeviceConsumption();
+
   }
 
   printConsumption(){

@@ -17,7 +17,7 @@ export class Device{
   device_priority: string
   auto_start: boolean
   device_state: boolean
-  //check with Nare if state returned
+
   constructor(){}
  
 }
