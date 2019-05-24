@@ -1,3 +1,40 @@
-<p>
-  generator-form works!
-</p>
+<form #generatorForm="ngForm" (submit)="add_generator(generatorForm)" class="form-horizontal">
+            
+    <div class="form-group">
+      <label class="col-sm-4" for="generator_name"> Generator Name:</label>
+      <div class="col-sm-6">
+          <input type="text" [(ngModel)]="gen.generator_name" [ngModelOptions]="{standalone: true}" class="form-control" id="generator_name">
+      </div>
+    </div>
+  
+      <div class="form-group">
+          <label class="col-sm-4" for="generator_topic"> Topic:</label>
+          <div class="col-sm-6">
+              <input type="text" [(ngModel)]="gen.generator_topic" [ngModelOptions]="{standalone: true}" class="form-control" id="generator_topic">
+          </div>
+        </div>
+  
+    <div class="form-group">
+      <label class="col-sm-4" for="min_capacity_watts">Minimum Capacity Watts:</label>
+      <div class="col-sm-6">
+          <input type="number" [(ngModel)]="gen.min_capacity_watts" [ngModelOptions]="{standalone: true}" class="form-control" id="min_capacity_watts">
+      </div>
+    </div>
+  
+    <div class="form-group">
+        <label class="col-sm-4" for="max_capacity_watts">Maximum Capacity Watts:</label>
+        <div class="col-sm-6">
+            <input type="number" [(ngModel)]="gen.max_capacity_watts" [ngModelOptions]="{standalone: true}" class="form-control" id="max_capacity_watts">
+        </div> 
+    </div>
+    <br>
+    <div class="form-group">
+        <label class="col-sm-4" for="generator_type">Generator Type:</label>
+        <div class="col-sm-6">
+            <input type="text" [(ngModel)]="gen.generator_type" [ngModelOptions]="{standalone: true}" class="form-control" id="generator_type">
+        </div>
+        
+    </div>
+    <br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>

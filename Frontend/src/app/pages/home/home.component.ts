@@ -1,4 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import { RequestsService } from 'src/app/requests.service';
+import {Device} from 'src/app/pages/devices/devices.component';
+import {Generator} from 'src/app/pages/generators/generators.component';
+
+import { Chart } from 'chart.js';
+import {ChartsComponent} from 'src/app/charts/charts.component'
+import { Consumption } from 'src/app/consumption.component';
+
+import { map } from 'rxjs-compat/operator/map';
 
 @Component({
   selector: 'app-home',
@@ -6,24 +17,33 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  home = HomeComponent;
-  constructor() { }
+  /*
+  * Variables:
+  */
+   
+  public deviceList: Observable<Device []>;
+  public generatorList : Observable<Generator [] >;
+  public consumptionList : Observable<Consumption[]>;
+  service: RequestsService;
+  charts: ChartsComponent;
+  
+  public consumption: Array<Consumption>
+
+  constructor(service: RequestsService, cc: ChartsComponent) { 
+    this.service = service;
+    this.charts = cc;
+  }
 
   ngOnInit() {
-
+    
+    this.deviceList = this.service.getDevicesList()
+    this.generatorList = this.service.getGeneratorList();
+    this.charts.drawBatteryCapacity();
+    this.printConsumption();
+    this.charts.drawTotalConsumption();
   }
-   deviceList = [
-    {"device_name":"Fridge","device_type":"Fridge","device_state":true},
-    {"device_name":"Microwave","device_type":"Microwave","device_state":true},
-    {"device_name":"Toaster","device_type":"Toaster","device_state":false},
-    {"device_name":"Dining Room Light","device_type":"Light","device_state":true},
-    {"device_name":"Bedroom Light","device_type":"Light","device_state":false}
-  ];
 
-  generatorList = [
-    {"generator_name":"Solar Power System","generator_type":"Solar Power","generator_state":true},
-    {"generator_name":"Diesel Generator","generator_type":"Standby Generator","generator_state":false}
-];
-
-
+  printConsumption(){
+    
+  }
 }
