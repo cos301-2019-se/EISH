@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { RequestsService } from 'src/app/requests.service';
+import { Generator } from 'src/app/pages/generators/generators.component';
 
 @Component({
   selector: 'app-generator-form',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GeneratorFormComponent implements OnInit {
 
-  constructor() { }
+  service: RequestsService
+  gen = new Generator();
+
+  constructor(service: RequestsService) { 
+    this.service = service;
+  }
 
   ngOnInit() {
+  }
+
+  add_generator(generatorForm){
+    console.log(this.gen);
+   this.service.add_generator(this.gen);
   }
 
 }
