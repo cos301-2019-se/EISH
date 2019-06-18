@@ -1,7 +1,12 @@
 # EISH [![Build Status](https://travis-ci.org/cos301-2019-se/EISH.svg?branch=master)](https://travis-ci.org/cos301-2019-se/EISH)
 # MonoToneID
 ### EISH: Energy Intrinsic Smart Home
-The EISH system is an artificially intelligent system.EISH system will primarily monitor the energy generation capacity of smart homes and the consumption of this energy. EISH's AI component will measure and predict the generation capacity of smart homes. EISH's AI component will be trained to learn the habits of the residents of smart homes by considering individual devices. This knowledge will be used to suggest and prioritise appliances to optimise energy consumption and cost.
+The Energy Intrinsic Smart Home Management System (EISHMS) is a software solution
+that aims to connect the generation and consumption management of home automation sys-
+tems. EISHMS should be able to monitor a smart homes' energy generation capacity, while also
+monitoring the consumption of the energy. Additionally it will incorporate an intelligent system
+that will be able to measure and predict the energy generation capacity, while also learning the
+usage patterns of specific devices to prioritize devices and optimize energy consumption.
 
 ### <a href="https://github.com/cos301-2019-se/EISH" target="_blank">Github</a>
 
