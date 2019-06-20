@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EISHMSApplication {
+public class EishmsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(EISHMSApplication.class, args);
+		SpringApplication.run(EishmsApplication.class, args);
 	}
 
 }
