@@ -1,6 +1,6 @@
 package com.monotoneid.eishms.dataPersistence.models;
 
-import static com.monotoneid.eishms.dataPersistence.models.UserType.GUEST;
+import static com.monotoneid.eishms.dataPersistence.models.UserType.ROLE_GUEST;
 
 import java.security.Timestamp;
 
@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 enum UserType {
-    ADMIN, RESIDENT, GUEST;
+    ROLE_ADMIN, ROLE_RESIDENT, ROLE_GUEST;
 }
 
 @Entity(name = "user")
@@ -60,7 +60,7 @@ public class User {
         setUserEmail(newUserEmail);
         setUserPassword(newUserPassword);
         setUserLocationTopic(newUserLocationTopic);
-        setUserType(GUEST);
+        setUserType(ROLE_GUEST);
     }
 
     //getters

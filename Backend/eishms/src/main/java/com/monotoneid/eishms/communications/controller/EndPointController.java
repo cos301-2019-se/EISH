@@ -1,40 +1,49 @@
 package com.monotoneid.eishms.communications.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class EndPointController{
 
    @GetMapping("/user/presence")
-   public void getUserPresence(){
-
+   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+   public String getUserPresence(){
+      return "all can get presence";
    } 
 
    @PostMapping("/user")
-   public void addUser(){
-
+   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+   public String addUser(){
+      return "all can add user";
    }
    
    @DeleteMapping("/user")
-   public void removeUser(){
-
+   @PreAuthorize("hasRole('ADMIN')")
+   public String removeUser(){
+      return "only admin can remove user";
    }
 
    @GetMapping("/users")
-   public void retriveAllUsers(){
-
+   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+   public String retriveAllUsers(){
+      return "all can get all users";
    }
 
    @PutMapping("/user")
-   public void updateUser(){
-
+   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+   public String updateUser(){
+      return "all can update themselves";
    }
 
    @PatchMapping("/user/expiration")
-   public void renewUser(){
-
+   @PreAuthorize("hasRole('ADMIN')")
+   public String renewUser(){
+      return "only admin can change expiration date";
    }
 }
