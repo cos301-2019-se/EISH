@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public class UserService{
-    @Value("${salt}")
+    @Value("${eishms.salt}")
     private String salt;
     /**
      * section Users
