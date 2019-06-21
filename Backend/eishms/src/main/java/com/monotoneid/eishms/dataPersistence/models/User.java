@@ -1,5 +1,7 @@
 package com.monotoneid.eishms.dataPersistence.models;
 
+import static com.monotoneid.eishms.dataPersistence.models.UserType.GUEST;
+
 import java.security.Timestamp;
 
 import javax.persistence.Column;
@@ -12,24 +14,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
- enum UserType {
-    ADMIN,
-    RESIDENT,
-    GUEST;
+enum UserType {
+    ADMIN, RESIDENT, GUEST;
 }
 
-@Entity(name="user")
-@Table(name="user")
+@Entity(name = "user")
+@Table(name = "user")
 @EntityListeners(AuditingEntityListener.class)
-public class User{
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "userid", columnDefinition = "serial", updatable = false, nullable = false)
     private long userId;
+
+    @Column(name = "username", columnDefinition = "text", updatable = true, nullable = false)
+    private String userName;
 
     @Column(name = "useremail", columnDefinition = "text", updatable = true, nullable = false)
     private String userEmail;
@@ -44,13 +48,28 @@ public class User{
     @Column(name = "usertype", columnDefinition = "text", updatable = true, nullable = false)
     private UserType userType;
 
-    //check the time stamp column definition
+    
     @Column(name = "userexpirydate", columnDefinition = "TIMESTAMP", updatable = true, nullable = false)
     private Timestamp userExpiryDate;
+
+    
+    public User(@JsonProperty("userName") String newUserName, @JsonProperty("userEmail") String newUserEmail,
+            @JsonProperty("userPassword") String newUserPassword,
+            @JsonProperty("userLocationTopic") String newUserLocationTopic) {
+        setUserName(newUserName);
+        setUserEmail(newUserEmail);
+        setUserPassword(newUserPassword);
+        setUserLocationTopic(newUserLocationTopic);
+        setUserType(GUEST);
+    }
 
     //getters
     public long getUserId(){
         return userId;
+    }
+
+    public String getUserName(){
+        return userName;
     }
 
     public String getUserEmail(){
@@ -74,6 +93,10 @@ public class User{
     }
 
     //setters
+    public void setUserName(String newUserName){
+        this.userName = newUserName;
+    }
+
     public void setUserEmail(String newUserEmail){
         this.userEmail = newUserEmail;
     }
