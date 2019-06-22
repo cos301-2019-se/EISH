@@ -35,11 +35,13 @@ public class UserService{
         Timestamp newUserExpiryDate = calculateExpiryDate(defaultNumberOfDays);
         homeuser.setUserPassword(password);
         homeuser.setUserExpiryDate(newUserExpiryDate);
-
         usersRepository.save(homeuser);
+        long numberOfUser =usersRepository.count();
 
-
-        return "Created User Succefully";
+        if (usersRepository.count()> numberOfUser+1)
+            return "Created HomeUser successful";
+        else    
+            return "Create HomeUser unsuccessful";
         
     }
     /**
