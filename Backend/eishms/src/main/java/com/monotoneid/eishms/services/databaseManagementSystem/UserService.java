@@ -9,14 +9,20 @@ import com.monotoneid.eishms.dataPersistence.repositories.Users;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
+
+
 
 public class UserService{
     @Value("${eishms.salt}")
     private String salt;
+    
     @Value("${eishms.defaultNumberOfDays}")
     private int defaultNumberOfDays;
 
+    @Autowired
+    PasswordEncoder encoder;
 
     @Autowired
     private Users usersRepository;
@@ -31,7 +37,7 @@ public class UserService{
      */
     public String addUser(HomeUser homeuser){
 
-        String password = hashAndSaltPassword(homeuser.getUserPassword());
+        String password = encryptPassword(homeuser.getUserPassword());
         Timestamp newUserExpiryDate = calculateExpiryDate(defaultNumberOfDays);
         homeuser.setUserPassword(password);
         homeuser.setUserExpiryDate(newUserExpiryDate);
@@ -49,11 +55,8 @@ public class UserService{
      * @param passwordToHash
      * @return String 
      */
-    private String hashAndSaltPassword(String passwordToHash){
-        String sha256hex = Hashing.sha256().hashString(passwordToHash, StandardCharsets.UTF_8).toString();
-        String newPassword= sha256hex+salt;
-        String finalPassword = Hashing.sha256().hashString(newPassword, StandardCharsets.UTF_8).toString();
-        return finalPassword;
+    private String encryptPassword(String password){
+        return encoder.encode(password);
     }
     private Timestamp  calculateExpiryDate(int numberOfDays){
         return new Timestamp(System.currentTimeMillis()+convertDaysToMillSeconds(numberOfDays));
