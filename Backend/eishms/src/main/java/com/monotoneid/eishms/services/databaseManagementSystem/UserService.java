@@ -26,7 +26,6 @@ public class UserService{
     public String addUser(User user){
         String password=HashAndSaltPassword(user.getUserPassword());
         user.setUserPassword(password);
-
         return "respose";
         
     }
