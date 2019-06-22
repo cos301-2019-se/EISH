@@ -52,7 +52,9 @@ public class HomeUser {
     @Column(name = "userexpirydate", columnDefinition = "TIMESTAMP", updatable = true, nullable = false)
     private Timestamp userExpiryDate;
 
-    public HomeUser() {}
+    public HomeUser(){
+
+    }
     
     public HomeUser(@JsonProperty("userName") String newUserName, @JsonProperty("userEmail") String newUserEmail,
             @JsonProperty("userPassword") String newUserPassword,
