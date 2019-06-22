@@ -1,23 +1,21 @@
 package com.monotoneid.eishms.services.databaseManagementSystem;
 
-import java.nio.charset.StandardCharsets;
+
 import java.sql.Timestamp;
 
-import com.google.common.hash.Hashing;
+
 import com.monotoneid.eishms.dataPersistence.models.HomeUser;
 import com.monotoneid.eishms.dataPersistence.repositories.Users;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
 public class UserService{
-    @Value("${eishms.salt}")
-    private String salt;
-    
+       
     @Value("${eishms.defaultNumberOfDays}")
     private int defaultNumberOfDays;
 
