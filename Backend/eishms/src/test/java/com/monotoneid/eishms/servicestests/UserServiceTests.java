@@ -3,7 +3,7 @@ package com.monotoneid.eishms.servicestests;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.monotoneid.eishms.dataPersistence.models.User;
+import com.monotoneid.eishms.dataPersistence.models.HomeUser;
 import com.monotoneid.eishms.dataPersistence.repositories.Users;
 import com.monotoneid.eishms.services.databaseManagementSystem.UserService;
 
@@ -24,27 +24,47 @@ public class UserServiceTests{
 
     @Test
     public void testAddUserGivenObjectWithValidCredentials_ShouldRespondWithSuccessMessage()throws Exception{
-        User newMockUser = new User("Eben","eben@labs.epiuse.com","12345","owntracks/eben/iPhone/house");
+        HomeUser newMockUser = new HomeUser("Eben","eben@labs.epiuse.com","12345","owntracks/eben/iPhone/house");
         userServiceTester.addUser(newMockUser);
         verify(usersRepositoryTester, times(1)).save(newMockUser);
 
     } 
+    /*
+    @Test
     public void testAddUserGivenObjectWithInavlidEmptyUserName_ShouldRespondWithfailMessage()throws Exception{
-        User newMockUser = new User("","eben@labs.epiuse.com","12345","owntracks/eben/iPhone/house");
+        User newMockUser = new User("Eben","eben@labs.epiuse.com","12345","owntracks/eben/iPhone/house");
+        userServiceTester.addUser(newMockUser);
+        User newMockUser2 = new User("","eben@labs.epiuse.com","12345","owntracks/eben/iPhone/house");
+        userServiceTester.addUser(newMockUser2);
+        verify(usersRepositoryTester, times(1)).save(newMockUser);
+        verify(usersRepositoryTester, times(0)).save(newMockUser2);
+    }
+    @Test
+    public void testAddUserGivenObjectWithInvalidEmptyUserPassword_ShouldRespondWithfailMessage()throws Exception{
+        User newMockUser = new User("Eben","eben@labs.epiuse.com","","owntracks/eben/iPhone/house");
         userServiceTester.addUser(newMockUser);
         verify(usersRepositoryTester, times(0)).save(newMockUser);
     }
-    public void testAddUserGivenObjectWithUserPassword_ShouldRespondWithfailMessage()throws Exception{
-
+    @Test
+    public void testAddUserGivenObjectWithInvalidEmptyUserEmail_ShouldRespondWithfailMessage()throws Exception{
+        User newMockUser = new User("Eben","","12345","owntracks/eben/iPhone/house");
+        userServiceTester.addUser(newMockUser);
+        verify(usersRepositoryTester, times(0)).save(newMockUser);
     }
-    public void testAddUserGivenObjectWithUserEmail_ShouldRespondWithfailMessage()throws Exception{
-
+    @Test
+    public void testAddUserGivenObjectWithInvalidEmptyUserLocationTopic_ShouldRespondWithfailMessage()throws Exception{
+        User newMockUser = new User("Eben","eben@labs.epiuse.com","12345","");
+        userServiceTester.addUser(newMockUser);
+        verify(usersRepositoryTester, times(0)).save(newMockUser);
     }
-    public void testAddUserGivenObjectWithUserLocationTopic_ShouldRespondWithfailMessage()throws Exception{
-
+    @Test
+    public void testAddUserGivenObjectWithInvalidEmptyCredentials_ShouldRespondWithfailMessage()throws Exception{
+        User newMockUser = new User("","","","");
+        userServiceTester.addUser(newMockUser);
+        verify(usersRepositoryTester, times(0)).save(newMockUser);
     }
 
 
-    
+    */
     
 }

@@ -2,7 +2,7 @@ package com.monotoneid.eishms.dataPersistence.models;
 
 import static com.monotoneid.eishms.dataPersistence.models.UserType.ROLE_GUEST;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,10 +22,10 @@ enum UserType {
     ROLE_ADMIN, ROLE_RESIDENT, ROLE_GUEST;
 }
 
-@Entity(name = "user")
-@Table(name = "user")
+@Entity(name = "homeuser")
+@Table(name = "homeuser")
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class HomeUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,7 +53,7 @@ public class User {
     private Timestamp userExpiryDate;
 
     
-    public User(@JsonProperty("userName") String newUserName, @JsonProperty("userEmail") String newUserEmail,
+    public HomeUser(@JsonProperty("userName") String newUserName, @JsonProperty("userEmail") String newUserEmail,
             @JsonProperty("userPassword") String newUserPassword,
             @JsonProperty("userLocationTopic") String newUserLocationTopic) {
         setUserName(newUserName);

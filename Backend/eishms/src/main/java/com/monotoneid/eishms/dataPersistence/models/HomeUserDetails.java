@@ -19,7 +19,7 @@ public class HomeUserDetails implements UserDetails {
     private String userLocationTopic;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public HomeUserDetails(User homeUser) {
+    public HomeUserDetails(HomeUser homeUser) {
         this.userId = homeUser.getUserId();
         this.userName = homeUser.getUserName();
         this.userEmail = homeUser.getUserEmail();
