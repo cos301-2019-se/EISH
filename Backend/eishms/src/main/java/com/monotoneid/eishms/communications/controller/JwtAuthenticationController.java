@@ -38,7 +38,7 @@ public class JwtAuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody JwtRequest loginRequest) {
- 
+        //System.out.println("Encoded password" + encoder.encode(loginRequest.getPassword()));
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
