@@ -11,6 +11,9 @@ import { KeysComponent } from './templates/forms/keys/keys.component';
 import { HttpClientModule } from '@angular/common/http';
 import {UserAccessControlService} from './services/user/user-access-control.service';
 import {InputService} from './services/input/input.service';
+import { AccessControlInterceptor } from './services/interceptor/user-access-control.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +28,12 @@ import {InputService} from './services/input/input.service';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [UserAccessControlService, InputService],
+  providers: [UserAccessControlService, InputService, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AccessControlInterceptor,
+    multi: true
+
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +12,9 @@ export class UserAccessControlService {
    */
 
    /* Variables: */
+  ROOT_URL = 'http://localhost:8080/api';
 
-  constructor() { }
+  constructor() {}
 
   /**
    * Sends username and password to endpoint and receives JWT upon success
@@ -52,8 +55,8 @@ export class UserAccessControlService {
    * @param credential Object
    * @returns
    */
-  changeCredentials(){
-
+  changeCredentials() : Observable<{}> {
+    return null;
   }
 
   /**'

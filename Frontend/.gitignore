@@ -1,0 +1,8 @@
+# Ignore all files in the node_modules folder
+/node_modules
+
+# Ignore workspace file
+*.code-workspace
+
+# Ignore all json files
+*.json
