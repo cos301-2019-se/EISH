@@ -21,6 +21,8 @@ public class UserServiceTests{
     @Mock
     Users usersRepositoryTester;
 
+    //Get Users
+    
 
     @Test
     public void testAddUserGivenObjectWithValidCredentials_ShouldRespondWithSuccessMessage()throws Exception{
@@ -29,16 +31,17 @@ public class UserServiceTests{
         verify(usersRepositoryTester, times(1)).save(newMockUser);
 
     } 
-    /*
     @Test
     public void testAddUserGivenObjectWithInavlidEmptyUserName_ShouldRespondWithfailMessage()throws Exception{
-        User newMockUser = new User("Eben","eben@labs.epiuse.com","12345","owntracks/eben/iPhone/house");
+        HomeUser newMockUser = new HomeUser("Eben","eben@labs.epiuse.com","12345","owntracks/eben/iPhone/house");
         userServiceTester.addUser(newMockUser);
-        User newMockUser2 = new User("","eben@labs.epiuse.com","12345","owntracks/eben/iPhone/house");
-        userServiceTester.addUser(newMockUser2);
         verify(usersRepositoryTester, times(1)).save(newMockUser);
-        verify(usersRepositoryTester, times(0)).save(newMockUser2);
+        HomeUser newMockUser2 = new HomeUser("","eben@labs.epiuse.com","12345","owntracks/eben/iPhone/house");
+        userServiceTester.addUser(newMockUser2);
+        verify(usersRepositoryTester, times(1)).save(newMockUser2);
     }
+    /*
+   
     @Test
     public void testAddUserGivenObjectWithInvalidEmptyUserPassword_ShouldRespondWithfailMessage()throws Exception{
         User newMockUser = new User("Eben","eben@labs.epiuse.com","","owntracks/eben/iPhone/house");

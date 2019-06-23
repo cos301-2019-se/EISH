@@ -1,15 +1,23 @@
 package com.monotoneid.eishms.communications.controller;
 
+import com.monotoneid.eishms.dataPersistence.models.HomeUser;
+import com.monotoneid.eishms.services.databaseManagementSystem.UserService;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class EndPointController{
+   
+   private UserService userService;
 
    @GetMapping("/user/presence")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
@@ -19,8 +27,9 @@ public class EndPointController{
 
    @PostMapping("/user")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public String addUser(){
-      return "all can add user";
+   public ResponseEntity<Object> addUser(@RequestBody HomeUser newHomeUser){
+      String result =userService.addUser(newHomeUser);
+      return new ResponseEntity<>(result,HttpStatus.OK);
    }
    
    @DeleteMapping("/user")
@@ -31,8 +40,8 @@ public class EndPointController{
 
    @GetMapping("/users")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public String retriveAllUsers(){
-      return "all can get all users";
+   public ResponseEntity<Object> retriveAllUsers(){
+      return new ResponseEntity<>(userService.retriveAllUsers(),HttpStatus.OK);
    }
 
    @PutMapping("/user")
