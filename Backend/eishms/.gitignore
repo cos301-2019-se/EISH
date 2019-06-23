@@ -34,3 +34,6 @@ HELP.md
 
 ### Everything in Bin ###
 bin
+
+### All json fies ###
+*.json
