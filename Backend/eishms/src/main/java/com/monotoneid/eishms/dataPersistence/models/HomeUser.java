@@ -14,8 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 enum UserType {
@@ -56,13 +54,11 @@ public class HomeUser {
 
     }
     
-    public HomeUser(@JsonProperty("userName") String newUserName, @JsonProperty("userEmail") String newUserEmail,
-            @JsonProperty("userPassword") String newUserPassword,
-            @JsonProperty("userLocationTopic") String newUserLocationTopic) {
-        setUserName(newUserName);
-        setUserEmail(newUserEmail);
-        setUserPassword(newUserPassword);
-        setUserLocationTopic(newUserLocationTopic);
+    public HomeUser(UserRequestBody urb){
+        setUserName(urb.getUserName());
+        setUserEmail(urb.getUserEmail());
+        setUserPassword(urb.getUserPassword());
+        setUserLocationTopic(urb.getUserLocationTopic());
         setUserType(ROLE_GUEST);
     }
 
