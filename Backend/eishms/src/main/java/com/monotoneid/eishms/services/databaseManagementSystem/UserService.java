@@ -55,7 +55,7 @@ public class UserService{
      * @param passwordToHash
      * @return String 
      */
-    private String encryptPassword(String password){
+    private String encryptPassword(String password){        
         return encoder.encode(password);
     }
     private Timestamp  calculateExpiryDate(int numberOfDays){
