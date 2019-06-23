@@ -31,3 +31,6 @@ HELP.md
 
 ### All Java Class Files ###
 *.class
+
+### Everything in Bin ###
+/bin/
