@@ -62,6 +62,14 @@ public class HomeUser {
         setUserType(ROLE_GUEST);
     }
 
+    public HomeUser(String username, String userEmail, String userPassword, String userLocationTopic) {
+        setUserName(username);
+        setUserEmail(userEmail);
+        setUserPassword(userPassword);
+        setUserLocationTopic(userLocationTopic);
+        setUserType(ROLE_GUEST);
+    }
+
     //getters
     public long getUserId(){
         return userId;
