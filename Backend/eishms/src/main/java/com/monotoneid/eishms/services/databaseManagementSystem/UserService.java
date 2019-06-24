@@ -74,9 +74,7 @@ public class UserService{
      * @return String 
      */
     private String encryptPassword(String password){
-        return encoder.encode(password);
-        }       
-        
+        return encoder.encode(password);        
     }
     private Timestamp  calculateExpiryDate(int numberOfDays){
         return new Timestamp(System.currentTimeMillis()+convertDaysToMillSeconds(numberOfDays));

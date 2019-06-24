@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class EndPointController{
    @Autowired
@@ -30,18 +30,33 @@ public class EndPointController{
    @Autowired
    private UserService userService;
    
+   /**
+    * GET METHOD
+    * Implements retrieveAllUsers endpoint, that calls the retrieveAllUsers service
+    * @return an object with all users 
+    */
    @GetMapping("/users")
    @PreAuthorize("hasRole('ADMIN')")
    public ResponseEntity<Object> retriveAllUsers(){
       return new ResponseEntity<>(userService.retrieveAllUsers(),HttpStatus.OK);
    }
 
+   /**
+    * GET METHOD
+    * Implements retrieveUser endpoint, that calls the retrieveUser service
+    * @return a the valid homeUser
+    */
    @GetMapping("/user/{userId}")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public ResponseEntity<HomeUser> retriveUser(@PathVariable(value = "userId") Long userId){
       return new ResponseEntity<>(userService.retrieveUser(userId),HttpStatus.OK);
    }
 
+   /**
+    * DELETE METHOD
+    * Implements removeUser endpoint, that calls the removeUser service
+    * @return an object with all the remaining users
+    */
    @DeleteMapping("/user/{userId}")
    @PreAuthorize("hasRole('ADMIN')")
    public ResponseEntity<Object> removeUser(@PathVariable(value = "userId") Long userId){
@@ -49,7 +64,11 @@ public class EndPointController{
       return new ResponseEntity<>(result,HttpStatus.OK);      
    }
 
-
+   /**
+    * GET METHOD
+    * Implements getUserPresence endpoint, that calls the getUserPresence service
+    * @return an object with the presence of the user
+    */
    @GetMapping("/user/presence")
    @CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
@@ -60,19 +79,24 @@ public class EndPointController{
    /**
     * POST METHOD
     * Implements the addUser endpoint, that calls the addUser service
+    * @param newHomeUser
     * @return the status message
     */
    @PostMapping("/user")
-   @CrossOrigin(origins = "http://localhost:4200")
+   //@CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public ResponseEntity<Object> addUser(@Valid @RequestBody HomeUser newHomeUser){
       String result =userService.addUser(newHomeUser);
       return new ResponseEntity<>(result,HttpStatus.OK);
    }
 
-
-  
-
+   /**
+    * PATCH METHOD
+    * Implements updateUserEmail endpoint, that calls updateUserEmail service
+    * @param userId
+    * @param newHomeUser
+    * @return
+    */
    @PatchMapping("/user/{userId}/useremail")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public ResponseEntity<Object> updateUserEmail(@PathVariable(value = "userId") Long userId,@Valid @RequestBody HomeUser newHomeUser){
