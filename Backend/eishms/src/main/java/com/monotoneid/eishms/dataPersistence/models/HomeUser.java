@@ -52,17 +52,13 @@ public class HomeUser {
     @Column(name = "userexpirydate", columnDefinition = "TIMESTAMP", updatable = true, nullable = false)
     private Timestamp userExpiryDate;
 
-    public HomeUser(){
-
-    }
+    public HomeUser(){}
     
-    public HomeUser(@JsonProperty("userName") String newUserName, @JsonProperty("userEmail") String newUserEmail,
-            @JsonProperty("userPassword") String newUserPassword,
-            @JsonProperty("userLocationTopic") String newUserLocationTopic) {
+    public HomeUser(@JsonProperty("userName") String newUserName, @JsonProperty("userEmail") String newEmail, @JsonProperty("userPassword") String newPassword, @JsonProperty("userLocationTopic") String newLocationTopic){
         setUserName(newUserName);
-        setUserEmail(newUserEmail);
-        setUserPassword(newUserPassword);
-        setUserLocationTopic(newUserLocationTopic);
+        setUserEmail(newEmail);
+        setUserPassword(newPassword);
+        setUserLocationTopic(newLocationTopic);
         setUserType(ROLE_GUEST);
     }
 
