@@ -57,8 +57,8 @@ export class UserAccessControlService {
    * @param credential Object
    * @returns
    */
-  changeCredentials(userCredentials){
-    this.http.put(this.ROOT_URL+ '', userCredentials);
+  changeCredentials() : Observable<{}> {
+    return null;
   }
 
   /**'
