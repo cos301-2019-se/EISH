@@ -27,6 +27,9 @@ export class UserAccessControlService {
    */
  
   authenticateUser(userData): Observable<any>{
+    //receives json: tokenType, accessToken
+    //sessionStorage.setItem('username', userData.username)
+    //sessionStorage.setItem('token', map.data.accessToken)
     return this.http.post(this.ROOT_URL+'auth', userData);
   }
 
@@ -35,7 +38,10 @@ export class UserAccessControlService {
    * @returns boolean
    */
   isUserLoggedIn(): boolean{
-    return false;
+    if(sessionStorage == null)
+      return false;
+    else
+      return true;
   }
 
   /**
@@ -47,6 +53,8 @@ export class UserAccessControlService {
    * @returns
    */
   userLogOut(){
+    sessionStorage.clear(); //window.sessionStorage.clear();
+    //load login page
 
   }
 
