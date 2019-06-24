@@ -42,7 +42,7 @@ public class UserService{
         long numberOfUser =usersRepository.count();
 
         if (usersRepository.count()> numberOfUser+1)
-            return "Created HomeUser successful";
+            return "Created HomeUser successfully";
         else    
             return "Create HomeUser unsuccessful";
         
