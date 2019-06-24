@@ -45,49 +45,38 @@ public class UserService{
      * @param 
      */
     public String addUser(HomeUser homeuser){
-        if(homeuser!= null){
-            Timestamp newUserExpiryDate = calculateExpiryDate(defaultNumberOfDays);
-            homeuser.setUserExpiryDate(newUserExpiryDate);
-            System.out.println(homeuser.getUserPassword());
-          //  if(homeuser.getUserPassword()!=null){
-                String password = encryptPassword(homeuser.getUserPassword());
-                System.out.println("encrypted password: " + password);
-                homeuser.setUserPassword(password);
-           // }
-                       
-            long numberOfUser =usersRepository.count();
-            if(homeuser.getUserName()!= null && homeuser.getUserEmail()!= null 
-            && homeuser.getUserPassword()!=null && homeuser.getUserLocationTopic()!= null 
-            && homeuser.getUserType()!= null && homeuser.getUserExpiryDate()!= null){
-                System.out.println("alluser inputs passed");
-                usersRepository.save(homeuser);
-            } else{
-                System.out.println("user input failed");
-
-            }
+        if(homeuser==null){
+            return "could not create user";
         }
-            // System.out.println(homeuser.getUserExpiryDate());
-            // System.out.println(homeuser.getUserId());
-            // System.out.println(homeuser.getUserName());
-            // System.out.println(homeuser.getUserPassword());
-            // System.out.println(homeuser.getUserEmail());
-            // System.out.println(homeuser.getUserLocationTopic());
-            // System.out.println(homeuser.getUserType());
-            
-           // if (usersRepository.count()> numberOfUser)
-            //    return "Create HomeUser successful";
-          //  else    
-            //    return "Create HomeUser unsuccessful";
-            //}
-            return "Create HomeUser unsuccessful";  
-    }
+        if(homeuser.getUserName().isEmpty() || homeuser.getUserEmail().isEmpty()
+        || homeuser.getUserLocationTopic().isEmpty() 
+        || homeuser.getUserPassword().isEmpty()){
+            return "could not create user";
+        }
+        Timestamp newUserExpiryDate = calculateExpiryDate(defaultNumberOfDays);
+        homeuser.setUserExpiryDate(newUserExpiryDate);
+        HomeUser savedHomeUser=null; 
+        if(homeuser.getUserPassword()!=null){
+           homeuser.setUserPassword(encryptPassword(homeuser.getUserPassword()));
+        }
+        if(homeuser.getUserName()!= null && homeuser.getUserEmail()!= null 
+        && homeuser.getUserPassword()!=null && homeuser.getUserLocationTopic()!= null 
+        && homeuser.getUserType()!= null && homeuser.getUserExpiryDate()!= null){
+            savedHomeUser = usersRepository.save(homeuser);
+            return savedHomeUser.getUserName()+" creation successful";
+        } else{
+            return savedHomeUser.getUserName()+" creation failed";
+        }
+}
     /**
      * hash and salt password
      * @param password
      * @return String 
      */
-    private String encryptPassword(String password){        
+    private String encryptPassword(String password){
         return encoder.encode(password);
+        }       
+        
     }
     private Timestamp  calculateExpiryDate(int numberOfDays){
         return new Timestamp(System.currentTimeMillis()+convertDaysToMillSeconds(numberOfDays));
