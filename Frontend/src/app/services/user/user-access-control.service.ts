@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs-compat/operator/map';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserAccessControlService {
-
   /**
    * Class executes HTTP requests to EISHMS API
    */
 
-   /* Variables: */
-  ROOT_URL = 'http://localhost:8080/api';
+ /* Variables: */
+ ROOT_URL = 'http://localhost:8080/api';
 
-  constructor() {}
+
+  constructor( private http: HttpClient) { }
 
   /**
    * Sends username and password to endpoint and receives JWT upon success
@@ -24,16 +25,23 @@ export class UserAccessControlService {
    * @param
    * @returns
    */
-  authenticateUser(){
-
+ 
+  authenticateUser(userData): Observable<any>{
+    //receives json: tokenType, accessToken
+    //sessionStorage.setItem('username', userData.username)
+    //sessionStorage.setItem('token', map.data.accessToken)
+    return this.http.post(this.ROOT_URL+'auth', userData);
   }
 
   /**
    * Checks session storage to see if user is currently logged in  
    * @returns boolean
    */
-  isUserLoggedIn(){
-
+  isUserLoggedIn(): boolean{
+    if(sessionStorage == null)
+      return false;
+    else
+      return true;
   }
 
   /**
@@ -45,6 +53,8 @@ export class UserAccessControlService {
    * @returns
    */
   userLogOut(){
+    sessionStorage.clear(); //window.sessionStorage.clear();
+    //load login page
 
   }
 
@@ -66,8 +76,8 @@ export class UserAccessControlService {
    * @param credential Object
    * @returns
    */
-  registerUser(){
-
+  registerUser(userCredentials){
+    this.http.post(this.ROOT_URL + '', userCredentials )
   }
 
   /**
@@ -77,7 +87,7 @@ export class UserAccessControlService {
    * @param
    * @returns
    */
-  authenticateKey(){
-
+  authenticateKey(key){
+    this.http.post(this.ROOT_URL + '', key);
   }
 }
