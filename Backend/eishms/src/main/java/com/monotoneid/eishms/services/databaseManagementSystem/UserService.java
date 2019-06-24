@@ -48,31 +48,37 @@ public class UserService{
         if(homeuser!= null){
             Timestamp newUserExpiryDate = calculateExpiryDate(defaultNumberOfDays);
             homeuser.setUserExpiryDate(newUserExpiryDate);
-            if(homeuser.getUserPassword()!=null){
+            System.out.println(homeuser.getUserPassword());
+          //  if(homeuser.getUserPassword()!=null){
                 String password = encryptPassword(homeuser.getUserPassword());
+                System.out.println("encrypted password: " + password);
                 homeuser.setUserPassword(password);
-            }
+           // }
                        
             long numberOfUser =usersRepository.count();
             if(homeuser.getUserName()!= null && homeuser.getUserEmail()!= null 
             && homeuser.getUserPassword()!=null && homeuser.getUserLocationTopic()!= null 
             && homeuser.getUserType()!= null && homeuser.getUserExpiryDate()!= null){
+                System.out.println("alluser inputs passed");
                 usersRepository.save(homeuser);
+            } else{
+                System.out.println("user input failed");
+
             }
+        }
+            // System.out.println(homeuser.getUserExpiryDate());
+            // System.out.println(homeuser.getUserId());
+            // System.out.println(homeuser.getUserName());
+            // System.out.println(homeuser.getUserPassword());
+            // System.out.println(homeuser.getUserEmail());
+            // System.out.println(homeuser.getUserLocationTopic());
+            // System.out.println(homeuser.getUserType());
             
-            System.out.println(homeuser.getUserExpiryDate());
-            System.out.println(homeuser.getUserId());
-            System.out.println(homeuser.getUserName());
-            System.out.println(homeuser.getUserPassword());
-            System.out.println(homeuser.getUserEmail());
-            System.out.println(homeuser.getUserLocationTopic());
-            System.out.println(homeuser.getUserType());
-            
-            if (usersRepository.count()> numberOfUser)
-                return "Create HomeUser successful";
-            else    
-                return "Create HomeUser unsuccessful";
-            }
+           // if (usersRepository.count()> numberOfUser)
+            //    return "Create HomeUser successful";
+          //  else    
+            //    return "Create HomeUser unsuccessful";
+            //}
             return "Create HomeUser unsuccessful";  
     }
     /**

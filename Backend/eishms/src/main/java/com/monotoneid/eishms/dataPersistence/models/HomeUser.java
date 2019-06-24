@@ -1,7 +1,5 @@
 package com.monotoneid.eishms.dataPersistence.models;
 
-import static com.monotoneid.eishms.dataPersistence.models.UserType.ROLE_GUEST;
-
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -16,15 +14,19 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-enum UserType {
-    ROLE_ADMIN, ROLE_RESIDENT, ROLE_GUEST;
-}
+
 
 @Entity(name = "homeuser")
 @Table(name = "homeuser")
 @EntityListeners(AuditingEntityListener.class)
+@TypeDef(
+    name = "pgsql_enum",
+    typeClass = PostgreSQLEnumType.class
+)
 public class HomeUser {
 
     @Id
@@ -45,7 +47,8 @@ public class HomeUser {
     private String userLocationTopic;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "usertype", columnDefinition = "text", updatable = true, nullable = false)
+    @Column(name = "usertype", columnDefinition = "userType", updatable = true, nullable = false)
+    @Type( type = "pgsql_enum" )
     private UserType userType;
 
     
@@ -62,7 +65,7 @@ public class HomeUser {
         setUserEmail(newEmail);
         setUserPassword(newPassword);
         setUserLocationTopic(newLocationTopic);
-        setUserType(ROLE_GUEST);
+        setUserType(UserType.ROLE_GUEST);
     }
 
     //getters
