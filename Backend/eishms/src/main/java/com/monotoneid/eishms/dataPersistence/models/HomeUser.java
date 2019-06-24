@@ -54,7 +54,10 @@ public class HomeUser {
 
     public HomeUser(){}
     
-    public HomeUser(@JsonProperty("userName") String newUserName, @JsonProperty("userEmail") String newEmail, @JsonProperty("userPassword") String newPassword, @JsonProperty("userLocationTopic") String newLocationTopic){
+    public HomeUser(@JsonProperty("userName") String newUserName,
+     @JsonProperty("userEmail") String newEmail, 
+     @JsonProperty("userPassword") String newPassword,
+     @JsonProperty("userLocationTopic") String newLocationTopic){
         setUserName(newUserName);
         setUserEmail(newEmail);
         setUserPassword(newPassword);
