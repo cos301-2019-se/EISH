@@ -16,39 +16,44 @@ export class LoginComponent implements OnInit {
   formHeading: String;
   loginForm: FormGroup;
   user = new User();
-  userType: Array<string> = [
-    'admin',
-    'guest',
-    'resident'
-  ];
   constructor(private fb: FormBuilder) {
-    this.loginForm = this.fb.group({
-      'userEmail':['',[Validators.required,Validators.EmailValidator]],
-      'userPassword':['',[Validators.required,Validators.minLength(8),Validators.maxLength(40)]]
-    });
    }
 
   ngOnInit() {
     this.formHeading="Login";
+    this.loginForm = this.fb.group({
+      'userEmail':['',[Validators.required,Validators.email]],
+      'userPassword':['',[Validators.required,Validators.minLength(8),Validators.maxLength(40)]]
+    });
     //do you call constructor here?
   }
 
+  get getVariables(){
+    return this.loginForm.controls;
+  }
   /**
    * Submits credentials;
    * if default admin credentials routes to changeCredentials
    * if guest has expired, route to keyPage
    */
-  login(formData){
+  login(){
     //sanitize and validate
     //if admin admin: go to server, according to response:  make token and  route to change credntials or wrong credntials
-    const regform = formData;
+    if(this.loginForm.invalid)
+    {
+      return;
+    }
+    else{
+      alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.loginForm.value, null, 4))
+    }
     //send username and password
-    if(formData.userName === "admin")
+   // if(this.getVariables().userName === "admin")
     {
       ///handle response from authenticateUser()
       //if success route to changeCredentials else reload login with error
     }
-    else{
+    //else
+    {
       //handle response from authenticateUSer()
       //if success route to system
     }

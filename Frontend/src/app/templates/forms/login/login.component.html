@@ -1,32 +1,26 @@
 <div class="container">
     <div class="heading"><h2>{{formHeading}}</h2></div>
     <div class="formContainer">
-        <form [formGroup]="loginForm" (ngSubmit)="login(loginForm)">
-          <div class="form-group" [ngClass]="{
-            'has-danger': userEmail.touched && userEmail.dirty && userEmail.invalid,
-            'has-success': userEmail.touched && userEmail.valid && userEmail.dirty
-          }">
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+          <div class="form-group" [ngClass]="{ 'is-invalid': getVariables.userEmail.errors }">
             <label for="userEmail">Email</label><br>
-            <input placeholder="Email" class="form-control" name="userEmail" id="userEmail" type="email" formControlName="userEmail">
-            <div class="form-control-feedback" *ngIf="userEmail.errors && (userEmail.dirty || userEmail.touched)">
-                <p *ngIf="userType.errors.required"> Email is required</p>
+            <input placeholder="Email" class="form-control" name="userEmail" type="email" formControlName="userEmail">
+            <div class="form-control-feedback" *ngIf="getVariables.userEmail.errors && (getVariables.userEmail.dirty || getVariables.userEmail.touched)">
+                <p *ngIf="getVariables.userEmail.errors.required"> Email is required</p>
             </div>
           </div>
       
-          <div class="form-group" [ngClass]="{
-            'has-danger': userPassword.touched && userPassword.dirty && userPassword.invalid,
-            'has-success': userPassword.touched && userPassword.valid && userPassword.dirty
-          }">
+          <div class="form-group" [ngClass]="{ 'is-invalid': getVariables.userPassword.errors }">
             <label for="userPassword">Password</label><br>
-            <input placeholder="Password" class="form-control" name="userPassword" id="userPassword" type="password" formControlName="userPassword">
-            <div class="form-control-feedback" *ngIf="userPassword.errors && (userPassword.dirty || userPassword.touched)">
-                <p *ngIf="userPassword.errors.required"> Password is required</p>
-                <p *ngIf="userPassword.errors.minlength"> Password must be at least 8 characters long</p>
-                <p *ngIf="userPassword.errors.maxlength"> Password too long</p>
+            <input placeholder="Password" class="form-control" name="userPassword" type="password" formControlName="userPassword">
+            <div class="form-control-feedback" *ngIf="getVariables.userPassword.errors && (getVariables.userPassword.dirty || getVariables.userPassword.touched)">
+                <p *ngIf="getVariables.userPassword.errors.required"> Password is required</p>
+                <p *ngIf="getVariables.userPassword.errors.minlength"> Password must be at least 8 characters long</p>
+                <p *ngIf="getVariables.userPassword.errors.maxlength"> Password too long</p>
             </div>
           </div>
           <br>   
-          <button type="submit" class="submitButton" [disabled]="!loginForm.valid">Register!</button>
+          <button type="submit" class="submitButton" [disabled]="!getVariables.loginForm.valid">Log in!</button>
           <br>   
           <br>   
           
