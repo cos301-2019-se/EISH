@@ -11,6 +11,9 @@ import { KeysComponent } from './templates/forms/keys/keys.component';
 import { HttpClientModule } from '@angular/common/http';
 import {UserAccessControlService} from './services/user/user-access-control.service';
 import {InputService} from './services/input/input.service';
+import { MaterialsComponent } from './templates/materials/materials.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +21,8 @@ import {InputService} from './services/input/input.service';
     SettingsComponent,
     LoginComponent,
     ChangeCredentialsComponent,
-    KeysComponent
+    KeysComponent,
+    MaterialsComponent
   ],
   imports: [
     BrowserModule,
