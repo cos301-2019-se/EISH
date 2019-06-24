@@ -3,11 +3,11 @@ package com.monotoneid.eishms.communications.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.monotoneid.eishms.dataPersistence.models.HomeUser;
-import com.monotoneid.eishms.dataPersistence.models.UserRequestBody;
 import com.monotoneid.eishms.dataPersistence.repositories.Users;
 import com.monotoneid.eishms.services.databaseManagementSystem.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,9 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class EndPointController{
-
-   @Autowired
-   ObjectMapper mapper;
 
    @Autowired
    private UserService userService;
@@ -48,11 +45,9 @@ public class EndPointController{
    @PostMapping("/user")
    @CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ObjectNode addUser(@RequestBody UserRequestBody urb){
-      ObjectNode objectNode = mapper.createObjectNode();
-      HomeUser newHomeUser = new HomeUser(urb);
-      objectNode.put("data",userService.addUser(newHomeUser));
-      return objectNode;
+   public ResponseEntity<Object> addUser(@RequestBody HomeUser newHomeUser){
+      String result = userService.addUser(newHomeUser);
+      return new ResponseEntity<>(result,HtttpStatus.OK);
    }
    
    @DeleteMapping("/user")

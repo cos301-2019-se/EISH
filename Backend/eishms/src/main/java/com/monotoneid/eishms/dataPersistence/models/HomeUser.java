@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 enum UserType {
@@ -50,23 +52,13 @@ public class HomeUser {
     @Column(name = "userexpirydate", columnDefinition = "TIMESTAMP", updatable = true, nullable = false)
     private Timestamp userExpiryDate;
 
-    public HomeUser(){
-
-    }
+    public HomeUser(){}
     
-    public HomeUser(UserRequestBody urb){
-        setUserName(urb.getUserName());
-        setUserEmail(urb.getUserEmail());
-        setUserPassword(urb.getUserPassword());
-        setUserLocationTopic(urb.getUserLocationTopic());
-        setUserType(ROLE_GUEST);
-    }
-
-    public HomeUser(String username, String userEmail, String userPassword, String userLocationTopic) {
-        setUserName(username);
-        setUserEmail(userEmail);
-        setUserPassword(userPassword);
-        setUserLocationTopic(userLocationTopic);
+    public HomeUser(@JsonProperty("userName") String newUserName, @JsonProperty("userEmail") String newEmail, @JsonProperty("userPassword") String newPassword, @JsonProperty("userLocationTopic") String newLocationTopic){
+        setUserName(newUserName);
+        setUserEmail(newEmail);
+        setUserPassword(newPassword);
+        setUserLocationTopic(newLocationTopic);
         setUserType(ROLE_GUEST);
     }
 
