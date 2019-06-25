@@ -5,7 +5,11 @@ import {ChangeCredentialsComponent} from './templates/forms/change-credentials/c
 import {KeysComponent} from './templates/forms/keys/keys.component';
 
 const routes: Routes = [
-  {path: '', component:LoginComponent},
+  /*{path: '',
+  redirectTo: 'login',
+  pathMatch: 'full'
+  },*/
+  { path: '', component:LoginComponent},
   {path: 'register', component:ChangeCredentialsComponent},
   {path: 'key', component:KeysComponent}
 ];

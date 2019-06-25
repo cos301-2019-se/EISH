@@ -1,41 +1,62 @@
 .container{
-    border: 0px;
-    border-radius: 5px;
-    background-color:rgb(28, 52, 71);
+  border: 0px;
+  border-radius: 5px;
+  background-color:rgb(28, 52, 71);
 
-  }
-  .formContainer{
-   text-align: center;
-  }
-  label{
-    font-size: 120%;
-    color: rgb(246, 246, 246);
-    text-align: left;
-    
-  }
-  input{
-    text-indent: 2%;
-  }
-  .heading{
-    background-color:lightgrey;
-    border-radius: 3px;
-    text-align: center;
-  }
+}
+.formContainer{
+ text-align: center;
+}
+label{
+  font-size: 120%;
+  color: rgb(246, 246, 246);
+  text-align: left;
+  
+}
+input{
+  text-indent: 2%;
+}
+.heading{
+  background-color:lightgrey;
+  border-radius: 3px;
+  text-align: center;
+}
 
-  .form-control{
-    border-radius: 5px;
-    width:30%;
-    height:5%;
-    font-size: 120%;
-    border-color: black;
-  }
+.form-control{
+  border-radius: 5px;
+  width:30%;
+  height:5%;
+  font-size: 120%;
+  border-color: black;
+}
 
-  .formContainer button{
-    width: 15%;
-    height: 6%;
-    text-align: center;
-    margin-left: 6%;
-    border-radius: 8px;
-    border: 0px;
-    background-color:chartreuse;
-  }
+.submitButton{
+  width: 15%;
+  height: 25px;
+  border-radius: 5px;
+  border: 0px;
+  background-color:chartreuse;
+}
+
+.errorMessages{
+  color: red;
+  font-size: 100%;
+  
+}
+
+.form-control-feedback{
+  color:red;
+  font-size: 100%;
+}
+.submitButton[disabled]{
+  background-color: grey;
+  color: black;
+}
+
+a {
+  color: white;
+}
+.copyright{
+  color: white;
+  font-size: 60%;
+}

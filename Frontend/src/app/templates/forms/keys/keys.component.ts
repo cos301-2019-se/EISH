@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup,FormBuilder, Validators } from '@angular/forms';
+import {UserAccessControlService} from 'src/app/services/user/user-access-control.service';
+import {Router,ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-keys',
@@ -10,32 +13,40 @@ export class KeysComponent implements OnInit {
    * Class routes to register and renews guest access
    */
   keyType:string //general or renew
-  constructor() { }
-
-  ngOnInit() {
+  keyForm: FormGroup;
+  incorrectKey: boolean;
+  constructor(private routes: Router,private fb: FormBuilder,private authenticationService: UserAccessControlService) {
+    this.incorrectKey = false;
+    let formHeading = "Key Form";
+    this.keyForm = this.fb.group({
+      'userKey':[null,[Validators.required]]
+    }); 
   }
 
+  ngOnInit() {
+    this.incorrectKey = false;
+    let formHeading = "Key Form";
+    this.keyForm = this.fb.group({
+      'userKey':[null,[Validators.required]]
+    });
+  }
+
+  get getVariables(){
+    return this.keyForm.controls;
+  }
   /**
    * Determines which action to take depending on keyType
    */
-  handleKey(key){
-    if(this.keyType == "general")
-      this.registerUser(key);
-      else
-        this.renewUser(key);
-  }
-
-  /**
-   * Routes to userRegistration page
-   */
-  registerUser(key){
-
-  }
-  /**
-   * Routes to system upon successful submission of renewal key
-   */
-  renewUser(key){
-
+  handleKey(){
+    let response = this.authenticationService.authenticateKey(this.getVariables.key);
+    if(response){
+      this.routes.navigate(['/register?regType=Register']);
+    }//else if renewalKey then route to dashboard
+    else{
+      this.incorrectKey = true;
+      return;
+    }
+    
   }
 
 }

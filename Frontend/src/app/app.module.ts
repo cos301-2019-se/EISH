@@ -24,7 +24,7 @@ import { AccessControlInterceptor } from './services/interceptor/user-access-con
     ChangeCredentialsComponent,
     KeysComponent,
     MaterialsComponent, 
-    AccessControlInterceptor
+    //AccessControlInterceptor
   ],
   imports: [
     BrowserModule,

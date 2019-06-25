@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { User } from 'src/app/models/user-model';
 import { UserAccessControlService } from 'src/app/services/user/user-access-control.service';
+import { Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,17 +15,24 @@ export class LoginComponent implements OnInit {
    */
   formHeading: String;
   loginForm: FormGroup;
-  user = new User();
-  constructor(private fb: FormBuilder) {
-   }
+  incorrectCredentials: boolean;
 
-  ngOnInit() {
+  constructor(private route: Router,private fb: FormBuilder, private AuthenticationServices: UserAccessControlService) {
+    this.incorrectCredentials = false;
     this.formHeading="Login";
     this.loginForm = this.fb.group({
-      'userEmail':['',[Validators.required,Validators.email]],
-      'userPassword':['',[Validators.required,Validators.minLength(8),Validators.maxLength(40)]]
+      'userEmail':[null,[Validators.required,Validators.email]],
+      'userPassword':[null,[Validators.required,Validators.minLength(8),Validators.maxLength(40)]]
     });
-    //do you call constructor here?
+  }
+
+  ngOnInit() {
+    this.incorrectCredentials = false;
+    this.formHeading="Login";
+    this.loginForm = this.fb.group({
+      'userEmail':[null,[Validators.required,Validators.email]],
+      'userPassword':[null,[Validators.required,Validators.minLength(8),Validators.maxLength(40)]]
+    });
   }
 
   get getVariables(){
@@ -42,20 +49,15 @@ export class LoginComponent implements OnInit {
     if(this.loginForm.invalid)
     {
       return;
-    }
-    else{
-      alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.loginForm.value, null, 4))
-    }
-    //send username and password
-   // if(this.getVariables().userName === "admin")
-    {
-      ///handle response from authenticateUser()
-      //if success route to changeCredentials else reload login with error
-    }
-    //else
-    {
-      //handle response from authenticateUSer()
-      //if success route to system
+    }else{
+      let result = this.AuthenticationServices.authenticateUser(this.getVariables);
+      if(result){
+        this.route.navigate(['/register']);
+        }else{
+        this.incorrectCredentials = true;
+        return;
+        //possibly need to clear the fields if they arent already;
+      }
     }
   
   }
