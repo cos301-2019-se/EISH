@@ -1,5 +1,7 @@
 package com.monotoneid.eishms.communications.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import com.monotoneid.eishms.dataPersistence.models.HomeUser;
@@ -38,8 +40,8 @@ public class EndPointController{
    @GetMapping("/users")
    @CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> retriveAllUsers(){
-      return new ResponseEntity<>(userService.retrieveAllUsers(),HttpStatus.OK);
+   public List<HomeUser> retriveAllUsers(){
+      return userService.retrieveAllUsers();
    }
 
    /**
@@ -51,7 +53,7 @@ public class EndPointController{
    @CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public ResponseEntity<HomeUser> retriveUser(@PathVariable(value = "userId") Long userId){
-      return new ResponseEntity<>(userService.retrieveUser(userId),HttpStatus.OK);
+      return userService.retrieveUser(userId);
    }
 
    /**
@@ -59,12 +61,11 @@ public class EndPointController{
     * Implements removeUser endpoint, that calls the removeUser service
     * @return an object with all the remaining users
     */
-   @DeleteMapping("/user/{userId}")
+   @DeleteMapping("/user")
    @CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> removeUser(@PathVariable(value = "userId") Long userId){
-      String result = userService.removeUser(userId);
-      return new ResponseEntity<>(result,HttpStatus.OK);      
+   public ResponseEntity<Object> removeUser(@Valid @RequestBody HomeUser homeUser){
+      return userService.removeUser(homeUser);
    }
 
    /**
@@ -89,8 +90,7 @@ public class EndPointController{
    @CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public ResponseEntity<Object> addUser(@Valid @RequestBody HomeUser newHomeUser){
-      String result =userService.addUser(newHomeUser);
-      return new ResponseEntity<>(result,HttpStatus.OK);
+      return userService.addUser(newHomeUser);
    }
 
    @PatchMapping("/user/userlocationtopic")

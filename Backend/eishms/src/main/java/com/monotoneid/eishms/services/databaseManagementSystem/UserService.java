@@ -44,39 +44,43 @@ public class UserService{
      * it will generate a defualt expiry date, Hash a usersPassword
      * @param 
      */
-    public String addUser(HomeUser homeuser){
-        if(homeuser==null){
-            return "could not create user";
+    public ResponseEntity<Object> addUser(HomeUser homeuser){
+        try {
+            if(homeuser==null){
+                throw null;
+            }
+            if(homeuser.getUserName().isEmpty() || homeuser.getUserEmail().isEmpty()
+            || homeuser.getUserLocationTopic().isEmpty() 
+            || homeuser.getUserPassword().isEmpty()){
+                throw null;
+            }
+            Timestamp newUserExpiryDate = calculateExpiryDate(defaultNumberOfDays);
+            homeuser.setUserExpiryDate(newUserExpiryDate); 
+            if(homeuser.getUserPassword()!=null){
+            homeuser.setUserPassword(encryptPassword(homeuser.getUserPassword()));
+            }
+            if(homeuser.getUserName()!= null && homeuser.getUserEmail()!= null 
+            && homeuser.getUserPassword()!=null && homeuser.getUserLocationTopic()!= null 
+            && homeuser.getUserType()!= null && homeuser.getUserExpiryDate()!= null){
+                usersRepository.save(homeuser);
+                return new ResponseEntity<>("User added!",HttpStatus.OK);
+            } else{
+                throw null;
+            }
+        } catch(Exception e) {
+            System.out.println("Error: Input is " + e.getMessage() + "!");
+            return new ResponseEntity<>("Error: Failed to add user details!",HttpStatus.PRECONDITION_FAILED);
         }
-        if(homeuser.getUserName().isEmpty() || homeuser.getUserEmail().isEmpty()
-        || homeuser.getUserLocationTopic().isEmpty() 
-        || homeuser.getUserPassword().isEmpty()){
-            return "could not create user";
-        }
-        Timestamp newUserExpiryDate = calculateExpiryDate(defaultNumberOfDays);
-        homeuser.setUserExpiryDate(newUserExpiryDate);
-        HomeUser savedHomeUser=null; 
-        if(homeuser.getUserPassword()!=null){
-           homeuser.setUserPassword(encryptPassword(homeuser.getUserPassword()));
-        }
-        if(homeuser.getUserName()!= null && homeuser.getUserEmail()!= null 
-        && homeuser.getUserPassword()!=null && homeuser.getUserLocationTopic()!= null 
-        && homeuser.getUserType()!= null && homeuser.getUserExpiryDate()!= null){
-            savedHomeUser = usersRepository.save(homeuser);
-            return savedHomeUser.getUserName()+" creation successful";
-        } else{
-            return savedHomeUser.getUserName()+" creation failed";
-        }
-}
+    }
     /**
      * hash and salt password
      * @param password
      * @return String 
      */
-    private String encryptPassword(String password){
+    private String encryptPassword(String password) throws Exception {
         return encoder.encode(password);        
     }
-    private Timestamp  calculateExpiryDate(int numberOfDays){
+    private Timestamp  calculateExpiryDate(int numberOfDays) {
         return new Timestamp(System.currentTimeMillis()+convertDaysToMillSeconds(numberOfDays));
     }
     private long convertDaysToMillSeconds(int numberOfDays){
@@ -85,21 +89,32 @@ public class UserService{
         else
          return 1*24*60*60*1000;
     }
+
     /**
      * section Users
      */
-    
-    public String removeUser(Long userId) throws ResourceNotFoundException {
-        HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-        usersRepository.deleteById(userId);
-        return foundUser.getUserName()+" has been deleted";
+    public ResponseEntity<Object> removeUser(HomeUser homeUser) {
+        try {
+            usersRepository.findById(homeUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+            usersRepository.deleteById(homeUser.getUserId());
+            return new ResponseEntity<>("Success: User has been deleted!",HttpStatus.OK);
+        } catch(Exception e){
+            System.out.println("Error: Input is " + e.getMessage() + "!");
+            return new ResponseEntity<>("Error: Failed to delete home user!",HttpStatus.PRECONDITION_FAILED);
+        }
     }
     /**
      * section Users
      */
-    public HomeUser retrieveUser(long userId) throws ResourceNotFoundException {
-        HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-        return foundUser;
+    public ResponseEntity<HomeUser> retrieveUser(long userId) {
+        try {
+            HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+            return new ResponseEntity<>(foundUser,HttpStatus.OK);
+        } catch(Exception e){
+            System.out.println("Error: " + e.getMessage()+"!");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
     }
     
     public List<HomeUser> retrieveAllUsers(){
