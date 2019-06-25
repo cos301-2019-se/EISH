@@ -138,7 +138,8 @@ public class EndPointController{
 
    @PatchMapping("/user/{userId}/expiration")
    @PreAuthorize("hasRole('ADMIN')")
-   public String renewUser(){
-      return "only admin can change expiration date";
+   public ResponseEntity<Object> renewUser(@PathVariable(value = "userId") Long userId,@Valid @RequestBody HomeUser newHomeUser){
+      String result =userService.renewUser(userId,newHomeUser);
+      return new ResponseEntity<>(result,HttpStatus.OK);
    }
 }

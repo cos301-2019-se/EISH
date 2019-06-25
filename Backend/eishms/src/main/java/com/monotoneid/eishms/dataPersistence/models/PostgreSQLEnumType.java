@@ -8,6 +8,8 @@ import org.hibernate.engine.spi.SharedSessionContractImplementor;
 
 public class PostgreSQLEnumType extends org.hibernate.type.EnumType {
  
+    private static final long serialVersionUID = 1L;
+
     public void nullSafeSet(
             PreparedStatement st,
             Object value,

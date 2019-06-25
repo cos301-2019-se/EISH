@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import com.monotoneid.eishms.dataPersistence.models.HomeUser;
+import com.monotoneid.eishms.dataPersistence.models.UserType;
 //import com.monotoneid.eishms.dataPersistence.models.UserType;
 import com.monotoneid.eishms.dataPersistence.repositories.Users;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
@@ -109,11 +110,18 @@ public class UserService{
      * section Users
      */
     
-    public String updateUserName(long userId, HomeUser newHomeUser)  throws ResourceNotFoundException {
+    public String updateUserName(long userId, HomeUser newHomeUserName)  throws ResourceNotFoundException {
         HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-        foundUser.setUserName(newHomeUser.getUserName());
-        usersRepository.save(foundUser);
-        return "UserName changed";
+        if(newHomeUserName==null){
+           return "Failed to update user name";
+       }else{
+            if(newHomeUserName.getUserName().isEmpty()==true){
+                return "failed to update user name";
+            }
+            foundUser.setUserName(newHomeUserName.getUserName());
+            final HomeUser updatedHomeUser= usersRepository.save(foundUser);
+            return updatedHomeUser.getUserName()+" Name Updated";
+       }
      }
     /**
      * section Users
@@ -121,27 +129,33 @@ public class UserService{
     
     public String updateUserEmail(Long userId,HomeUser newHomeUserEmail)  throws ResourceNotFoundException {
         HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-        foundUser.setUserEmail(newHomeUserEmail.getUserEmail());
-        System.out.println(foundUser.getUserEmail());
-        System.out.println(foundUser.getUserName());
-        System.out.println(foundUser.getUserLocationTopic());
-        System.out.println(foundUser.getUserId());
-        System.out.println(foundUser.getUserPassword());
-        System.out.println(foundUser.getUserExpiryDate());
-        System.out.println(foundUser.getUserType());
-       final HomeUser updatedHomeUser= usersRepository.save(foundUser);
-        return updatedHomeUser.getUserName()+" Email Updated";
+        if(newHomeUserEmail==null){
+           return "Failed to update user email";
+       }else{
+            if(newHomeUserEmail.getUserEmail().isEmpty()==true){
+                return "failed to update user email";
+            }
+            foundUser.setUserEmail(newHomeUserEmail.getUserEmail());
+            final HomeUser updatedHomeUser= usersRepository.save(foundUser);
+            return updatedHomeUser.getUserName()+" Email Updated";
+       }     
     }
     /**
      * section Users
      */
     
-    public String updateUserPassword(Long userId,HomeUser newHomeUserLocationTopic)  throws ResourceNotFoundException {
+    public String updateUserPassword(Long userId,HomeUser newHomeUserPassword)  throws ResourceNotFoundException {
         HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-        foundUser.setUserPassword(newHomeUserLocationTopic.getUserPassword());
-        usersRepository.save(foundUser);
-        return foundUser.getUserName()+ " password updated";
- 
+        if(newHomeUserPassword==null){
+            return "failed to update user password";
+        }else{
+            if(newHomeUserPassword.getUserPassword().isEmpty()==true){
+                return "failed to update user password";
+            }
+            foundUser.setUserPassword(encryptPassword(newHomeUserPassword.getUserPassword()));
+            final HomeUser updatedHomeUser= usersRepository.save(foundUser);
+            return updatedHomeUser.getUserName()+" Password Updated";
+        }
     }
     /**
      * section Users
@@ -149,35 +163,69 @@ public class UserService{
     
     public String updateUserLocationTopic(Long userId,HomeUser newHomeUserLocationTopic)  throws ResourceNotFoundException {
         HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-        foundUser.setUserLocationTopic(newHomeUserLocationTopic.getUserLocationTopic());
-        usersRepository.save(foundUser);
-        return foundUser.getUserName()+" Location Topic Updated";
+        if(newHomeUserLocationTopic==null){
+           return "Failed to update user location topic";
+       }else{
+            if(newHomeUserLocationTopic.getUserLocationTopic().isEmpty()==true){
+                return "failed to update user location topic";
+            }
+            foundUser.setUserLocationTopic(newHomeUserLocationTopic.getUserLocationTopic());
+            final HomeUser updatedHomeUser= usersRepository.save(foundUser);
+            return updatedHomeUser.getUserName()+" Location Topic Updated";
+       }
     }
 
     public String updateUserType(Long userId,HomeUser newHomeUserType)  throws ResourceNotFoundException {
         HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-      // if(newHomeUserType.getUserType()!=UserType.ROLE_ADMIN){
-        foundUser.setUserType(newHomeUserType.getUserType());
-       //}
-        
-        //usersRepository.save(foundUser);
-        return foundUser.getUserName()+" Type Updated";
+        if(newHomeUserType==null){
+           return "Failed to update user type";
+       }else{
+            if(newHomeUserType.getUserType()==UserType.ROLE_GUEST
+            ||newHomeUserType.getUserType()==UserType.ROLE_RESIDENT
+            ||newHomeUserType.getUserType()==null){
+                return "failed to update user type";
+            }
+            foundUser.setUserType(newHomeUserType.getUserType());
+            final HomeUser updatedHomeUser= usersRepository.save(foundUser);
+            return updatedHomeUser.getUserName()+" User Type Updated";
+       }
     }
 
     public String updateUser(Long userId,HomeUser newHomeUser)  throws ResourceNotFoundException {
         HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-        foundUser.setUserEmail(newHomeUser.getUserEmail());
-        foundUser.setUserLocationTopic(newHomeUser.getUserLocationTopic());
-        
-        usersRepository.save(foundUser);
-        return foundUser.getUserName()+" User Updated";
+        if(newHomeUser==null){
+            return "Failed to update user details";
+        }else{
+             if(newHomeUser.getUserLocationTopic().isEmpty()==true
+             || newHomeUser.getUserName().isEmpty()==true
+             || newHomeUser.getUserPassword().isEmpty()==true
+             || newHomeUser.getUserEmail().isEmpty()==true){
+                 return "failed to update user details";
+             }
+            foundUser.setUserEmail(newHomeUser.getUserEmail());
+            foundUser.setUserLocationTopic(newHomeUser.getUserLocationTopic());
+            foundUser.setUserName(newHomeUser.getUserName());
+            foundUser.setUserPassword(encryptPassword(newHomeUser.getUserPassword()));
+            final HomeUser updatedHomeUser= usersRepository.save(foundUser);
+            return updatedHomeUser.getUserName()+" User Updated";
+        }
     }
  
     /**
     * Changing users expiry date 
     */   
-    public void renewUser(){
- 
+    public String renewUser(Long userId,HomeUser newHomeUserExpiry)  throws ResourceNotFoundException {
+        HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+        if(newHomeUserExpiry==null){
+            return "Failed to update user expiry";
+        }else{
+            if(newHomeUserExpiry.getUserExpiryDate()==null){
+                return "failed to update user expiry date";
+            }
+            foundUser.setUserExpiryDate(calculateExpiryDate(defaultNumberOfDays));
+            final HomeUser updatedHomeUser= usersRepository.save(foundUser);
+            return updatedHomeUser.getUserName()+" User Updated";
+        }
     }
 	    
 }
