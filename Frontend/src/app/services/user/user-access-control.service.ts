@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs-compat/operator/map';
+//import { map } from 'rxjs-compat/operator/map';
 
 @Injectable({
   providedIn: 'root'
@@ -65,8 +65,8 @@ export class UserAccessControlService {
    * @param credential Object
    * @returns
    */
-  changeCredentials() : Observable<{}> {
-    return null;
+  changeCredentials(userCredentials) : Boolean{
+    return false;
   }
 
   /**'
@@ -77,7 +77,8 @@ export class UserAccessControlService {
    * @returns
    */
   registerUser(userCredentials){
-    this.http.post(this.ROOT_URL + '', userCredentials )
+    this.http.post(this.ROOT_URL + '', userCredentials );
+    return Boolean;
   }
 
   /**
@@ -89,5 +90,15 @@ export class UserAccessControlService {
    */
   authenticateKey(key){
     this.http.post(this.ROOT_URL + '', key);
+    return Boolean;
+  }
+
+  /**
+   * Retrieves user with given name
+   * @param username
+   * @returns user information
+   */
+  getUser(userName){
+
   }
 }
