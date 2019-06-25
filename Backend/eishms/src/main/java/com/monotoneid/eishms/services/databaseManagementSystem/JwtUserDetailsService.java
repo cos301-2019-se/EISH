@@ -4,7 +4,9 @@ import com.monotoneid.eishms.dataPersistence.models.HomeUserDetails;
 
 import java.util.List;
 
+import com.monotoneid.eishms.dataPersistence.models.HomeKey;
 import com.monotoneid.eishms.dataPersistence.models.HomeUser;
+import com.monotoneid.eishms.dataPersistence.repositories.HomeKeys;
 import com.monotoneid.eishms.dataPersistence.repositories.Users;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +21,16 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Autowired
     Users userRepository;
 
+    @Autowired
+    HomeKeys homekeys;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        HomeKey homekey;
+        
+        if ((homekey = homekeys.findByKeyName(username)) != null)
+            return new HomeUserDetails(homekey);
+
         List<HomeUser> userList = userRepository.findAll(); 
         HomeUser user = null;
         
@@ -30,7 +40,7 @@ public class JwtUserDetailsService implements UserDetailsService {
                 break;
             }
         }
-        //System.out.println(user);
+        
         return new HomeUserDetails(user);
     }
  

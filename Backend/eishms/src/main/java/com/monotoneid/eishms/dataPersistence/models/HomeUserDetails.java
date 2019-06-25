@@ -13,35 +13,28 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class HomeUserDetails implements UserDetails {
     private static final long serialVersionUID = 1L;
-    private long userId;
     private String userName;
-    private String userEmail;
     private String userPassword;
-    private String userLocationTopic;
     private Collection<? extends GrantedAuthority> authorities;
 
+    public HomeUserDetails(HomeKey homeKey) {
+        this.userName = homeKey.getKeyName();
+        this.userPassword = homeKey.getUserkey();
+        Set<UserType> userTypes = new HashSet<>();
+        userTypes.add(homeKey.getUsertype());
+        this.authorities = userTypes.stream().map(role -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList());
+    }
+
     public HomeUserDetails(HomeUser homeUser) {
-        this.userId = homeUser.getUserId();
+        //this.userId = homeUser.getUserId();
         this.userName = homeUser.getUserName();
-        this.userEmail = homeUser.getUserEmail();
-        this.userLocationTopic = homeUser.getUserLocationTopic();
+        //this.userEmail = homeUser.getUserEmail();
+        //this.userLocationTopic = homeUser.getUserLocationTopic();
         this.userPassword = homeUser.getUserPassword();
         //this.authorities = new ArrayList<>();
         Set<UserType> userTypes = new HashSet<>();
         userTypes.add(homeUser.getUserType());
         this.authorities = userTypes.stream().map(role -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList());
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
- 
-    public String getEmail() {
-        return userEmail;
-    }
-
-    public String getUserLocationTopic() {
-        return userLocationTopic;
     }
  
     @Override
@@ -85,6 +78,6 @@ public class HomeUserDetails implements UserDetails {
         if (o == null || getClass() != o.getClass()) return false;
         
         HomeUserDetails user = (HomeUserDetails) o;
-        return Objects.equals(userId, user.userId);
+        return Objects.equals(userName, user.userName);
     }
 }
