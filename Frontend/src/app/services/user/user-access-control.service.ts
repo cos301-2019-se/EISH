@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operator/map';
 import { User } from 'src/app/models/user-model';
-
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +15,7 @@ export class UserAccessControlService {
  /* Variables: */
   ROOT_URL = 'http://localhost:8080/api/';
   user :User [];
-
+ 
   constructor( private http: HttpClient) { }
 
   /**
@@ -28,14 +27,23 @@ export class UserAccessControlService {
    * @returns Boolean 
    */
  
-  authenticateUser(userCredentials){
+  authenticateUser(userCredentials): Boolean{
     //receives json: tokenType, accessToken
     //sessionStorage.setItem('username', userCredentials.username)
     //sessionStorage.setItem('token', map.data.accessToken)
 
     let jsondata: any;
 
-    this.http.post(this.ROOT_URL+'auth/login', userCredentials).map(
+    this.http.post(this.ROOT_URL+'auth/login', userCredentials).subscribe(data =>{
+      //console.log(data)
+     
+      //sessionStorage.setItem('userName', userCredentials.userName);
+      //sessionStorage.setItem('token', data.accessToken);
+    }, err=>{
+      //handle error
+      return false;
+    });
+     /* map(
       (response: any) => {jsondata =  response.json()
       }, err =>{
         //handle error
@@ -43,7 +51,7 @@ export class UserAccessControlService {
         //send false
         return false;
       }
-    );
+    )*/
 
     sessionStorage.setItem('userName', userCredentials.userName);
     sessionStorage.setItem('token', jsondata.accessToken)
@@ -100,7 +108,8 @@ export class UserAccessControlService {
    */
   registerUser(userCredentials): Boolean{
     let jsondata: any
-    this.http.post(this.ROOT_URL + 'user', userCredentials ).map(
+    this.http.post(this.ROOT_URL + 'user', userCredentials ).pipe();
+    /*map(
       (response: any) => {jsondata =  response.json()
       }, err =>{
         //handle error
@@ -108,7 +117,7 @@ export class UserAccessControlService {
         return false;
 
       }
-    );
+    );*/
 
     sessionStorage.setItem('userName', userCredentials.userName);
     sessionStorage.setItem('token', jsondata.accessToken)
@@ -123,18 +132,20 @@ export class UserAccessControlService {
    * @param
    * @returns
    */
-  authenticateKey(key){
+  authenticateKey(key): Boolean{
     let jsondata: any
-    this.http.post(this.ROOT_URL + '', key).map(
+    this.http.post(this.ROOT_URL + '', key).pipe()
+    /*map(
       (response: any) => {jsondata =  response.json()
       }, err =>{
         //handle error
         //send false
         return false;
       }
-    );
+    );*/
    
     //sessionStorage.setItem(, jsondata.accessToken);
+    return true;
   }
 
 }
