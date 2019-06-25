@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
-//@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200") 
 @RestController
 public class EndPointController{
    @Autowired
@@ -36,6 +36,7 @@ public class EndPointController{
     * @return an object with all users 
     */
    @GetMapping("/users")
+   @CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('ADMIN')")
    public ResponseEntity<Object> retriveAllUsers(){
       return new ResponseEntity<>(userService.retrieveAllUsers(),HttpStatus.OK);
@@ -47,6 +48,7 @@ public class EndPointController{
     * @return a the valid homeUser
     */
    @GetMapping("/user/{userId}")
+   @CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public ResponseEntity<HomeUser> retriveUser(@PathVariable(value = "userId") Long userId){
       return new ResponseEntity<>(userService.retrieveUser(userId),HttpStatus.OK);
@@ -58,6 +60,7 @@ public class EndPointController{
     * @return an object with all the remaining users
     */
    @DeleteMapping("/user/{userId}")
+   @CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('ADMIN')")
    public ResponseEntity<Object> removeUser(@PathVariable(value = "userId") Long userId){
       String result = userService.removeUser(userId);
@@ -83,51 +86,31 @@ public class EndPointController{
     * @return the status message
     */
    @PostMapping("/user")
-   //@CrossOrigin(origins = "http://localhost:4200")
+   @CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public ResponseEntity<Object> addUser(@Valid @RequestBody HomeUser newHomeUser){
       String result =userService.addUser(newHomeUser);
       return new ResponseEntity<>(result,HttpStatus.OK);
    }
 
-   /**
-    * PATCH METHOD
-    * Implements updateUserEmail endpoint, that calls updateUserEmail service
-    * @param userId
-    * @param newHomeUser
-    * @return
-    */
-   @PatchMapping("/user/{userId}/useremail")
+   @PatchMapping("/user/userlocationtopic")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<Object> updateUserEmail(@PathVariable(value = "userId") Long userId,@Valid @RequestBody HomeUser newHomeUser){
-      String result =userService.updateUserEmail(userId,newHomeUser);
+   public ResponseEntity<Object> updateUserLocationTopic(@Valid @RequestBody HomeUser newHomeUser){
+      String result =userService.updateUserLocationTopic(newHomeUser);
       return new ResponseEntity<>(result,HttpStatus.OK);
    }
 
-   @PatchMapping("/user/{userId}/userpassword")
-   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<Object> updateUserPasword(@PathVariable(value = "userId") Long userId,@Valid @RequestBody HomeUser newHomeUser){
-      String result =userService.updateUserPassword(userId,newHomeUser);
-      return new ResponseEntity<>(result,HttpStatus.OK);
-   }
-   @PatchMapping("/user/{userId}/userlocationtopic")
-   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<Object> updateUserLocationTopic(@PathVariable(value = "userId") Long userId,@Valid @RequestBody HomeUser newHomeUser){
-      String result =userService.updateUserLocationTopic(userId,newHomeUser);
-      return new ResponseEntity<>(result,HttpStatus.OK);
-   }
-   @PatchMapping("/user/{userId}/usertype")
+   @PatchMapping("/user/usertype")
    @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> updateUserType(@PathVariable(value = "userId") Long userId,@Valid @RequestBody HomeUser newHomeUser){
-      String result =userService.updateUserType(userId,newHomeUser);
+   public ResponseEntity<Object> updateUserType(@Valid @RequestBody HomeUser newHomeUser){
+      String result =userService.updateUserType(newHomeUser);
       return new ResponseEntity<>(result,HttpStatus.OK);
    }
 
-   @PutMapping("/user/{userId}")
+   @PutMapping("/user")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<Object> updateUser(@PathVariable(value = "userId") Long userId,@Valid @RequestBody HomeUser newHomeUser){
-      String result =userService.updateUser(userId,newHomeUser);
-      return new ResponseEntity<>(result,HttpStatus.OK);
+   public ResponseEntity<Object> updateUser(@Valid @RequestBody HomeUser newHomeUser){
+      return userService.updateUser(newHomeUser);
    }
    
   
@@ -136,10 +119,9 @@ public class EndPointController{
     * @return
     */
 
-   @PatchMapping("/user/{userId}/expiration")
+   @PatchMapping("/user/expiration")
    @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> renewUser(@PathVariable(value = "userId") Long userId,@Valid @RequestBody HomeUser newHomeUser){
-      String result =userService.renewUser(userId,newHomeUser);
-      return new ResponseEntity<>(result,HttpStatus.OK);
+   public String renewUser(){
+      return "only admin can change expiration date";
    }
 }
