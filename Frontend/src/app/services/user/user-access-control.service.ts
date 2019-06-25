@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs-compat/operator/map';
+import { map } from 'rxjs/operator/map';
+import { User } from 'src/app/models/user-model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +14,8 @@ export class UserAccessControlService {
    */
 
  /* Variables: */
- ROOT_URL = 'http://localhost:8080/api';
-
+  ROOT_URL = 'http://localhost:8080/api/';
+  user :User [];
 
   constructor( private http: HttpClient) { }
 
@@ -22,23 +24,40 @@ export class UserAccessControlService {
    * Uses session storage to store username and JWT
    * POST Request
    * exposed endpoint:
-   * @param
-   * @returns
+   * @param userCredentials: json of user form data
+   * @returns Boolean 
    */
  
-  authenticateUser(userData): Observable<any>{
+  authenticateUser(userCredentials){
     //receives json: tokenType, accessToken
-    //sessionStorage.setItem('username', userData.username)
+    //sessionStorage.setItem('username', userCredentials.username)
     //sessionStorage.setItem('token', map.data.accessToken)
-    return this.http.post(this.ROOT_URL+'auth', userData);
+
+    let jsondata: any;
+
+    this.http.post(this.ROOT_URL+'auth/login', userCredentials).map(
+      (response: any) => {jsondata =  response.json()
+      }, err =>{
+        //handle error
+        //console.log(err)
+        //send false
+        return false;
+      }
+    );
+
+    sessionStorage.setItem('userName', userCredentials.userName);
+    sessionStorage.setItem('token', jsondata.accessToken)
+    //console.log(jsondata);
+    return true;
+
   }
 
   /**
    * Checks session storage to see if user is currently logged in  
-   * @returns boolean
+   * @returns Boolean
    */
-  isUserLoggedIn(): boolean{
-    if(sessionStorage == null)
+  isUserLoggedIn(): Boolean {
+    if(sessionStorage == null )
       return false;
     else
       return true;
@@ -48,11 +67,8 @@ export class UserAccessControlService {
    * Clears session storage, invalidates JWT
    * Route to login page
    * PUT Request
-   * exposed endpoint:
-   * @param 
-   * @returns
    */
-  userLogOut(){
+  userLogOut(): void{
     sessionStorage.clear(); //window.sessionStorage.clear();
     //load login page
 
@@ -62,11 +78,17 @@ export class UserAccessControlService {
    * Sends user information to API
    * PUT Request
    * exposed endpoint:
-   * @param credential Object
-   * @returns
+   * @param userCredentials: json of user form data
+   * @returns Boolean
    */
-  changeCredentials() : Observable<{}> {
-    return null;
+  changeCredentials(userCredentials): Boolean {
+    
+    this.http.put(this.ROOT_URL + 'user', userCredentials).subscribe(
+      err => {
+        return false;
+      }
+    );
+    return true;
   }
 
   /**'
@@ -76,8 +98,22 @@ export class UserAccessControlService {
    * @param credential Object
    * @returns
    */
-  registerUser(userCredentials){
-    this.http.post(this.ROOT_URL + '', userCredentials )
+  registerUser(userCredentials): Boolean{
+    let jsondata: any
+    this.http.post(this.ROOT_URL + 'user', userCredentials ).map(
+      (response: any) => {jsondata =  response.json()
+      }, err =>{
+        //handle error
+        //send false
+        return false;
+
+      }
+    );
+
+    sessionStorage.setItem('userName', userCredentials.userName);
+    sessionStorage.setItem('token', jsondata.accessToken)
+    //console.log(jsondata);
+    return true;
   }
 
   /**
@@ -88,6 +124,17 @@ export class UserAccessControlService {
    * @returns
    */
   authenticateKey(key){
-    this.http.post(this.ROOT_URL + '', key);
+    let jsondata: any
+    this.http.post(this.ROOT_URL + '', key).map(
+      (response: any) => {jsondata =  response.json()
+      }, err =>{
+        //handle error
+        //send false
+        return false;
+      }
+    );
+   
+    //sessionStorage.setItem(, jsondata.accessToken);
   }
+
 }
