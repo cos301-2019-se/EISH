@@ -15,8 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
-
 @Service
 public class UserService{
        
@@ -111,7 +109,6 @@ public class UserService{
     /**
      * section Users
      */
-    
     public String updateUserLocationTopic(HomeUser newHomeUserLocationTopic)  throws ResourceNotFoundException {
         if(newHomeUserLocationTopic==null){
            return "Failed to update user location topic";
