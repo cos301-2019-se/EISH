@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.monotoneid.eishms.dataPersistence.models.HomeUser;
+import com.monotoneid.eishms.dataPersistence.repositories.HomeKeys;
 import com.monotoneid.eishms.services.databaseManagementSystem.UserService;
 
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,14 @@ public class EndPointController{
 
    @Autowired
    private UserService userService;
+
+   @Autowired
+   HomeKeys myHouseKeys;
+
+   @GetMapping("keys") 
+   public String getKeys() {
+      return myHouseKeys.findByKeyName("general").getKeyName() + " : " + myHouseKeys.findByKeyName("general").getUnencryptedKey();
+   }
 
    /**
     * POST METHOD

@@ -9,16 +9,14 @@ public class HomeKey {
     private String unencryptedKey;
     private UserType userType;
 
-    @Autowired
-    PasswordEncoder encoder;
-
     public HomeKey(String keyname, String userkey, UserType usertype) {
-        this.keyName = keyname;
-        this.userKey = userkey;
-        this.userType = usertype; 
+        setKeyName(keyname);
+        setUserkey(userkey);
+        setUnencryptedKey(userkey);
+        setUsertype(usertype); 
     }
 
-    public void setUsername(String keyname) {
+    public void setKeyName(String keyname) {
         this.keyName = keyname;
     }
 
@@ -27,12 +25,15 @@ public class HomeKey {
     }
 
     public void  setUserkey(String userkey) {
-        this.unencryptedKey = userkey;
-        this.userKey = encoder.encode(userKey);
+        this.userKey = userkey;
     }
 
     public String getUserkey() {
         return this.userKey;
+    }
+
+    public void setUnencryptedKey(String unencrypted) {
+        this.unencryptedKey = unencrypted;
     }
 
     public String getUnencryptedKey() {

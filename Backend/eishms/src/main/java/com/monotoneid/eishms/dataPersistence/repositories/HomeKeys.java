@@ -1,20 +1,32 @@
 package com.monotoneid.eishms.dataPersistence.repositories;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import com.monotoneid.eishms.dataPersistence.models.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class HomeKeys {
 
     List<HomeKey> homeKeys;
-    Date lastCreation;
+    long lastCreation;
+    Random ran;
+
+    @Autowired
+    PasswordEncoder encoder;
 
     public HomeKeys() {
-        generateNewKeys();
+        ran = new Random(System.currentTimeMillis());
+        homeKeys = null;
+        lastCreation = 0;
+        //String enc = encoder.encode("Juhsjdll");
+        //generateNewKeys();
     }
 
     public HomeKey findByKeyName(String keyname) {
@@ -26,17 +38,53 @@ public class HomeKeys {
         return null;
     }
 
-    public void generateNewKeys() {
 
+    private int generateRandomInt(int max) {
+        return ran.nextInt(max);
+    }
+
+    private String generateKey() {
+        char[] keyCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+".toCharArray();
+        String genKey = "";
+        
+        for (int i=0; i < 8; i++) {
+            genKey += keyCharacters[generateRandomInt(keyCharacters.length)];
+        }
+
+        return genKey;
+    }
+
+    public void generateNewKeys() {
+        HomeKey generalKey = new HomeKey("general", generateKey(), UserType.ROLE_GENERAL);
+        HomeKey renewalKey = new HomeKey("renewal", generateKey(), UserType.ROLE_RENEWAL);
+
+        generalKey.setUserkey(encoder.encode(generalKey.getUserkey()));
+        renewalKey.setUserkey(encoder.encode(renewalKey.getUserkey()));
+
+        if (homeKeys == null) {
+            homeKeys = new ArrayList<HomeKey>();
+            homeKeys.add(generalKey);
+            homeKeys.add(renewalKey);
+        } else {
+            homeKeys.clear();
+            homeKeys.add(generalKey);
+            homeKeys.add(renewalKey);
+        }
+
+        lastCreation = System.currentTimeMillis();
     }
 
     public void updateKeys() {
-        if (keysExpired()) {
+        if (keysExpired() || homeKeys == null) {
             generateNewKeys();
         }
     }
 
     public boolean keysExpired() {
-        return false;
+        long currentTime = System.currentTimeMillis();
+        long timeElapsed = currentTime - lastCreation;
+
+        //86400000 is 24 hours in milliseconds
+        return timeElapsed >= 86400000;
     }
 }

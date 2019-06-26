@@ -3,6 +3,7 @@ package com.monotoneid.eishms.communications.controller;
 import javax.validation.Valid;
 
 import com.monotoneid.eishms.configuration.JwtTokenUtil;
+import com.monotoneid.eishms.dataPersistence.repositories.HomeKeys;
 import com.monotoneid.eishms.dataPersistence.repositories.Users;
 import com.monotoneid.eishms.messages.JwtRequest;
 import com.monotoneid.eishms.messages.JwtResponse;
@@ -29,6 +30,9 @@ public class JwtAuthenticationController {
  
     @Autowired
     Users userRepository;
+
+    @Autowired
+    HomeKeys myHouseKeys;
  
     @Autowired
     PasswordEncoder encoder;
@@ -39,6 +43,9 @@ public class JwtAuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody JwtRequest loginRequest) {
         //System.out.println("Encoded password" + encoder.encode(loginRequest.getPassword()));
+        myHouseKeys.updateKeys();
+        //System.out.println(myHouseKeys.findByKeyName("general").getKeyName() + " : " + myHouseKeys.findByKeyName("general").getUnencryptedKey());
+        //System.out.println(myHouseKeys.findByKeyName("general").getKeyName() + " : " + myHouseKeys.findByKeyName("general").getUserkey() + "[encrypted]");
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
