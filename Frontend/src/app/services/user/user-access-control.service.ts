@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import { map } from 'rxjs/operator/map';
-import { User } from 'src/app/models/user-model';
-import { Observable } from 'rxjs';
+import 'rxjs/add/operator/map';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +13,6 @@ export class UserAccessControlService {
 
  /* Variables: */
   ROOT_URL = 'http://localhost:8080/api/';
-  user :User [];
  
   constructor( private http: HttpClient) { }
 
@@ -34,24 +32,16 @@ export class UserAccessControlService {
 
     let jsondata: any;
 
-    this.http.post(this.ROOT_URL+'auth/login', userCredentials).subscribe(data =>{
-      //console.log(data)
-     
-      //sessionStorage.setItem('userName', userCredentials.userName);
-      //sessionStorage.setItem('token', data.accessToken);
-    }, err=>{
-      //handle error
-      return false;
-    });
-     /* map(
+    this.http.post(this.ROOT_URL+'auth/login', userCredentials).pipe( 
+      map(
       (response: any) => {jsondata =  response.json()
-      }, err =>{
+      },err =>{
         //handle error
         //console.log(err)
         //send false
         return false;
       }
-    )*/
+    ));
 
     sessionStorage.setItem('userName', userCredentials.userName);
     sessionStorage.setItem('token', jsondata.accessToken)
@@ -91,10 +81,9 @@ export class UserAccessControlService {
    */
   changeCredentials(userCredentials): Boolean {
     
-    this.http.put(this.ROOT_URL + 'user', userCredentials).subscribe(
-      err => {
-        return false;
-      }
+    this.http.put(this.ROOT_URL + 'user', userCredentials).pipe(
+    //error, return false
+      
     );
     return true;
   }
@@ -108,16 +97,16 @@ export class UserAccessControlService {
    */
   registerUser(userCredentials): Boolean{
     let jsondata: any
-    this.http.post(this.ROOT_URL + 'user', userCredentials ).pipe();
-    /*map(
-      (response: any) => {jsondata =  response.json()
-      }, err =>{
-        //handle error
-        //send false
-        return false;
+    this.http.post(this.ROOT_URL + 'user', userCredentials ).pipe(
+      map(
+        (response: any) => {jsondata =  response.json()
+        }, err =>{
+          //handle error
+          //send false
+          return false;
 
-      }
-    );*/
+      })
+    );
 
     sessionStorage.setItem('userName', userCredentials.userName);
     sessionStorage.setItem('token', jsondata.accessToken)
@@ -134,15 +123,16 @@ export class UserAccessControlService {
    */
   authenticateKey(key): Boolean{
     let jsondata: any
-    this.http.post(this.ROOT_URL + '', key).pipe()
-    /*map(
-      (response: any) => {jsondata =  response.json()
-      }, err =>{
-        //handle error
-        //send false
-        return false;
-      }
-    );*/
+    this.http.post(this.ROOT_URL + '', key).pipe(
+      map(
+        (response: any) => {jsondata =  response.json()
+        }, err =>{
+          //handle error
+          //send false
+          return false;
+        }
+      )
+    );
    
     //sessionStorage.setItem(, jsondata.accessToken);
     return true;
