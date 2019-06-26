@@ -27,18 +27,33 @@ public class UserService{
     @Autowired
     private Users usersRepository;
 
-
-    
     public void setDefaulNumberOfDays(int newDefualtNumberofDays){
         this.defaultNumberOfDays = newDefualtNumberofDays;
     }
     public int getDefaultNumberOfDays(){
         return defaultNumberOfDays;
     }
+
     /**
-     * section Users
+     * hash and salt password
+     * @param password
+     * @return String 
      */
-    public void getUserPresence(){}
+    private String encryptPassword(String password) throws Exception {
+        return encoder.encode(password);        
+    }
+    
+    private Timestamp  calculateExpiryDate(int numberOfDays) {
+        return new Timestamp(System.currentTimeMillis()+convertDaysToMillSeconds(numberOfDays));
+    }
+    
+    private long convertDaysToMillSeconds(int numberOfDays){
+        if(numberOfDays > 0)
+         return numberOfDays*24*60*60*1000;
+        else
+         return 1*24*60*60*1000;
+    }
+
     /**
      * This function will receive user credentials and store them to the database
      * it will generate a defualt expiry date, Hash a usersPassword
@@ -72,37 +87,7 @@ public class UserService{
             return new ResponseEntity<>("Error: Failed to add user details!",HttpStatus.PRECONDITION_FAILED);
         }
     }
-    /**
-     * hash and salt password
-     * @param password
-     * @return String 
-     */
-    private String encryptPassword(String password) throws Exception {
-        return encoder.encode(password);        
-    }
-    private Timestamp  calculateExpiryDate(int numberOfDays) {
-        return new Timestamp(System.currentTimeMillis()+convertDaysToMillSeconds(numberOfDays));
-    }
-    private long convertDaysToMillSeconds(int numberOfDays){
-        if(numberOfDays > 0)
-         return numberOfDays*24*60*60*1000;
-        else
-         return 1*24*60*60*1000;
-    }
 
-    /**
-     * section Users
-     */
-    public ResponseEntity<Object> removeUser(HomeUser homeUser) {
-        try {
-            usersRepository.findById(homeUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-            usersRepository.deleteById(homeUser.getUserId());
-            return new ResponseEntity<>("Success: User has been deleted!",HttpStatus.OK);
-        } catch(Exception e){
-            System.out.println("Error: Input is " + e.getMessage() + "!");
-            return new ResponseEntity<>("Error: Failed to delete home user!",HttpStatus.PRECONDITION_FAILED);
-        }
-    }
     /**
      * section Users
      */
@@ -114,44 +99,10 @@ public class UserService{
             System.out.println("Error: " + e.getMessage()+"!");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        
     }
-    
+
     public List<HomeUser> retrieveAllUsers(){
-       return usersRepository.findAll();
-    }
-
-    /**
-     * section Users
-     */
-    public String updateUserLocationTopic(HomeUser newHomeUserLocationTopic)  throws ResourceNotFoundException {
-        if(newHomeUserLocationTopic==null){
-           return "Failed to update user location topic";
-        }else{
-            if(newHomeUserLocationTopic.getUserLocationTopic().isEmpty()==true){
-                return "failed to update user location topic";
-            }
-            HomeUser foundUser = usersRepository.findById(newHomeUserLocationTopic.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-            foundUser.setUserLocationTopic(newHomeUserLocationTopic.getUserLocationTopic());
-            final HomeUser updatedHomeUser= usersRepository.save(foundUser);
-            return updatedHomeUser.getUserName()+" Location Topic Updated";
-       }
-    }
-
-    public String updateUserType(HomeUser newHomeUserType)  throws ResourceNotFoundException {
-        if(newHomeUserType==null){
-           return "Failed to update user type";
-        }else{
-            if(newHomeUserType.getUserType()==UserType.ROLE_GUEST
-            ||newHomeUserType.getUserType()==UserType.ROLE_RESIDENT
-            ||newHomeUserType.getUserType()==null){
-                return "failed to update user type";
-            }
-            HomeUser foundUser = usersRepository.findById(newHomeUserType.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-            foundUser.setUserType(newHomeUserType.getUserType());
-            final HomeUser updatedHomeUser= usersRepository.save(foundUser);
-            return updatedHomeUser.getUserName()+" User Type Updated";
-       }
+        return usersRepository.findAll();
     }
 
     public ResponseEntity<Object> updateUser(HomeUser newHomeUser) {
@@ -175,24 +126,111 @@ public class UserService{
             }
         } catch(Exception e) {
             System.out.println("Error: Input is " + e.getMessage() + "!");
-            return new ResponseEntity<>("Error: Failed to update user details!",HttpStatus.PRECONDITION_FAILED);
+            if(e.getCause() == null)
+                return new ResponseEntity<>("Error: Failed to update user type!",HttpStatus.PRECONDITION_FAILED);
+            else
+                return new ResponseEntity<>("Error: Failed to update user type!",HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /**
+     * section Users
+     */
+    public ResponseEntity<Object> removeUser(HomeUser homeUser) {
+        try {
+            if(homeUser == null)
+                throw null;
+            usersRepository.findById(homeUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+            usersRepository.deleteById(homeUser.getUserId());
+            return new ResponseEntity<>("Success: User has been deleted!",HttpStatus.OK);
+        } catch(Exception e){
+            System.out.println("Error: Input is " + e.getMessage() + "!");
+            if(e.getMessage() == null)
+                return new ResponseEntity<>("Error: Failed to delete home user!",HttpStatus.PRECONDITION_FAILED);
+            else
+                return new ResponseEntity<>("Error: Failed to delete home user!",HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    /**
+     * section Users
+     */
+    public ResponseEntity<Object> getUserPresence(Long userId){
+        try {
+            HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+            return new ResponseEntity<>(foundUser.getUserLocationTopic(),HttpStatus.OK);
+        } catch(Exception e){
+            return new ResponseEntity<>("Error: Failed to get user presence!",HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /**
+     * section Users
+     */
+    public ResponseEntity<Object> updateUserLocationTopic(HomeUser homeUser) {
+        try {
+            if(homeUser == null){
+                throw null;
+            }else{
+                if(homeUser.getUserLocationTopic().isEmpty() == true){
+                    throw null;
+                }
+                HomeUser foundUser = usersRepository.findById(homeUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+                foundUser.setUserLocationTopic(homeUser.getUserLocationTopic());
+                usersRepository.save(foundUser);
+                return new ResponseEntity<>("Location Topic Updated",HttpStatus.OK);
+            }
+        } catch(Exception e) {
+            if(e.getCause() == null)
+                return new ResponseEntity<>("Error: Failed to update user type!",HttpStatus.PRECONDITION_FAILED);
+            else
+                return new ResponseEntity<>("Error: Failed to update user type!",HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public ResponseEntity<Object> updateUserType(HomeUser homeUser) {
+        try {
+            if(homeUser ==null){
+                throw null;
+            }else{
+                if(homeUser.getUserType()==UserType.ROLE_GUEST
+                ||homeUser.getUserType()==UserType.ROLE_RESIDENT
+                ||homeUser.getUserType()==null){
+                    throw null;
+                }
+                HomeUser foundUser = usersRepository.findById(homeUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+                foundUser.setUserType(homeUser.getUserType());
+                usersRepository.save(foundUser);
+                return new ResponseEntity<>("Users type updated!",HttpStatus.OK);
+            }
+        } catch(Exception e){
+            if(e.getCause() == null)
+                return new ResponseEntity<>("Error: Failed to update user type!",HttpStatus.PRECONDITION_FAILED);
+            else
+                return new ResponseEntity<>("Error: Failed to update user type!",HttpStatus.NOT_FOUND);
         }
     }
  
     /**
     * Changing users expiry date 
     */   
-    public String renewUser(Long userId,HomeUser newHomeUserExpiry)  throws ResourceNotFoundException {
-        HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-        if(newHomeUserExpiry==null){
-            return "Failed to update user expiry";
-        }else{
-            if(newHomeUserExpiry.getUserExpiryDate()==null){
-                return "failed to update user expiry date";
+    public ResponseEntity<Object> renewUser(HomeUser homeUser) {
+        try {
+            if(homeUser == null)
+                throw null;
+            else if(homeUser.getUserExpiryDate()==null)
+                    throw null;
+            else{
+                HomeUser foundUser = usersRepository.findById(homeUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+                foundUser.setUserExpiryDate(calculateExpiryDate(defaultNumberOfDays));
+                usersRepository.save(foundUser);
+                return new ResponseEntity<>("User renewed!",HttpStatus.OK);
             }
-            foundUser.setUserExpiryDate(calculateExpiryDate(defaultNumberOfDays));
-            final HomeUser updatedHomeUser= usersRepository.save(foundUser);
-            return updatedHomeUser.getUserName()+" User Updated";
+        } catch(Exception e){
+            if(e.getCause() == null)
+                return new ResponseEntity<>("Error: Failed to update user type!",HttpStatus.PRECONDITION_FAILED);
+            else
+                return new ResponseEntity<>("Error: Failed to update user type!",HttpStatus.NOT_FOUND);
         }
     }
 	    

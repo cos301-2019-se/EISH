@@ -31,18 +31,19 @@ public class EndPointController{
 
    @Autowired
    private UserService userService;
-   
+
    /**
-    * GET METHOD
-    * Implements retrieveAllUsers endpoint, that calls the retrieveAllUsers service
-    * @return an object with all users 
+    * POST METHOD
+    * Implements the addUser endpoint, that calls the addUser service
+    * @param newHomeUser
+    * @return the status message
     */
-   @GetMapping("/users")
-   @CrossOrigin(origins = "http://localhost:4200")
-   @PreAuthorize("hasRole('ADMIN')")
-   public List<HomeUser> retriveAllUsers(){
-      return userService.retrieveAllUsers();
-   }
+    @PostMapping("/user")
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    public ResponseEntity<Object> addUser(@Valid @RequestBody HomeUser newHomeUser){
+       return userService.addUser(newHomeUser);
+    }
 
    /**
     * GET METHOD
@@ -54,6 +55,24 @@ public class EndPointController{
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public ResponseEntity<HomeUser> retriveUser(@PathVariable(value = "userId") Long userId){
       return userService.retrieveUser(userId);
+   }
+
+   /**
+   * GET METHOD
+   * Implements retrieveAllUsers endpoint, that calls the retrieveAllUsers service
+   * @return an object with all users 
+   */
+   @GetMapping("/users")
+   @CrossOrigin(origins = "http://localhost:4200")
+   @PreAuthorize("hasRole('ADMIN')")
+   public List<HomeUser> retriveAllUsers(){
+      return userService.retrieveAllUsers();
+   }
+
+   @PutMapping("/user")
+   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+   public ResponseEntity<Object> updateUser(@Valid @RequestBody HomeUser newHomeUser){
+      return userService.updateUser(newHomeUser);
    }
 
    /**
@@ -73,55 +92,32 @@ public class EndPointController{
     * Implements getUserPresence endpoint, that calls the getUserPresence service
     * @return an object with the presence of the user
     */
-   @GetMapping("/user/presence")
+   @GetMapping("/user/presence/{userId}")
    @CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public String getUserPresence(){
-      return "all can get presence";
-   }
-  
-   /**
-    * POST METHOD
-    * Implements the addUser endpoint, that calls the addUser service
-    * @param newHomeUser
-    * @return the status message
-    */
-   @PostMapping("/user")
-   @CrossOrigin(origins = "http://localhost:4200")
-   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<Object> addUser(@Valid @RequestBody HomeUser newHomeUser){
-      return userService.addUser(newHomeUser);
+   public ResponseEntity<Object> getUserPresence(@PathVariable(value = "userId") Long userId){
+      return userService.getUserPresence(userId);
    }
 
    @PatchMapping("/user/userlocationtopic")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<Object> updateUserLocationTopic(@Valid @RequestBody HomeUser newHomeUser){
-      String result =userService.updateUserLocationTopic(newHomeUser);
-      return new ResponseEntity<>(result,HttpStatus.OK);
+   public ResponseEntity<Object> updateUserLocationTopic(@Valid @RequestBody HomeUser homeUser){
+      return userService.updateUserLocationTopic(homeUser);
    }
 
    @PatchMapping("/user/usertype")
    @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> updateUserType(@Valid @RequestBody HomeUser newHomeUser){
-      String result =userService.updateUserType(newHomeUser);
-      return new ResponseEntity<>(result,HttpStatus.OK);
+   public ResponseEntity<Object> updateUserType(@Valid @RequestBody HomeUser homeUser){
+      return userService.updateUserType(homeUser);
    }
-
-   @PutMapping("/user")
-   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<Object> updateUser(@Valid @RequestBody HomeUser newHomeUser){
-      return userService.updateUser(newHomeUser);
-   }
-   
   
    /**
     * update user expirydate
     * @return
     */
-
    @PatchMapping("/user/expiration")
    @PreAuthorize("hasRole('ADMIN')")
-   public String renewUser(){
-      return "only admin can change expiration date";
+   public ResponseEntity<Object> renewUser(@Valid @RequestBody HomeUser homeUser){
+      return userService.renewUser(homeUser);
    }
 }
