@@ -8,7 +8,7 @@ import com.monotoneid.eishms.dataPersistence.models.HomeUser;
 import com.monotoneid.eishms.dataPersistence.repositories.HomeKeys;
 import com.monotoneid.eishms.services.databaseManagementSystem.UserService;
 
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -61,11 +61,11 @@ public class EndPointController{
     * Implements retrieveUser endpoint, that calls the retrieveUser service
     * @return a the valid homeUser
     */
-   @GetMapping("/user/{userId}")
+   @GetMapping("/user/{userName}")
    @CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<HomeUser> retriveUser(@PathVariable(value = "userId") Long userId){
-      return userService.retrieveUser(userId);
+   public ResponseEntity<HomeUser> retriveUser(@PathVariable(value = "userName") String homeUserName){
+      return userService.retrieveUser(homeUserName);
    }
 
    /**
