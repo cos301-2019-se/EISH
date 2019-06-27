@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService{
        
-    @Value("${eishms.defaultNumberOfDays:3}")
-    private int defaultNumberOfDays=3;
+    @Value("${eishms.defaultNumberOfDays:1}")
+    private int defaultNumberOfDays=1;
 
     @Autowired
     PasswordEncoder encoder;
