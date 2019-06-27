@@ -34,7 +34,7 @@ public class HomeUser {
     @Column(name = "userid", columnDefinition = "serial", updatable = false, nullable = false)
     private long userId;
 
-    @Column(name = "username", columnDefinition = "text", updatable = true, nullable = false)
+    @Column(name = "username", columnDefinition = "text", updatable = true, unique = true, nullable = false)
     private String userName;
 
     @Column(name = "useremail", columnDefinition = "text", updatable = true, nullable = false)
@@ -56,6 +56,9 @@ public class HomeUser {
     private Timestamp userExpiryDate;
 
     public HomeUser(){}
+    public HomeUser(String userName, String userEmail){
+            
+    }
     
     public HomeUser(@JsonProperty("userName") String newUserName,
      @JsonProperty("userEmail") String newEmail, 

@@ -91,9 +91,9 @@ public class UserService{
     /**
      * section Users
      */
-    public ResponseEntity<HomeUser> retrieveUser(long userId) {
+    public ResponseEntity<HomeUser> retrieveUser(String homeUserName) {
         try {
-            HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+            HomeUser foundUser = usersRepository.findByHomeUserName(homeUserName).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
             return new ResponseEntity<>(foundUser,HttpStatus.OK);
         } catch(Exception e){
             System.out.println("Error: " + e.getMessage()+"!");
