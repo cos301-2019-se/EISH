@@ -25,7 +25,7 @@ export class ChangeCredentialsComponent implements OnInit {
   
   constructor(private router: ActivatedRoute,private routes: Router,private fb: FormBuilder,private authenticationServices: UserAccessControlService) {
     if(this.router.snapshot.paramMap.get("regType") == ""){
-      this.formHeading = "Change Credentials";
+      this.formHeading = "Change";
     }else{
       this.formHeading = "Register";
     }
@@ -40,7 +40,7 @@ export class ChangeCredentialsComponent implements OnInit {
 
   ngOnInit() {
     if(this.router.snapshot.paramMap.get("regType") == ""){
-      this.formHeading = "Change Credentials";
+      this.formHeading = "Change";
     }else{
       this.formHeading = "Register";
     }
