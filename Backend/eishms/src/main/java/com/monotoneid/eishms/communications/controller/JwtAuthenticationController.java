@@ -73,7 +73,7 @@ public class JwtAuthenticationController {
         //     }
         // }
 
-        loginUser = userRepository.
+        loginUser = userRepository.findByHomeUserName(loginUser.getUserName()).get();
 
         //compare current date with expiry date
         if (loginUser.getUserType() == UserType.ROLE_GUEST && loginUser.getUserExpiryDate().before(new Date())) {
