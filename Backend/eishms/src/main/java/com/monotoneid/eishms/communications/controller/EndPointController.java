@@ -36,7 +36,7 @@ public class EndPointController{
    @Autowired
    HomeKeys myHouseKeys;
 
-   @GetMapping("keys") 
+   @GetMapping("/keys") 
    public String getKeys() {
       return myHouseKeys.findByKeyName("general").getKeyName() + " : " + myHouseKeys.findByKeyName("general").getUnencryptedKey();
    }
