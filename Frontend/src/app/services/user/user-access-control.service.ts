@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import { map, mergeMap, switchMap, catchError } from 'rxjs/operators';
-import { forkJoin, pipe, Subject} from 'rxjs';
+import { forkJoin, pipe, Subject, Observable, Subscription} from 'rxjs';
 import { ifError } from 'assert';
 import { errorHandler } from '@angular/platform-browser/src/browser';
 import { error } from 'util';
@@ -17,7 +17,10 @@ export class UserAccessControlService {
 
  /* Variables: */
   ROOT_URL = 'http://localhost:8080/api/';
- data:any;
+  data:any;
+  statusVariable : Boolean
+
+
   constructor( private http: HttpClient) { }
 
   /**
@@ -28,27 +31,30 @@ export class UserAccessControlService {
    * @param userCredentials: json of user form data
    * @returns Boolean 
    */
- 
-  authenticateUser(userCredentials):any{
+  authenticateUser(userCredentials){
     //receives json: tokenType, accessToken
     //sessionStorage.setItem('username', userCredentials.username)
     //sessionStorage.setItem('token', map.data.accessToken)
     
     let parameter = {"user_id": 1}
-    let status = false;
-
-    this.http.post(this.ROOT_URL+'auth/login/', parameter).pipe(
-      map(
-          (response: Response) =>{
-            if(!response.ok)
-              return false
-          }, response => {
+    
+     return this.http.post(this.ROOT_URL+'auth/login/', parameter).pipe(
+      map( response => {
+            this.statusVariable =  false;
             this.data =  response[0],
+            console.log(this.data),
             sessionStorage.setItem('accessToken', this.data.accessToken),
             sessionStorage.setItem('userName' , userCredentials.userEmail);
+            this.statusVariable = true;
+            this.quickDisplay();
             return true;
+
           }
-      )).subscribe();
+      )).subscribe({
+        next: (res) => {console.log(res); 
+          return res},
+        complete: () => {console.log('completed')}
+      });
     
   }
 
@@ -56,6 +62,7 @@ export class UserAccessControlService {
     console.log('in QD, data: ' + this.data.accessToken);
     console.log('in QD, token.UN: ' + sessionStorage.getItem('userName'))
     console.log('in QD, token.AT: ' + sessionStorage.getItem('accessToken'))
+   
     sessionStorage.clear();
   }
 

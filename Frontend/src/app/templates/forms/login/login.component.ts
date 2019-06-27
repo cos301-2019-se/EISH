@@ -56,8 +56,10 @@ export class LoginComponent implements OnInit {
       let result = this.AuthenticationServices.authenticateUser(formData.value);
 
       if(result){
+        console.log('executing true');
         this.route.navigate(['/register']);
         }else{
+        console.log('executing false');
         this.incorrectCredentials = true;
         return;
         //possibly need to clear the fields if they arent already;
