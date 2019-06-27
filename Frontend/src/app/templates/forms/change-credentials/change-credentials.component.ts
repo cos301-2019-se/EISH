@@ -52,8 +52,8 @@ export class ChangeCredentialsComponent implements OnInit {
       'userDeviceName':['',[Validators.minLength(3),Validators.maxLength(25)]]
     });
   }
-  route(){
-    this.routes.navigate(['/dashboard']);
+  route(routeLocation){
+    this.routes.navigate(['/' + routeLocation]);
   }
   get getVariables(){
     return this.credentialsForm.controls;
@@ -62,38 +62,35 @@ export class ChangeCredentialsComponent implements OnInit {
    * Called upon button click. Chooses which function to call based on submissionType
    */
   submit(formData){
+  
     if(this.credentialsForm.invalid)
     {
       return;
     }
     else{
       let presence = this.authenticationServices.isUserLoggedIn();
-      let result = this.authenticationServices.authenticateUser(formData.value);
-      if(presence && result){
+      if(presence ){
         this.editCredentials(formData.value);
-        this.route();
       }else if(presence == false){
-        let response = this.registerCredentials(formData.value);
-        if(response){
-          this.route();
+         this.registerCredentials(formData.value);
+       
         }else{
           return;
         }
       }
     }
-   }
 
   /**
    * Carry out change of user credentials
    */
   editCredentials(credentials){
-    return this.authenticationServices.changeCredentials(credentials);
+    return this.authenticationServices.changeCredentials(credentials, this);
   }
 
   /**
    * Carry out registration of new user
    */
   registerCredentials(credentials){
-    return this.authenticationServices.registerUser(credentials);
+    return this.authenticationServices.registerUser(credentials, this);
   }
 }

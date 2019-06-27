@@ -36,12 +36,14 @@ export class LoginComponent implements OnInit {
   }
 
   switcher(){
-    this.route.navigate(['/register']);      
+    this.route.navigate(['/register?regType=Register']);      
   }
+
   error(){
     this.incorrectCredentials = true;
 
   }
+
   get getVariables(){
     return this.loginForm.controls;
   }
@@ -54,24 +56,11 @@ export class LoginComponent implements OnInit {
     //sanitize and validate
     //if admin admin: go to server, according to response:  make token and  route to change credntials or wrong credntials
     
-    
-    if(this.loginForm.invalid)
-    {
+    if(this.loginForm.invalid){
       return;
-    }else{
-      let result = this.AuthenticationServices.authenticateUser(formData.value);
-      if(result){
-        this.switcher();
-        }else{
-          this.error();
-        return;
-        //possibly need to clear the fields if they arent already;
-      }
+    }else {
+     this.AuthenticationServices.authenticateUser(formData.value, this);
     }
 
-    
-  
   }
- 
-
 }

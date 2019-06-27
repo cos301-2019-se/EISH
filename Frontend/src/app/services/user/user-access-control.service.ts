@@ -7,6 +7,7 @@ import { ifError } from 'assert';
 import { errorHandler } from '@angular/platform-browser/src/browser';
 import { error } from 'util';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,8 +19,6 @@ export class UserAccessControlService {
  /* Variables: */
   ROOT_URL = 'http://localhost:8080/api/';
   data:any;
-  statusVariable : Boolean
-
 
   constructor( private http: HttpClient) { }
 
@@ -31,39 +30,21 @@ export class UserAccessControlService {
    * @param userCredentials: json of user form data
    * @returns Boolean 
    */
-  authenticateUser(userCredentials){
-    //receives json: tokenType, accessToken
-    //sessionStorage.setItem('username', userCredentials.username)
-    //sessionStorage.setItem('token', map.data.accessToken)
+  authenticateUser(userCredentials, loginForm){
+   let parameter = {"user_id": 1}
     
-    let parameter = {"user_id": 1}
-    
-     return this.http.post(this.ROOT_URL+'auth/login/', parameter).pipe(
+     return this.http.post(this.ROOT_URL+'auth/login/',parameter).pipe(
       map( response => {
-            this.statusVariable =  false;
             this.data =  response[0],
-            console.log(this.data),
             sessionStorage.setItem('accessToken', this.data.accessToken),
             sessionStorage.setItem('userName' , userCredentials.userEmail);
-            this.statusVariable = true;
-            this.quickDisplay();
-            return true;
+            loginForm.switcher();
 
-          }
-      )).subscribe({
-        next: (res) => {console.log(res); 
-          return res},
-        complete: () => {console.log('completed')}
-      });
+      }/*, catchError(error => 
+            loginForm.error()
+          )*/
+      )).subscribe(error => (loginForm.error()));
     
-  }
-
-  quickDisplay(){
-    console.log('in QD, data: ' + this.data.accessToken);
-    console.log('in QD, token.UN: ' + sessionStorage.getItem('userName'))
-    console.log('in QD, token.AT: ' + sessionStorage.getItem('accessToken'))
-   
-    sessionStorage.clear();
   }
 
   /**
@@ -95,14 +76,14 @@ export class UserAccessControlService {
    * @param userCredentials: json of user form data
    * @returns Boolean
    */
-  changeCredentials(userCredentials): any {
-    
-    this.http.put(this.ROOT_URL + 'user', userCredentials).subscribe(
+  changeCredentials(userCredentials, credentialInstance): any {
+    let parameter = {"user_id": 1}
+    this.http.put(this.ROOT_URL + 'auth/login', parameter).subscribe(
      ( res: Response) =>{ 
        if(res.ok) 
-        return true;
+        credentialInstance.route('dashboard')
       else 
-      return false;
+     credentialInstance.route('register?regType=Change'); // error message?
     });
   }
 
@@ -113,19 +94,14 @@ export class UserAccessControlService {
    * @param credential Object
    * @returns
    */
-  registerUser(userCredentials):any{
-    
-    this.http.post(this.ROOT_URL+'auth/login/',userCredentials).pipe(
-      map(
-        (response: Response) =>{
-        if(!response.ok)
-          return false
-        },  
+  registerUser(userCredentials, registerInstace):any{
+    let parameter = {"user_id": 1}
+    return this.http.post(this.ROOT_URL+'auth/login/',parameter).pipe(
+      map( 
         response => {
             this.data =  response[0],
-            sessionStorage.setItem('accessToken', this.data.accessToken),
-            sessionStorage.setItem('userName' , userCredentials.userEmail);
-          return true;
+            sessionStorage.clear()
+            registerInstace.route('login')
           }
       )).subscribe();
   }
@@ -137,22 +113,18 @@ export class UserAccessControlService {
    * @param
    * @returns
    */
-  authenticateKey(key): any{
-    //key.userKey
-   
-    /*this.http.post(this.ROOT_URL+'auth/login/',key).pipe(
+  authenticateKey(key, keyInstance): any{
+    //key.userKey ??
+    let parameter = {"user_id": 1}
+    return this.http.post(this.ROOT_URL+'auth/login/',parameter).pipe(
       map(
-        (response: Response) =>{
-          if(!response.ok)
-            return false
-        },
-          response => {
+        response => {
             this.data =  response[0],
             sessionStorage.setItem('accessToken', this.data.accessToken),
             sessionStorage.setItem('key', key);
-          return true;
+            keyInstance.route();
           }
-      )).subscribe();*/
+      )).subscribe();
    return true;
   }
 
