@@ -8,7 +8,7 @@ import com.monotoneid.eishms.dataPersistence.models.HomeUser;
 import com.monotoneid.eishms.dataPersistence.repositories.HomeKeys;
 import com.monotoneid.eishms.services.databaseManagementSystem.UserService;
 
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,7 +36,9 @@ public class EndPointController{
    @Autowired
    HomeKeys myHouseKeys;
 
-   @GetMapping("/keys") 
+   @GetMapping("keys")
+   @CrossOrigin(origins = "http://localhost:4200")
+   @PreAuthorize("hasRole('ADMIN')") 
    public String getKeys() {
       return myHouseKeys.findByKeyName("general").getKeyName() + " : " + myHouseKeys.findByKeyName("general").getUnencryptedKey();
    }
@@ -49,7 +51,7 @@ public class EndPointController{
     */
     @PostMapping("/user")
     @CrossOrigin(origins = "http://localhost:4200")
-    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('GENERAL')")
     public ResponseEntity<Object> addUser(@Valid @RequestBody HomeUser newHomeUser){
        return userService.addUser(newHomeUser);
     }
@@ -59,11 +61,11 @@ public class EndPointController{
     * Implements retrieveUser endpoint, that calls the retrieveUser service
     * @return a the valid homeUser
     */
-   @GetMapping("/user/{userId}")
+   @GetMapping("/user/{userName}")
    @CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<HomeUser> retriveUser(@PathVariable(value = "userId") Long userId){
-      return userService.retrieveUser(userId);
+   public ResponseEntity<HomeUser> retriveUser(@PathVariable(value = "userName") String homeUserName){
+      return userService.retrieveUser(homeUserName);
    }
 
    /**
@@ -79,6 +81,7 @@ public class EndPointController{
    }
 
    @PutMapping("/user")
+   @CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public ResponseEntity<Object> updateUser(@Valid @RequestBody HomeUser newHomeUser){
       return userService.updateUser(newHomeUser);
@@ -108,13 +111,8 @@ public class EndPointController{
       return userService.getUserPresence(userId);
    }
 
-   @PatchMapping("/user/userlocationtopic")
-   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<Object> updateUserLocationTopic(@Valid @RequestBody HomeUser homeUser){
-      return userService.updateUserLocationTopic(homeUser);
-   }
-
    @PatchMapping("/user/usertype")
+   @CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('ADMIN')")
    public ResponseEntity<Object> updateUserType(@Valid @RequestBody HomeUser homeUser){
       return userService.updateUserType(homeUser);
@@ -125,7 +123,8 @@ public class EndPointController{
     * @return
     */
    @PatchMapping("/user/expiration")
-   @PreAuthorize("hasRole('ADMIN')")
+   @CrossOrigin(origins = "http://localhost:4200")
+   @PreAuthorize("hasRole('ADMIN') or hasRole('RENEWAL')")
    public ResponseEntity<Object> renewUser(@Valid @RequestBody HomeUser homeUser){
       return userService.renewUser(homeUser);
    }
