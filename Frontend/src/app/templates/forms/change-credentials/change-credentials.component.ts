@@ -24,10 +24,12 @@ export class ChangeCredentialsComponent implements OnInit {
   
   
   constructor(private router: ActivatedRoute,private routes: Router,private fb: FormBuilder,private authenticationServices: UserAccessControlService) {
-    if(this.router.snapshot.paramMap.get("regType") == ""){
-      this.formHeading = "Change";
-    }else{
+    if(this.router.snapshot.paramMap.get("regType") == "Register"){
+      alert(this.router.snapshot.paramMap.get("regType"));      
       this.formHeading = "Register";
+    }else{
+      alert(this.router.snapshot.paramMap.get("regType"));
+      this.formHeading = "Change Credentials";
     }
     this.Action = "Submit!";
     this.credentialsForm = this.fb.group({
@@ -39,18 +41,6 @@ export class ChangeCredentialsComponent implements OnInit {
    }
 
   ngOnInit() {
-    if(this.router.snapshot.paramMap.get("regType") == ""){
-      this.formHeading = "Change";
-    }else{
-      this.formHeading = "Register";
-    }
-    this.Action = "Submit!";
-    this.credentialsForm = this.fb.group({
-      'userName':['',[Validators.required]],
-      'userEmail':['',[Validators.required,Validators.email]],
-      'userPassword':['',[Validators.required,Validators.minLength(8),Validators.maxLength(40)]],
-      'userDeviceName':['',[Validators.minLength(3),Validators.maxLength(25)]]
-    });
   }
   route(routeLocation){
     this.routes.navigate(['/' + routeLocation]);
@@ -68,6 +58,7 @@ export class ChangeCredentialsComponent implements OnInit {
       return;
     }
     else{
+      
       let presence = this.authenticationServices.isUserLoggedIn();
       if(presence ){
         this.editCredentials(formData.value);

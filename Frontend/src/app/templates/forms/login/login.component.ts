@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
   }
 
   switcher(){
-    this.route.navigate(['/register?regType=Register']);      
+    this.route.navigate(['register','Register']);      
   }
 
   error(){
