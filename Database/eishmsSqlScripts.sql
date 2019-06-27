@@ -1,9 +1,9 @@
  CREATE TYPE userType AS ENUM ('ROLE_ADMIN', 'ROLE_RESIDENT', 'ROLE_GUEST');
- CREATE TYPE userType1 AS ENUM (ROLE_ADMIN, ROLE_RESIDENT, ROLE_GUEST);
+ 
 
  create table homeuser(
  userid serial  primary key,
- username text not null,
+ username text not null unique,
  useremail text not null,
  userpassword text not null,
  userlocationtopic text not null,
