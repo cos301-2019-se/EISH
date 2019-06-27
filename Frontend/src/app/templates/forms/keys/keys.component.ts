@@ -30,7 +30,12 @@ export class KeysComponent implements OnInit {
       'userKey':[null,[Validators.required]]
     });
   }
-
+  route(){
+    this.routes.navigate(['/register?regType=Register']);
+  }
+  errorInForm(){
+    this.incorrectKey = true;
+  }
   get getVariables(){
     return this.keyForm.controls;
   }
@@ -41,10 +46,9 @@ export class KeysComponent implements OnInit {
     console.log(formData.value)
     let response = this.authenticationService.authenticateKey(formData.value);
     if(response){
-      this.routes.navigate(['/register?regType=Register']);
+      this.route();
     }//else if renewalKey then route to dashboard
     else{
-      this.incorrectKey = true;
       return;
     }
     

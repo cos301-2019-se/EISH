@@ -52,7 +52,9 @@ export class ChangeCredentialsComponent implements OnInit {
       'userDeviceName':['',[Validators.minLength(3),Validators.maxLength(25)]]
     });
   }
-
+  route(){
+    this.routes.navigate(['/dashboard']);
+  }
   get getVariables(){
     return this.credentialsForm.controls;
   }
@@ -69,24 +71,17 @@ export class ChangeCredentialsComponent implements OnInit {
       let result = this.authenticationServices.authenticateUser(formData.value);
       if(presence && result){
         this.editCredentials(formData.value);
-        this.routes.navigate(['/dashboard']);
+        this.route();
       }else if(presence == false){
         let response = this.registerCredentials(formData.value);
         if(response){
-          this.routes.navigate(['/dashboard']);
+          this.route();
         }else{
           return;
         }
       }
     }
    }
-
-  /**
-   * Carry out change of admin default credentials
-   */
-  adminCredentials(){
-
-  }
 
   /**
    * Carry out change of user credentials

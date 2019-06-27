@@ -35,6 +35,13 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  switcher(){
+    this.route.navigate(['/register']);      
+  }
+  error(){
+    this.incorrectCredentials = true;
+
+  }
   get getVariables(){
     return this.loginForm.controls;
   }
@@ -52,17 +59,17 @@ export class LoginComponent implements OnInit {
     {
       return;
     }else{
-      
       let result = this.AuthenticationServices.authenticateUser(formData.value);
-
       if(result){
-        this.route.navigate(['/register']);
+        this.switcher();
         }else{
-        this.incorrectCredentials = true;
+          this.error();
         return;
         //possibly need to clear the fields if they arent already;
       }
     }
+
+    
   
   }
  
