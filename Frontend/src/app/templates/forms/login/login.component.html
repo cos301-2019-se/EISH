@@ -1,7 +1,7 @@
 <div class="container">
     <div class="heading"><h2>{{formHeading}}</h2></div>
     <div class="formContainer">
-        <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <form [formGroup]="loginForm" (ngSubmit)="login(loginForm)">
           <div class="userMessages" *ngIf="incorrectCredentials">
             <p>Incorrect name or email. Please try again</p>
           </div>
@@ -26,7 +26,7 @@
           <button type="submit" class="submitButton" [disabled]="!getVariables.loginForm.valid">Log in!</button>
           <br> 
           <br>
-          <a href="/keys">Register!</a>  
+          <a href="/key">Register!</a>  
           <br>   
           <br>
         </form>

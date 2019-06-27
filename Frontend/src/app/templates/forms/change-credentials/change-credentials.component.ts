@@ -59,19 +59,19 @@ export class ChangeCredentialsComponent implements OnInit {
   /**
    * Called upon button click. Chooses which function to call based on submissionType
    */
-  submit(){
+  submit(formData){
     if(this.credentialsForm.invalid)
     {
       return;
     }
     else{
       let presence = this.authenticationServices.isUserLoggedIn();
-      let result = this.authenticationServices.authenticateUser(this.getVariables);
+      let result = this.authenticationServices.authenticateUser(formData.value);
       if(presence && result){
-        this.editCredentials(this.getVariables);
+        this.editCredentials(formData.value);
         this.routes.navigate(['/dashboard']);
       }else if(presence == false){
-        let response = this.registerCredentials(this.getVariables);
+        let response = this.registerCredentials(formData.value);
         if(response){
           this.routes.navigate(['/dashboard']);
         }else{

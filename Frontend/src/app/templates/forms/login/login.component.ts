@@ -43,14 +43,18 @@ export class LoginComponent implements OnInit {
    * if default admin credentials routes to changeCredentials
    * if guest has expired, route to keyPage
    */
-  login(){
+  login(formData){
     //sanitize and validate
     //if admin admin: go to server, according to response:  make token and  route to change credntials or wrong credntials
+    
+    
     if(this.loginForm.invalid)
     {
       return;
     }else{
-      let result = this.AuthenticationServices.authenticateUser(this.getVariables);
+      
+      let result = this.AuthenticationServices.authenticateUser(formData.value);
+
       if(result){
         this.route.navigate(['/register']);
         }else{

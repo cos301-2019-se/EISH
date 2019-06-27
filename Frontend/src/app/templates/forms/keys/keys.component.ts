@@ -37,8 +37,9 @@ export class KeysComponent implements OnInit {
   /**
    * Determines which action to take depending on keyType
    */
-  handleKey(){
-    let response = this.authenticationService.authenticateKey(this.getVariables.key);
+  handleKey(formData){
+    console.log(formData.value)
+    let response = this.authenticationService.authenticateKey(formData.value);
     if(response){
       this.routes.navigate(['/register?regType=Register']);
     }//else if renewalKey then route to dashboard
