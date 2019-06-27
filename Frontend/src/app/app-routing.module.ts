@@ -10,9 +10,8 @@ const routes: Routes = [
   pathMatch: 'full'
   },*/
   { path: '', component:LoginComponent},
-  {path: 'register?regType=Change', component:ChangeCredentialsComponent},
-  {path: 'key', component:KeysComponent},
-  {path: 'register?regType=Register', component: ChangeCredentialsComponent}
+  {path: 'register/:regType', component:ChangeCredentialsComponent},
+  {path: 'key', component:KeysComponent}
 ];
 
 @NgModule({

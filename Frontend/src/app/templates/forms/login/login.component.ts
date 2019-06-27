@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
   }
 
   switcher(){
-    this.route.navigate(['/register']);      
+    this.route.navigate(['register','Register']);      
   }
   error(){
     this.incorrectCredentials = true;
