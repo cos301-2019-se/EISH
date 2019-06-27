@@ -12,7 +12,7 @@ import com.monotoneid.eishms.messages.JwtResponse;
 
 import java.util.Date;
 //import com.sun.tools.javac.util.List;
-import java.util.List;
+//import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,7 +73,7 @@ public class JwtAuthenticationController {
         //     }
         // }
 
-        loginUser = userRepository.findByHomeUserName(loginUser.getUserName()).get();
+        loginUser = userRepository.findByHomeUserName(loginRequest.getUsername()).get();
 
         //compare current date with expiry date
         if (loginUser.getUserType() == UserType.ROLE_GUEST && loginUser.getUserExpiryDate().before(new Date())) {
