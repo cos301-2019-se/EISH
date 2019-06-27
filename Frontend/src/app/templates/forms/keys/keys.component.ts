@@ -31,7 +31,7 @@ export class KeysComponent implements OnInit {
     });
   }
   route(){
-    this.routes.navigate(['/register?regType=Register']);
+    this.routes.navigate(['register','Register']);
   }
   errorInForm(){
     this.incorrectKey = true;

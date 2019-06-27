@@ -30,7 +30,7 @@ export class UserAccessControlService {
    * @param userCredentials: json of user form data
    * @returns Boolean 
    */
-  authenticateUser(userCredentials, loginForm){
+  authenticateUser(userCredentials, loginInstance){
    let parameter = {"user_id": 1}
     
      return this.http.post(this.ROOT_URL+'auth/login/',parameter).pipe(
@@ -38,12 +38,14 @@ export class UserAccessControlService {
             this.data =  response[0],
             sessionStorage.setItem('accessToken', this.data.accessToken),
             sessionStorage.setItem('userName' , userCredentials.userEmail);
-            loginForm.switcher();
+            //check if details are admin if true:
+            loginInstance.switcher();
+            //else go to dashboard
+            //loginInstance.switcher();
 
-      }/*, catchError(error => 
-            loginForm.error()
-          )*/
-      )).subscribe(error => (loginForm.error()));
+      }),catchError(error => 
+        loginInstance.error())
+        ).subscribe(error => (loginInstance.error()));
     
   }
 
@@ -81,9 +83,9 @@ export class UserAccessControlService {
     this.http.put(this.ROOT_URL + 'auth/login', parameter).subscribe(
      ( res: Response) =>{ 
        if(res.ok) 
-        credentialInstance.route('dashboard')
+        credentialInstance.route('dashboard', '')
       else 
-     credentialInstance.route('register?regType=Change'); // error message?
+     credentialInstance.route('register', 'Change'); // error message?
     });
   }
 
@@ -95,15 +97,18 @@ export class UserAccessControlService {
    * @returns
    */
   registerUser(userCredentials, registerInstace):any{
+    console.log('inside register')
     let parameter = {"user_id": 1}
     return this.http.post(this.ROOT_URL+'auth/login/',parameter).pipe(
       map( 
         response => {
             this.data =  response[0],
             sessionStorage.clear()
-            registerInstace.route('login')
+            registerInstace.route('/', '')
           }
-      )).subscribe();
+      ),catchError(error => 
+        registerInstace.error())
+        ).subscribe();
   }
 
   /**
@@ -115,6 +120,7 @@ export class UserAccessControlService {
    */
   authenticateKey(key, keyInstance): any{
     //key.userKey ??
+    console.log('inside auth key')
     let parameter = {"user_id": 1}
     return this.http.post(this.ROOT_URL+'auth/login/',parameter).pipe(
       map(
@@ -124,7 +130,8 @@ export class UserAccessControlService {
             sessionStorage.setItem('key', key);
             keyInstance.route();
           }
-      )).subscribe();
+      ),catchError(error => 
+       keyInstance.error())).subscribe();
    return true;
   }
 

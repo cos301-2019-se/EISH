@@ -24,11 +24,9 @@ export class ChangeCredentialsComponent implements OnInit {
   
   
   constructor(private router: ActivatedRoute,private routes: Router,private fb: FormBuilder,private authenticationServices: UserAccessControlService) {
-    if(this.router.snapshot.paramMap.get("regType") == "Register"){
-      alert(this.router.snapshot.paramMap.get("regType"));      
+    if(this.router.snapshot.paramMap.get("regType") == "Register"){ 
       this.formHeading = "Register";
     }else{
-      alert(this.router.snapshot.paramMap.get("regType"));
       this.formHeading = "Change Credentials";
     }
     this.Action = "Submit!";
@@ -42,8 +40,8 @@ export class ChangeCredentialsComponent implements OnInit {
 
   ngOnInit() {
   }
-  route(routeLocation){
-    this.routes.navigate(['/' + routeLocation]);
+  route(route, routeLocation){
+    this.routes.navigate([route, routeLocation]);
   }
   get getVariables(){
     return this.credentialsForm.controls;
