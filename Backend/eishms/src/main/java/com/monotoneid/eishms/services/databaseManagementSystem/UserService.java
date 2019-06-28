@@ -155,36 +155,12 @@ public class UserService{
     /**
      * section Users
      */
-    public ResponseEntity<Object> getUserPresence(Long userId){
+    public ResponseEntity<Object> getUserPresence(String homeUserName){
         try {
-            HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+            HomeUser foundUser = usersRepository.findByHomeUserName(homeUserName).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
             return new ResponseEntity<>(foundUser.getUserLocationTopic(),HttpStatus.OK);
         } catch(Exception e){
             return new ResponseEntity<>("Error: Failed to get user presence!",HttpStatus.NOT_FOUND);
-        }
-    }
-
-    /**
-     * section Users
-     */
-    public ResponseEntity<Object> updateUserLocationTopic(HomeUser homeUser) {
-        try {
-            if(homeUser == null){
-                throw null;
-            }else{
-                if(homeUser.getUserLocationTopic().isEmpty() == true){
-                    throw null;
-                }
-                HomeUser foundUser = usersRepository.findById(homeUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-                foundUser.setUserLocationTopic(homeUser.getUserLocationTopic());
-                usersRepository.save(foundUser);
-                return new ResponseEntity<>("Location Topic Updated",HttpStatus.OK);
-            }
-        } catch(Exception e) {
-            if(e.getCause() == null)
-                return new ResponseEntity<>("Error: Failed to update user type!",HttpStatus.PRECONDITION_FAILED);
-            else
-                return new ResponseEntity<>("Error: Failed to update user type!",HttpStatus.NOT_FOUND);
         }
     }
 
@@ -221,7 +197,7 @@ public class UserService{
             else if(homeUser.getUserExpiryDate()==null)
                     throw null;
             else{
-                HomeUser foundUser = usersRepository.findById(homeUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+                HomeUser foundUser = usersRepository.findByHomeUserName(homeUser.getUserName()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
                 foundUser.setUserExpiryDate(calculateExpiryDate(defaultNumberOfDays));
                 usersRepository.save(foundUser);
                 return new ResponseEntity<>("User renewed!",HttpStatus.OK);

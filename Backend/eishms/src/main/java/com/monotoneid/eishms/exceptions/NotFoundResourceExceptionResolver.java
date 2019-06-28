@@ -23,4 +23,11 @@ public class NotFoundResourceExceptionResolver {
         response.put("message", "Requested resource wasn't found on the server");
         return response;
     }
+
+    @ExceptionHandler(NullPointerException.class)
+    public HashMap<String, String> handleNullPointerException(HttpServletRequest request, NullPointerException e) {
+        HashMap<String, String> response = new HashMap<>();
+        response.put("message", "Requested resource includes a null!");
+        return response;
+    }
 }

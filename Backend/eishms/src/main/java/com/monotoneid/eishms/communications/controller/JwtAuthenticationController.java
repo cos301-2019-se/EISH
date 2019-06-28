@@ -49,6 +49,7 @@ public class JwtAuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody JwtRequest loginRequest) {
+        System.out.println(loginRequest.getUsername()+ " +++***+++ "+loginRequest.getPassword());
         //System.out.println("Encoded password" + encoder.encode(loginRequest.getPassword()));
         myHouseKeys.updateKeys();
         //System.out.println(myHouseKeys.findByKeyName("general").getKeyName() + " : " + myHouseKeys.findByKeyName("general").getUnencryptedKey());
@@ -81,6 +82,7 @@ public class JwtAuthenticationController {
         }
         
         String jwt = jwtProvider.generateJwtToken(authentication);
+        System.out.println("User is authorized!");
         return ResponseEntity.ok(new JwtResponse(jwt));
     }
 }
