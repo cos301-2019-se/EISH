@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
     this.incorrectCredentials = false;
     this.formHeading="Login";
     this.loginForm = this.fb.group({
-      'userEmail':[null,[Validators.required,Validators.email]],
+      'userName':[null,[Validators.required]],
       'userPassword':[null,[Validators.required,Validators.minLength(8),Validators.maxLength(40)]]
     });
   }
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     this.incorrectCredentials = false;
     this.formHeading="Login";
     this.loginForm = this.fb.group({
-      'userEmail':[null,[Validators.required,Validators.email]],
+      'userName':[null,[Validators.required]],
       'userPassword':[null,[Validators.required,Validators.minLength(8),Validators.maxLength(40)]]
     });
   }

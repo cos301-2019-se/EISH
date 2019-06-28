@@ -6,12 +6,11 @@
             <p>Incorrect name or email. Please try again</p>
           </div>
           <div class="form-group" >
-            <label for="userEmail">Email</label><br>
-            <input placeholder="Email" class="form-control" name="userEmail" type="email" formControlName="userEmail">
-            <div class="form-control-feedback" *ngIf="getVariables.userEmail.errors && (getVariables.userEmail.dirty || getVariables.userEmail.touched)">
-                <p *ngIf="getVariables.userEmail.errors.required"> Email is required</p>
-                <p *ngIf="!getVariables.userEmail.errors.required && getVariables.userEmail.invalid">Incorrect email</p>
-              </div>
+            <label for="userName">Name</label><br>
+            <input placeholder="Name" class="form-control" name="userName" type="text" formControlName="userName">
+            <div class="form-control-feedback" *ngIf="getVariables.userName.errors && (getVariables.userName.dirty || getVariables.userName.touched)">
+                <p *ngIf="getVariables.userName.errors.required"> Email is required</p>
+            </div>
           </div>
       
           <div class="form-group" >
