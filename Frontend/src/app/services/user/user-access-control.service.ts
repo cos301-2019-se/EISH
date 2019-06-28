@@ -31,13 +31,12 @@ export class UserAccessControlService {
    * @returns Boolean 
    */
   authenticateUser(userCredentials, loginInstance){
-   let parameter = {"user_id": 1}
-    
-     return this.http.post(this.ROOT_URL+'auth/login/',parameter).pipe(
+  
+     return this.http.post(this.ROOT_URL+'auth/login/',userCredentials).pipe(
       map( response => {
             this.data =  response[0],
             sessionStorage.setItem('accessToken', this.data.accessToken),
-            sessionStorage.setItem('userName' , userCredentials.userEmail);
+            sessionStorage.setItem('userName' , userCredentials.userName);
             //check if details are admin if true:
             loginInstance.switcher();
             //else go to dashboard
@@ -79,8 +78,8 @@ export class UserAccessControlService {
    * @returns Boolean
    */
   changeCredentials(userCredentials, credentialInstance): any {
-    let parameter = {"user_id": 1}
-    this.http.put(this.ROOT_URL + 'auth/login', parameter).subscribe(
+    
+    this.http.put(this.ROOT_URL + 'update/', credentialInstance).subscribe(
      ( res: Response) =>{ 
        if(res.ok) 
         credentialInstance.route('dashboard', '')
@@ -97,9 +96,8 @@ export class UserAccessControlService {
    * @returns
    */
   registerUser(userCredentials, registerInstace):any{
-    console.log('inside register')
-    let parameter = {"user_id": 1}
-    return this.http.post(this.ROOT_URL+'auth/login/',parameter).pipe(
+    
+    return this.http.post(this.ROOT_URL+'user/',registerInstace).pipe(
       map( 
         response => {
             this.data =  response[0],
@@ -120,9 +118,8 @@ export class UserAccessControlService {
    */
   authenticateKey(key, keyInstance): any{
     //key.userKey ??
-    console.log('inside auth key')
-    let parameter = {"user_id": 1}
-    return this.http.post(this.ROOT_URL+'auth/login/',parameter).pipe(
+    
+    return this.http.post(this.ROOT_URL+'key/',keyInstance).pipe(
       map(
         response => {
             this.data =  response[0],
