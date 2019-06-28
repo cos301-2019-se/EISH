@@ -1,9 +1,11 @@
 package com.monotoneid.eishms.communications.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import com.monotoneid.eishms.dataPersistence.models.HomeKey;
 import com.monotoneid.eishms.dataPersistence.models.HomeUser;
 import com.monotoneid.eishms.dataPersistence.repositories.HomeKeys;
 import com.monotoneid.eishms.services.databaseManagementSystem.UserService;
@@ -41,8 +43,11 @@ public class EndPointController{
    @GetMapping("/keys")
    //@CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('ADMIN')") 
-   public String getKeys() {
-      return myHouseKeys.findByKeyName("general").getKeyName() + " : " + myHouseKeys.findByKeyName("general").getUnencryptedKey();
+   public List<HomeKey> getKeys() {
+      List<HomeKey> keyList = new ArrayList<HomeKey>();
+      keyList.add(myHouseKeys.findByKeyName("general"));
+      keyList.add(myHouseKeys.findByKeyName("renewal"));
+      return keyList;
    }
 
    /**
@@ -66,7 +71,8 @@ public class EndPointController{
    @GetMapping(value = "/user",params = {"userName"})
    //@CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<HomeUser> retriveUser(@RequestParam(value = "userName") String homeUserName){
+   public ResponseEntity<HomeUser> retriveUser(@Valid @RequestParam(value = "userName") String homeUserName){
+      System.out.println("RETRIEVE USER ENDPOINT!!!");
       return userService.retrieveUser(homeUserName);
    }
 
@@ -109,7 +115,7 @@ public class EndPointController{
    @GetMapping(value = "/user/presence", params = {"userName"})
    //@CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<Object> getUserPresence(@RequestParam(value = "userName") String homeUserName){
+   public ResponseEntity<Object> getUserPresence(@Valid @RequestParam(value = "userName") String homeUserName){
       return userService.getUserPresence(homeUserName);
    }
 

@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import net.minidev.json.JSONObject;
+
 @Service
 public class UserService{
        
@@ -122,7 +124,9 @@ public class UserService{
                 foundUser.setUserName(newHomeUser.getUserName());
                 foundUser.setUserPassword(encryptPassword(newHomeUser.getUserPassword()));
                 usersRepository.save(foundUser);
-                return new ResponseEntity<>("Credentials Updated!",HttpStatus.OK);
+                JSONObject responseObject = new JSONObject();
+                responseObject.put("message","Credentials Updated!");
+                return new ResponseEntity<>(responseObject,HttpStatus.OK);
             }
         } catch(Exception e) {
             System.out.println("Error: Input is " + e.getMessage() + "!");

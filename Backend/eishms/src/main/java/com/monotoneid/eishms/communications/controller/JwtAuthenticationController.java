@@ -66,20 +66,24 @@ public class JwtAuthenticationController {
  
 //      if guest has expired don't generate token tell the user
         //List<HomeUser> allUsers = userRepository.findAll();
-        HomeUser loginUser = null;
-        // for (int i=0; i < allUsers.size(); i++) {
-        //     if (allUsers.get(i).getUserName().matches(loginRequest.getUsername())) {
-        //         loginUser = allUsers.get(i);
-        //         break;
-        //     }
-        // }
+        if (!loginRequest.getUsername().matches("general") && !loginRequest.getUsername().matches("renewal")) {
+            HomeUser loginUser = null;
+            // for (int i=0; i < allUsers.size(); i++) {
+            //     if (allUsers.get(i).getUserName().matches(loginRequest.getUsername())) {
+            //         loginUser = allUsers.get(i);
+            //         break;
+            //     }
+            // }
 
-        loginUser = userRepository.findByHomeUserName(loginRequest.getUsername()).get();
+            loginUser = userRepository.findByHomeUserName(loginRequest.getUsername()).get();
+    
 
-        //compare current date with expiry date
-        if (loginUser.getUserType() == UserType.ROLE_GUEST && loginUser.getUserExpiryDate().before(new Date())) {
-            return ResponseEntity.status(HttpStatus.valueOf(410)).body("Your credentials have expired.");
+            //compare current date with expiry date
+            if (loginUser.getUserType() == UserType.ROLE_GUEST && loginUser.getUserExpiryDate().before(new Date())) {
+                return ResponseEntity.status(HttpStatus.valueOf(410)).body("Your credentials have expired.");
+            }
         }
+        
         
         String jwt = jwtProvider.generateJwtToken(authentication);
         System.out.println("User is authorized!");
