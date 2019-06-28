@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import { map, mergeMap, switchMap, catchError } from 'rxjs/operators';
 import { forkJoin, pipe, Subject, Observable, Subscription} from 'rxjs';
 import { ifError } from 'assert';
 import { errorHandler } from '@angular/platform-browser/src/browser';
 import { error } from 'util';
-
+import { User } from 'src/app/models/user-model';
+import { PARAMETERS } from '@angular/core/src/util/decorators';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class UserAccessControlService {
    */
 
  /* Variables: */
-  ROOT_URL = 'http://localhost:8080/api/';
+  ROOT_URL = 'http://192.168.8.101:8080/api/';
   data:any;
 
   constructor( private http: HttpClient) { }
@@ -31,10 +32,14 @@ export class UserAccessControlService {
    * @returns Boolean 
    */
   authenticateUser(userCredentials, loginInstance){
-  
-     return this.http.post(this.ROOT_URL+'auth/login/',userCredentials).pipe(
+    var loginCred = {username : userCredentials.userName, password : userCredentials.userPassword};
+    //console.log("User credentials: " + loginCred);
+    //console.log("User credentials: " + loginCred.password);
+     return this.http.post(this.ROOT_URL+'auth/login/',loginCred).pipe(
       map( response => {
-            this.data =  response[0],
+            this.data =  response,
+           //console.log("Server response: " + this.data.accessToken);
+            //console.log("Server Response Array: " + response[0].accessToken);
             sessionStorage.setItem('accessToken', this.data.accessToken),
             sessionStorage.setItem('userName' , userCredentials.userName);
             //check if details are admin if true:
@@ -44,7 +49,7 @@ export class UserAccessControlService {
 
       }),catchError(error => 
         loginInstance.error())
-        ).subscribe(error => (loginInstance.error()));
+        ).subscribe();
     
   }
 
@@ -70,6 +75,12 @@ export class UserAccessControlService {
 
   }
 
+  getUser(): Observable<User> {
+    let username = sessionStorage.getItem("userName");
+    const params = new HttpParams().set("userName", username);
+    return this.http.get<User>(this.ROOT_URL+'user/', { params });   
+  }
+
   /**
    * Sends user information to API
    * PUT Request
@@ -78,8 +89,9 @@ export class UserAccessControlService {
    * @returns Boolean
    */
   changeCredentials(userCredentials, credentialInstance): any {
-    
-    this.http.put(this.ROOT_URL + 'update/', credentialInstance).subscribe(
+    console.log(userCredentials);
+    //let userCred = {"userId" : , "userName": , "userEmail" : , "userPassword": , "userLocationTopic": ("owntracks/eishms/" + userCredentials.userDeviceName)};
+    this.http.put(this.ROOT_URL + 'user/', userCredentials).subscribe(
      ( res: Response) =>{ 
        if(res.ok) 
         credentialInstance.route('dashboard', '')
@@ -116,20 +128,19 @@ export class UserAccessControlService {
    * @param
    * @returns
    */
-  authenticateKey(key, keyInstance): any{
+  authenticateKey(keyType, key, keyInstance): any{
     //key.userKey ??
-    
-    return this.http.post(this.ROOT_URL+'key/',keyInstance).pipe(
+    let keyLogin = {username: keyType, password: key};
+    return this.http.post(this.ROOT_URL+'auth/login/', keyLogin).pipe(
       map(
         response => {
-            this.data =  response[0],
+            this.data =  response,
             sessionStorage.setItem('accessToken', this.data.accessToken),
             sessionStorage.setItem('key', key);
             keyInstance.route();
           }
       ),catchError(error => 
-       keyInstance.error())).subscribe();
-   return true;
+       keyInstance.errorInForm())).subscribe();
   }
 
 }

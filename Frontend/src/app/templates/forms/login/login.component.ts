@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
     this.formHeading="Login";
     this.loginForm = this.fb.group({
       'userName':[null,[Validators.required]],
-      'userPassword':[null,[Validators.required,Validators.minLength(8),Validators.maxLength(40)]]
+      'userPassword':[null,[Validators.required,Validators.minLength(5),Validators.maxLength(40)]]
     });
   }
 
@@ -31,12 +31,12 @@ export class LoginComponent implements OnInit {
     this.formHeading="Login";
     this.loginForm = this.fb.group({
       'userName':[null,[Validators.required]],
-      'userPassword':[null,[Validators.required,Validators.minLength(8),Validators.maxLength(40)]]
+      'userPassword':[null,[Validators.required,Validators.minLength(5),Validators.maxLength(40)]]
     });
   }
 
   switcher(){
-    this.route.navigate(['register','Register']);      
+    this.route.navigate(['register','Change']);      
   }
 
   error(){
@@ -59,6 +59,7 @@ export class LoginComponent implements OnInit {
     if(this.loginForm.invalid){
       return;
     }else {
+      console.log(formData.value);
      this.AuthenticationServices.authenticateUser(formData.value, this);
     }
 

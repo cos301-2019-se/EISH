@@ -26,20 +26,32 @@ export class ChangeCredentialsComponent implements OnInit {
   constructor(private router: ActivatedRoute,private routes: Router,private fb: FormBuilder,private authenticationServices: UserAccessControlService) {
     if(this.router.snapshot.paramMap.get("regType") == "Register"){ 
       this.formHeading = "Register";
+      this.credentialsForm = this.fb.group({
+        'userName':[null,[Validators.required]],
+        'userEmail':[null,[Validators.required,Validators.email]],
+        'userPassword':[null,[Validators.required,Validators.minLength(8),Validators.maxLength(40)]],
+        'userDeviceName':[null,[Validators.minLength(3),Validators.maxLength(25)]]
+      });
     }else{
       this.formHeading = "Change Credentials";
+      let theForm = this;
+      let observa = this.authenticationServices.getUser().subscribe(res => {
+        //console.log(res.userName);
+        theForm.user.userId = res.userId;
+        theForm.credentialsForm = this.fb.group({
+          'userName':[res.userName,[Validators.required]],
+          'userEmail':[res.userEmail,[Validators.required,Validators.email]],
+          'userPassword':[null,[Validators.required,Validators.minLength(8),Validators.maxLength(40)]],
+          'userDeviceName':[res.userLocationTopic,[Validators.minLength(3),Validators.maxLength(25)]]
+        });
+      });
     }
     this.Action = "Submit!";
-    this.credentialsForm = this.fb.group({
-      'userName':[null,[Validators.required]],
-      'userEmail':[null,[Validators.required,Validators.email]],
-      'userPassword':[null,[Validators.required,Validators.minLength(8),Validators.maxLength(40)]],
-      'userDeviceName':[null,[Validators.minLength(3),Validators.maxLength(25)]]
-    });
    }
 
   ngOnInit() {
   }
+
   route(route, routeLocation){
     this.routes.navigate([route, routeLocation]);
   }
@@ -59,7 +71,11 @@ export class ChangeCredentialsComponent implements OnInit {
       
       let presence = this.authenticationServices.isUserLoggedIn();
       if(presence ){
-        this.editCredentials(formData.value);
+        this.user.userName = formData.value.userName;
+        this.user.userEmail = formData.value.userEmail;
+        this.user.userPassword = formData.value.userPassword;
+        this.user.userLocationTopic = formData.value.userDeviceName;
+        this.editCredentials(this.user);
       }else if(presence == false){
          this.registerCredentials(formData.value);
        
