@@ -69,16 +69,15 @@ export class ChangeCredentialsComponent implements OnInit {
     }
     else{
       
-      let presence = this.authenticationServices.isUserLoggedIn();
-      if(presence ){
+      let isKey = sessionStorage.getItem("key"); //this has to change
+      if(isKey == null){
         this.user.userName = formData.value.userName;
         this.user.userEmail = formData.value.userEmail;
         this.user.userPassword = formData.value.userPassword;
         this.user.userLocationTopic = formData.value.userDeviceName;
         this.editCredentials(this.user);
-      }else if(presence == false){
-         this.registerCredentials(formData.value);
-       
+      }else if(isKey != null){
+        this.registerCredentials(formData.value);
         }else{
           return;
         }
@@ -97,5 +96,9 @@ export class ChangeCredentialsComponent implements OnInit {
    */
   registerCredentials(credentials){
     return this.authenticationServices.registerUser(credentials, this);
+  }
+
+  error() {
+
   }
 }

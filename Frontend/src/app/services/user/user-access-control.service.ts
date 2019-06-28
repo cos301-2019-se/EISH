@@ -18,7 +18,7 @@ export class UserAccessControlService {
    */
 
  /* Variables: */
-  ROOT_URL = 'http://192.168.8.101:8080/api/';
+  ROOT_URL = 'http://192.168.8.102:8080/api/';
   data:any;
 
   constructor( private http: HttpClient) { }
@@ -108,11 +108,17 @@ export class UserAccessControlService {
    * @returns
    */
   registerUser(userCredentials, registerInstace):any{
-    
-    return this.http.post(this.ROOT_URL+'user/',registerInstace).pipe(
+    let newCred = {
+      userName: userCredentials.userName,
+      userEmail: userCredentials.userEmail,
+      userPassword: userCredentials.userPassword,
+      userLocationTopic: userCredentials.userDeviceName
+    }
+    console.log(newCred);
+    return this.http.post(this.ROOT_URL+'user/',newCred).pipe(
       map( 
         response => {
-            this.data =  response[0],
+            this.data =  response,
             sessionStorage.clear()
             registerInstace.route('/', '')
           }
@@ -130,7 +136,8 @@ export class UserAccessControlService {
    */
   authenticateKey(keyType, key, keyInstance): any{
     //key.userKey ??
-    let keyLogin = {username: keyType, password: key};
+    let keyLogin = {username: keyType, password: key.userKey};
+    console.log(keyLogin);
     return this.http.post(this.ROOT_URL+'auth/login/', keyLogin).pipe(
       map(
         response => {
