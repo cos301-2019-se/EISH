@@ -13,6 +13,7 @@ import com.monotoneid.eishms.messages.JwtResponse;
 import java.util.Date;
 //import com.sun.tools.javac.util.List;
 //import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,20 +67,26 @@ public class JwtAuthenticationController {
  
 //      if guest has expired don't generate token tell the user
         //List<HomeUser> allUsers = userRepository.findAll();
-        HomeUser loginUser = null;
+
+        Optional<HomeUser> loginUser = null;
         // for (int i=0; i < allUsers.size(); i++) {
         //     if (allUsers.get(i).getUserName().matches(loginRequest.getUsername())) {
         //         loginUser = allUsers.get(i);
         //         break;
         //     }
         // }
-
-        loginUser = userRepository.findByHomeUserName(loginRequest.getUsername()).get();
+    try {
+        loginUser = userRepository.findByHomeUserName(loginRequest.getUsername());
 
         //compare current date with expiry date
-        if (loginUser.getUserType() == UserType.ROLE_GUEST && loginUser.getUserExpiryDate().before(new Date())) {
+        if (loginUser.get().getUserType() == UserType.ROLE_GUEST && loginUser.get().getUserExpiryDate().before(new Date())) {
             return ResponseEntity.status(HttpStatus.valueOf(410)).body("Your credentials have expired.");
         }
+        
+    } catch(Exception e){
+        System.out.println("Error: " + e.getMessage()+"!");
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
         
         String jwt = jwtProvider.generateJwtToken(authentication);
         System.out.println("User is authorized!");
