@@ -6,7 +6,7 @@
  username text not null unique,
  useremail text not null,
  userpassword text not null,
- userlocationtopic text not null unique,
+ userlocationtopic text not null,
  usertype userType not null,
  userexpirydate TIMESTAMP not null
  );

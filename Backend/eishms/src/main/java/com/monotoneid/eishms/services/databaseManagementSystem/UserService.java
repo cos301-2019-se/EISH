@@ -3,7 +3,6 @@ package com.monotoneid.eishms.services.databaseManagementSystem;
 import java.sql.Timestamp;
 import java.util.List;
 
-
 import com.monotoneid.eishms.dataPersistence.models.HomeUser;
 import com.monotoneid.eishms.dataPersistence.models.UserType;
 import com.monotoneid.eishms.dataPersistence.repositories.Users;
@@ -16,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import net.minidev.json.JSONObject;
 
 @Service
 public class UserService{
@@ -102,14 +102,10 @@ public class UserService{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    
-   public List<HomeUser> retrieveAllUsers(){
+
+    public List<HomeUser> retrieveAllUsers(){
         return usersRepository.findAll();
     }
-    //@JsonIgnoreProperties(value={"userPassword"})
-     //public List<HomeUser> retrieveFilteredHomeUsers(){
-    //    return usersRepository.findAll();
-    //}
 
     public ResponseEntity<Object> updateUser(HomeUser newHomeUser) {
         try {
@@ -128,7 +124,9 @@ public class UserService{
                 foundUser.setUserName(newHomeUser.getUserName());
                 foundUser.setUserPassword(encryptPassword(newHomeUser.getUserPassword()));
                 usersRepository.save(foundUser);
-                return new ResponseEntity<>("Credentials Updated!",HttpStatus.OK);
+                JSONObject responseObject = new JSONObject();
+                responseObject.put("message","Credentials Updated!");
+                return new ResponseEntity<>(responseObject,HttpStatus.OK);
             }
         } catch(Exception e) {
             System.out.println("Error: Input is " + e.getMessage() + "!");

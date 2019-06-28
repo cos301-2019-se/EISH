@@ -40,7 +40,13 @@ public class JwtUserDetailsService implements UserDetailsService {
                 break;
             }
         }
+
+        //HomeUser user = userRepository.findByHomeUserName(username).get();
+
+        // if (user != null)
+        //     return new HomeUserDetails(user);
         
+        //throw UsernameNotFoundException;     
         return new HomeUserDetails(user);
     }
  

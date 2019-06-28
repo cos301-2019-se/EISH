@@ -1,5 +1,5 @@
 package com.monotoneid.eishms.dataPersistence.models;
-
+/*
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +27,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @TypeDef(
     name = "pgsql_enum",
     typeClass = PostgreSQLEnumType.class
-)
-public class Device {
+)*/
+public class Device<DeviceConsumption> {
+    /*
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deviceid", columnDefinition = "serial", updatable = false, nullable = false)
@@ -45,8 +46,8 @@ public class Device {
     @Type( type = "pgsql_enum" )
     private DevicePriorityType devicePriority;
 
-    @OneToOne(mappedBy = "device")
-    private DeviceType deviceType;
+   // @OneToOne(mappedBy = "device")
+    //private DeviceType deviceType;
 
     @OneToMany(mappedBy = "device")
     private List<DeviceConsumption> deviceconsumptions= new ArrayList<DeviceConsumption>();
@@ -72,9 +73,9 @@ public class Device {
     public String getDeviceTopic(){
         return deviceTopic;
     }
-    public DeviceType getDeviceType(){
-        return deviceType;
-    }
+   // public DeviceType getDeviceType(){
+   //     return deviceType;
+   // }
     public DevicePriorityType getDevicePriority(){
         return devicePriority;
     }
@@ -89,13 +90,14 @@ public class Device {
     public void setDeviceTopic(String newDeviceTopic){
         this.deviceTopic = newDeviceTopic;
     }
-    public void setDeviceType(DeviceType newDeviceType){
-        this.deviceType = newDeviceType;
-    }
+   // public void setDeviceType(DeviceType newDeviceType){
+    //    this.deviceType = newDeviceType;
+   // }
     public void setDevicePriorityType(DevicePriorityType newDevicePriorityType){
         this.devicePriority = newDevicePriorityType;
     }
-    public void setDeviceConsumption(List<DeviceConsumption> newDeviceConsumption){
-        this.deviceconsumptions = newDeviceConsumption;
-    }
+   // public void setDeviceConsumption(List<DeviceConsumption> newDeviceConsumption){
+    //    this.deviceconsumptions = newDeviceConsumption;
+    //}
+    */
 }
