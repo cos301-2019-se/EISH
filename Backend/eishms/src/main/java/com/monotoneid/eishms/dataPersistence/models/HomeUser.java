@@ -46,8 +46,7 @@ public class HomeUser {
     @Column(name = "userpassword", columnDefinition = "text", updatable = true, nullable = false)
     private String userPassword;
 
-    @Column(name = "userlocationtopic", columnDefinition = "text", updatable = true, nullable = false)
-   // @Pattern(regexp="^owntracks\\eishms\\[a-zA-Z0-9]")
+    @Column(name = "userlocationtopic", columnDefinition = "text", updatable = true, unique = true, nullable = false)
     private String userLocationTopic;
 
     @Enumerated(EnumType.STRING)

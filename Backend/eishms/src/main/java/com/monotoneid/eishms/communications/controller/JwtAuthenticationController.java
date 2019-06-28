@@ -1,5 +1,7 @@
 package com.monotoneid.eishms.communications.controller;
 
+import java.util.Date;
+
 import javax.validation.Valid;
 
 import com.monotoneid.eishms.configuration.JwtTokenUtil;
@@ -9,11 +11,6 @@ import com.monotoneid.eishms.dataPersistence.repositories.HomeKeys;
 import com.monotoneid.eishms.dataPersistence.repositories.Users;
 import com.monotoneid.eishms.messages.JwtRequest;
 import com.monotoneid.eishms.messages.JwtResponse;
-
-import java.util.Date;
-//import com.sun.tools.javac.util.List;
-//import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

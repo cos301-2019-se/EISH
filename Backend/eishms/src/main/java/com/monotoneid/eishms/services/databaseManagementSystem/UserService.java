@@ -3,6 +3,7 @@ package com.monotoneid.eishms.services.databaseManagementSystem;
 import java.sql.Timestamp;
 import java.util.List;
 
+
 import com.monotoneid.eishms.dataPersistence.models.HomeUser;
 import com.monotoneid.eishms.dataPersistence.models.UserType;
 import com.monotoneid.eishms.dataPersistence.repositories.Users;
@@ -102,10 +103,14 @@ public class UserService{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-    public List<HomeUser> retrieveAllUsers(){
+    
+   public List<HomeUser> retrieveAllUsers(){
         return usersRepository.findAll();
     }
+    //@JsonIgnoreProperties(value={"userPassword"})
+     //public List<HomeUser> retrieveFilteredHomeUsers(){
+    //    return usersRepository.findAll();
+    //}
 
     public ResponseEntity<Object> updateUser(HomeUser newHomeUser) {
         try {
