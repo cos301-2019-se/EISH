@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -38,12 +39,15 @@ public class HomeUser {
     private String userName;
 
     @Column(name = "useremail", columnDefinition = "text", updatable = true, nullable = false)
+   // @Pattern(regexp="^\\w+[\\w-\\.]*\\@\\w+((-\\w+)|(\\w*))\\.[a-z]{2,3}$")
+   @Pattern(regexp="^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$")
     private String userEmail;
 
     @Column(name = "userpassword", columnDefinition = "text", updatable = true, nullable = false)
     private String userPassword;
 
     @Column(name = "userlocationtopic", columnDefinition = "text", updatable = true, nullable = false)
+    @Pattern(regexp="^owntracks\\eishms\\[a-zA-Z0-9]")
     private String userLocationTopic;
 
     @Enumerated(EnumType.STRING)
