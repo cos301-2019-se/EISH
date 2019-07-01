@@ -1,8 +1,9 @@
 package com.monotoneid.eishms.dataPersistence.models;
-/*
+
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -11,9 +12,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -27,17 +31,19 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @TypeDef(
     name = "pgsql_enum",
     typeClass = PostgreSQLEnumType.class
-)*/
-public class Device<DeviceConsumption> {
-    /*
+)
+public class Device {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deviceid", columnDefinition = "serial", updatable = false, nullable = false)
     private long deviceId;
     
+    @Size(min = 4, max = 30, message = "Device Name must be between 4 and 30 characters")
     @Column(name = "devicename", columnDefinition = "text", updatable = true, unique = true, nullable = false)
     private String deviceName;
 
+    @Size(min = 4, max = 30, message = "Device Topic must be between 4 and 30 characters")
     @Column(name = "devicetopic", columnDefinition = "text", updatable = true, unique = true, nullable = false)
     private String deviceTopic;
 
@@ -46,8 +52,10 @@ public class Device<DeviceConsumption> {
     @Type( type = "pgsql_enum" )
     private DevicePriorityType devicePriority;
 
-   // @OneToOne(mappedBy = "device")
-    //private DeviceType deviceType;
+    @ManyToOne
+    @JoinColumn(name = "devicetypeid")
+    private DeviceType deviceType;
+    
 
     @OneToMany(mappedBy = "device")
     private List<DeviceConsumption> deviceconsumptions= new ArrayList<DeviceConsumption>();
@@ -60,7 +68,6 @@ public class Device<DeviceConsumption> {
         setDeviceName(newDeviceName);
         setDeviceTopic(newDeviceTopic);
         setDevicePriorityType(devicePriority.valueOf(newDevicePriorityType));
-        //setDeviceType(newDeviceType);
     }
 
     //getter
@@ -73,9 +80,9 @@ public class Device<DeviceConsumption> {
     public String getDeviceTopic(){
         return deviceTopic;
     }
-   // public DeviceType getDeviceType(){
-   //     return deviceType;
-   // }
+    public DeviceType getDeviceType(){
+        return deviceType;
+    }
     public DevicePriorityType getDevicePriority(){
         return devicePriority;
     }
@@ -90,14 +97,14 @@ public class Device<DeviceConsumption> {
     public void setDeviceTopic(String newDeviceTopic){
         this.deviceTopic = newDeviceTopic;
     }
-   // public void setDeviceType(DeviceType newDeviceType){
-    //    this.deviceType = newDeviceType;
-   // }
+    public void setDeviceType(DeviceType newDeviceType){
+       this.deviceType = newDeviceType;
+    }
     public void setDevicePriorityType(DevicePriorityType newDevicePriorityType){
         this.devicePriority = newDevicePriorityType;
     }
-   // public void setDeviceConsumption(List<DeviceConsumption> newDeviceConsumption){
-    //    this.deviceconsumptions = newDeviceConsumption;
-    //}
-    */
+    public void setDeviceConsumption(List<DeviceConsumption> newDeviceConsumption){
+       this.deviceconsumptions = newDeviceConsumption;
+    }
+    
 }

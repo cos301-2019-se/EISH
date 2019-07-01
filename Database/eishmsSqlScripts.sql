@@ -1,6 +1,8 @@
+ /*
+USERS AND ENTITIES RELATED TO USERS
+*/
  CREATE TYPE userType AS ENUM ('ROLE_ADMIN', 'ROLE_RESIDENT', 'ROLE_GUEST');
  
-
  create table homeuser(
  userid serial  primary key,
  username text not null unique,
@@ -17,4 +19,35 @@ insert into homeuser(username,useremail,userpassword,userlocationtopic,usertype,
 
 select * from homeuser;
 
+/*
+DEVICES AND ENTITIES RELATED TO DEVICES
+*/
+CREATE TYPE devicePriorityType AS ENUM ('PRIORITY_MUSTHAVE', 'PRIORITY_ALWAYSON', 'PRIORITY_NEUTRAL', 'PRIORITY_NICETOHAVE');
 
+CREATE TABLE devicetype(
+devicetypeid serial primary key,
+devicetypename text not null unique,
+devicetypestates text[] not null);
+
+CREATE TABLE device(
+deviceid serial primary key,
+devicename text not null unique,
+devicetopic text not null unique,
+devicepriority devicePriorityType not null,
+idfromdevicetype serial references devicetype(devicetypeid) not null);
+
+CREATE TABLE deviceconsumption(
+deviceid serial references device(deviceid) not null,
+deviceconsumptiontimestamp timestamp not null,
+deviceconsumptionstate text not null,
+deviceconsumption float not null,
+ primary key(deviceid,deviceconsumptiontimestamp)	
+);
+
+drop table deviceconsumption;
+drop table device;
+
+CREATE TABLE homeconsumption(
+homeconsumptiontimestamp timestamp not null primary key,
+homeconsumption float not null
+);
