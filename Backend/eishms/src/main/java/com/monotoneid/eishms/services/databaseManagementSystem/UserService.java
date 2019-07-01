@@ -81,7 +81,9 @@ public class UserService{
             && homeuser.getUserPassword()!=null && homeuser.getUserLocationTopic()!= null 
             && homeuser.getUserType()!= null && homeuser.getUserExpiryDate()!= null){
                 usersRepository.save(homeuser);
-                return new ResponseEntity<>("User added!",HttpStatus.OK);
+                JSONObject responseObject = new JSONObject();
+                responseObject.put("message","User added!");
+                return new ResponseEntity<>(responseObject,HttpStatus.OK);
             } else{
                 throw null;
             }
@@ -151,7 +153,9 @@ public class UserService{
                 throw null;
             usersRepository.findById(homeUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
             usersRepository.deleteById(homeUser.getUserId());
-            return new ResponseEntity<>("Success: User has been deleted!",HttpStatus.OK);
+            JSONObject responseObject = new JSONObject();
+            responseObject.put("message","Success: User has been deleted!");
+            return new ResponseEntity<>(responseObject,HttpStatus.OK);
         } catch(Exception e){
             System.out.println("Error: Input is " + e.getMessage() + "!");
             if(e.getMessage() == null)
@@ -186,7 +190,9 @@ public class UserService{
                 HomeUser foundUser = usersRepository.findById(homeUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
                 foundUser.setUserType(homeUser.getUserType());
                 usersRepository.save(foundUser);
-                return new ResponseEntity<>("Users type updated!",HttpStatus.OK);
+                JSONObject responseObject = new JSONObject();
+                responseObject.put("message","Users type updated!");
+                return new ResponseEntity<>(responseObject,HttpStatus.OK);
             }
         } catch(Exception e){
             if(e.getCause() == null)
@@ -209,7 +215,9 @@ public class UserService{
                 HomeUser foundUser = usersRepository.findByHomeUserName(homeUser.getUserName()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
                 foundUser.setUserExpiryDate(calculateExpiryDate(defaultNumberOfDays));
                 usersRepository.save(foundUser);
-                return new ResponseEntity<>("User renewed!",HttpStatus.OK);
+                JSONObject responseObject = new JSONObject();
+                responseObject.put("message","User renewed!");
+                return new ResponseEntity<>(responseObject,HttpStatus.OK);
             }
         } catch(Exception e){
             if(e.getCause() == null)
