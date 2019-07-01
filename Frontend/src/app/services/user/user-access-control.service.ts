@@ -43,7 +43,10 @@ export class UserAccessControlService {
             sessionStorage.setItem('accessToken', this.data.accessToken),
             sessionStorage.setItem('userName' , userCredentials.userName);
             //check if details are admin if true:
-            loginInstance.switcher();
+            if (userCredentials.userName == "admin")
+              loginInstance.routeToChange();
+            else 
+              loginInstance.routeToHomepage();
             //else go to dashboard
             //loginInstance.switcher();
 
@@ -58,10 +61,7 @@ export class UserAccessControlService {
    * @returns Boolean
    */
   isUserLoggedIn(): Boolean {
-    if(sessionStorage == null )
-      return false;
-    else
-      return true;
+    return sessionStorage.getItem("userName") != null;
   }
  
   /**
@@ -114,7 +114,7 @@ export class UserAccessControlService {
       userPassword: userCredentials.userPassword,
       userLocationTopic: userCredentials.userDeviceName
     }
-    console.log(newCred);
+    //console.log(newCred);
     return this.http.post(this.ROOT_URL+'user/',newCred).pipe(
       map( 
         response => {

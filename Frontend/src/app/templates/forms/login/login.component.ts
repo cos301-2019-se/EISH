@@ -35,18 +35,22 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  switcher(){
+  routeToChange(): void {
     this.route.navigate(['register','Change']);      
   }
 
-  error(){
-    this.incorrectCredentials = true;
+  routeToHomepage(): void {
 
+  }
+
+  error(): void {
+    this.incorrectCredentials = true;
   }
 
   get getVariables(){
     return this.loginForm.controls;
   }
+  
   /**
    * Submits credentials;
    * if default admin credentials routes to changeCredentials
@@ -55,13 +59,9 @@ export class LoginComponent implements OnInit {
   login(formData){
     //sanitize and validate
     //if admin admin: go to server, according to response:  make token and  route to change credntials or wrong credntials
-    
-    if(this.loginForm.invalid){
-      return;
-    }else {
-      console.log(formData.value);
-     this.AuthenticationServices.authenticateUser(formData.value, this);
-    }
+    if (!this.loginForm.invalid)
+      this.AuthenticationServices.authenticateUser(formData.value, this);
 
+    return;  
   }
 }
