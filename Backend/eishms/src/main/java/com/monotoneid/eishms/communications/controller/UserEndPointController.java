@@ -100,7 +100,6 @@ public class UserEndPointController{
     * @return an object with all the remaining users
     */
    @DeleteMapping("/user")
-   //@CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('ADMIN')")
    public ResponseEntity<Object> removeUser(@Valid @RequestBody HomeUser homeUser){
       return userService.removeUser(homeUser);
