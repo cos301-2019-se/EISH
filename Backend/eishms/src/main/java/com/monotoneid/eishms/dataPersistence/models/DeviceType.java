@@ -38,7 +38,7 @@ public class DeviceType {
     private String[] deviceTypeStates;
 
     
-    @OneToMany(mappedBy = "devicetypeid")
+    @OneToMany(mappedBy = "devicetype")
     private List<Device> devicesOfThisType= new ArrayList<Device>();
 
     public DeviceType(){}

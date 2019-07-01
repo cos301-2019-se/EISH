@@ -3,7 +3,6 @@ package com.monotoneid.eishms.dataPersistence.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -15,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -54,7 +52,7 @@ public class Device {
 
     @ManyToOne
     @JoinColumn(name = "devicetypeid")
-    private DeviceType deviceType;
+    private DeviceType devicetype;
     
 
     @OneToMany(mappedBy = "device")
@@ -64,10 +62,12 @@ public class Device {
 
     public Device(@JsonProperty("deviceName") String newDeviceName,
     @JsonProperty("deviceTopic") String newDeviceTopic,
-    @JsonProperty("devicePriorityType") String newDevicePriorityType){
+    @JsonProperty("devicePriorityType") String newDevicePriorityType,
+    DeviceType newDeviceType){
         setDeviceName(newDeviceName);
         setDeviceTopic(newDeviceTopic);
         setDevicePriorityType(devicePriority.valueOf(newDevicePriorityType));
+        setDeviceType(newDeviceType);
     }
 
     //getter
@@ -81,7 +81,7 @@ public class Device {
         return deviceTopic;
     }
     public DeviceType getDeviceType(){
-        return deviceType;
+        return devicetype;
     }
     public DevicePriorityType getDevicePriority(){
         return devicePriority;
@@ -98,7 +98,7 @@ public class Device {
         this.deviceTopic = newDeviceTopic;
     }
     public void setDeviceType(DeviceType newDeviceType){
-       this.deviceType = newDeviceType;
+       this.devicetype = newDeviceType;
     }
     public void setDevicePriorityType(DevicePriorityType newDevicePriorityType){
         this.devicePriority = newDevicePriorityType;
@@ -106,5 +106,6 @@ public class Device {
     public void setDeviceConsumption(List<DeviceConsumption> newDeviceConsumption){
        this.deviceconsumptions = newDeviceConsumption;
     }
+   
     
 }

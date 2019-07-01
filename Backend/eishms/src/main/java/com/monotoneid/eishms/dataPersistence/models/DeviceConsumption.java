@@ -24,16 +24,16 @@ public class DeviceConsumption {
     @EmbeddedId
     private DeviceConsumptionId deviceConsumptionId;
 
-    //@Id
+    
     @ManyToOne
-    @JoinColumn(name="deviceid")
+    @JoinColumn(name="deviceid", insertable = false ,updatable = false, nullable = false)
     private Device device;
 
     @Column(name = "deviceconsumption", columnDefinition = "float", updatable = true, nullable = false)
     private float deviceConsumption;
 
     //@Id
-    @Column(name = "deviceconsumptiontimestamp", columnDefinition = "TIMESTAMP", updatable = true, nullable = false)
+    @Column(name = "deviceconsumptiontimestamp", columnDefinition = "TIMESTAMP", insertable = false , updatable = false, nullable = false)
     private Timestamp deviceConsumptionTimestamp;
 
     @Size(min = 1, message = "device states must be one or more characters")
@@ -43,11 +43,14 @@ public class DeviceConsumption {
     public DeviceConsumption() {}
 
     public DeviceConsumption(@JsonProperty("deviceConsumption") float newDeviceConsumption,
+    @JsonProperty("device") Device newDevice,
     @JsonProperty("deviceConsumptionTimeStamp") Timestamp newDeviceConsumptionTimestamp,
     @JsonProperty("deviceConsumptionState") String newDeviceConsumptionState){
         setDeviceConsumption(newDeviceConsumption);
+        setDevice(newDevice);
         setDeviceConsumptionTimestamp(newDeviceConsumptionTimestamp);
         setDeviceConsumptionState(newDeviceConsumptionState);
+        setDeviceConsumptionId();
 
     }
 
@@ -56,7 +59,7 @@ public class DeviceConsumption {
         return deviceConsumptionId;
     }
     public Device getDevice(){
-        return device;
+       return device;
     }
     public float getDeviceConsumption(){
         return deviceConsumption;
@@ -68,8 +71,8 @@ public class DeviceConsumption {
         return deviceConsumptionState;
     }
     //setters
-    public void setDeviceConsumptionId(DeviceConsumptionId newDeviceConsumptionId){
-        this.deviceConsumptionId = newDeviceConsumptionId;
+    public void setDeviceConsumptionId(){
+        this.deviceConsumptionId = new DeviceConsumptionId(getDevice().getDeviceId(),getDeviceConsumptionTimestamp());
     }
     public void setDevice(Device newDevice){
         this.device = newDevice;
