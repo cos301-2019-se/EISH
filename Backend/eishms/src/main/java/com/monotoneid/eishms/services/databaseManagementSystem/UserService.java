@@ -167,12 +167,10 @@ public class UserService{
      * @exception null
      * @exception ResourceNotFound
      */
-    public ResponseEntity<Object> removeUser(HomeUser homeUser) {
+    public ResponseEntity<Object> removeUser(long userId) {
         try {
-            if(homeUser == null)
-                throw null;
-            usersRepository.findById(homeUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-            usersRepository.deleteById(homeUser.getUserId());
+            usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+            usersRepository.deleteById(userId);
             JSONObject responseObject = new JSONObject();
             responseObject.put("message","Success: User has been deleted!");
             return new ResponseEntity<>(responseObject,HttpStatus.OK);
@@ -197,23 +195,23 @@ public class UserService{
         }
     }
 
-    public ResponseEntity<Object> updateUserType(HomeUser homeUser) {
-        try {
-            if(homeUser ==null){
-                throw null;
-            }else{
-                if(homeUser.getUserType()==UserType.ROLE_GUEST
-                ||homeUser.getUserType()==UserType.ROLE_RESIDENT
-                ||homeUser.getUserType()==null){
+    public ResponseEntity<Object> updateUserType(long userId, String role) {
+        try {            
+                if(UserType.valueOf(role) == UserType.ROLE_GUEST
+                ||UserType.valueOf(role) == UserType.ROLE_RESIDENT
+                ||UserType.valueOf(role) == null)
                     throw null;
-                }
-                HomeUser foundUser = usersRepository.findById(homeUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-                foundUser.setUserType(homeUser.getUserType());
+            
+                HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+                foundUser.setUserType(UserType.valueOf(role));
                 usersRepository.save(foundUser);
+                if(foundUser.getUserType() == UserType.ROLE_GUEST)
+                    renewUser(userId, 1);
+                else if(foundUser.getUserType() == UserType.ROLE_RESIDENT)
+                    renewUser(userId, 365);
                 JSONObject responseObject = new JSONObject();
                 responseObject.put("message","Users type updated!");
                 return new ResponseEntity<>(responseObject,HttpStatus.OK);
-            }
         } catch(Exception e){
             if(e.getCause() == null)
                 return new ResponseEntity<>("Error: Failed to update user type!",HttpStatus.PRECONDITION_FAILED);
@@ -225,25 +223,16 @@ public class UserService{
     /**
     * Changing users expiry date 
     */   
-    public ResponseEntity<Object> renewUser(HomeUser homeUser) {
+    public ResponseEntity<Object> renewUser(long userId, int days) {
         try {
-            if(homeUser == null)
-                throw null;
-            else if(homeUser.getUserExpiryDate()==null)
-                    throw null;
-            else{
-                HomeUser foundUser = usersRepository.findByHomeUserName(homeUser.getUserName()).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-                foundUser.setUserExpiryDate(calculateExpiryDate(defaultNumberOfDays));
-                usersRepository.save(foundUser);
-                JSONObject responseObject = new JSONObject();
-                responseObject.put("message","User renewed!");
-                return new ResponseEntity<>(responseObject,HttpStatus.OK);
-            }
+            HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+            foundUser.setUserExpiryDate(calculateExpiryDate(days));
+            usersRepository.save(foundUser);
+            JSONObject responseObject = new JSONObject();
+            responseObject.put("message","User renewed!");
+            return new ResponseEntity<>(responseObject,HttpStatus.OK);
         } catch(Exception e){
-            if(e.getCause() == null)
-                return new ResponseEntity<>("Error: Failed to update user type!",HttpStatus.PRECONDITION_FAILED);
-            else
-                return new ResponseEntity<>("Error: Failed to update user type!",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Error: Failed to update user type!",HttpStatus.NOT_FOUND);
         }
     }
 	    
