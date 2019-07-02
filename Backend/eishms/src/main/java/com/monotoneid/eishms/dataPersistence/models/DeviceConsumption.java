@@ -42,10 +42,8 @@ public class DeviceConsumption {
 
     public DeviceConsumption() {}
 
-    public DeviceConsumption(@JsonProperty("deviceConsumption") float newDeviceConsumption,
-    @JsonProperty("device") Device newDevice,
-    @JsonProperty("deviceConsumptionTimeStamp") Timestamp newDeviceConsumptionTimestamp,
-    @JsonProperty("deviceConsumptionState") String newDeviceConsumptionState){
+    public DeviceConsumption(float newDeviceConsumption, Device newDevice, 
+    Timestamp newDeviceConsumptionTimestamp, String newDeviceConsumptionState) {
         setDeviceConsumption(newDeviceConsumption);
         setDevice(newDevice);
         setDeviceConsumptionTimestamp(newDeviceConsumptionTimestamp);
@@ -58,32 +56,42 @@ public class DeviceConsumption {
     public DeviceConsumptionId getDeviceConsumptionId(){
         return deviceConsumptionId;
     }
+
     public Device getDevice(){
        return device;
     }
+
     public float getDeviceConsumption(){
         return deviceConsumption;
     }
+
     public Timestamp getDeviceConsumptionTimestamp(){
         return deviceConsumptionTimestamp;
     }
+
     public String getDeviceConsumptionState(){
         return deviceConsumptionState;
     }
+
     //setters
     public void setDeviceConsumptionId(){
         this.deviceConsumptionId = new DeviceConsumptionId(getDevice().getDeviceId(),getDeviceConsumptionTimestamp());
     }
+
     public void setDevice(Device newDevice){
         this.device = newDevice;
     }
+
     public void setDeviceConsumption(float newDeviceConsumption){
         this.deviceConsumption = newDeviceConsumption;
     }
+
     public void setDeviceConsumptionTimestamp(Timestamp newDeviceConsumptionTimestamp){
         this.deviceConsumptionTimestamp = newDeviceConsumptionTimestamp;
     }
+
     public void setDeviceConsumptionState(String newDeviceConsumptionState){
         this.deviceConsumptionState = newDeviceConsumptionState;
     }
+    
 }
