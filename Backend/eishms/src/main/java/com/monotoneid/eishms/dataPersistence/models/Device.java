@@ -31,7 +31,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
     typeClass = PostgreSQLEnumType.class
 )
 public class Device {
-    
+
+        
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deviceid", columnDefinition = "serial", updatable = false, nullable = false)
@@ -46,7 +47,7 @@ public class Device {
     private String deviceTopic;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "deviceprioritytype", columnDefinition = "devicePriorityType", updatable = true, nullable = false)
+    @Column(name = "devicepriority", columnDefinition = "devicePriorityType", updatable = true, nullable = false)
     @Type( type = "pgsql_enum" )
     private DevicePriorityType devicePriority;
 
@@ -54,7 +55,7 @@ public class Device {
     @JoinColumn(name = "devicetypeid")
     private DeviceType devicetype;
     
-
+   
     @OneToMany(mappedBy = "device")
     private List<DeviceConsumption> deviceconsumptions= new ArrayList<DeviceConsumption>();
 
@@ -62,14 +63,14 @@ public class Device {
 
     public Device(@JsonProperty("deviceName") String newDeviceName,
     @JsonProperty("deviceTopic") String newDeviceTopic,
-    @JsonProperty("devicePriorityType") String newDevicePriorityType,
-    DeviceType newDeviceType){
+    @JsonProperty("devicePriorityType") String newDevicePriorityType){
+   // @JsonProperty("deviceTypeId") long referenceDeviceTypeId){
         setDeviceName(newDeviceName);
         setDeviceTopic(newDeviceTopic);
         setDevicePriorityType(devicePriority.valueOf(newDevicePriorityType));
-        setDeviceType(newDeviceType);
+        //setDeviceTypeId(referenceDeviceTypeId);
     }
-
+  
     //getter
     public long getDeviceId(){
         return deviceId;
@@ -89,7 +90,11 @@ public class Device {
     public List<DeviceConsumption> getDeviceConsumption(){
         return deviceconsumptions;
     }
-
+    // @Transient
+    // public long getDeviceTypeId(){
+    //     return deviceTypeId;
+    // }
+    
     //setter
     public void setDeviceName(String newDeviceName){
         this.deviceName = newDeviceName;
@@ -106,6 +111,8 @@ public class Device {
     public void setDeviceConsumption(List<DeviceConsumption> newDeviceConsumption){
        this.deviceconsumptions = newDeviceConsumption;
     }
-   
-    
+    // @Transient
+    // public void setDeviceTypeId(long newDeviceId){
+    //     this.deviceTypeId = newDeviceId;
+    // }
 }

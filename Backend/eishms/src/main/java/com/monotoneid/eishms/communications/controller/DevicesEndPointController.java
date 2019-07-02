@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.services.databaseManagementSystem.DeviceService;
 
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,7 +59,17 @@ public class DevicesEndPointController{
    public ResponseEntity<Object> removeDevice(@Valid @RequestBody Device deviceToDelete){
       return deviceService.removeDevice(deviceToDelete);
    }
-   
+   /**
+    * POST METHOD
+    * Implements the adddevice endpoint, that calls the addDevice service
+    * @param newDevice
+    * @return the status message
+    */
+    @PostMapping("/device")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT')")
+    public ResponseEntity<Object> addDevice(@Valid @RequestBody Device newdevice, @RequestBody @JsonProperty("deviceTypeId") long referenceDeviceTypeId){
+       return deviceService.addDevice(referenceDeviceTypeId,newdevice);
+    }
 
 
 }
