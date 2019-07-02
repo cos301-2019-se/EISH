@@ -6,6 +6,7 @@ import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.dataPersistence.models.DevicePriorityType;
 import com.monotoneid.eishms.dataPersistence.repositories.Devices;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
+import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MQTTDeviceManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,9 @@ public class DeviceService {
 
     @Autowired
     private Devices devicesRepository;
+
+    @Autowired
+    private MQTTDeviceManager deviceManager;
 
     /**
      * Retrieves all the devices in the database
@@ -55,8 +59,7 @@ public class DeviceService {
         try {
             if(newDevice == null)
                 throw null;
-            else {
-                if(newDevice.getDeviceName().isEmpty() == true
+            else if(newDevice.getDeviceName().isEmpty() == true
                 || newDevice.getDevicePriority() != DevicePriorityType.PRIORITY_ALWAYSON
                 && newDevice.getDevicePriority() != DevicePriorityType.PRIORITY_MUSTHAVE
                 && newDevice.getDevicePriority() != DevicePriorityType.PRIORITY_NEUTRAL
@@ -64,12 +67,13 @@ public class DeviceService {
                 || newDevice.getDeviceTopic().isEmpty() == true
                 || newDevice.getDeviceType() == null)
                     throw null;
-                Device founDevice = devicesRepository.findById(newDevice.getDeviceId()).orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
-                founDevice.setDeviceName(newDevice.getDeviceName());
-                founDevice.setDevicePriorityType(newDevice.getDevicePriority());
-                founDevice.setDeviceTopic(newDevice.getDeviceTopic());
-                founDevice.setDeviceType(newDevice.getDeviceType());
-                devicesRepository.save(founDevice);
+            else {
+                Device foundDevice = devicesRepository.findById(newDevice.getDeviceId()).orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
+                foundDevice.setDeviceName(newDevice.getDeviceName());
+                foundDevice.setDevicePriorityType(newDevice.getDevicePriority());
+                foundDevice.setDeviceTopic(newDevice.getDeviceTopic());
+                foundDevice.setDeviceType(newDevice.getDeviceType());
+                devicesRepository.save(foundDevice);
                 JSONObject responseObject = new JSONObject();
                 responseObject.put("message","Devices Updated!");
                 return new ResponseEntity<>(responseObject,HttpStatus.OK);
@@ -82,6 +86,30 @@ public class DeviceService {
                 return new ResponseEntity<>("Error: Failed to update device!",HttpStatus.NOT_FOUND);
         }
     }
+    
+    /**
+     * Controls the specified device with the MQTT device manager
+     * @param device
+     * @return
+     */
+    public ResponseEntity<Object> controlDevice(Device device) {
+        try {
+            if(device == null)
+                throw null;
+            else {
+                Device founDevice = devicesRepository.findById(device.getDeviceId()).orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
+                JSONObject responseObject = new JSONObject();
+                responseObject.put("message","Devices Updated!");
+                return new ResponseEntity<>(responseObject,HttpStatus.OK);
+            }
+        } catch(Exception e) {
+            System.out.println("Error: Input is " + e.getMessage() + "!");
+            if(e.getCause() == null)
+                return new ResponseEntity<>("Error: Failed to change device state!",HttpStatus.PRECONDITION_FAILED);
+            else
+                return new ResponseEntity<>("Error: Failed to change device state!",HttpStatus.NOT_FOUND);
+        }
+    }
 
     /**
      * Removes the specified device 
@@ -90,12 +118,12 @@ public class DeviceService {
      * @exception null
      * @exception ResourceNotFound
      */
-    public ResponseEntity<Object> removeDevice(Device device) {
+    public ResponseEntity<Object> removeDevice(Device deviceToDelete) {
         try {
-            if(device == null)
+            if(deviceToDelete == null)
                 throw null;
-            devicesRepository.findById(device.getDeviceId()).orElseThrow(() -> new ResourceNotFoundException("Device does not exist"));
-            devicesRepository.deleteById(device.getDeviceId());
+            devicesRepository.findById(deviceToDelete.getDeviceId()).orElseThrow(() -> new ResourceNotFoundException("Device does not exist"));
+            devicesRepository.deleteById(deviceToDelete.getDeviceId());
             JSONObject responseObject = new JSONObject();
             responseObject.put("message","Success: Device has been deleted!");
             return new ResponseEntity<>(responseObject,HttpStatus.OK);
