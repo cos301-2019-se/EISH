@@ -1,28 +1,28 @@
 package com.monotoneid.eishms.endpointcontrollertests;
 
-import static org.junit.Assert.assertTrue;
+//import static org.junit.Assert.assertTrue;
 
-import java.util.Optional;
+// import java.util.Optional;
 
-import com.monotoneid.eishms.dataPersistence.models.HomeUser;
-import com.monotoneid.eishms.dataPersistence.repositories.Users;
-import com.monotoneid.eishms.services.databaseManagementSystem.UserService;
+// import com.monotoneid.eishms.dataPersistence.models.HomeUser;
+// import com.monotoneid.eishms.dataPersistence.repositories.Users;
+// import com.monotoneid.eishms.services.databaseManagementSystem.UserService;
 
-import org.junit.Test;
+// import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+// import org.springframework.boot.test.mock.mockito.MockBean;
+// import org.springframework.boot.test.web.client.TestRestTemplate;
+// import org.springframework.boot.web.server.LocalServerPort;
+// import org.springframework.http.HttpEntity;
+// import org.springframework.http.HttpHeaders;
+// import org.springframework.http.HttpMethod;
+//import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.servlet.MockMvc;
+//import org.springframework.test.web.reactive.server.WebTestClient;
+//import org.springframework.test.web.servlet.MockMvc;
 
 @RunWith(SpringRunner.class)
 // @WebMvcTest(EndPointController.class)
@@ -30,35 +30,35 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 public class EndPointControllerIntegrationTest {
 
-    @Autowired
-    private WebTestClient webClient;
+    //@Autowired
+    //private WebTestClient webClient;
     
-    @Test
-    public void exampleTest() {
-        this.webClient.get().uri("/users").exchange().expectStatus().isOk();
+    //@Test
+    //public void exampleTest() {
+      //  this.webClient.get().uri("/users").exchange().expectStatus().isOk();
        // .expectBody(String.class).isEqualTo();
-    }
+    //}
 
-    @Autowired
-    private MockMvc mvc;
-    @Test
-    public void testCreateRetrieveWithMockMVC() throws Exception {
+    //@Autowired
+   // private MockMvc mvc;
+    //@Test
+    //public void testCreateRetrieveWithMockMVC() throws Exception {
        // this.mvc.perform(post("/user")).expectStatus().is2xxSuccessful();
-    }
+    //}
 
-    @Autowired
-    private UserService service;
+    // @Autowired
+    // private UserService service;
     
-    @Autowired
-    private Users usersRepository;
+    // @Autowired
+    // private Users usersRepository;
 
-    @Test
-    public void testRetrieveUser() throws Exception {
-        Optional<HomeUser> optUser = Optional.of(new HomeUser("Eben","eben@labs.epiuse.com","12345","owntracks/eben/iPhone/house"));
+    // @Test
+    // public void testRetrieveUser() throws Exception {
+      //  Optional<HomeUser> optUser = Optional.of(new HomeUser("Eben","eben@labs.epiuse.com","12345","owntracks/eben/iPhone/house"));
        // when(usersRepository.findById(1)).thenReturn(optUser);
 
         //assertTrue(service.retrieveUser(1).getUserName().contains("Eben"));
-    }
+    //}
     
     
     // @LocalServerPort
@@ -89,8 +89,8 @@ public class EndPointControllerIntegrationTest {
     /**
      * GET METHOD Tests the retrieveAllUsers endpoint
      */
-    @Test
-    public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
+  //  @Test
+    //public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
     /*    UserRequestBody urb = new UserRequestBody();
         HomeUser newMockUser = new HomeUser();
 
@@ -102,5 +102,5 @@ public class EndPointControllerIntegrationTest {
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(JsonPath("$[0].userName", Is(newMockUser.getUserName())));
         */
-    }
+    //}
 }

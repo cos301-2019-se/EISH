@@ -1,10 +1,16 @@
 package com.monotoneid.eishms.services.databaseManagementSystem;
 
+import static com.monotoneid.eishms.dataPersistence.models.DevicePriorityType.PRIORITY_ALWAYSON;
+import static com.monotoneid.eishms.dataPersistence.models.DevicePriorityType.PRIORITY_MUSTHAVE;
+import static com.monotoneid.eishms.dataPersistence.models.DevicePriorityType.PRIORITY_NEUTRAL;
+import static com.monotoneid.eishms.dataPersistence.models.DevicePriorityType.PRIORITY_NICETOHAVE;
+
 import java.util.List;
 
 import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.dataPersistence.models.DevicePriorityType;
 import com.monotoneid.eishms.dataPersistence.repositories.Devices;
+import com.monotoneid.eishms.dataPersistence.requestbodies.DeviceRequestBody;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MQTTDeviceManager;
 
@@ -20,7 +26,7 @@ public class DeviceService {
 
     @Autowired
     private Devices devicesRepository;
-
+    
     @Autowired
     private MQTTDeviceManager deviceManager;
 
@@ -40,10 +46,11 @@ public class DeviceService {
      */
     public ResponseEntity<Device> retrieveDevice(long deviceId){
         try {
-            Device foundDevice = devicesRepository.findById(deviceId).orElseThrow(() -> new ResourceNotFoundException("Device does not exist"));
-            return new ResponseEntity<>(foundDevice,HttpStatus.OK);
-        } catch(Exception e){
-            System.out.println("Error: " + e.getMessage()+"!");
+            Device foundDevice = devicesRepository.findById(deviceId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Device does not exist"));
+            return new ResponseEntity<>(foundDevice, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage() + "!");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -55,7 +62,7 @@ public class DeviceService {
      * @exception null
      * @exception ResourceNotFound
      */
-    public ResponseEntity<Object> updateDevice(Device newDevice) {
+    public ResponseEntity<Object> updateDevice(DeviceRequestBody newDevice) {
         try {
             if(newDevice == null)
                 throw null;
@@ -65,14 +72,14 @@ public class DeviceService {
                 && newDevice.getDevicePriority() != DevicePriorityType.PRIORITY_NEUTRAL
                 && newDevice.getDevicePriority() != DevicePriorityType.PRIORITY_NICETOHAVE
                 || newDevice.getDeviceTopic().isEmpty() == true
-                || newDevice.getDeviceType() == null)
+                || newDevice.getDeviceStates() == null)
                     throw null;
             else {
                 Device foundDevice = devicesRepository.findById(newDevice.getDeviceId()).orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
                 foundDevice.setDeviceName(newDevice.getDeviceName());
                 foundDevice.setDevicePriorityType(newDevice.getDevicePriority());
                 foundDevice.setDeviceTopic(newDevice.getDeviceTopic());
-                foundDevice.setDeviceType(newDevice.getDeviceType());
+                foundDevice.setDeviceStates(newDevice.getDeviceStates());
                 devicesRepository.save(foundDevice);
                 JSONObject responseObject = new JSONObject();
                 responseObject.put("message","Devices Updated!");
@@ -92,9 +99,9 @@ public class DeviceService {
      * @param device
      * @return
      */
-    public ResponseEntity<Object> controlDevice(Device device) {
+    public ResponseEntity<Object> controlDevice(DeviceRequestBody device) {
         try {
-            if(device == null)
+            if (device == null)
                 throw null;
             else {
                 Device founDevice = devicesRepository.findById(device.getDeviceId()).orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
@@ -118,21 +125,72 @@ public class DeviceService {
      * @exception null
      * @exception ResourceNotFound
      */
-    public ResponseEntity<Object> removeDevice(Device deviceToDelete) {
+    public ResponseEntity<Object> removeDevice(DeviceRequestBody deviceToDelete) {
         try {
             if(deviceToDelete == null)
                 throw null;
             devicesRepository.findById(deviceToDelete.getDeviceId()).orElseThrow(() -> new ResourceNotFoundException("Device does not exist"));
             devicesRepository.deleteById(deviceToDelete.getDeviceId());
             JSONObject responseObject = new JSONObject();
-            responseObject.put("message","Success: Device has been deleted!");
-            return new ResponseEntity<>(responseObject,HttpStatus.OK);
-        } catch(Exception e){
+            responseObject.put("message", "Success: Device has been deleted!");
+            return new ResponseEntity<>(responseObject, HttpStatus.OK);
+        } catch (Exception e) {
             System.out.println("Error: Input is " + e.getMessage() + "!");
-            if(e.getMessage() == null)
-                return new ResponseEntity<>("Error: Failed to delete device!",HttpStatus.PRECONDITION_FAILED);
+            if (e.getMessage() == null)
+                return new ResponseEntity<>("Error: Failed to delete device!", HttpStatus.PRECONDITION_FAILED);
             else
-                return new ResponseEntity<>("Error: Failed to delete device!",HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Error: Failed to delete device!", HttpStatus.NOT_FOUND);
         }
     }
+
+    public ResponseEntity<Object> addDevice(Device device) {
+        System.out.println(device.getDeviceName());
+        System.out.println(device.getDeviceTopic());
+        System.out.println(device.getDevicePriority());        
+        System.out.println(device.getDeviceStates()[0]);
+        String[] temp =(String[])device.getDeviceStates();
+        device.setDeviceStates(temp);
+
+        try {
+            if (device == null) {
+                throw null;
+            }
+            if (device.getDeviceName().isEmpty() 
+                    || device.getDeviceTopic().isEmpty()
+                    || device.getDevicePriority() == null
+                    || device.getDeviceStates()==null) {
+                throw null;
+            }
+            if (device.getDevicePriority() != PRIORITY_ALWAYSON && device.getDevicePriority() != PRIORITY_MUSTHAVE
+                        && device.getDevicePriority() != PRIORITY_NEUTRAL
+                        && device.getDevicePriority() != PRIORITY_NICETOHAVE) {
+                    throw null;
+                }
+               
+              devicesRepository.save(device);
+            JSONObject responseObject = new JSONObject();
+            responseObject.put("message","Device added!");
+            return new ResponseEntity<>(responseObject,HttpStatus.OK);
+
+        } catch(Exception e) {
+            System.out.println("Error: Input is " + e.getMessage() + "!");
+            return new ResponseEntity<>("Error: Failed to add device details!",HttpStatus.PRECONDITION_FAILED);
+        }
+     }
+        /*
+        try {
+            
+            
+            if (device.getDeviceName() != null && device.getDeviceTopic() != null
+                    && device.getDevicePriority() != null) {
+               // DevicePriorityType newDevicePriorityType = DevicePriorityType.PRIORITY_ALWAYSON;
+                
+                
+                
+            } else{
+                throw null;
+            }
+        
+    }
+    */
 }
