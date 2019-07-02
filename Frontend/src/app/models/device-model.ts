@@ -3,7 +3,5 @@ export class Device{
     deviceName: String;
     deviceTopic: String;
     devicePriorityType: String;
-    deviceTypeId: Number;
-    deviceTypeName: String;
-    deviceTypeStates: {};
+    deviceStates: {};
 }

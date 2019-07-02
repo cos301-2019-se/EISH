@@ -6,5 +6,6 @@ export class User{
     userLocationTopic: String;
     userExpiryDate: any;
     userType: String;
+    userPresence: Boolean;
 
 }
