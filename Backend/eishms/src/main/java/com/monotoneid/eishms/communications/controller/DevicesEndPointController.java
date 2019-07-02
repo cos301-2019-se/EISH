@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+
 import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.services.databaseManagementSystem.DeviceService;
 import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MQTTDeviceManager;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +40,7 @@ public class DevicesEndPointController{
    * @return an object with all devices 
    */
    @GetMapping("/devices")
-   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+  // @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public List<Device> retrieveAllDevices(){
       return deviceService.retrieveAllDevices();
    }
@@ -90,4 +92,15 @@ public class DevicesEndPointController{
    public ResponseEntity<Object> removeDevice(@Valid @RequestBody Device deviceToDelete){
       return deviceService.removeDevice(deviceToDelete);
    }
+   /**
+    * POST METHOD
+    * Implements the DeviceUser endpoint, that calls the addDevice service
+    * @param newDevice
+    * @return the status message
+    */
+    @PostMapping("/device")
+   // @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
+    public ResponseEntity<Object> addUser(@Valid @RequestBody Device newDevice){
+       return deviceService.addDevice(newDevice);
+    }
 }

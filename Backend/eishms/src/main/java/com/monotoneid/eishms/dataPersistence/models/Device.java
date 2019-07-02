@@ -11,8 +11,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
@@ -31,7 +29,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
     typeClass = PostgreSQLEnumType.class
 )
 public class Device {
-    
+
+        
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deviceid", columnDefinition = "serial", updatable = false, nullable = false)
@@ -46,15 +45,15 @@ public class Device {
     private String deviceTopic;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "deviceprioritytype", columnDefinition = "devicePriorityType", updatable = true, nullable = false)
+    @Column(name = "devicepriority", columnDefinition = "devicePriorityType", updatable = true, nullable = false)
     @Type( type = "pgsql_enum" )
     private DevicePriorityType devicePriority;
 
-    @ManyToOne
-    @JoinColumn(name = "devicetypeid")
-    private DeviceType devicetype;
+    //@Size(min = 1, message = "number of device states must be one or more")
+    @Column(name = "devicestates", columnDefinition = "text[]", updatable = true, nullable = false)
+    private String[] deviceStates;
     
-
+   
     @OneToMany(mappedBy = "device")
     private List<DeviceConsumption> deviceconsumptions= new ArrayList<DeviceConsumption>();
 
@@ -63,13 +62,14 @@ public class Device {
     public Device(@JsonProperty("deviceName") String newDeviceName,
     @JsonProperty("deviceTopic") String newDeviceTopic,
     @JsonProperty("devicePriorityType") String newDevicePriorityType,
-    DeviceType newDeviceType){
+    @JsonProperty("deviceStates") String[] newDeviceStates){
         setDeviceName(newDeviceName);
         setDeviceTopic(newDeviceTopic);
         setDevicePriorityType(devicePriority.valueOf(newDevicePriorityType));
-        setDeviceType(newDeviceType);
+        setDeviceStates(newDeviceStates);
+        
     }
-
+  
     //getter
     public long getDeviceId(){
         return deviceId;
@@ -80,8 +80,8 @@ public class Device {
     public String getDeviceTopic(){
         return deviceTopic;
     }
-    public DeviceType getDeviceType(){
-        return devicetype;
+    public String[] getDeviceStates(){
+        return deviceStates;
     }
     public DevicePriorityType getDevicePriority(){
         return devicePriority;
@@ -89,7 +89,8 @@ public class Device {
     public List<DeviceConsumption> getDeviceConsumption(){
         return deviceconsumptions;
     }
-
+    
+    
     //setter
     public void setDeviceName(String newDeviceName){
         this.deviceName = newDeviceName;
@@ -97,8 +98,8 @@ public class Device {
     public void setDeviceTopic(String newDeviceTopic){
         this.deviceTopic = newDeviceTopic;
     }
-    public void setDeviceType(DeviceType newDeviceType){
-       this.devicetype = newDeviceType;
+    public void setDeviceStates(String[] newDeviceStates){
+        this.deviceStates = newDeviceStates;
     }
     public void setDevicePriorityType(DevicePriorityType newDevicePriorityType){
         this.devicePriority = newDevicePriorityType;
@@ -106,6 +107,5 @@ public class Device {
     public void setDeviceConsumption(List<DeviceConsumption> newDeviceConsumption){
        this.deviceconsumptions = newDeviceConsumption;
     }
-   
     
 }
