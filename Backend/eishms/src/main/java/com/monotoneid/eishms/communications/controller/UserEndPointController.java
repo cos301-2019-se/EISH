@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
-// @CrossOrigin(origins = "http://192.168.8.100:4200")
 @RestController()
 @RequestMapping("/api")
 public class UserEndPointController{
@@ -39,8 +38,12 @@ public class UserEndPointController{
    @Autowired
    HomeKeys myHouseKeys;
 
+   /**
+    * GET METHOD
+    * Implements the getKeys() endpoint, it is used for the admin to retrieve the GENERAL and RENEWAL keys.
+    * @return keyList
+    */
    @GetMapping("/keys")
-   //@CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('ADMIN')") 
    public List<HomeKey> getKeys() {
       List<HomeKey> keyList = new ArrayList<HomeKey>();
@@ -56,7 +59,6 @@ public class UserEndPointController{
     * @return the status message
     */
     @PostMapping("/user")
-    //@CrossOrigin(origins = "http://localhost:4200")
     @PreAuthorize("hasRole('ADMIN') or hasRole('GENERAL')")
     public ResponseEntity<Object> addUser(@Valid @RequestBody HomeUser newHomeUser){
        return userService.addUser(newHomeUser);
@@ -65,13 +67,12 @@ public class UserEndPointController{
    /**
     * GET METHOD
     * Implements retrieveUser endpoint, that calls the retrieveUser service
+    * @param homeUserName
     * @return a the valid homeUser
     */
    @GetMapping(value = "/user",params = {"userName"})
-   //@CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public ResponseEntity<HomeUser> retriveUser(@Valid @RequestParam(value = "userName") String homeUserName){
-      System.out.println("RETRIEVE USER ENDPOINT!!!");
       return userService.retrieveUser(homeUserName);
    }
 
@@ -81,14 +82,17 @@ public class UserEndPointController{
    * @return an object with all users 
    */
    @GetMapping("/users")
-   //@CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('ADMIN')")
    public List<HomeUser> retriveAllUsers(){
       return userService.retrieveAllUsers();
    }
 
+   /**
+    * Implements updateUser endpoint, that calls the updateUser service
+    * @param newHomeUser
+    * @return object message
+    */
    @PutMapping("/user")
-   //@CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public ResponseEntity<Object> updateUser(@Valid @RequestBody HomeUser newHomeUser){
       return userService.updateUser(newHomeUser);
@@ -97,6 +101,7 @@ public class UserEndPointController{
    /**
     * DELETE METHOD
     * Implements removeUser endpoint, that calls the removeUser service
+    * @param homeUser
     * @return an object with all the remaining users
     */
    @DeleteMapping("/user")
@@ -108,17 +113,22 @@ public class UserEndPointController{
    /**
     * GET METHOD
     * Implements getUserPresence endpoint, that calls the getUserPresence service
+    * @param homeUserName
     * @return an object with the presence of the user
     */
    @GetMapping(value = "/user/presence", params = {"userName"})
-   //@CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public ResponseEntity<Object> getUserPresence(@Valid @RequestParam(value = "userName") String homeUserName){
       return userService.getUserPresence(homeUserName);
    }
 
+   /**
+    * PATCH METHOD
+    * Implements updateUserType endpoint, that calls the updateUserType service
+    * @param homeUser
+    * @return Object message
+    */
    @PatchMapping("/user/usertype")
-   //@CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('ADMIN')")
    public ResponseEntity<Object> updateUserType(@Valid @RequestBody HomeUser homeUser){
       return userService.updateUserType(homeUser);
@@ -126,10 +136,10 @@ public class UserEndPointController{
   
    /**
     * update user expirydate
-    * @return
+    * @param homeUser
+    * @return object message
     */
    @PatchMapping("/user/expiration")
-   //@CrossOrigin(origins = "http://localhost:4200")
    @PreAuthorize("hasRole('ADMIN') or hasRole('RENEWAL')")
    public ResponseEntity<Object> renewUser(@Valid @RequestBody HomeUser homeUser){
       return userService.renewUser(homeUser);

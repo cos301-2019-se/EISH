@@ -34,7 +34,7 @@ deviceid serial primary key,
 devicename text not null unique,
 devicetopic text not null unique,
 devicepriority devicePriorityType not null,
-idfromdevicetype serial references devicetype(devicetypeid) not null);
+devicetypeid serial references devicetype(devicetypeid) not null);
 
 CREATE TABLE deviceconsumption(
 deviceid serial references device(deviceid) not null,
@@ -51,3 +51,4 @@ CREATE TABLE homeconsumption(
 homeconsumptiontimestamp timestamp not null primary key,
 homeconsumption float not null
 );
+insert into devicetype(devicetypename,devicetypestates) values('TV',ARRAY['ON','OFF','STANDBY']);
