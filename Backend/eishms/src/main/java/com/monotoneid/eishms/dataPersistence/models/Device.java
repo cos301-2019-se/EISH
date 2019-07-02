@@ -66,7 +66,11 @@ public class Device {
         setDeviceName(newDeviceName);
         setDeviceTopic(newDeviceTopic);
         setDevicePriorityType(devicePriority.valueOf(newDevicePriorityType));
-        setDeviceStates(newDeviceStates);
+        String[] newStates = new String[newDeviceStates.length];
+        for(int i=0;i<deviceStates.length;i++){
+            newStates[i] = new String(newDeviceStates[i]);
+        }
+        setDeviceStates(newStates);
         
     }
   

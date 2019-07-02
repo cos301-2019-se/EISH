@@ -100,7 +100,7 @@ public class DevicesEndPointController{
     */
     @PostMapping("/device")
    // @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
-    public ResponseEntity<Object> addUser(@Valid @RequestBody Device newDevice){
+    public ResponseEntity<Object> addDevice(@Valid @RequestBody Device newDevice){
        return deviceService.addDevice(newDevice);
     }
 }

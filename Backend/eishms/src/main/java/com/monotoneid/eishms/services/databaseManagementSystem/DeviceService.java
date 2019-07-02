@@ -147,8 +147,8 @@ public class DeviceService {
         System.out.println(device.getDeviceTopic());
         System.out.println(device.getDevicePriority());        
         System.out.println(device.getDeviceStates()[0]);
-        String[] temp =(String[])device.getDeviceStates();
-        device.setDeviceStates(temp);
+       // String[] temp =(String[])device.getDeviceStates();
+        //device.setDeviceStates(temp);
 
         try {
             if (device == null) {
