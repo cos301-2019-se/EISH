@@ -54,44 +54,7 @@ public class DeviceService {
         }
     }
 
-    /**
-     * Updates the data of the specified with parsed in data
-     * @param newDevice
-     * @return Object message
-     * @exception null
-     * @exception ResourceNotFound
-     */
-    public ResponseEntity<Object> updateDevice(Device device) {
-        try {
-            if(device == null)
-                throw null;
-            else if(device.getDeviceName().isEmpty() == true
-                || device.getDevicePriority() != DevicePriorityType.PRIORITY_ALWAYSON
-                && device.getDevicePriority() != DevicePriorityType.PRIORITY_MUSTHAVE
-                && device.getDevicePriority() != DevicePriorityType.PRIORITY_NEUTRAL
-                && device.getDevicePriority() != DevicePriorityType.PRIORITY_NICETOHAVE
-                || device.getDeviceTopic().isEmpty() == true
-                || device.getDeviceStates() == null)
-                    throw null;
-            else {
-                Device foundDevice = devicesRepository.findById(device.getDeviceId()).orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
-                foundDevice.setDeviceName(device.getDeviceName());
-                foundDevice.setDevicePriorityType(device.getDevicePriority());
-                foundDevice.setDeviceTopic(device.getDeviceTopic());
-                foundDevice.setDeviceStates(device.getDeviceStates());
-                devicesRepository.save(foundDevice);
-                JSONObject responseObject = new JSONObject();
-                responseObject.put("message","Devices Updated!");
-                return new ResponseEntity<>(responseObject,HttpStatus.OK);
-            }
-        } catch(Exception e) {
-            System.out.println("Error: Input is " + e.getMessage() + "!");
-            if(e.getCause() == null)
-                return new ResponseEntity<>("Error: Failed to update device!",HttpStatus.PRECONDITION_FAILED);
-            else
-                return new ResponseEntity<>("Error: Failed to update device!",HttpStatus.NOT_FOUND);
-        }
-    }
+    
     
     /**
      * Controls the specified device with the MQTT device manager
@@ -132,13 +95,6 @@ public class DeviceService {
     }
 
     public ResponseEntity<Object> addDevice(Device device) {
-        System.out.println(device.getDeviceName());
-        System.out.println(device.getDeviceTopic());
-        System.out.println(device.getDevicePriority());        
-        System.out.println(device.getDeviceStates()[0]);
-       // String[] temp =(String[])device.getDeviceStates();
-        //device.setDeviceStates(temp);
-
         try {
             if (device == null) {
                 throw null;
@@ -150,35 +106,69 @@ public class DeviceService {
                 throw null;
             }
             if (device.getDevicePriority() != PRIORITY_ALWAYSON && device.getDevicePriority() != PRIORITY_MUSTHAVE
-                        && device.getDevicePriority() != PRIORITY_NEUTRAL
-                        && device.getDevicePriority() != PRIORITY_NICETOHAVE) {
+                    && device.getDevicePriority() != PRIORITY_NEUTRAL
+                    && device.getDevicePriority() != PRIORITY_NICETOHAVE) {
                     throw null;
                 }
-               
-              devicesRepository.save(device);
-            JSONObject responseObject = new JSONObject();
-            responseObject.put("message","Device added!");
-            return new ResponseEntity<>(responseObject,HttpStatus.OK);
-
+                if (device.getDeviceName() != null && device.getDeviceTopic() != null
+                && device.getDevicePriority() != null && device.getDeviceStates()!=null) {
+           
+                    devicesRepository.save(device);
+                    JSONObject responseObject = new JSONObject();
+                    responseObject.put("message","Device added!");
+                    return new ResponseEntity<>(responseObject,HttpStatus.OK);
+                } else{
+            throw null;
+        }    
         } catch(Exception e) {
             System.out.println("Error: Input is " + e.getMessage() + "!");
             return new ResponseEntity<>("Error: Failed to add device details!",HttpStatus.PRECONDITION_FAILED);
         }
      }
-        /*
+     /**
+     * Updates the data of the specified with parsed in data
+     * @param newDevice
+     * @return Object message
+     * @exception null
+     * @exception ResourceNotFound
+     */
+    public ResponseEntity<Object> updateDevice(Device device) {
         try {
-            
-            
-            if (device.getDeviceName() != null && device.getDeviceTopic() != null
-                    && device.getDevicePriority() != null) {
-               // DevicePriorityType newDevicePriorityType = DevicePriorityType.PRIORITY_ALWAYSON;
-                
-                
-                
-            } else{
+            if (device == null) {
                 throw null;
             }
-        
+            if (device.getDeviceName().isEmpty() 
+                    || device.getDeviceTopic().isEmpty()
+                    || device.getDevicePriority() == null
+                    || device.getDeviceStates()==null) {
+                throw null;
+            }
+            if (device.getDevicePriority() != PRIORITY_ALWAYSON && device.getDevicePriority() != PRIORITY_MUSTHAVE
+                    && device.getDevicePriority() != PRIORITY_NEUTRAL
+                    && device.getDevicePriority() != PRIORITY_NICETOHAVE) {
+                    throw null;
+                }
+                if (device.getDeviceName() != null && device.getDeviceTopic() != null
+                && device.getDevicePriority() != null && device.getDeviceStates()!=null) {
+                    Device foundDevice = devicesRepository.findById(device.getDeviceId()).orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
+                    foundDevice.setDeviceName(device.getDeviceName());
+                    foundDevice.setDevicePriorityType(device.getDevicePriority());
+                    foundDevice.setDeviceTopic(device.getDeviceTopic());
+                    foundDevice.setDeviceStates(device.getDeviceStates());
+                    devicesRepository.save(foundDevice);
+                    JSONObject responseObject = new JSONObject();
+                    responseObject.put("message","Devices Updated!");
+                    return new ResponseEntity<>(responseObject,HttpStatus.OK);
+            }else{
+                throw null;
+            }    
+        } catch(Exception e) {
+            System.out.println("Error: Input is " + e.getMessage() + "!");
+            if(e.getCause() == null)
+                return new ResponseEntity<>("Error: Failed to update device!",HttpStatus.PRECONDITION_FAILED);
+            else
+                return new ResponseEntity<>("Error: Failed to update device!",HttpStatus.NOT_FOUND);
+        }
     }
-    */
+       
 }

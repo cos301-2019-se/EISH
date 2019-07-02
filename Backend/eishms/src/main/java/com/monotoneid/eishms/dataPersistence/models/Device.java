@@ -16,18 +16,25 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity(name = "device")
 @Table(name = "device")
 @EntityListeners(AuditingEntityListener.class)
+@TypeDefs({
+    @TypeDef(
+        name = "string-array",
+        typeClass = StringArrayType.class
+    ),
 @TypeDef(
     name = "pgsql_enum",
     typeClass = PostgreSQLEnumType.class
-)
+)})
 public class Device {
 
         
@@ -50,6 +57,7 @@ public class Device {
     private DevicePriorityType devicePriority;
 
     //@Size(min = 1, message = "number of device states must be one or more")
+    @Type( type = "string-array" )
     @Column(name = "devicestates", columnDefinition = "text[]", updatable = true, nullable = false)
     private String[] deviceStates;
     
@@ -67,7 +75,7 @@ public class Device {
         setDeviceTopic(newDeviceTopic);
         setDevicePriorityType(devicePriority.valueOf(newDevicePriorityType));
         String[] newStates = new String[newDeviceStates.length];
-        for(int i=0;i<deviceStates.length;i++){
+        for(int i=0;i<newDeviceStates.length;i++){
             newStates[i] = new String(newDeviceStates[i]);
         }
         setDeviceStates(newStates);
