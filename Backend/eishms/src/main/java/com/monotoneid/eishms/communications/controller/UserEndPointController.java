@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.monotoneid.eishms.dataPersistence.models.HomeKey;
 import com.monotoneid.eishms.dataPersistence.models.HomeUser;
 import com.monotoneid.eishms.dataPersistence.repositories.HomeKeys;
@@ -106,8 +107,8 @@ public class UserEndPointController{
     */
    @DeleteMapping("/user")
    @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> removeUser(@Valid @RequestBody HomeUser homeUser){
-      return userService.removeUser(homeUser);
+   public ResponseEntity<Object> removeUser(@Valid @RequestBody @JsonProperty("userId") long userId){
+      return userService.removeUser(userId);
    }
 
    /**
@@ -130,8 +131,8 @@ public class UserEndPointController{
     */
    @PatchMapping("/user/usertype")
    @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> updateUserType(@Valid @RequestBody HomeUser homeUser){
-      return userService.updateUserType(homeUser);
+   public ResponseEntity<Object> updateUserType(@Valid @RequestBody @JsonProperty("userId") long userId, @JsonProperty("userType") String role){
+      return userService.updateUserType(userId,role);
    }
   
    /**
@@ -141,7 +142,7 @@ public class UserEndPointController{
     */
    @PatchMapping("/user/expiration")
    @PreAuthorize("hasRole('ADMIN') or hasRole('RENEWAL')")
-   public ResponseEntity<Object> renewUser(@Valid @RequestBody HomeUser homeUser){
-      return userService.renewUser(homeUser);
+   public ResponseEntity<Object> renewUser(@Valid @RequestBody  @JsonProperty("userId") long userId, @JsonProperty("numDays") int days){
+      return userService.renewUser(userId,days);
    }
 }

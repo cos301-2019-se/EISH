@@ -5,6 +5,7 @@ import java.util.List;
 import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.dataPersistence.models.DevicePriorityType;
 import com.monotoneid.eishms.dataPersistence.repositories.Devices;
+import com.monotoneid.eishms.dataPersistence.requestbodies.DeviceRequestBody;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MQTTDeviceManager;
 
@@ -55,7 +56,7 @@ public class DeviceService {
      * @exception null
      * @exception ResourceNotFound
      */
-    public ResponseEntity<Object> updateDevice(Device newDevice) {
+    public ResponseEntity<Object> updateDevice(DeviceRequestBody newDevice) {
         try {
             if(newDevice == null)
                 throw null;
@@ -92,7 +93,7 @@ public class DeviceService {
      * @param device
      * @return
      */
-    public ResponseEntity<Object> controlDevice(Device device) {
+    public ResponseEntity<Object> controlDevice(DeviceRequestBody device) {
         try {
             if(device == null)
                 throw null;
@@ -118,7 +119,7 @@ public class DeviceService {
      * @exception null
      * @exception ResourceNotFound
      */
-    public ResponseEntity<Object> removeDevice(Device deviceToDelete) {
+    public ResponseEntity<Object> removeDevice(DeviceRequestBody deviceToDelete) {
         try {
             if(deviceToDelete == null)
                 throw null;
