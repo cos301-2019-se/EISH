@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-
 import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.services.databaseManagementSystem.DeviceService;
 import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MQTTDeviceManager;
@@ -65,8 +64,8 @@ public class DevicesEndPointController{
      */
     @PutMapping("/device")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Object> updateDevice(@Valid @RequestBody Device newDevice){
-       return deviceService.updateDevice(newDevice);
+    public ResponseEntity<Object> updateDevice(@Valid @RequestBody Device device){
+       return deviceService.updateDevice(device);
     }
 
     /**
@@ -77,8 +76,8 @@ public class DevicesEndPointController{
      */
     @PatchMapping("/device")
     @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
-    public ResponseEntity<Object> controlDevice(@Valid @RequestBody Device device) {
-       return deviceService.controlDevice(device);
+    public ResponseEntity<Object> controlDevice(@Valid @RequestBody @JsonProperty("deviceId") long deviceId) {
+       return deviceService.controlDevice(deviceId);
     }
 
     /**
@@ -89,8 +88,8 @@ public class DevicesEndPointController{
     */
    @DeleteMapping("/device")
    @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> removeDevice(@Valid @RequestBody Device deviceToDelete){
-      return deviceService.removeDevice(deviceToDelete);
+   public ResponseEntity<Object> removeDevice(@Valid @RequestBody @JsonProperty("deviceId") long deviceId){
+      return deviceService.removeDevice(deviceId);
    }
    /**
     * POST METHOD
