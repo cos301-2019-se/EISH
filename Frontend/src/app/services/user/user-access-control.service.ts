@@ -1,13 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import 'rxjs/add/operator/map';
-import { map, mergeMap, switchMap, catchError } from 'rxjs/operators';
-import { forkJoin, pipe, Subject, Observable, Subscription} from 'rxjs';
-import { ifError } from 'assert';
-import { errorHandler } from '@angular/platform-browser/src/browser';
-import { error } from 'util';
+import { map, catchError } from 'rxjs/operators';
+import {Observable} from 'rxjs';
 import { User } from 'src/app/models/user-model';
-import { PARAMETERS } from '@angular/core/src/util/decorators';
 
 @Injectable({
   providedIn: 'root'
@@ -33,27 +29,23 @@ export class UserAccessControlService {
    */
   authenticateUser(userCredentials, loginInstance){
     var loginCred = {username : userCredentials.userName, password : userCredentials.userPassword};
-    //console.log("User credentials: " + loginCred);
-    //console.log("User credentials: " + loginCred.password);
+    
      return this.http.post(this.ROOT_URL+'auth/login/',loginCred).pipe(
       map( response => {
             this.data =  response,
-           //console.log("Server response: " + this.data.accessToken);
-            //console.log("Server Response Array: " + response[0].accessToken);
             sessionStorage.setItem('accessToken', this.data.accessToken),
             sessionStorage.setItem('userName' , userCredentials.userName);
+            
             //check if details are admin if true:
             if (userCredentials.userName == "admin")
               loginInstance.routeToChange();
-            else 
+            else //else go to dashboard
               loginInstance.routeToHomepage();
-            //else go to dashboard
-            //loginInstance.switcher();
 
       }),catchError(error => 
         loginInstance.error())
         ).subscribe();
-    
+
   }
 
   /**
@@ -75,7 +67,15 @@ export class UserAccessControlService {
 
   }
 
+  /**
+   * Retrieves user information from API
+   * GET Request
+   * exposed endpoint:
+   * @param userCredentials: json of user form data
+   * @returns Observerable array of type User
+   */
   getUser(): Observable<User> {
+
     let username = sessionStorage.getItem("userName");
     const params = new HttpParams().set("userName", username);
     return this.http.get<User>(this.ROOT_URL+'user/', { params });   
@@ -86,11 +86,10 @@ export class UserAccessControlService {
    * PUT Request
    * exposed endpoint:
    * @param userCredentials: json of user form data
-   * @returns Boolean
+   * @returns void
    */
-  changeCredentials(userCredentials, credentialInstance): any {
-    console.log(userCredentials);
-    //let userCred = {"userId" : , "userName": , "userEmail" : , "userPassword": , "userLocationTopic": ("owntracks/eishms/" + userCredentials.userDeviceName)};
+  changeCredentials(userCredentials, credentialInstance) {
+
     this.http.put(this.ROOT_URL + 'user/', userCredentials).subscribe(
      ( res: Response) =>{ 
        if(res.ok) 
@@ -100,30 +99,24 @@ export class UserAccessControlService {
     });
   }
 
-  /**'
+  /**
    * Sends user information to API, receives JWT upon success
    * POST Request
    * exposed endpoint:
    * @param credential Object
    * @returns
    */
-  registerUser(userCredentials, registerInstace):any{
-    let newCred = {
-      userName: userCredentials.userName,
-      userEmail: userCredentials.userEmail,
-      userPassword: userCredentials.userPassword,
-      userLocationTopic: userCredentials.userDeviceName
-    }
-    //console.log(newCred);
-    return this.http.post(this.ROOT_URL+'user/',newCred).pipe(
+  registerUser(userCredentials, registerInstance):any{
+
+    return this.http.post(this.ROOT_URL+'user/',userCredentials).pipe(
       map( 
         response => {
             this.data =  response,
             sessionStorage.clear()
-            registerInstace.route('/', '')
+            registerInstance.route('/', '')
           }
       ),catchError(error => 
-        registerInstace.error())
+        registerInstance.error())
         ).subscribe();
   }
 
@@ -135,9 +128,8 @@ export class UserAccessControlService {
    * @returns
    */
   authenticateKey(keyType, key, keyInstance): any{
-    //key.userKey ??
     let keyLogin = {username: keyType, password: key.userKey};
-    console.log(keyLogin);
+    
     return this.http.post(this.ROOT_URL+'auth/login/', keyLogin).pipe(
       map(
         response => {
@@ -148,6 +140,10 @@ export class UserAccessControlService {
           }
       ),catchError(error => 
        keyInstance.errorInForm())).subscribe();
+  }
+  
+  removeUser(){
+    
   }
 
 }

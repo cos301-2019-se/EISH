@@ -12,4 +12,35 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
   }
 
+  removeUser(){
+
+  }
+
+  editUser(){
+
+  }
+
+  addDevice(){
+
+  }
+
+  editDevice(){
+
+  }
+
+  removeDevice(){
+    
+  }
+
+  addPowerGenerator(){
+
+  }
+
+  editPowerGenerator(){
+
+  }
+
+  removePowerGenerator(){
+    
+  }
 }

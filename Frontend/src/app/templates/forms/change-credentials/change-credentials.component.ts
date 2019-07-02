@@ -35,8 +35,7 @@ export class ChangeCredentialsComponent implements OnInit {
     }else{
       this.formHeading = "Change Credentials";
       let theForm = this;
-      let observa = this.authenticationServices.getUser().subscribe(res => {
-        //console.log(res.userName);
+      let observable = this.authenticationServices.getUser().subscribe(res => {
         theForm.user.userId = res.userId;
         theForm.credentialsForm = this.fb.group({
           'userName':[res.userName,[Validators.required]],
@@ -58,6 +57,7 @@ export class ChangeCredentialsComponent implements OnInit {
   get getVariables(){
     return this.credentialsForm.controls;
   }
+
   /**
    * Called upon button click. Chooses which function to call based on submissionType
    */

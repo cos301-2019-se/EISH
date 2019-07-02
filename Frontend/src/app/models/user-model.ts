@@ -4,4 +4,7 @@ export class User{
     userEmail: String;
     userPassword: String;
     userLocationTopic: String;
+    userExpiryDate: any;
+    userType: String;
+
 }
