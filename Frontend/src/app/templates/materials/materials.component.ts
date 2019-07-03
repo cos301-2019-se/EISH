@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import  { MatSidenavModule,MatMenuModule} from  '@angular/material';
 
-const material = [MatSideNavModule,MatMenuModule];
+const material = [MatSidenavModule,MatMenuModule];
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
