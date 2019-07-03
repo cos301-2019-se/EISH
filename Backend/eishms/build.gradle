@@ -27,13 +27,11 @@ dependencies {
 	compile group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.48'
 	// https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3
 	compile group: 'org.eclipse.paho', name: 'org.eclipse.paho.client.mqttv3', version: '1.2.1'
-<<<<<<< HEAD
 	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
 
-=======
 	compile group:'com.vladmihalcea', name:'hibernate-types-52', version:'2.4.4'
->>>>>>> f3806dccde8d244e14093a95352c1da3db6e35bb
+	
 }
 test{
 	testLogging.showStandardStreams = true
