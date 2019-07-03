@@ -15,6 +15,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 
@@ -23,6 +26,7 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@JsonIgnoreProperties({"deviceConsumption"})
 @Entity(name = "device")
 @Table(name = "device")
 @EntityListeners(AuditingEntityListener.class)
@@ -62,8 +66,9 @@ public class Device {
     private String[] deviceStates;
     
    
+    @JsonManagedReference
     @OneToMany(mappedBy = "device")
-    private List<DeviceConsumption> deviceconsumptions= new ArrayList<DeviceConsumption>();
+    private List<DeviceConsumption> deviceConsumption= new ArrayList<DeviceConsumption>();
 
     public Device(){}
 
@@ -98,8 +103,9 @@ public class Device {
     public DevicePriorityType getDevicePriority(){
         return devicePriority;
     }
+    
     public List<DeviceConsumption> getDeviceConsumption(){
-        return deviceconsumptions;
+        return deviceConsumption;
     }
     
     
@@ -117,7 +123,7 @@ public class Device {
         this.devicePriority = newDevicePriorityType;
     }
     public void setDeviceConsumption(List<DeviceConsumption> newDeviceConsumption){
-       this.deviceconsumptions = newDeviceConsumption;
+       this.deviceConsumption = newDeviceConsumption;
     }
     
 }

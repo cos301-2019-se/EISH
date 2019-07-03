@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -24,7 +24,7 @@ public class DeviceConsumption {
     @EmbeddedId
     private DeviceConsumptionId deviceConsumptionId;
 
-    
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name="deviceid", insertable = false ,updatable = false, nullable = false)
     private Device device;

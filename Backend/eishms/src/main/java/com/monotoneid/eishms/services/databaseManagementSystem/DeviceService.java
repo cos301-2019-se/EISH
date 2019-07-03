@@ -7,8 +7,9 @@ import static com.monotoneid.eishms.dataPersistence.models.DevicePriorityType.PR
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.monotoneid.eishms.dataPersistence.models.Device;
-import com.monotoneid.eishms.dataPersistence.models.DevicePriorityType;
 import com.monotoneid.eishms.dataPersistence.repositories.Devices;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MQTTDeviceManager;
@@ -33,6 +34,7 @@ public class DeviceService {
      * Retrieves all the devices in the database
      * @return List of all devices
      */
+    
     public List<Device> retrieveAllDevices(){
         return devicesRepository.findAll();
     }

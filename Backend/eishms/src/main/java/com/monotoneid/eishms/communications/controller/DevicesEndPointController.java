@@ -89,7 +89,7 @@ public class DevicesEndPointController{
     */
    @DeleteMapping("/device")
    @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> removeDevice(@Valid @RequestBody @JsonProperty("deviceId") long deviceId){
+   public ResponseEntity<Object> removeDevice(@JsonProperty("deviceId") long deviceId){
       return deviceService.removeDevice(deviceId);
    }
    /**
@@ -99,7 +99,7 @@ public class DevicesEndPointController{
     * @return the status message
     */
     @PostMapping("/device")
-   // @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
     public ResponseEntity<Object> addDevice(@Valid @RequestBody Device newDevice){
        return deviceService.addDevice(newDevice);
     }
