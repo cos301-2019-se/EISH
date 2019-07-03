@@ -20,6 +20,9 @@ import { ConsumptionComponent } from './pages/consumption/consumption.component'
 import { ForecastComponent } from './pages/forecast/forecast.component';
 import { BatteryChartComponent } from './pages/dashboard/battery-chart/battery-chart.component';
 import { ConsumptionChartComponent } from './pages/consumption/consumption-chart/consumption-chart.component';
+import { SideNavComponent } from './side-nav/side-nav.component';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
 
 
 @NgModule({
@@ -37,14 +40,21 @@ import { ConsumptionChartComponent } from './pages/consumption/consumption-chart
     ConsumptionComponent,
     ForecastComponent,
     BatteryChartComponent,
-    ConsumptionChartComponent, 
+    ConsumptionChartComponent,
+    SideNavComponent, 
     //AccessControlInterceptor
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule
   ],
   providers: [UserAccessControlService, InputService, {
     provide: HTTP_INTERCEPTORS,
