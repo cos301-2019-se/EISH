@@ -15,19 +15,30 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@JsonIgnoreProperties({"deviceConsumption"})
 @Entity(name = "device")
 @Table(name = "device")
 @EntityListeners(AuditingEntityListener.class)
+@TypeDefs({
+    @TypeDef(
+        name = "string-array",
+        typeClass = StringArrayType.class
+    ),
 @TypeDef(
     name = "pgsql_enum",
     typeClass = PostgreSQLEnumType.class
-)
+)})
 public class Device {
 
         
@@ -50,12 +61,14 @@ public class Device {
     private DevicePriorityType devicePriority;
 
     //@Size(min = 1, message = "number of device states must be one or more")
+    @Type( type = "string-array" )
     @Column(name = "devicestates", columnDefinition = "text[]", updatable = true, nullable = false)
     private String[] deviceStates;
     
    
+    @JsonManagedReference
     @OneToMany(mappedBy = "device")
-    private List<DeviceConsumption> deviceconsumptions= new ArrayList<DeviceConsumption>();
+    private List<DeviceConsumption> deviceConsumption= new ArrayList<DeviceConsumption>();
 
     public Device(){}
 
@@ -66,7 +79,11 @@ public class Device {
         setDeviceName(newDeviceName);
         setDeviceTopic(newDeviceTopic);
         setDevicePriorityType(devicePriority.valueOf(newDevicePriorityType));
-        setDeviceStates(newDeviceStates);
+        String[] newStates = new String[newDeviceStates.length];
+        for(int i=0;i<newDeviceStates.length;i++){
+            newStates[i] = new String(newDeviceStates[i]);
+        }
+        setDeviceStates(newStates);
         
     }
   
@@ -86,8 +103,9 @@ public class Device {
     public DevicePriorityType getDevicePriority(){
         return devicePriority;
     }
+    
     public List<DeviceConsumption> getDeviceConsumption(){
-        return deviceconsumptions;
+        return deviceConsumption;
     }
     
     
@@ -105,7 +123,7 @@ public class Device {
         this.devicePriority = newDevicePriorityType;
     }
     public void setDeviceConsumption(List<DeviceConsumption> newDeviceConsumption){
-       this.deviceconsumptions = newDeviceConsumption;
+       this.deviceConsumption = newDeviceConsumption;
     }
     
 }
