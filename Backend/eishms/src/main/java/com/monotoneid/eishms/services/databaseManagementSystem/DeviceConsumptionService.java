@@ -3,8 +3,10 @@ package com.monotoneid.eishms.services.databaseManagementSystem;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.dataPersistence.models.DeviceConsumption;
 import com.monotoneid.eishms.dataPersistence.repositories.DeviceConsumptions;
+import com.monotoneid.eishms.dataPersistence.repositories.Devices;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,24 +15,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class DeviceConsumptionService{
     @Autowired
+    private Devices deviceRepository;
+
+    @Autowired
     private DeviceConsumptions deviceConsumptionRepository;
 
     public List<DeviceConsumption> retrieveAllConsumptions(){
         return deviceConsumptionRepository.findAll();
     }
-    public List<DeviceConsumption> retrieveDeviceConsumptionById(long DeviceToFind){
-        List<DeviceConsumption> foundDeviceConsumptionList = null;
-        try{
-             foundDeviceConsumptionList = deviceConsumptionRepository.getDeviceConsumptionofId(DeviceToFind)
-            .orElseThrow(() -> new ResourceNotFoundException("Device Consumption does not exist"));
-            return foundDeviceConsumptionList;
-        }catch (Exception e) {
-            System.out.println("Error: " + e.getMessage() + "!");
-            return foundDeviceConsumptionList;
+    public List<DeviceConsumption> retrieveDeviceConsumptionById(long deviceId){
+        try {
+            Device foundDevice = deviceRepository.findById(deviceId).orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
+            return foundDevice.getDeviceConsumption();
+        } catch(Exception e) {
+            System.out.println("Device does not exist!");
+            return null;
         }
     }
 
-public void  addDeviceConsumptionOfDeviceId(long referenceDeviceId,  Timestamp newDeviceConsumptionTimestamp, String newDeviceConsumptionSate, float newdeviceConsumption){
-    deviceConsumptionRepository.insertIntoDeviceConsumption(referenceDeviceId, newDeviceConsumptionTimestamp, newDeviceConsumptionSate, newdeviceConsumption);;
-}
+    public void  addDeviceConsumptionOfDeviceId(long referenceDeviceId,  Timestamp newDeviceConsumptionTimestamp, String newDeviceConsumptionSate, float newdeviceConsumption){
+        deviceConsumptionRepository.insertIntoDeviceConsumption(referenceDeviceId, newDeviceConsumptionTimestamp, newDeviceConsumptionSate, newdeviceConsumption);;
+    }
 }

@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.hibernate.annotations.Type;
@@ -21,7 +22,7 @@ import org.hibernate.annotations.TypeDef;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
-
+@JsonIgnoreProperties({"userPassword"})
 @Entity(name = "homeuser")
 @Table(name = "homeuser")
 @EntityListeners(AuditingEntityListener.class)
