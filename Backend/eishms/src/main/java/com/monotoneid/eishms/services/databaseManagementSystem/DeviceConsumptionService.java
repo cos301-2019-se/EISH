@@ -24,7 +24,7 @@ public class DeviceConsumptionService{
 
 
 
-    public void insertDeviceConsumption(long referenceDeviceId,  Timestamp newDeviceConsumptionTimestamp, String newDeviceConsumptionState, float newDeviceConsumption){
+    public void addDeviceConsumption(long referenceDeviceId,  Timestamp newDeviceConsumptionTimestamp, String newDeviceConsumptionState, float newDeviceConsumption){
         try{
             Device foundDevice = devicesRepository.findById(referenceDeviceId)
                     .orElseThrow(() -> new ResourceNotFoundException("Device does not exist"));
@@ -43,7 +43,7 @@ public List<DeviceConsumption> retrieveDeviceConsumptionById(long deviceId){
             Device foundDevice = deviceRepository.findById(deviceId).orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
             return foundDevice.getDeviceConsumption();
         } catch(Exception e) {
-            System.out.println("Device does not exist!");
+            System.out.println("Error: " + e.getMessage() + "!");
             return null;
         }
     }
