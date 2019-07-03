@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class DeviceConsumptionService{
     @Autowired
+    private Devices deviceRepository;
+
+    @Autowired
     private DeviceConsumptions deviceConsumptionRepository;
     @Autowired
     private Devices devicesRepository;
@@ -31,22 +34,17 @@ public class DeviceConsumptionService{
             System.out.println("Error: " + e.getMessage() + "!");
         }
    }
-        /*
+        
     public List<DeviceConsumption> retrieveAllConsumptions(){
         return deviceConsumptionRepository.findAll();
     }
-    public List<DeviceConsumption> retrieveDeviceConsumptionById(long deviceToFind){
-        List<DeviceConsumption> foundDeviceConsumptionList = null;
-        try{
-             foundDeviceConsumptionList = deviceConsumptionRepository.getDeviceConsumptionofId(DeviceToFind)
-            .orElseThrow(() -> new ResourceNotFoundException("Device Consumption does not exist"));
-            return foundDeviceConsumptionList;
-        }catch (Exception e) {
-            System.out.println("Error: " + e.getMessage() + "!");
-            return foundDeviceConsumptionList;
+public List<DeviceConsumption> retrieveDeviceConsumptionById(long deviceId){
+        try {
+            Device foundDevice = deviceRepository.findById(deviceId).orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
+            return foundDevice.getDeviceConsumption();
+        } catch(Exception e) {
+            System.out.println("Device does not exist!");
+            return null;
         }
     }
-
-
-*/
 }
