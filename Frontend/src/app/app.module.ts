@@ -22,18 +22,8 @@ import { BatteryChartComponent } from './pages/dashboard/battery-chart/battery-c
 import { ConsumptionChartComponent } from './pages/consumption/consumption-chart/consumption-chart.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
-<<<<<<< Updated upstream
 import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
 
-=======
-import { MatMenuModule,MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
-import {MatInputModule} from '@angular/material/input';
->>>>>>> Stashed changes
 
 @NgModule({
   declarations: [
@@ -51,12 +41,8 @@ import {MatInputModule} from '@angular/material/input';
     ForecastComponent,
     BatteryChartComponent,
     ConsumptionChartComponent,
-<<<<<<< Updated upstream
     SideNavComponent, 
     //AccessControlInterceptor
-=======
-    SideNavComponent
->>>>>>> Stashed changes
   ],
   imports: [
     BrowserModule,
@@ -68,21 +54,7 @@ import {MatInputModule} from '@angular/material/input';
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
-<<<<<<< Updated upstream
     MatListModule
-=======
-    MatListModule,
-    MatMenuModule,
-    MatExpansionModule,
-    MatAutocompleteModule,
-    MatFormFieldModule,
-    FormsModule,
-    MatInputModule,
-    BrowserAnimationsModule
-  ],
-  exports:[
-    BrowserAnimationsModule
->>>>>>> Stashed changes
   ],
   providers: [UserAccessControlService, InputService, {
     provide: HTTP_INTERCEPTORS,
