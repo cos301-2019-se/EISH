@@ -26,7 +26,7 @@ public class DeviceService {
 
     @Autowired
     private Devices devicesRepository;
-    
+
     @Autowired
     private MQTTDeviceManager deviceManager;
 
@@ -57,45 +57,12 @@ public class DeviceService {
     }
 
     
-    
     /**
-     * Controls the specified device with the MQTT device manager
-     * @param device
-     * @return
-     */
-    public ResponseEntity<Object> controlDevice(long deviceId) {
-        try {
-            devicesRepository.findById(deviceId).orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
-            
-            JSONObject responseObject = new JSONObject();
-            responseObject.put("message","Devices Updated!");
-            return new ResponseEntity<>(responseObject,HttpStatus.OK);
-        } catch(Exception e) {
-            System.out.println("Error: Input is " + e.getMessage() + "!");
-            return new ResponseEntity<>("Error: Failed to change device state!",HttpStatus.NOT_FOUND);
-        }
-    }
-
-    /**
-     * Removes the specified device 
-     * @param device
+     * Adds a new device into the database with the specified data
+     * @param newDevice
      * @return Object message
      * @exception null
-     * @exception ResourceNotFound
      */
-    public ResponseEntity<Object> removeDevice(long deviceId) {
-        try {
-            devicesRepository.findById(deviceId).orElseThrow(() -> new ResourceNotFoundException("Device does not exist"));
-            devicesRepository.deleteById(deviceId);
-            JSONObject responseObject = new JSONObject();
-            responseObject.put("message", "Success: Device has been deleted!");
-            return new ResponseEntity<>(responseObject, HttpStatus.OK);
-        } catch (Exception e) {
-            System.out.println("Error: Input is " + e.getMessage() + "!");
-            return new ResponseEntity<>("Error: Failed to delete device!", HttpStatus.NOT_FOUND);
-        }
-    }
-
     public ResponseEntity<Object> addDevice(Device device) {
         try {
             if (device == null) {
@@ -116,6 +83,7 @@ public class DeviceService {
                 && device.getDevicePriority() != null && device.getDeviceStates()!=null) {
            
                     devicesRepository.save(device);
+                    deviceManager.addDevice(device); //To add the device to the MQTT list of devices
                     JSONObject responseObject = new JSONObject();
                     responseObject.put("message","Device added!");
                     return new ResponseEntity<>(responseObject,HttpStatus.OK);
@@ -127,7 +95,8 @@ public class DeviceService {
             return new ResponseEntity<>("Error: Failed to add device details!",HttpStatus.PRECONDITION_FAILED);
         }
      }
-     /**
+
+    /**
      * Updates the data of the specified with parsed in data
      * @param newDevice
      * @return Object message
@@ -172,5 +141,28 @@ public class DeviceService {
                 return new ResponseEntity<>("Error: Failed to update device!",HttpStatus.NOT_FOUND);
         }
     }
-       
+
+    
+
+    
+
+    /**
+     * Removes the specified device 
+     * @param device
+     * @return Object message
+     * @exception null
+     * @exception ResourceNotFound
+     */
+    public ResponseEntity<Object> removeDevice(long deviceId) {
+        try {
+            devicesRepository.findById(deviceId).orElseThrow(() -> new ResourceNotFoundException("Device does not exist"));
+            devicesRepository.deleteById(deviceId);
+            JSONObject responseObject = new JSONObject();
+            responseObject.put("message", "Success: Device has been deleted!");
+            return new ResponseEntity<>(responseObject, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("Error: Input is " + e.getMessage() + "!");
+            return new ResponseEntity<>("Error: Failed to delete device!", HttpStatus.NOT_FOUND);
+        }
+    }       
 }
