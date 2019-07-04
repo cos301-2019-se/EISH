@@ -118,10 +118,6 @@ public class UserService{
     public List<HomeUser> retrieveAllUsers(){
         return usersRepository.findAll();
     }
-    //@JsonIgnoreProperties(value={"userPassword"})
-     //public List<HomeUser> retrieveFilteredHomeUsers(){
-    //    return usersRepository.findAll();
-    //}
 
     /**
      * Updates the attributes of specified user with parsed in data
@@ -197,21 +193,21 @@ public class UserService{
 
     public ResponseEntity<Object> updateUserType(long userId, String role) {
         try {            
-                if(UserType.valueOf(role) == UserType.ROLE_GUEST
-                ||UserType.valueOf(role) == UserType.ROLE_RESIDENT
-                ||UserType.valueOf(role) == null)
-                    throw null;
-            
-                HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
-                foundUser.setUserType(UserType.valueOf(role));
-                usersRepository.save(foundUser);
-                if(foundUser.getUserType() == UserType.ROLE_GUEST)
-                    renewUser(userId, 1);
-                else if(foundUser.getUserType() == UserType.ROLE_RESIDENT)
-                    renewUser(userId, 365);
-                JSONObject responseObject = new JSONObject();
-                responseObject.put("message","Users type updated!");
-                return new ResponseEntity<>(responseObject,HttpStatus.OK);
+            if(UserType.valueOf(role) == UserType.ROLE_GUEST
+            ||UserType.valueOf(role) == UserType.ROLE_RESIDENT
+            ||UserType.valueOf(role) == null)
+                throw null;
+        
+            HomeUser foundUser = usersRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+            foundUser.setUserType(UserType.valueOf(role));
+            usersRepository.save(foundUser);
+            if(foundUser.getUserType() == UserType.ROLE_GUEST)
+                renewUser(userId, 1);
+            else if(foundUser.getUserType() == UserType.ROLE_RESIDENT)
+                renewUser(userId, 365);
+            JSONObject responseObject = new JSONObject();
+            responseObject.put("message","Users type updated!");
+            return new ResponseEntity<>(responseObject,HttpStatus.OK);
         } catch(Exception e){
             if(e.getCause() == null)
                 return new ResponseEntity<>("Error: Failed to update user type!",HttpStatus.PRECONDITION_FAILED);
