@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.monotoneid.eishms.dataPersistence.models.Device;
+import com.monotoneid.eishms.services.databaseManagementSystem.DeviceConsumptionService;
 
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -14,6 +15,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -32,8 +34,11 @@ public class MQTTDevice {
     String[] publishTopics;
     int[] deviceQos; 
 
+    String deviceState;
+
     //Device Consumption Service
-    
+    @Autowired
+    DeviceConsumptionService dcs;
 
     //Device Model
     Device device;
@@ -68,12 +73,13 @@ public class MQTTDevice {
                         float consumption = Float.parseFloat(energyObject.get("Power"));
                         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
                         //Put in consumption database
+                        dcs.addDeviceConsumption(device.getDeviceId(), currentTimestamp, deviceState, consumption);
                     } else if (topic.matches(subscribeTopics[1])) { // power state
 
                     } else if (topic.matches(subscribeTopics[2])) { // requested consumption
 
                     } else {
-
+                        //ignore all other topics
                     }
                 }
             
