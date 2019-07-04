@@ -1,5 +1,7 @@
 package com.monotoneid.eishms.communications.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import com.monotoneid.eishms.dataPersistence.models.DeviceConsumption;
@@ -29,8 +31,8 @@ public class DeviceConsumptionEndPointController{
     * @return a the valid Device
     */
     @GetMapping(value = "/consumption",params = {"deviceId"})
-    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-    public ResponseEntity<DeviceConsumption> retriveDevice(@Valid @RequestParam(value = "deviceId") long deviceId){
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    public List<DeviceConsumption> retrieveDeviceConsumption(@Valid @RequestParam(value = "deviceId") long deviceId){
        return deviceConsumptionService.retrieveDeviceConsumptionById(deviceId);
     }
 

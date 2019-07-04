@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
-public class DevicesEndPointController{
+public class DeviceEndPointController{
 
    @Autowired
    private DeviceService deviceService;
@@ -41,7 +41,7 @@ public class DevicesEndPointController{
     * @return the status message
     */
    @PostMapping("/device")
-   // @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
+   @PreAuthorize("hasRole('ADMIN')")
    public ResponseEntity<Object> addDevice(@Valid @RequestBody Device newDevice){
       return deviceService.addDevice(newDevice);
    }
@@ -64,7 +64,7 @@ public class DevicesEndPointController{
     * @return an object with all devices 
     */
    @GetMapping("/devices")
-   // @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public List<Device> retrieveAllDevices(){
    return deviceService.retrieveAllDevices();
    }
@@ -82,18 +82,6 @@ public class DevicesEndPointController{
    }
 
    /**
-    * PATCH METHOD
-    * Implements the controlDevice endpoint, that calls the controlDevice service from deviceManager
-    * @param deviceToDelete
-    * @return device state
-    */
-   @PatchMapping("/device")
-   @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
-   public ResponseEntity<Object> controlDevice(@Valid @RequestBody @JsonProperty("deviceId") long deviceId, @JsonProperty("deviceState") String deviceState) {
-      return deviceManager.controlDevice(deviceId,deviceState);
-   }
-
-   /**
     * DELETE METHOD
     * Implements removeDevice endpoint, that calls the removeDevice service
     * @param deviceToDelete
@@ -104,5 +92,16 @@ public class DevicesEndPointController{
    public ResponseEntity<Object> removeDevice(@JsonProperty("deviceId") long deviceId){
       return deviceService.removeDevice(deviceId);
    }
- 
+
+   /**
+    * PATCH METHOD
+    * Implements the controlDevice endpoint, that calls the controlDevice service from deviceManager
+    * @param deviceToDelete
+    * @return device state
+    */
+   @PatchMapping("/device")
+   @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
+   public ResponseEntity<Object> controlDevice(@JsonProperty("deviceId") long deviceId, @JsonProperty("deviceState") String deviceState) {
+      return deviceManager.controlDevice(deviceId,deviceState);
+   }
 }

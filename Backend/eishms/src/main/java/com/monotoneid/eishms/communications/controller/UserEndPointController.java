@@ -72,7 +72,7 @@ public class UserEndPointController{
     * @return a the valid homeUser
     */
    @GetMapping(value = "/user",params = {"userName"})
-   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+   @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
    public ResponseEntity<HomeUser> retriveUser(@Valid @RequestParam(value = "userName") String homeUserName){
       return userService.retrieveUser(homeUserName);
    }
@@ -95,8 +95,8 @@ public class UserEndPointController{
     */
    @PutMapping("/user")
    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<Object> updateUser(@Valid @RequestBody HomeUser newHomeUser){
-      return userService.updateUser(newHomeUser);
+   public ResponseEntity<Object> updateUser(@Valid @RequestBody HomeUser homeUser){
+      return userService.updateUser(homeUser);
    }
 
    /**
@@ -107,7 +107,7 @@ public class UserEndPointController{
     */
    @DeleteMapping("/user")
    @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> removeUser(@Valid @RequestBody @JsonProperty("userId") long userId){
+   public ResponseEntity<Object> removeUser(@JsonProperty("userId") long userId){
       return userService.removeUser(userId);
    }
 
@@ -131,7 +131,7 @@ public class UserEndPointController{
     */
    @PatchMapping("/user/usertype")
    @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> updateUserType(@Valid @RequestBody @JsonProperty("userId") long userId, @JsonProperty("userType") String role){
+   public ResponseEntity<Object> updateUserType(@JsonProperty("userId") long userId, @JsonProperty("userType") String role){
       return userService.updateUserType(userId,role);
    }
   
@@ -142,7 +142,7 @@ public class UserEndPointController{
     */
    @PatchMapping("/user/expiration")
    @PreAuthorize("hasRole('ADMIN') or hasRole('RENEWAL')")
-   public ResponseEntity<Object> renewUser(@Valid @RequestBody  @JsonProperty("userId") long userId, @JsonProperty("numDays") int days){
+   public ResponseEntity<Object> renewUser(@JsonProperty("userId") long userId, @JsonProperty("numDays") int days){
       return userService.renewUser(userId,days);
    }
 }
