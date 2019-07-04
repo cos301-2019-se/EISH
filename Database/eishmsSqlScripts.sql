@@ -19,22 +19,25 @@ insert into homeuser(username,useremail,userpassword,userlocationtopic,usertype,
 
 select * from homeuser;
 
+CREATE TABLE homeuserpresence(
+	homeuserpresencetimestamp timestamp not null,
+	homeuserpresence boolean not null,
+	userid serial references homeuserpresence(userid) not null,
+	primary key(userid,homeuserpresencetimestamp));
+
+
 /*
 DEVICES AND ENTITIES RELATED TO DEVICES
 */
 CREATE TYPE devicePriorityType AS ENUM ('PRIORITY_MUSTHAVE', 'PRIORITY_ALWAYSON', 'PRIORITY_NEUTRAL', 'PRIORITY_NICETOHAVE');
 
-CREATE TABLE devicetype(
-devicetypeid serial primary key,
-devicetypename text not null unique,
-devicetypestates text[] not null);
 
 CREATE TABLE device(
 deviceid serial primary key,
 devicename text not null unique,
 devicetopic text not null unique,
 devicepriority devicePriorityType not null,
-devicetypeid serial references devicetype(devicetypeid) not null);
+devicestates text[] not null);
 
 CREATE TABLE deviceconsumption(
 deviceid serial references device(deviceid) not null,
@@ -52,3 +55,14 @@ homeconsumptiontimestamp timestamp not null primary key,
 homeconsumption float not null
 );
 insert into devicetype(devicetypename,devicetypestates) values('TV',ARRAY['ON','OFF','STANDBY']);
+
+/*
+GENERATORS AND ENTITIES RELATED TO GENERATORS
+*/
+CREATE TABLE generator(
+	generatorid serial primary key,
+	generatorname text not null unique,
+	generatorurl text not null unique,
+);
+
+CREATE TABLE generatorgeneration();	
