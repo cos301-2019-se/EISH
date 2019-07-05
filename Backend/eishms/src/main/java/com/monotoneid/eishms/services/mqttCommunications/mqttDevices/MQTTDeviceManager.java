@@ -15,12 +15,11 @@ import net.minidev.json.JSONObject;
 
 @Service
 public class MQTTDeviceManager {
-    
+
     private ArrayList<MQTTDevice> mqttDevices;
 
     public MQTTDeviceManager(Devices devicesRepository) {
         List<Device> deviceModels = devicesRepository.findAll();
-
         mqttDevices = new ArrayList<MQTTDevice>();
         deviceModels.forEach((device) -> {
             mqttDevices.add(new MQTTDevice(device));
@@ -36,6 +35,7 @@ public class MQTTDeviceManager {
             MQTTDevice foundDevice = null;
             for (int i=0; i < mqttDevices.size() && (foundDevice = mqttDevices.get(i)).getId() != deviceId; i++);
             if (foundDevice != null) {
+                deviceState.toUpperCase();
                 if(deviceState == "ON")
                     foundDevice.turnOn();
                 else if(deviceState == "OFF")

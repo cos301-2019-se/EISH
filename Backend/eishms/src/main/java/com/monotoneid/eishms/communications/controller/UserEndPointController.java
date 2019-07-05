@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -105,9 +106,9 @@ public class UserEndPointController{
     * @param homeUser
     * @return an object with all the remaining users
     */
-   @DeleteMapping("/user")
+   @DeleteMapping("/user/{userId}")
    @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> removeUser(@JsonProperty("userId") long userId){
+   public ResponseEntity<Object> removeUser(@PathVariable long userId){
       return userService.removeUser(userId);
    }
 
@@ -129,10 +130,10 @@ public class UserEndPointController{
     * @param homeUser
     * @return Object message
     */
-   @PatchMapping("/user/usertype")
+   @PatchMapping("/user/usertype/{userId}/{userType}")
    @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> updateUserType(@JsonProperty("userId") long userId, @JsonProperty("userType") String role){
-      return userService.updateUserType(userId,role);
+   public ResponseEntity<Object> updateUserType(@PathVariable long userId, @PathVariable String userType){
+      return userService.updateUserType(userId,userType);
    }
   
    /**
@@ -140,9 +141,9 @@ public class UserEndPointController{
     * @param homeUser
     * @return object message
     */
-   @PatchMapping("/user/expiration")
+   @PatchMapping("/user/expiration/{userId}/{numDays}")
    @PreAuthorize("hasRole('ADMIN') or hasRole('RENEWAL')")
-   public ResponseEntity<Object> renewUser(@JsonProperty("userId") long userId, @JsonProperty("numDays") int days){
-      return userService.renewUser(userId,days);
+   public ResponseEntity<Object> renewUser(@PathVariable long userId, @PathVariable int numDays){
+      return userService.renewUser(userId,numDays);
    }
 }

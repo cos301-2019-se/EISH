@@ -25,8 +25,8 @@ public class DeviceService {
     @Autowired
     private Devices devicesRepository;
 
-    @Autowired
-    private MQTTDeviceManager deviceManager;
+    //@Autowired
+    //private MQTTDeviceManager deviceManager;
 
     /**
      * Retrieves all the devices in the database
@@ -81,7 +81,7 @@ public class DeviceService {
                 && device.getDevicePriority() != null && device.getDeviceStates()!=null) {
            
                     devicesRepository.save(device);
-                    deviceManager.addDevice(device); //To add the device to the MQTT list of devices
+                    //deviceManager.addDevice(device); //To add the device to the MQTT list of devices
                     JSONObject responseObject = new JSONObject();
                     responseObject.put("message","Device added!");
                     return new ResponseEntity<>(responseObject,HttpStatus.OK);
