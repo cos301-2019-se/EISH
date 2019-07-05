@@ -104,4 +104,11 @@ public class DeviceEndPointController{
    public ResponseEntity<Object> controlDevice(@JsonProperty("deviceId") long deviceId, @JsonProperty("deviceState") String deviceState) {
       return deviceManager.controlDevice(deviceId,deviceState);
    }
+
+   @GetMapping("/control")
+   public String controlDevice() {
+       deviceManager.controlDevice(1, "OFF");
+       return "Device should be OFF";
+   }
+   
 }
