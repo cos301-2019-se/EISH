@@ -32,6 +32,7 @@ public class DeviceConsumptionId implements Serializable{
     public Timestamp getDeviceConsumptionTimeStamp(){
         return deviceConsumptionTimestamp;
     }
+        
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

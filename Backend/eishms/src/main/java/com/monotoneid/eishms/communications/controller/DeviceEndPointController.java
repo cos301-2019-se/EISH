@@ -31,8 +31,8 @@ public class DeviceEndPointController{
    @Autowired
    private DeviceService deviceService;
 
-   @Autowired
-   private MQTTDeviceManager deviceManager;
+   //@Autowired
+   //private MQTTDeviceManager deviceManager;
 
    /**
     * POST METHOD
@@ -82,6 +82,18 @@ public class DeviceEndPointController{
    }
 
    /**
+    * PATCH METHOD
+    * Implements the controlDevice endpoint, that calls the controlDevice service from deviceManager
+    * @param deviceToDelete
+    * @return device state
+    */
+   @PatchMapping("/device")
+   @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
+   public ResponseEntity<Object> controlDevice(@Valid @RequestBody @JsonProperty("deviceId") long deviceId, @JsonProperty("deviceState") String deviceState) {
+      return null; //deviceManager.controlDevice(deviceId,deviceState);
+   }
+
+   /**
     * DELETE METHOD
     * Implements removeDevice endpoint, that calls the removeDevice service
     * @param deviceToDelete
@@ -93,15 +105,5 @@ public class DeviceEndPointController{
       return deviceService.removeDevice(deviceId);
    }
 
-   /**
-    * PATCH METHOD
-    * Implements the controlDevice endpoint, that calls the controlDevice service from deviceManager
-    * @param deviceToDelete
-    * @return device state
-    */
-   @PatchMapping("/device")
-   @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
-   public ResponseEntity<Object> controlDevice(@JsonProperty("deviceId") long deviceId, @JsonProperty("deviceState") String deviceState) {
-      return deviceManager.controlDevice(deviceId,deviceState);
-   }
+   
 }
