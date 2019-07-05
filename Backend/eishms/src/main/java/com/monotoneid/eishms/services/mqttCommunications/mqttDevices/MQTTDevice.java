@@ -16,12 +16,14 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 //@Service
 public class MQTTDevice {
-    String serverUrl = "tcp://192.168.8.100:1883";
+    String serverUrl = "tcp://192.168.8.101:1883";
     /* This Requires no ssl */
     //String caFilePath = "/your_ssl/cacert.pem";
     //String clientCrtFilePath = "/your_ssl/client.pem";
@@ -34,23 +36,18 @@ public class MQTTDevice {
     String[] publishTopics;
     int[] deviceQos; 
 
-    String deviceState;
+    String deviceState = "ON";
 
-    //Device Consumption Service
-    @Autowired
-    DeviceConsumptionService dcs;
+    MQTTDeviceManager deviceManager;
 
-    //Device Model
     Device device;
 
-    //MQTT client
     IMqttAsyncClient asyncClient;
 
-    public MQTTDevice(Device device) {
+    public MQTTDevice(Device device, MQTTDeviceManager deviceManager) {
         this.device = device;
         this.asyncClientId = UUID.randomUUID().toString();
-        //Add all the topics to subscribe to, and all topics to publish to.
-        
+        this.deviceManager = deviceManager;
         try {
             this.asyncClient = new MqttAsyncClient(serverUrl, asyncClientId);
             MqttConnectOptions options = new MqttConnectOptions();
@@ -67,17 +64,18 @@ public class MQTTDevice {
             this.asyncClient.setCallback(new MqttCallback(){
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
+
                     if (topic.matches(subscribeTopics[0])) { // telemetry
-                        Map<String, String> telemetryObject = jsonToMap(message.getPayload().toString());
-                        Map<String, String> energyObject = jsonToMap(telemetryObject.get("ENERGY"));
-                        float consumption = Float.parseFloat(energyObject.get("Power"));
+                        String jsonMessage = new String(message.getPayload());
+                        Map<String, Map<String, Float>> telemetryObject = jsonToMap(jsonMessage);
+                        String hack = new String(""+telemetryObject.get("ENERGY").get("Power")+"");
+                        float consumption = Float.parseFloat(hack);
                         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-                        //Put in consumption database
-                        dcs.addDeviceConsumption(device.getDeviceId(), currentTimestamp, deviceState, consumption);
+                        deviceManager.deviceConsumptionService.addDeviceConsumption(device.getDeviceId(), currentTimestamp, deviceState, consumption);
                     } else if (topic.matches(subscribeTopics[1])) { // power state
 
                     } else if (topic.matches(subscribeTopics[2])) { // requested consumption
-
+                        
                     } else {
                         //ignore all other topics
                     }
@@ -85,11 +83,12 @@ public class MQTTDevice {
             
                 @Override
                 public void deliveryComplete(IMqttDeliveryToken token) {
+
                 }
             
                 @Override
                 public void connectionLost(Throwable cause) {
-                    
+                    System.out.println("Connection lost attempting to reconnect!");
                 }
             });
         } catch(MqttException me) {
@@ -163,12 +162,24 @@ public class MQTTDevice {
             me.printStackTrace();
         }
 
-
-
-        return "";
+        return deviceState;
     }
 
-    private Map<String, String> jsonToMap(String strJSON) {
+    /* Helper Methods */
+    private Map<String, Map<String, Float>> jsonToMap(String strJSON) {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Map<String, Float>> jsonMap = null;
+        
+        try {
+            jsonMap = mapper.readValue(strJSON, Map.class);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        return jsonMap;
+    }
+
+    private Map<String, String> jsonToMapString(String strJSON) {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> jsonMap = null;
         
@@ -180,4 +191,6 @@ public class MQTTDevice {
 
         return jsonMap;
     }
+
+    /* Handler Functions */
 }

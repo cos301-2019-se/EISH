@@ -6,7 +6,9 @@ import java.util.List;
 import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.dataPersistence.repositories.Devices;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
+import com.monotoneid.eishms.services.databaseManagementSystem.DeviceConsumptionService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,19 +17,22 @@ import net.minidev.json.JSONObject;
 
 @Service
 public class MQTTDeviceManager {
-
+    
+    @Autowired
+    DeviceConsumptionService deviceConsumptionService;
+    
     private ArrayList<MQTTDevice> mqttDevices;
 
     public MQTTDeviceManager(Devices devicesRepository) {
         List<Device> deviceModels = devicesRepository.findAll();
         mqttDevices = new ArrayList<MQTTDevice>();
         deviceModels.forEach((device) -> {
-            mqttDevices.add(new MQTTDevice(device));
+            addDevice(device);
         });
     }
 
     public void addDevice(Device newDevice) {
-        mqttDevices.add(new MQTTDevice(newDevice));
+        mqttDevices.add(new MQTTDevice(newDevice,this));
     }
     
     public ResponseEntity<Object> controlDevice(long deviceId, String deviceState) {
