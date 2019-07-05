@@ -18,10 +18,9 @@ public class DeviceConsumptionService{
    
     @Autowired
     private DeviceConsumptions deviceConsumptionRepository;
+
     @Autowired
     private Devices devicesRepository;
-
-
 
     public void addDeviceConsumption(long referenceDeviceId,  Timestamp newDeviceConsumptionTimestamp, String newDeviceConsumptionState, float newDeviceConsumption){
         try{

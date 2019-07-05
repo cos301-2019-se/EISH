@@ -105,5 +105,22 @@ public class DeviceEndPointController{
       return deviceService.removeDevice(deviceId);
    }
 
+   /**
+    * PATCH METHOD
+    * Implements the controlDevice endpoint, that calls the controlDevice service from deviceManager
+    * @param deviceToDelete
+    * @return device state
+    */
+   @PatchMapping("/device")
+   @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
+   public ResponseEntity<Object> controlDevice(@JsonProperty("deviceId") long deviceId, @JsonProperty("deviceState") String deviceState) {
+      return deviceManager.controlDevice(deviceId,deviceState);
+   }
+
+   @GetMapping("/control")
+   public String controlDevice() {
+       deviceManager.controlDevice(1, "OFF");
+       return "Device should be OFF";
+   }
    
 }
