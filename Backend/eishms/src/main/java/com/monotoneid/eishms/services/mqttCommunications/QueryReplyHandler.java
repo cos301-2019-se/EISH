@@ -13,7 +13,7 @@ public class QueryReplyHandler {
     }
 
     public boolean register(QueryReply queryReply) {
-        
+        return false;
     }
 
     public int numberOfComplete() {

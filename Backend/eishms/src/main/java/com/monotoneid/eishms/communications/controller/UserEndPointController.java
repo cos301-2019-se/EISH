@@ -60,11 +60,11 @@ public class UserEndPointController{
     * @param newHomeUser
     * @return the status message
     */
-    @PostMapping("/user")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('GENERAL')")
-    public ResponseEntity<Object> addUser(@Valid @RequestBody HomeUser newHomeUser){
-       return userService.addUser(newHomeUser);
-    }
+   @PostMapping("/user")
+   @PreAuthorize("hasRole('ADMIN') or hasRole('GENERAL')")
+   public ResponseEntity<Object> addUser(@Valid @RequestBody HomeUser newHomeUser){
+      return userService.addUser(newHomeUser);
+   }
 
    /**
     * GET METHOD

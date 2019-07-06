@@ -20,7 +20,7 @@ public class DeviceConsumptionService{
     private DeviceConsumptions deviceConsumptionRepository;
 
     @Autowired
-    private Devices devicesRepository;
+    private Devices devicesRepository; 
 
     public void addDeviceConsumption(long referenceDeviceId,  Timestamp newDeviceConsumptionTimestamp, String newDeviceConsumptionState, float newDeviceConsumption){
         try{
@@ -32,21 +32,23 @@ public class DeviceConsumptionService{
         }catch (Exception e) {
             System.out.println("Error: " + e.getMessage() + "!");
         }
-   }
+    }
         
     public List<DeviceConsumption> retrieveAllConsumptions(){
         return deviceConsumptionRepository.findAll();
     }
+    
     public List<DeviceConsumption> retrieveDeviceConsumptionById(long deviceId){
-            try {
-                Device foundDevice = devicesRepository.findById(deviceId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
-                return foundDevice.getDeviceConsumption();
-            } catch(Exception e) {
-                System.out.println("Error: " + e.getMessage() + "!");
-                return null;
-            }
+        try {
+            Device foundDevice = devicesRepository.findById(deviceId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
+            return foundDevice.getDeviceConsumption();
+        } catch(Exception e) {
+            System.out.println("Error: " + e.getMessage() + "!");
+            return null;
+        }
     }
+
    /* 
     public List<DeviceConsumption> retriveConsumptionByDeviceId(long deviceId){
         try{
@@ -59,7 +61,7 @@ public class DeviceConsumptionService{
         }
     }
     */ 
-    public List<DeviceConsumption> retrieveFilteredDeviceConsumptionByDeviceIdAndTimeStamps(long deviceId,Timestamp startTimeStamp, Timestamp endTimeStamp){
+    //public List<DeviceConsumption> retrieveFilteredDeviceConsumptionByDeviceIdAndTimeStamps(long deviceId,Timestamp startTimeStamp, Timestamp endTimeStamp){
         // try{
         //     List<DeviceConsumption> foundDeviceConsumptionList = deviceConsumptionRepository.findFilteredDeviceConsumption(deviceId, startTimeStamp, endTimeStamp)
         //             .orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
@@ -67,13 +69,13 @@ public class DeviceConsumptionService{
 
         // } catch(Exception e) {
         //     System.out.println("Error: " + e.getMessage() + "!");
-             return null;
+             //return null;
         // }
         
         
-    }
+    //}
 
-    public List<DeviceConsumption> retrieveAllDeviceCases(long deviceId, String startTimeStamp, String endTimeStamp){
+    public List<DeviceConsumption> retrieveAllDeviceCases(long deviceId, String startTimeStamp, String endTimeStamp) {
         Timestamp convertedStartTimestamp = null;
         Timestamp convertedEndTimestamp = null;
         try{
@@ -87,14 +89,13 @@ public class DeviceConsumptionService{
                 convertedEndTimestamp = new Timestamp(System.currentTimeMillis());
             }
             
-        List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findByDeviceConsumptionBetween(deviceId,convertedStartTimestamp,convertedEndTimestamp);
+            //Device founDevice = devicesRepository.findById(deviceId).orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
+            List<DeviceConsumption> foundDeviceConsumptionList = deviceConsumptionRepository.findByDeviceConsumptionBetween(deviceId,convertedStartTimestamp,convertedEndTimestamp);
                   //  .orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
             return foundDeviceConsumptionList;
         } catch(Exception e) {
             System.out.println("Error: " + e.getMessage() + "!");
             return null;
         }
-    }
-    
-    
+    }   
 }
