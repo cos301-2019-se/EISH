@@ -8,20 +8,21 @@
           add, remove and edit device properties
         </mat-panel-description>
       </mat-expansion-panel-header>
-        <button mat-raised-button >Add Device</button>
-
+        <button mat-raised-button (click)="addDeviceForm()" >Add Device</button>
+        <br>
+        <br>
         <div class="searchDiv">
             <form class="serchDevice">
                 <mat-form-field class="searchWidth">
-                  <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="userDeviceName" [matAutocomplete]="auto">
+                  <input type="text" placeholder="Enter device name" aria-label="device name" matInput [formControl]="userDeviceName" [matAutocomplete]="auto">
                   <mat-autocomplete #auto="matAutocomplete">
                     <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                       {{option}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
+                <button mat-button color="primary" (click)="returnDevice()">Search</button>
               </form>
-                <button (click)="returnDevice()">Search</button>
                 <div *ngIf=deviceFound>
                   <p>{{deviceResult}}</p>
                 </div>
@@ -39,6 +40,55 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <p>table with user information</p>
+      <button mat-raised-button color="primary" (click) = "removeUser()">Remove User</button>
+      <br>
+      <br>
+      <div class="table-container mat-elevation-z8" >
+        <table mat-table [dataSource]="dataSource" >
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox (change)="$event ? masterToggle():null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="checkboxLabel()">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row):null"
+                            [checked]="selection.isSelected(row)">
+              </mat-checkbox>  
+            </td>
+          </ng-container>
+
+
+
+          <!--FIRST COLUMN-->
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef>No.</th>
+            <td  mat-cell *matCellDef="let element">{{element.position}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td  mat-cell *matCellDef="let element">{{element.name}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="weight">
+            <th mat-header-cell *matHeaderCellDef>Weight</th>
+            <td  mat-cell *matCellDef="let element">{{element.weight}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="symbol">
+            <th mat-header-cell *matHeaderCellDef>Symbol</th>
+            <td  mat-cell *matCellDef="let element">{{element.symbol}}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+              (click)="selection.toggle(row)">
+          </tr>
+        </table>
+      </div>
     </mat-expansion-panel>
 
     <mat-expansion-panel (opened)="panelOpenState = true"
@@ -54,3 +104,31 @@
       <p>present generators</p>
     </mat-expansion-panel>
   </mat-accordion>
+
+
+<!--Dialog for add device-->
+<!-- <div #addDevice>
+  <h2 mat-dialog-title>Add Device</h2>
+  <div mat-dialog-content>
+    <p>Device name</p>
+    <mat-form-field>
+      <input matInput [(ngModel)]="deviceModel.deviceName">
+    </mat-form-field>
+    <p>Device topic</p>
+    <mat-form-field>
+      <input matInput [(ngModel)]="deviceModel.deviceTopic">
+    </mat-form-field>
+    <p>Device priority</p>
+    <mat-form-field>
+      <mat-select>
+        <mat-option *ngFor="let priority of devicePriorities " [value]="devicePriorities">
+          {{devicePriority}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button (click) = "cancelSubmittion()">Cancel</button>
+    <button mat-raised-button (click) = "addDevice()">Add</button>
+  </div>
+</div> -->

@@ -10,12 +10,12 @@ body {
 }
 
 .container{
-  width: 30%;
+  width: 50%;
   margin-left: auto;
   margin-right: auto;
   border: 0px;
   border-radius: 5px;
-  background-color:rgb(46, 46, 46);
+  background-color:rgb(34, 47, 63);
 }
 
 .formContainer{
@@ -27,7 +27,9 @@ label{
   color: rgb(246, 246, 246);
   text-align: left;  
 }
-
+body{
+  background-color: lightseagreen;
+}
 input{
   text-indent: 2%;
 }

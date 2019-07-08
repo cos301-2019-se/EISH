@@ -32,6 +32,7 @@ export class ChangeCredentialsComponent implements OnInit {
         'userPassword':[null,[Validators.required,Validators.minLength(8),Validators.maxLength(40)]],
         'userDeviceName':[null,[Validators.minLength(3),Validators.maxLength(25)]]
       });
+      this.Action = "Submit";
     }else{
       this.formHeading = "Change Credentials";
       let theForm = this;
@@ -44,11 +45,12 @@ export class ChangeCredentialsComponent implements OnInit {
           'userDeviceName':[res.userLocationTopic,[Validators.minLength(3),Validators.maxLength(25)]]
         });
       });
+      this.Action = "Submit";
     }
-    this.Action = "Submit!";
    }
 
   ngOnInit() {
+    this.Action = "Submit"
   }
 
   route(route, routeLocation){

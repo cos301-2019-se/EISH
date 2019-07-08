@@ -5,5 +5,14 @@
   }
   
   .searchWidth{
-    width: 80%;
+    width: 50%;
   }
+
+table{
+  width:100%;
+}
+
+.table-container{
+  height:250px;
+  overflow:auto;
+}

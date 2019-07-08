@@ -57,8 +57,6 @@ export class LoginComponent implements OnInit {
    * if guest has expired, route to keyPage
    */
   login(formData){
-    //sanitize and validate
-    //if admin admin: go to server, according to response:  make token and  route to change credntials or wrong credntials
     if (!this.loginForm.invalid)
       this.AuthenticationServices.authenticateUser(formData.value, this);
 

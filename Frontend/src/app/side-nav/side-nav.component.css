@@ -1,12 +1,24 @@
 .sidenav-container {
   height: 100%;
 }
+
+.navHeader{
+  background-color: rgb(106, 210, 236);
+
+}
+.pageContent{
+  padding: 20px;
+  height: 100vh;
+}
 .sidenav {
   width: 200px;
 }
 
+button[mat-icon-button]{
+  padding-right:15px;
+}
 .sidenav .mat-toolbar {
-  background: inherit;
+  background:rgb(106, 210, 236);
 }
 
 .mat-toolbar.mat-primary {

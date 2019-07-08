@@ -22,9 +22,14 @@ import { BatteryChartComponent } from './pages/dashboard/battery-chart/battery-c
 import { ConsumptionChartComponent } from './pages/consumption/consumption-chart/consumption-chart.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
-
-
+import {MatTableModule, MatMenuModule,MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import {MatInputModule,MatCheckboxModule} from '@angular/material';
+import {MatSelectModule } from '@angular/material/select';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,8 +46,7 @@ import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, Mat
     ForecastComponent,
     BatteryChartComponent,
     ConsumptionChartComponent,
-    SideNavComponent, 
-    //AccessControlInterceptor
+    SideNavComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +58,20 @@ import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, Mat
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    MatMenuModule,
+    MatExpansionModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatInputModule,
+    MatSelectModule,
+    MatTableModule,
+    MatCheckboxModule,
+    BrowserAnimationsModule
+  ],
+  exports:[
+    BrowserAnimationsModule
   ],
   providers: [UserAccessControlService, InputService, {
     provide: HTTP_INTERCEPTORS,
