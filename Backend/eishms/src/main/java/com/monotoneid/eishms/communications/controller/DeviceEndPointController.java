@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -87,10 +88,21 @@ public class DeviceEndPointController{
     * @param deviceToDelete
     * @return an object with deleted device
     */
-   @DeleteMapping("/device")
+   @DeleteMapping("/device/{deviceId}")
    @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> removeDevice(@JsonProperty("deviceId") long deviceId){
+   public ResponseEntity<Object> removeDevice(@PathVariable long deviceId){
       return deviceService.removeDevice(deviceId);
+   }
+
+   /**
+    * GET METHOD
+    * Implements getDeviceStates endpoint, that calls the getDeviceStates service
+    * @return
+    */
+   @GetMapping(value = "/device/state")
+   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+   public List<Object> getDeviceStates() {
+      return deviceManager.getDeviceStates();
    }
 
    /**
@@ -99,16 +111,9 @@ public class DeviceEndPointController{
     * @param deviceToDelete
     * @return device state
     */
-   @PatchMapping("/device")
+   @PatchMapping("/device/{deviceId}/{deviceState}")
    @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
-   public ResponseEntity<Object> controlDevice(@JsonProperty("deviceId") long deviceId, @JsonProperty("deviceState") String deviceState) {
+   public ResponseEntity<Object> controlDevice(@PathVariable long deviceId, @PathVariable String deviceState) {
       return deviceManager.controlDevice(deviceId,deviceState);
    }
-
-   @GetMapping("/control")
-   public String controlDevice() {
-       deviceManager.controlDevice(1, "OFF");
-       return "Device should be OFF";
-   }
-   
 }

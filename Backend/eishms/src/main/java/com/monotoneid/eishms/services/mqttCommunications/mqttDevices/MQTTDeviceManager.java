@@ -21,7 +21,6 @@ public class MQTTDeviceManager {
     @Autowired
     DeviceConsumptionService deviceConsumptionService;
     
-/*    
     private ArrayList<MQTTDevice> mqttDevices;
 
     public MQTTDeviceManager(Devices devicesRepository) {
@@ -35,18 +34,28 @@ public class MQTTDeviceManager {
     public void addDevice(Device newDevice) {
         mqttDevices.add(new MQTTDevice(newDevice,this));
     }
+
+    public List<Object> getDeviceStates() {
+        List<Object> returnList = new ArrayList<Object>();
+        mqttDevices.forEach((device) -> {    
+            JSONObject responseObject = new JSONObject();
+            responseObject.put("deviceId",device.getId());
+            responseObject.put("deviceState",device.getCurrentState());
+            returnList.add(responseObject);
+        });
+        return returnList;
+    }
     
     public ResponseEntity<Object> controlDevice(long deviceId, String deviceState) {
         try{
             MQTTDevice foundDevice = null;
             for (int i=0; i < mqttDevices.size() && (foundDevice = mqttDevices.get(i)).getId() != deviceId; i++);
             if (foundDevice != null) {
+                deviceState.toUpperCase();
                 if(deviceState == "ON")
                     foundDevice.turnOn();
                 else if(deviceState == "OFF")
                     foundDevice.turnOff();
-                else if(deviceState == "TOGGLE")
-                    foundDevice.toggle();
                 else
                     throw null;
                 JSONObject responseObject = new JSONObject();
@@ -62,5 +71,4 @@ public class MQTTDeviceManager {
                 return new ResponseEntity<>("Error: Failed to change device state!",HttpStatus.NOT_FOUND);
         }
     }
-    */
 }

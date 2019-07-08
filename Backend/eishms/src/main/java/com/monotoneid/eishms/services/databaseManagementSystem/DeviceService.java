@@ -25,14 +25,13 @@ public class DeviceService {
     @Autowired
     private Devices devicesRepository;
 
-    //@Autowired
-   // private MQTTDeviceManager deviceManager;
+    @Autowired
+    private MQTTDeviceManager deviceManager;
 
     /**
      * Retrieves all the devices in the database
      * @return List of all devices
      */
-    
     public List<Device> retrieveAllDevices(){
         return devicesRepository.findAll();
     }
@@ -53,7 +52,6 @@ public class DeviceService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
     
     /**
      * Adds a new device into the database with the specified data
@@ -81,18 +79,17 @@ public class DeviceService {
                 && device.getDevicePriority() != null && device.getDeviceStates()!=null) {
            
                     devicesRepository.save(device);
-                    //deviceManager.addDevice(device); //To add the device to the MQTT list of devices
+                    deviceManager.addDevice(device); //To add the device to the MQTT list of devices
                     JSONObject responseObject = new JSONObject();
                     responseObject.put("message","Device added!");
                     return new ResponseEntity<>(responseObject,HttpStatus.OK);
-                } else{
-            throw null;
-        }    
+                } else
+                    throw null;    
         } catch(Exception e) {
             System.out.println("Error: Input is " + e.getMessage() + "!");
             return new ResponseEntity<>("Error: Failed to add device details!",HttpStatus.PRECONDITION_FAILED);
         }
-     }
+    }
 
     /**
      * Updates the data of the specified with parsed in data
@@ -139,10 +136,6 @@ public class DeviceService {
                 return new ResponseEntity<>("Error: Failed to update device!",HttpStatus.NOT_FOUND);
         }
     }
-
-    
-
-    
 
     /**
      * Removes the specified device 
