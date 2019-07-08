@@ -31,14 +31,7 @@ public class DeviceConsumptionEndPointController{
     * @param deviceId
     * @return a the valid Device
     */
-    
-    @GetMapping(value = "/consumption",params = {"deviceId"})
-    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-    public List<DeviceConsumption> retrieveDeviceConsumption(@Valid @RequestParam(value = "deviceId") long deviceId){
-           return deviceConsumptionService.retrieveDeviceConsumptionById(deviceId);
-    }
-    
-    
+     
     @GetMapping(value ="/consumption", params={"deviceId","startTimeStamp","endTimeStamp"})
     @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public List<DeviceConsumption> retrieveDeviceConsumptionCases(@RequestParam(value ="deviceId", required = true) long deviceId
