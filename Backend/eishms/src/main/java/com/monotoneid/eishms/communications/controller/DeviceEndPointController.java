@@ -82,7 +82,7 @@ public class DeviceEndPointController{
    public ResponseEntity<Device> retriveDevice(@Valid @RequestParam(value = "deviceId") long deviceId){
       return deviceService.retrieveDevice(deviceId);
    }
-
+  
    /**
     * DELETE METHOD
     * Implements removeDevice endpoint, that calls the removeDevice service

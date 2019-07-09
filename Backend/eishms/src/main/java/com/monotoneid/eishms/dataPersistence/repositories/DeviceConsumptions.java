@@ -13,15 +13,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository()
 
-public interface DeviceConsumptions extends JpaRepository<DeviceConsumption,DeviceConsumptionId> {
+public interface DeviceConsumptions extends JpaRepository<DeviceConsumption,DeviceConsumptionId>{
 
+    @Query(value="select * from deviceconsumption  where deviceid= ?1 and deviceconsumptiontimestamp between ?2 and ?3",nativeQuery =true)
+    public Optional<List<DeviceConsumption>> findByDeviceConsumptionIdAndDeviceConsumptionTimestampBetween(long deviceid,Timestamp startTimeStamp,Timestamp endTimeStamp);
     
-    //@Query(name="select * from deviceconsumption where deviceid=?1 and deviceconsumptiontimestamp>=?2 and deviceconsumptiontimestamp<=?3",nativeQuery =true)
-    //public Optional<List<DeviceConsumption>> findFilteredDeviceConsumption(long deviceid,Timestamp startTimeStamp,Timestamp endTimeStamp);
-
-    //public List<DeviceConsumption> findAllByIdBetween(DeviceConsumptionId startDeviceConsumptionId,DeviceConsumptionId endDeviceConsumptionId);
-   // public Optional<List<DeviceConsumption>> findAllByDeviceId(long deviceId);
-   
-   @Query(name="select * from deviceconsumption where deviceid = ?1 and (deviceconsumptiontimestamp between ?2 and ?3)",nativeQuery = true)
-    public List<DeviceConsumption> findByDeviceConsumptionBetween(long deviceid,Timestamp startTimeStamp,Timestamp endTimeStamp);
 }
