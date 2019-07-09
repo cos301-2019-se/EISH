@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.services.databaseManagementSystem.DeviceService;
+import com.monotoneid.eishms.services.externalCommunicatons.Weather;
 import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MQTTDeviceManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,5 +116,13 @@ public class DeviceEndPointController{
    @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
    public ResponseEntity<Object> controlDevice(@PathVariable long deviceId, @PathVariable String deviceState) {
       return deviceManager.controlDevice(deviceId,deviceState);
+   }
+
+   @Autowired
+   Weather weat;
+
+   @GetMapping("/weather")
+   public StringBuffer getWeather() {
+      return weat.getCurrentWeather();
    }
 }
