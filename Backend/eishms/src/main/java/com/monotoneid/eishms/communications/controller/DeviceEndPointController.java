@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.services.databaseManagementSystem.DeviceService;
 import com.monotoneid.eishms.services.externalCommunicatons.Weather;

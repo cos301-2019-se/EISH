@@ -1,15 +1,10 @@
 package com.monotoneid.eishms.communications.controller;
-
-import java.sql.Timestamp;
 import java.util.List;
-
-import javax.validation.Valid;
 
 import com.monotoneid.eishms.dataPersistence.models.DeviceConsumption;
 import com.monotoneid.eishms.services.databaseManagementSystem.DeviceConsumptionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +24,7 @@ public class DeviceConsumptionEndPointController{
     * GET METHOD
     * Implements retrieveDeviceConsumption endpoint, that calls the retrieveDeviceConsumption service
     * @param deviceId
-    * @return a the valid Device
+    * @return a the valid DeviceConsumptionList
     */
      
     @GetMapping(value ="/consumption", params={"deviceId","startTimeStamp","endTimeStamp"})
@@ -39,6 +34,13 @@ public class DeviceConsumptionEndPointController{
     @RequestParam(value ="endTimeStamp", required = true) String endTimeStamp){
         
         return deviceConsumptionService.retrieveAllDeviceCases(deviceId, startTimeStamp, endTimeStamp);
+    }
+
+    @GetMapping(value = "/consumption", params={"deviceId","interval"})
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    public List<DeviceConsumption> retrieveDeviceConsumptionBetweenInterval(@RequestParam(value ="deviceId", required = true) long deviceId
+    ,@RequestParam(value ="interval", required = true) String interval){
+        return deviceConsumptionService.retrieveBetweenInterval(deviceId, interval);
     }
     
 

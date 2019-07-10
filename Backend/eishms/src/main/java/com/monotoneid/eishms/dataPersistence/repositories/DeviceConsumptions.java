@@ -17,5 +17,8 @@ public interface DeviceConsumptions extends JpaRepository<DeviceConsumption,Devi
 
     @Query(value="select * from deviceconsumption  where deviceid= ?1 and deviceconsumptiontimestamp between ?2 and ?3",nativeQuery =true)
     public Optional<List<DeviceConsumption>> findByDeviceConsumptionIdAndDeviceConsumptionTimestampBetween(long deviceid,Timestamp startTimeStamp,Timestamp endTimeStamp);
+  
+    @Query(value="select * from deviceconsumption where deviceid= ?1 and deviceconsumptiontimestamp>=now() - interval ?2 order by deviceconsumptiontimestamp desc",nativeQuery=true)
+    public Optional<List<DeviceConsumption>> findDeviceConsumptionBetweenInterval(long deviceId,String interval);
     
 }

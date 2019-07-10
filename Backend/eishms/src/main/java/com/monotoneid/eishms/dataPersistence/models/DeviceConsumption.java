@@ -29,8 +29,8 @@ public class DeviceConsumption {
     @JoinColumn(name="deviceid", insertable = false ,updatable = false, nullable = false)
     private Device device;
 
-    @Column(name = "deviceconsumption", columnDefinition = "float", updatable = true, nullable = false)
-    private float deviceConsumption;
+    @Column(name = "deviceconsumption", columnDefinition = "float", updatable = true, nullable = true)
+    private Float deviceConsumption;
 
     //@Id
     @Column(name = "deviceconsumptiontimestamp", columnDefinition = "TIMESTAMP", insertable = false , updatable = false, nullable = false)
@@ -61,7 +61,7 @@ public class DeviceConsumption {
        return device;
     }
 
-    public float getDeviceConsumption(){
+    public Float getDeviceConsumption(){
         return deviceConsumption;
     }
 
@@ -82,7 +82,7 @@ public class DeviceConsumption {
         this.device = newDevice;
     }
 
-    public void setDeviceConsumption(float newDeviceConsumption){
+    public void setDeviceConsumption(Float newDeviceConsumption){
         this.deviceConsumption = newDeviceConsumption;
     }
 
