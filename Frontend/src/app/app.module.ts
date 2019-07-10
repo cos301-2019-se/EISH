@@ -22,14 +22,13 @@ import { BatteryChartComponent } from './pages/dashboard/battery-chart/battery-c
 import { ConsumptionChartComponent } from './pages/consumption/consumption-chart/consumption-chart.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import {MatTableModule, MatMenuModule,MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
+import {MatSlideToggleModule,MatExpansionModule,MatAutocompleteModule,MatFormFieldModule,MatSelectModule,MatInputModule,MatCheckboxModule,MatDialogModule,MatTableModule, MatMenuModule,MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatFormFieldModule} from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-import {MatInputModule,MatCheckboxModule} from '@angular/material';
-import {MatSelectModule } from '@angular/material/select';
+import { DeviceModalComponent } from './pages/settings/device-modal/device-modal.component';
+import { ChartsModule} from 'ng2-charts';
+import 'hammerjs';
+import { IconsModule,ButtonsModule,WavesModule,TableModule  } from 'node_modules/angular-bootstrap-md';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,7 +45,8 @@ import {MatSelectModule } from '@angular/material/select';
     ForecastComponent,
     BatteryChartComponent,
     ConsumptionChartComponent,
-    SideNavComponent
+    SideNavComponent,
+    DeviceModalComponent
   ],
   imports: [
     BrowserModule,
@@ -60,6 +60,7 @@ import {MatSelectModule } from '@angular/material/select';
     MatIconModule,
     MatListModule,
     MatMenuModule,
+    MatSlideToggleModule,
     MatExpansionModule,
     MatAutocompleteModule,
     MatFormFieldModule,
@@ -67,8 +68,13 @@ import {MatSelectModule } from '@angular/material/select';
     MatInputModule,
     MatSelectModule,
     MatTableModule,
-    MatCheckboxModule,
-    BrowserAnimationsModule
+    MatCheckboxModule,MatDialogModule,
+    BrowserAnimationsModule,
+    IconsModule,
+    ButtonsModule,
+    WavesModule,
+    TableModule,
+    ChartsModule
   ],
   exports:[
     BrowserAnimationsModule
@@ -79,6 +85,7 @@ import {MatSelectModule } from '@angular/material/select';
     multi: true
 
   }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents:[DeviceModalComponent ]
 })
 export class AppModule { }

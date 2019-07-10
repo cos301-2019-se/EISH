@@ -1,0 +1,11 @@
+[mat-dialog-close]{
+    background-color: red;
+}
+
+.submit{
+    background-color: greenyellow;
+}
+
+.modal{
+    width:60%; 
+}
