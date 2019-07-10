@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.messaging.simp.*;
 
 import net.minidev.json.JSONObject;
 
@@ -20,6 +21,9 @@ public class MQTTDeviceManager {
     
     @Autowired
     DeviceConsumptionService deviceConsumptionService;
+
+    @Autowired
+    SimpMessagingTemplate simpMessagingTemplate;
     
     private ArrayList<MQTTDevice> mqttDevices;
 
@@ -60,5 +64,11 @@ public class MQTTDeviceManager {
             else
                 return new ResponseEntity<>("Error: Failed to change device state!",HttpStatus.NOT_FOUND);
         }
+    }
+
+    public String getDeviceStateById(long deviceId) {
+        MQTTDevice foundDevice = mqttDevices.get(0);
+        for (int i=0; i < mqttDevices.size() && (foundDevice = mqttDevices.get(i)).getId() != deviceId; i++);
+        return foundDevice.getCurrentState();
     }
 }

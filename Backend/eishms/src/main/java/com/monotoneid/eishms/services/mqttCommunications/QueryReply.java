@@ -45,6 +45,10 @@ public class QueryReply {
         return false;    
     }
 
+    public String getReplyMessage() {
+        return replyMessage;
+    }
+
     public boolean replyExists() {
         return replyMessage.length() != 0;
     }
