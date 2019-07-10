@@ -14,17 +14,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DeviceConsumptionService{
-    @Autowired
-    private Devices deviceRepository;
-
+   
     @Autowired
     private DeviceConsumptions deviceConsumptionRepository;
 
     @Autowired
-    private Devices devicesRepository;
+    private Devices devicesRepository; 
 
     public void addDeviceConsumption(long referenceDeviceId,  Timestamp newDeviceConsumptionTimestamp, String newDeviceConsumptionState, float newDeviceConsumption){
-        try{
+        try{            
             Device foundDevice = devicesRepository.findById(referenceDeviceId)
                     .orElseThrow(() -> new ResourceNotFoundException("Device does not exist"));
             DeviceConsumption newDeviceToAdd = new DeviceConsumption(newDeviceConsumption, foundDevice, newDeviceConsumptionTimestamp, newDeviceConsumptionState);
@@ -33,17 +31,23 @@ public class DeviceConsumptionService{
             System.out.println("Error: " + e.getMessage() + "!");
         }
    }
-        
-    public List<DeviceConsumption> retrieveAllConsumptions(){
-        return deviceConsumptionRepository.findAll();
-    }
-public List<DeviceConsumption> retrieveDeviceConsumptionById(long deviceId){
-        try {
-            Device foundDevice = deviceRepository.findById(deviceId).orElseThrow(() -> new ResourceNotFoundException("Device does not exist!"));
-            return foundDevice.getDeviceConsumption();
+     
+    public List<DeviceConsumption> retrieveAllDeviceCases(long deviceId, String startTimeStamp, String endTimeStamp){
+        try{
+            devicesRepository.findById(deviceId).orElseThrow(() -> new ResourceNotFoundException("device does not exist!"));
+              
+            String removeQuotesStartTimeStamp =startTimeStamp.replaceAll("^\"|\"$","");
+            Timestamp convertedStartTimestamp = Timestamp.valueOf(removeQuotesStartTimeStamp);
+
+            String removeQuotesEndTimeStamp =endTimeStamp.replaceAll("^\"|\"$","");
+            Timestamp convertedEndTimestamp = Timestamp.valueOf(removeQuotesEndTimeStamp);
+
+            List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findByDeviceConsumptionIdAndDeviceConsumptionTimestampBetween(deviceId,convertedStartTimestamp,convertedEndTimestamp)
+                        .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
+                return foundDeviceConsumptionList;
         } catch(Exception e) {
             System.out.println("Error: " + e.getMessage() + "!");
-            return null;
+            throw e;
         }
-    }
+    }        
 }
