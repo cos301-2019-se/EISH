@@ -7,5 +7,6 @@ export class User{
     userExpiryDate: any;
     userType: String;
     userPresence: Boolean;
+    //userRole: String
 
 }

@@ -1,4 +1,4 @@
-export class Device{
+export interface Device{
     deviceId:Number;
     deviceName: String;
     deviceTopic: String;

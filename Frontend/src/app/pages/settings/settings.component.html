@@ -16,15 +16,38 @@
                 <mat-form-field class="searchWidth">
                   <input type="text" placeholder="Enter device name" aria-label="device name" matInput [formControl]="userDeviceName" [matAutocomplete]="auto">
                   <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    <mat-option *ngFor="let option of filteredOptions | async " [value]="option">
                       {{option}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
                 <button mat-button color="primary" (click)="returnDevice()">Search</button>
               </form>
-                <div *ngIf=deviceFound>
-                  <p>{{deviceResult}}</p>
+                <div *ngIf=deviceFound >
+                  <table mdbTable striped="true" responsive="true" hover="true" small="true">
+                    <thead>
+                       <th *ngFor="let head of deviceTableHeaders" scope="col">{{head}}</th>
+                    </thead>
+                    <tbody>
+                       <tr *ngFor="let device of deviceResult; let deviceId = index">
+                           <td>
+                             <span  contenteditable="true" (keyup)="changeValue(userId, 'expiryDate', $event)" (blur)="updateDeviceList(deviceId, 'deviceName', $event)">{{device.deviceName}}</span>
+                           </td>
+                           <td>
+                             <span  contenteditable="true" (keyup)="changeValue(userId, 'expiryDate', $event)" (blur)="updateDeviceList(deviceId, 'deviceTopic', $event)">{{device.deviceTopic}}</span>
+                           </td>
+                           <td>
+                             <span  contenteditable="true" (keyup)="changeValue(userId, 'expiryDate', $event)" (blur)="updateDeviceList(deviceId, 'devicePriorityType', $event)">{{device.devicePriorityType}}</span>
+                           </td>
+                           
+                           <td>
+                             <span class="table-remove">
+                               <button type="button" mdbBtn color="danger" rounded="true" size="sm" class="my-0" (click)="removeDevice(device.deviceId)">Remove</button>
+                             </span>
+                           </td>
+                         </tr>
+                    </tbody>
+                   </table> 
                 </div>
         </div>
     </mat-expansion-panel>
@@ -39,55 +62,40 @@
           remove users and edit user credentials
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <p>table with user information</p>
-      <button mat-raised-button color="primary" (click) = "removeUser()">Remove User</button>
       <br>
       <br>
       <div class="table-container mat-elevation-z8" >
-        <table mat-table [dataSource]="dataSource" >
-          <ng-container matColumnDef="select">
-            <th mat-header-cell *matHeaderCellDef>
-              <mat-checkbox (change)="$event ? masterToggle():null"
-                            [checked]="selection.hasValue() && isAllSelected()"
-                            [indeterminate]="checkboxLabel()">
-              </mat-checkbox>
-            </th>
-            <td mat-cell *matCellDef="let row">
-              <mat-checkbox (click)="$event.stopPropagation()"
-                            (change)="$event ? selection.toggle(row):null"
-                            [checked]="selection.isSelected(row)">
-              </mat-checkbox>  
-            </td>
-          </ng-container>
-
-
-
-          <!--FIRST COLUMN-->
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Name </th>
-            <td  mat-cell *matCellDef="let element">{{element.userName}}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef>Email</th>
-            <td  mat-cell *matCellDef="let element">{{element.userEmail}}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="expiryDate">
-            <th mat-header-cell *matHeaderCellDef>ExpiryDate</th>
-            <td  mat-cell *matCellDef="let element"><input type="text" placeholder={{element.userExpiryDate}} [disabled]=element.userType ></td>
-          </ng-container>
-
-          <ng-container matColumnDef="resident">
-            <th mat-header-cell *matHeaderCellDef>Resident</th>
-            <td  mat-cell *matCellDef="let element"><mat-slide-toggle [checked]=element.userType (click)="update()"></mat-slide-toggle></td>
-          </ng-container>
-          
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-              (click)="selection.toggle(row)">
-          </tr>
-        </table>
+        <table mdbTable striped="true" responsive="true" hover="true" small="true">
+          <thead>
+             <th *ngFor="let head of userTableHeaders" scope="col">{{head}}</th>
+          </thead>
+          <tbody>
+             <tr *ngFor="let person of userArray; let userId = index">
+                 <td>
+                   <span contenteditable="false">{{person.userName}}</span>
+                 </td>
+                 <td>
+                   <span contenteditable="false">{{person.userEmail}}</span>
+                 </td>
+                 <td>
+                   <span>{{person.userExpiryDate}}</span>
+                 </td>
+                 <td>
+                    <span contenteditable="true" (keyup)="changeValue(userId, 'expiryDate', $event)" (blur)="updateUserList(userId, 'expiryDate', $event)">0</span>
+                  </td>
+                 <td>
+                   <span contenteditable="true" (keyup)="changeValue(userId, 'resident', $event)" (blur)="updateUserList(userId, 'resident', $event)">
+                     <mat-slide-toggle [checked]=resolveUserType(person.userType) (change)="updateUserList(userId, 'userType', $event)"></mat-slide-toggle>
+                   </span>
+                 </td>
+                 <td>
+                   <span class="table-remove">
+                     <button type="button" mdbBtn color="danger" rounded="true" size="sm" class="my-0" (click)="removeUser(person.userId)">Remove</button>
+                   </span>
+                 </td>
+               </tr>
+          </tbody>
+         </table>
       </div>
     </mat-expansion-panel>
 
@@ -102,34 +110,7 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div>
-              <table mdbTable striped="true" responsive="true" hover="true" small="true">
-               <thead>
-                  <th *ngFor="let head of tableHeaders" scope="col">{{head}}</th>
-               </thead>
-               <tbody>
-                  <tr *ngFor="let person of personList; let userId = index">
-                      <td>
-                        <span (keyup)="changeValue(userId, 'name', $event)" (blur)="updateList(userId, 'name', $event)" contenteditable="false">{{person.userName}}</span>
-                      </td>
-                      <td>
-                        <span contenteditable="false" (keyup)="changeValue(userId, 'email', $event)" (blur)="updateList(userId, 'email', $event)">{{person.userEmail}}</span>
-                      </td>
-                      <td>
-                        <span  (keyup)="changeValue(userId, 'expiryDate', $event)" (blur)="updateList(userId, 'expiryDate', $event)">{{person.userExpiryDate}}</span>
-                      </td>
-                      <td>
-                        <span contenteditable="true" (keyup)="changeValue(userId, 'resident', $event)" (blur)="updateList(userId, 'resident', $event)">
-                          <mat-slide-toggle [checked]=person.userType (change)="updateList(userId, 'userType', $event)"></mat-slide-toggle>
-                        </span>
-                      </td>
-                      <td>
-                        <span class="table-remove">
-                          <button type="button" mdbBtn color="danger" rounded="true" size="sm" class="my-0" (click)="remove(userId)">Remove</button>
-                        </span>
-                      </td>
-                    </tr>
-               </tbody>
-              </table>
+              
         </div>
     </mat-expansion-panel>
   </mat-accordion>

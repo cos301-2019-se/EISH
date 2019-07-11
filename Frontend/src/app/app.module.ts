@@ -26,10 +26,11 @@ import {MatSlideToggleModule,MatExpansionModule,MatAutocompleteModule,MatFormFie
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { DeviceModalComponent } from './pages/settings/device-modal/device-modal.component';
-import { ChartsModule} from 'ng2-charts';
 import 'hammerjs';
 import { IconsModule,ButtonsModule,WavesModule,TableModule  } from 'node_modules/angular-bootstrap-md';
-@NgModule({
+import {DeviceService} from './services/devices/device.service';
+
+@NgModule ({
   declarations: [
     AppComponent,
     SettingsComponent,
@@ -73,13 +74,13 @@ import { IconsModule,ButtonsModule,WavesModule,TableModule  } from 'node_modules
     IconsModule,
     ButtonsModule,
     WavesModule,
-    TableModule,
-    ChartsModule
+    TableModule
   ],
   exports:[
     BrowserAnimationsModule
+    //SocketIoModule.forRoot(config)
   ],
-  providers: [UserAccessControlService, InputService, {
+  providers: [UserAccessControlService, InputService, DeviceService, {
     provide: HTTP_INTERCEPTORS,
     useClass: AccessControlInterceptor,
     multi: true
@@ -88,4 +89,5 @@ import { IconsModule,ButtonsModule,WavesModule,TableModule  } from 'node_modules
   bootstrap: [AppComponent],
   entryComponents:[DeviceModalComponent ]
 })
-export class AppModule { }
+
+export class AppModule{}

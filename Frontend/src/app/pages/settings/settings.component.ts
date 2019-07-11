@@ -7,6 +7,11 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import  {MatTableDataSource} from '@angular/material/table';
 import { DeviceModalComponent } from './device-modal/device-modal.component';
+import {Device}  from 'src/app/models/device-model';
+import {User}  from 'src/app/models/user-model';
+import {DeviceService} from 'src/app/services/devices/device.service';
+import {UserAccessControlService} from 'src/app/services/user/user-access-control.service';
+import { GeneratorService} from "src/app/services/generators/generator.service";
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
@@ -14,19 +19,15 @@ import { DeviceModalComponent } from './device-modal/device-modal.component';
 })
 
 export class SettingsComponent implements OnInit {
-  //for user table
-  displayedColumns = ["select","name","email","expiryDate","resident"];
-  dataSource = new MatTableDataSource<Users>(ELEMENT_DATA);    //set this upon retrieving data from DB
-  selection = new SelectionModel<Users>(true,[]);
+
   formData: any;
-  isGuest: Boolean;
+
 
 
   //for search bar
   panelOpenState = false;
   deviceFound: Boolean;
   userDeviceName = new FormControl();
-  options: string[] = ['bedroom_light', 'Kettle', 'bedroom_fan','lounge_TV'];
   filteredOptions: Observable<string[]>;
 
   ///for devices
@@ -35,46 +36,109 @@ export class SettingsComponent implements OnInit {
   maxWatt: number;
   minWatt: number;
   priority: string[] = ['Nice-to-have', 'Always-on','Must-have'];
-  deviceResult: string;
-  tableHeaders = ["Name","Email","Expiry Date","Resident","Remove"];
+  deviceResult:string[];
+  deviceTableHeaders = ["Device Name ","Device Topic", "Device Priority" ];
+  userTableHeaders = ["Name","Email","Current Expiry Date","Extend Expiry Date","Resident","Remove"];
   editField: string;
-    personList: Array<any> = [
-      { userId: 1, userName: 'Aurelia Vega', userEmail:"auriela@gmail.com", userExpiryDate:"20/07/2019", userType:true},
-      { userId: 2, userName: 'Guadalupe House', userEmail:"guapdad@gmail.com", userExpiryDate:"09/08/2019",userType:false},
-      { userId: 3, userName: 'Austin Post', userEmail:"postedup@gmail.com", userExpiryDate:"11/07/2019", userType:false},
-      { userId: 4,userName: 'Jacob Thompson', userEmail:"jakieboy@gmail.com", userExpiryDate:"20/07/2019", userType:false},
-      { userId:5,userName:"John",userEmail:"john@gmail.com",userExpiryDate:"10/07/2019",userType:true},
-      { userId:6,userName:"Matthew",userEmail:"matthew@gmail.com",userExpiryDate:"10/07/2019",userType:true},
-      { userId:7,userName:"Andy",userEmail:"andy@gmail.com",userExpiryDate:"10/07/2019",userType:false},
-      { userId:8,userName:"Marcus",userEmail:"marcus@gmail.com",userExpiryDate:"10/07/2019",userType:true}
-    ];
+  deviceNames:string[];
 
-    updateList(id: number, property: string, event: any) {
+    updateUserList(id: number, property: string, event: any) {
       if(property == "userType"){
-        console.log("Before: "+this.personList[id][property]);
-        this.personList[id][property] = !this.personList[id][property];
-        //console.log("toggled resident");
-        console.log("After: "+this.personList[id][property]);
+        console.log(this.deviceArray[id].deviceName)
+       let userUpdate= {
+         userId: this.userArray[id].userId ,
+         userType:  this.userArray[id].userType
+        
+        };
+        
+        this.userService.changeUserType(userUpdate)
+
       }else{
         const editField = event.target.textContent;
-      this.personList[id][property] = editField;
-      console.log(this.editField);
+  
+        //console.log(this.editField);
+        let userUpdate = {
+          userId: this.userArray[id].userId,
+          nrDays: editField
+        }
+        this.userService.changeUserExpiration(userUpdate);
       }
     }
 
-    remove(id: any) {
-      this.personList.splice(id, 1);
+
+    updateDeviceList(id: number, property: string, event: any) {
+      if(property == "deviceName"){
+
+          console.log('in changing device name')
+          const editField = event.target.textContent;
+          console.log('edit field: '+ editField)
+          let deviceUpdate= {
+          deviceId: this.deviceArray[id].deviceId,
+          deviceName: editField,
+          deviceTopic: this.deviceArray[id].deviceTopic,
+          devicePriorityType: this.deviceArray[id].devicePriorityType
+          //deviceStates: this.deviceArray[id].device.deviceStates
+          };
+         
+          console.log('object: ' + JSON.stringify(deviceUpdate))
+          this.deviceService.editDevice(deviceUpdate)
+
+      }else if(property == "deviceTopic"){
+          console.log('in changing device topic')
+        
+          const editField = event.target.textContent;
+          console.log('edit field: '+ editField)
+          let deviceUpdate= {
+          deviceId: this.deviceArray[id].deviceId,
+          deviceName: this.deviceArray[id].deviceName,
+          deviceTopic: editField,
+          devicePriorityType: this.deviceArray[id].devicePriorityType
+          //deviceStates: this.deviceArray[id].device.deviceStates
+          };
+          
+          console.log('object: ' + JSON.stringify(deviceUpdate))
+          this.deviceService.editDevice(deviceUpdate)
+        
+      } else{
+          console.log('changing device priortity');
+
+          const editField = event.target.textContent;
+          console.log('edit field: '+ editField)
+          let deviceUpdate= {
+          deviceId: this.deviceArray[id].deviceId,
+          deviceName: this.deviceArray[id].deviceName,
+          deviceTopic: this.deviceArray[id].deviceTopic,
+          devicePriorityType: editField
+          //deviceStates: this.deviceArray[id].device.deviceStates
+          };
+          console.log('object: ' + JSON.stringify(deviceUpdate))
+          this.deviceService.editDevice(deviceUpdate)
+      }
+    }
+
+    resolveUserType(userType) {
+      if(userType=="RESIDENT"){
+        return true;
+      }else
+        return false
+    }
+
+    removeUser(id: any) {
+      console.log('removing user with id: '+ id)
+      this.userService.removeUser(id)
+      //this.userArray.splice(id, 1);
     }
 
     changeValue(id: number, property: string, event: any) {
-     if(property == "userType"){
-      console.log(event.type);
-     }else{
       this.editField = event.target.textContent;
-      console.log(this.editField);
-     }
+     
     }
-  constructor(private dialog: MatDialog) { }
+ 
+  
+   /**
+   * Constructor
+   */
+  constructor(private dialog: MatDialog, private deviceService: DeviceService, private userService: UserAccessControlService, private generatorService: GeneratorService) { }
 
   openDialog(){
     const dialogConfig = new MatDialogConfig();
@@ -87,98 +151,140 @@ export class SettingsComponent implements OnInit {
     );
   }
   ngOnInit() {
-    this.deviceFound=false;
-    this.filteredOptions = this.userDeviceName.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
+    this.deviceService.getDeviceJSONArray().pipe(
+      map( response => {
+          this.deviceArray =  response,
+          JSON.stringify(this.deviceArray)
+          
+          var devices:string[]
+          devices = []
+          for (let index = 0; index < this.deviceArray.length; index++) {
+              devices[index] = this.deviceArray[index].deviceName
+            }
+            this.deviceNames = devices;
 
+            this.filteredOptions = this.userDeviceName.valueChanges
+            .pipe(
+              startWith(''),
+              map(value => this._filter(value))
+              
+            );    
+        
+          })
+     ).subscribe();
+    this.getUserList();
+    this.deviceFound=false;
+    
   }
+  
+  deviceArray: any
+  userArray: any
+ 
   
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.includes(filterValue));
+    return this.deviceNames.filter(option => option.toLowerCase().includes(filterValue));
   }
 
   returnDevice(){
-    this.deviceFound=true;
-    this.deviceResult = "{{display "+ this.userDeviceName.value+ " information}}";
+    
+    if(this.userDeviceName.value === null ||this.userDeviceName.value == null){
+      return
+    }
+    
+    let option = this.userDeviceName.value.toLowerCase();
+    this.deviceResult = null;
+    this.deviceResult = [];
+    this.deviceFound=false;
+    let arrayIndex = 0;
+      for (let index = 0; index < this.deviceArray.length; index++) {
+        if(this.deviceArray[index].deviceName.toLowerCase().includes(option) ){
+          console.log('device result: ' + this.deviceResult)
+            console.log('index: ' + index)
+            this.deviceFound=true;
+            this.deviceResult[arrayIndex] = this.deviceArray[index];
+            arrayIndex++;
+        }
+      }
+      JSON.stringify(this.deviceResult)
+
+      console.log(this.deviceResult)
+      
+      //JSON.parse(this.deviceResult)
+      
+      /*if(this.deviceResult == ''){
+        console.log('Not Found')
+        this.deviceResult = JSON.stringify("{Not Found}")
+    }*/
+
     return;
   }
-
-  isAllSelected(){
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-  masterToggle(){
-    this.isAllSelected()?
-      this.selection.clear():
-      this.dataSource.data.forEach(row=>this.selection.select(row));
-  }
-  checkboxLabel(row?: Users): string{
-    if(!row){
-      return `${this.isAllSelected() ? 'select' : 'deselect'}all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect':'select'} row ${row.userId+1}`;
-  }
-  
-  removeUser(index){
-    //use spilce to delete user from current data set then send request to server to delete user
-    let hold =this.dataSource.data;
-    hold.splice(index,1);
-    this.dataSource.data = hold;
+ 
+  getUserList(){
+    console.log('getting user list')
+    this.userService.getUserJSONArray().pipe(
+        map( response => {
+            this.userArray =  response,
+            JSON.stringify(this.userArray);
+           
+        })
+    ).subscribe()
   }
 
-  editUser(){
-
-  }
-  update(){
-
-  }
-  addDevice( data){
-
-  }
-
-  editDevice(){
-
+  /**
+   * Remove user from system
+   */
+ 
+ 
+  /**
+   * Changes guest users' expiry date
+   */
+  editUserExpiry(userForm){
+    this.userService.changeUserExpiration(userForm.value);
   }
 
-  removeDevice(){
-    
+  /**
+   * Changes users Type between Guest and Resident
+   */
+  editUserType(userForm){
+    this.userService.changeUserType(userForm.value);
   }
 
-  addPowerGenerator(){
-
+  /**
+   * Edits device propertities
+   * @param deviceForm
+   */
+  editDevice(deviceForm){
+    this.deviceService.editDevice(deviceForm.value);
   }
 
-  editPowerGenerator(){
-
+   /**
+   * Removes a device from the system
+   * @param deviceForm
+   */
+  removeDevice(deviceId){
+    console.log('removing device with ID: ' + deviceId)
+    this.deviceService.removeDevice(deviceId);
   }
 
-  removePowerGenerator(){
-    
+  /**
+   * Add new power generator to system
+   */
+  addPowerGenerator(genForm){
+    this.generatorService.addPowerGenerator(genForm.value);
   }
-}
 
-//for users table
-export interface Users{
-  userName: String;
-  userId: number;
-  userEmail: String;
-  userExpiryDate: any;
-  userType: Boolean; //coz either resident or guest (column will say resident) so false means guest and true means resident
-}
-const ELEMENT_DATA :Users[]=[
-  {userId:1,userName:"John",userEmail:"john@gmail.com",userExpiryDate:"10/07/2019",userType:true},
-  {userId:2,userName:"Matthew",userEmail:"matthew@gmail.com",userExpiryDate:"10/07/2019",userType:true},
-  {userId:3,userName:"Andy",userEmail:"andy@gmail.com",userExpiryDate:"10/07/2019",userType:false},
-  {userId:4,userName:"Marcus",userEmail:"marcus@gmail.com",userExpiryDate:"10/07/2019",userType:true}
-];
-//for devices table
-export interface Devices{
-  deviceName: String;
-  deviceTopic: String;
-  devicePriorityType: String;
+  /**
+   * Edit a power generators' properties
+   */
+  editPowerGenerator(genForm){
+    this.generatorService.editPowerGenerator(genForm.value)
+  }
+
+  /**
+   * Remove power generator from system
+   */
+  removePowerGenerator(generatorId){
+    this.generatorService.removePowerGenerator(generatorId);
+  }
 }

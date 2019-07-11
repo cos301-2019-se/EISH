@@ -10,7 +10,7 @@ import { ConsumptionComponent } from './pages/consumption/consumption.component'
 import { ForecastComponent } from './pages/forecast/forecast.component';
 
 const routes: Routes = [
-  { path: '', component:LoginComponent},
+  { path: '', component:SettingsComponent},
   {path: 'register/:regType', component:ChangeCredentialsComponent},
   {path: 'key', component:KeysComponent},
   {path: 'settings',component:SettingsComponent},
