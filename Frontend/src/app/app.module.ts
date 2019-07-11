@@ -29,6 +29,7 @@ import { DeviceModalComponent } from './pages/settings/device-modal/device-modal
 import 'hammerjs';
 import { IconsModule,ButtonsModule,WavesModule,TableModule  } from 'node_modules/angular-bootstrap-md';
 import {DeviceService} from './services/devices/device.service';
+import { DailyPlannerComponent } from './pages/daily-planner/daily-planner.component';
 
 @NgModule ({
   declarations: [
@@ -47,7 +48,8 @@ import {DeviceService} from './services/devices/device.service';
     BatteryChartComponent,
     ConsumptionChartComponent,
     SideNavComponent,
-    DeviceModalComponent
+    DeviceModalComponent,
+    DailyPlannerComponent
   ],
   imports: [
     BrowserModule,
