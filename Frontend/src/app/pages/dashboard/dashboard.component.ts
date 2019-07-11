@@ -12,10 +12,10 @@ export class DashboardComponent implements OnInit {
   gaugemax = 100;
   gaugeCap ="round"
   gaugeType = "full";
-  gaugeValue = 82;
-  gaugeLabel = "Battery Percentage";
+  gaugeValue = 92;
+  //gaugeLabel = "Battery Percentage";
   gaugeAppendText = "%";
-  gaugeThickness = 4;
+  gaugeThickness = 8;
   state="Charging"
 
   //for weather
@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit {
   }
 
   thresholdConfig = {
-    '10': {color:'red'},
+    '0': {color:'red'},
     '20' : {color: 'orange'},
     '40': {color:'yellow'},
     '80': {color:'green'}
