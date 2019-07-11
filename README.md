@@ -8,8 +8,6 @@ monitoring the consumption of the energy. Additionally it will incorporate an in
 that will be able to measure and predict the energy generation capacity, while also learning the
 usage patterns of specific devices to prioritize devices and optimize energy consumption.
 
-### <a href="https://github.com/cos301-2019-se/EISH" target="_blank">Github</a>
-
 ### Documentation
 
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH_Demo2.pdf" target="_blank">Software Requirement Specification AND Architectural Design </a>
