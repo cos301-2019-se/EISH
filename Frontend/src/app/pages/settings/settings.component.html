@@ -71,21 +71,21 @@
           </thead>
           <tbody>
              <tr *ngFor="let person of userArray; let userId = index">
-                 <td>
+                 <th *ngIf="userId+1 >= mdbTablePagination.firstItemIndex && userId < mdbTablePagination.lastItemIndex" scope="row">
                    <span contenteditable="false">{{person.userName}}</span>
-                 </td>
-                 <td>
+                 </th>
+                 <td *ngIf="userId+1 >= mdbTablePagination.firstItemIndex && userId < mdbTablePagination.lastItemIndex">
                    <span contenteditable="false">{{person.userEmail}}</span>
                  </td>
                  <td>
                    <span>{{person.userExpiryDate}}</span>
                  </td>
-                 <td>
+                 <td *ngIf="userId+1 >= mdbTablePagination.firstItemIndex && userId < mdbTablePagination.lastItemIndex">
                     <span contenteditable="true" (keyup)="changeValue(userId, 'expiryDate', $event)" (blur)="updateUserList(userId, 'expiryDate', $event)">0</span>
                   </td>
-                 <td>
+                 <td *ngIf="userId+1 >= mdbTablePagination.firstItemIndex && userId < mdbTablePagination.lastItemIndex">
                    <span contenteditable="true" (keyup)="changeValue(userId, 'resident', $event)" (blur)="updateUserList(userId, 'resident', $event)">
-                     <mat-slide-toggle [checked]=resolveUserType(person.userType) (change)="updateUserList(userId, 'userType', $event)"></mat-slide-toggle>
+                    <mat-slide-toggle [checked]=resolveUserType(person.userType) (change)="updateUserList(userId, 'userType', $event)"></mat-slide-toggle>
                    </span>
                  </td>
                  <td>
@@ -95,8 +95,15 @@
                  </td>
                </tr>
           </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="5">
+                <mdb-table-pagination [tableEl]="tableEl" [searchDataSource]="personList"></mdb-table-pagination>
+              </td>
+            </tr>
+          </tfoot>
          </table>
-      </div>
+        </div>
     </mat-expansion-panel>
 
     <mat-expansion-panel (opened)="panelOpenState = true"
@@ -110,8 +117,7 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div>
-              
-        </div>
+      </div>
     </mat-expansion-panel>
   </mat-accordion>
 

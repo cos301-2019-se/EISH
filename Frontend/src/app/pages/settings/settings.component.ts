@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import {MatDialogModule, MatDialogConfig} from '@angular/material/dialog';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
@@ -7,22 +7,62 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import  {MatTableDataSource} from '@angular/material/table';
 import { DeviceModalComponent } from './device-modal/device-modal.component';
-import {Device}  from 'src/app/models/device-model';
-import {User}  from 'src/app/models/user-model';
-import {DeviceService} from 'src/app/services/devices/device.service';
-import {UserAccessControlService} from 'src/app/services/user/user-access-control.service';
-import { GeneratorService} from "src/app/services/generators/generator.service";
+import { MdbTablePaginationComponent, MdbTableDirective,WavesModule } from 'node_modules/angular-bootstrap-md';
+import { UserAccessControlService } from 'src/app/services/user/user-access-control.service';
+import { GeneratorService } from 'src/app/services/generators/generator.service';
+import { DeviceService } from 'src/app/services/devices/device.service';
+
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })
 
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, AfterViewInit {
+  constructor(private generatorService: GeneratorService,private userService: UserAccessControlService,private deviceService:DeviceService,private cdRef: ChangeDetectorRef,private dialog: MatDialog) { }
+  ngOnInit() {
+    this.deviceService.getDeviceJSONArray().pipe(
+      map( response => {
+          this.deviceArray =  response,
+          JSON.stringify(this.deviceArray)
+          
+          var devices:string[]
+          devices = []
+          for (let index = 0; index < this.deviceArray.length; index++) {
+              devices[index] = this.deviceArray[index].deviceName
+            }
+            this.deviceNames = devices;
 
+            this.filteredOptions = this.userDeviceName.valueChanges
+            .pipe(
+              startWith(''),
+              map(value => this._filter(value))
+              
+            );    
+        
+          })
+     ).subscribe();
+    this.getUserList();
+    this.deviceFound=false;
+    
+    this.mdbTable.setDataSource(this.userArray);
+    this.previous = this.mdbTable.getDataSource();
+  }
+
+  ngAfterViewInit(): void {
+    this.mdbTablePagination.setMaxVisibleItemsNumberTo(5);
+    this.mdbTablePagination.calculateFirstItemIndex();
+    this.mdbTablePagination.calculateLastItemIndex();
+    this.cdRef.detectChanges();
+  }
+  
+  //for user table
   formData: any;
 
-
+  //for pagination
+  @ViewChild(MdbTablePaginationComponent, { static: true }) mdbTablePagination: MdbTablePaginationComponent;
+  @ViewChild(MdbTableDirective, { static: true }) mdbTable: MdbTableDirective;
+  previous: any = [];
 
   //for search bar
   panelOpenState = false;
@@ -133,12 +173,6 @@ export class SettingsComponent implements OnInit {
       this.editField = event.target.textContent;
      
     }
- 
-  
-   /**
-   * Constructor
-   */
-  constructor(private dialog: MatDialog, private deviceService: DeviceService, private userService: UserAccessControlService, private generatorService: GeneratorService) { }
 
   openDialog(){
     const dialogConfig = new MatDialogConfig();
@@ -149,32 +183,6 @@ export class SettingsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       data => {this.formData = data;}
     );
-  }
-  ngOnInit() {
-    this.deviceService.getDeviceJSONArray().pipe(
-      map( response => {
-          this.deviceArray =  response,
-          JSON.stringify(this.deviceArray)
-          
-          var devices:string[]
-          devices = []
-          for (let index = 0; index < this.deviceArray.length; index++) {
-              devices[index] = this.deviceArray[index].deviceName
-            }
-            this.deviceNames = devices;
-
-            this.filteredOptions = this.userDeviceName.valueChanges
-            .pipe(
-              startWith(''),
-              map(value => this._filter(value))
-              
-            );    
-        
-          })
-     ).subscribe();
-    this.getUserList();
-    this.deviceFound=false;
-    
   }
   
   deviceArray: any

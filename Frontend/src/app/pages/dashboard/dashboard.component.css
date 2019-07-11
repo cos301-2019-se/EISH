@@ -1,0 +1,92 @@
+.batteryHeader{
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    letter-spacing: 0.1rem;
+    padding:1rem;
+}
+
+/*
+====================
+Weather Card Styling
+====================
+*/
+
+  .city-name__text {
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    letter-spacing: 0.1rem;
+    margin-bottom: 1rem;
+    padding:1rem;
+  }
+  
+  .temperature__text {
+    align-self: end;
+    width: 100%;
+    font-size: 4rem;
+    font-weight: 100;
+    letter-spacing: 0.1rem;
+  }
+  
+  .temperature-metric__text {
+    text-align: start;
+    font-size: 3rem;
+  }
+  .weather-condition__text {
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    text-align: center;
+  }
+  
+
+  .weather-icon__container {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    justify-content: center;
+  }
+  
+  .weather-icon__container > svg {
+    width: 8rem;
+    height: 10rem;
+  }
+
+/*small screens*/
+@media screen and (max-width: 640px){
+    .row{
+        width: 100%;
+    }
+
+    .col{
+        box-shadow: 0 0 2rem rgba(0, 0, 255, 0.1);
+        text-align: center;
+        padding: 2rem;
+        margin: 1rem;
+        height: 60%;
+        cursor: pointer;
+        background-color:white;
+        border-radius: 0.9rem;
+        width:60%;
+    }
+}
+
+/*larger screens*/
+@media screen and (min-width: 640px){
+    .cardContainer{
+        width:100%;
+        background-color:white;
+        display: table;
+        table-layout: fixed;
+        border-spacing:2rem;
+    }
+    
+    .col{
+        display:table-cell;
+        text-align: center;
+        box-shadow: 0 0 2rem rgba(0, 0, 255, 0.1);
+        height: 60%;
+        cursor: pointer;
+        background-color: white;
+        border-radius: 0.9rem;
+        width: 40%;
+    }
+}
