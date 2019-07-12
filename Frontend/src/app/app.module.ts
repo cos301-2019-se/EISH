@@ -21,12 +21,12 @@ import { BatteryChartComponent } from './pages/dashboard/battery-chart/battery-c
 import { ConsumptionChartComponent } from './pages/consumption/consumption-chart/consumption-chart.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import {MatCardModule,MatSlideToggleModule,MatExpansionModule,MatAutocompleteModule,MatFormFieldModule,MatSelectModule,MatInputModule,MatCheckboxModule,MatDialogModule,MatTableModule, MatMenuModule,MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
+import {MatProgressBarModule,MatCardModule,MatSlideToggleModule,MatExpansionModule,MatAutocompleteModule,MatFormFieldModule,MatSelectModule,MatInputModule,MatCheckboxModule,MatDialogModule,MatTableModule, MatMenuModule,MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { DeviceModalComponent } from './pages/settings/device-modal/device-modal.component';
 import 'hammerjs';
-import { IconsModule,ButtonsModule,WavesModule,TableModule, ChartsModule  } from 'node_modules/angular-bootstrap-md';
+import { IconsModule,ButtonsModule,WavesModule,TableModule, ChartsModule,CardsModule,InputsModule } from 'node_modules/angular-bootstrap-md';
 import {DeviceService} from './services/devices/device.service';
 import { DailyPlannerComponent } from './pages/daily-planner/daily-planner.component';
 import { NgxGaugeModule } from 'node_modules/ngx-gauge';
@@ -72,12 +72,14 @@ import { NgxGaugeModule } from 'node_modules/ngx-gauge';
     MatTableModule,
     MatCheckboxModule,MatDialogModule,
     BrowserAnimationsModule,
+    CardsModule,InputsModule,
     IconsModule,
     ButtonsModule,
     WavesModule,
     TableModule,
     MatCardModule,
     NgxGaugeModule,
+    MatProgressBarModule,
     ChartsModule
   ],
   exports:[

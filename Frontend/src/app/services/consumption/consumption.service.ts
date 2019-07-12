@@ -16,8 +16,8 @@ export class ConsumptionService {
 
   }
 
-  getAllDevices(): Observable<[]> {
-    return this.http.get<[]>(this.ROOT_URL + 'devices');
+  getAllDevices(): Observable<Device[]> {
+    return this.http.get<Device[]>(this.ROOT_URL + 'devices');
   }
 
   getCustomDeviceConsumption(deviceId, startTimeStamp, endTimeStamp): Observable<[]>{

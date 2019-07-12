@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
+import { WeatherService } from 'src/app/services/weather/weather.service';
+import {map, startWith} from 'rxjs/operators';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
+  title="Dashboard";
   ///for battery
   gaugeMin =0;
   gaugemax = 100;
@@ -19,13 +21,24 @@ export class DashboardComponent implements OnInit {
   state="Charging"
 
   //for weather
-  minTemp = 15;
-  maxTemp = 28;
-  currentTemp = 23;
-  condition = "Storm"
-  constructor() { }
+  
+  weatherData= {
+    "weatherDescription": "Sunny",
+    "weatherIcon":"http://openweathermap.org/img/wn/01n@2x.png",
+    "weatherTemp":25,
+    "weatherLocation": "Pretoria"
+  };
+
+  constructor(private weatherService: WeatherService) { }
 
   ngOnInit() {
+    /*this.weatherService.getWeather().pipe(
+        map( response => {
+            this.weatherData =  response,
+            JSON.stringify(this.weatherData),
+            console.log(this.weatherData);
+          })
+    )*/
   }
 
   thresholdConfig = {
