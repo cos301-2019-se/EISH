@@ -7,7 +7,7 @@
             <option [value]="device" *ngFor="let device of devices">{{ device }}</option>
         </select>
         <label>Range: </label>
-        <select [ngModel]="selectedRange" (ngModelChange)="isCustom($event)">
+        <select [ngModel]="selectedRange" (ngModelChange)="selectRange($event)">
             <option value="Last Hour">Last Hour</option>
             <option value="Today">Today</option>
             <option value="This Week">This Week</option>
@@ -17,12 +17,12 @@
         </select>
         <span *ngIf="custom">
             <label>From: </label>
-            <input type="datetime-local">
+            <input type="datetime-local" [value]="startTime" (change)="setStartDateTime($event.target.value)">
             <label>To: </label>
-            <input type="datetime-local">
+            <input type="datetime-local" [value]="endTime" (change)="setEndDateTime($event.target.value)">
         </span>
         
     </div>
-    <app-consumption-chart></app-consumption-chart>
+    <app-consumption-chart #consumptionChart></app-consumption-chart>
 </div>
 

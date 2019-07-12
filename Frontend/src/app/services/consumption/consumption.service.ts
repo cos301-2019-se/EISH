@@ -21,10 +21,7 @@ export class ConsumptionService {
   }
 
   getCustomDeviceConsumption(deviceId, startTimeStamp, endTimeStamp): Observable<[]>{
-    let params = new HttpParams();
-    params.set("deviceId", deviceId);
-    params.set("startTimeStamp", startTimeStamp);
-    params.set("endTimeStamp", endTimeStamp);
+    const params = new HttpParams().set("deviceId", deviceId).set("startTimeStamp", startTimeStamp).set("endTimeStamp", endTimeStamp);
     return this.http.get<[]>(this.ROOT_URL + 'device/consumption', { params });
   }
 

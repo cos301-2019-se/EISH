@@ -34,16 +34,20 @@ export class ConsumptionChartComponent implements OnInit {
     this.configureConsumptionChart();
   }
 
+  setHeading(heading: String) {
+    this.heading = heading;
+  }
+
   configureConsumptionChart() { 
     this.chartConfigration = {
       type: 'line',
       data: {
-        labels: [1,2,3,4,5],
+        labels: [],
         datasets: [{
           label: 'Device Consumption',
           backgroundColor: 'rgba(24,48,35,0.5)',
           borderColor: '#FF22DD',
-          data: [ 2, 8, 6, 7, 0
+          data: [
           ],
           fill: true,
         }]
@@ -81,15 +85,14 @@ export class ConsumptionChartComponent implements OnInit {
       }
     };
     this.chart = new Chart('consumptionChart', this.chartConfigration);
-    this.addDataPoint({timestamp: 6, consumption: 12});
-    this.setChartHeading('LightBulb Consumption');
-    this.setXAxisLabel("Hours");
+    this.setChartHeading('Consumption');
+    //this.setXAxisLabel("Hours");
     this.setYAxisLabel("Power Consumption");
   }
 
   addDataPoint(newData): void {
-    this.chartConfigration.data.labels.push(newData.timestamp);//put timestamp here
-    this.chartConfigration.data.datasets[0].data.push(parseInt(newData.consumption));
+    this.chartConfigration.data.labels.push(newData.deviceConsumptionTimestamp);//put timestamp here
+    this.chartConfigration.data.datasets[0].data.push(parseInt(newData.deviceConsumption));
     //this.chart.update();
   }
   
@@ -109,11 +112,13 @@ export class ConsumptionChartComponent implements OnInit {
   }
 
   addBulkData(bulkData): void {
-    bulkData.foreach((dataPoint) => {
+    this.clearChart();
+    bulkData.forEach((dataPoint) => {
       this.addDataPoint(dataPoint);
     });
 
     //maybe update or ???
+    this.chart.update();
   }
 
   changeTimeFormat(): void {
