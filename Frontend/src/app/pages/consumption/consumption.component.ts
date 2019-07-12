@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { webSocket } from "rxjs/webSocket";
 import { ConsumptionService } from 'src/app/services/consumption/consumption.service';
 import { ConsumptionChartComponent } from './consumption-chart/consumption-chart.component';
 
@@ -18,6 +19,7 @@ export class ConsumptionComponent implements OnInit {
   selectedDevice = "Home";
   selectedRange = "Last Hour";
   custom = false;
+  socketUrl = "ws://192.168.8.102/consumption";
 
   constructor(private consumptionService: ConsumptionService) { 
     this.startTime = this.toDateString(new Date());
@@ -65,8 +67,21 @@ export class ConsumptionComponent implements OnInit {
   getDeviceConsumption(deviceId, startTimestamp, endTimestamp) {
     this.consumptionService.getCustomDeviceConsumption(deviceId, startTimestamp, endTimestamp).subscribe(
       (res) => {
-        console.log(res);
         this.consumptionChart.addBulkData(res);
+      }
+    );
+  }
+
+  getCurrentDeviceConsumption(deviceId, specialRange) {
+    this.consumptionService.getSpecialDeviceConsumption(deviceId, specialRange).subscribe(
+      (res) => {
+        this.consumptionChart.addBulkData(res);
+        const Socket = webSocket(this.socketUrl);
+        Socket.subscribe(
+          (msg) => {
+            console.log(msg);
+          }
+        );
       }
     );
   }
@@ -102,6 +117,13 @@ export class ConsumptionComponent implements OnInit {
     for (var i=0; i < this.devices.length; i++) {
       if (this.devices[i] == deviceName)
         return this.deviceIds[i];
+    }
+  }
+
+  getDeviceTopic(deviceName) {
+    for (var i=0; i < this.devices.length; i++) {
+      if (this.devices[i] == deviceName)
+        return this.deviceTopics[i];
     }
   }
 

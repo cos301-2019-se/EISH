@@ -12,7 +12,6 @@ import {UserAccessControlService} from './services/user/user-access-control.serv
 import {InputService} from './services/input/input.service';
 import { MaterialsComponent } from './templates/materials/materials.component';
 import { AccessControlInterceptor } from './services/interceptor/user-access-control.interceptor';
-import { AllDevicesComponent } from './pages/devices/all_devices/all-devices.component';
 import { DevicesComponent } from './pages/devices/devices/devices.component';
 import { NotificationComponent } from './pages/notifications/notification.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
@@ -40,7 +39,6 @@ import { NgxGaugeModule } from 'node_modules/ngx-gauge';
     ChangeCredentialsComponent,
     KeysComponent,
     MaterialsComponent,
-    AllDevicesComponent,
     DevicesComponent,
     NotificationComponent,
     DashboardComponent,

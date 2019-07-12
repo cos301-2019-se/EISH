@@ -25,7 +25,7 @@ export class ConsumptionService {
     return this.http.get<[]>(this.ROOT_URL + 'device/consumption', { params });
   }
 
-  getSpecialDeviceConsumption(): Observable<[]> {
+  getSpecialDeviceConsumption(deviceId, specialRange): Observable<[]> {
     return null
   }
 }

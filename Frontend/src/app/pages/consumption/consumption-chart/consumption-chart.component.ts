@@ -12,22 +12,15 @@ export class ConsumptionChartComponent implements OnInit {
   /**
    * Variables:
    */
-  //deviceChart: any;
-  //totalConsumption: any;
-  //deviceName : 
-  //deviceName = "";
   heading: String;
   chart: Chart;
   currentDevice = null;
-  //consumptionData = null;
-  //consumptionOptions = null;
 
   chartConfigration = null;
 
   constructor() { 
     this.heading = "Home Consumption";
-
-    //this.deviceName = "Mara Angular";
+    //connect to a socket
   }
 
   ngOnInit() {
@@ -129,26 +122,13 @@ export class ConsumptionChartComponent implements OnInit {
 
   }
 
+  detectTimeScale(consumptionData): void {
+
+  }
+
   clearChart(): void {
     this.chartConfigration.data.labels = [];
     this.chartConfigration.data.datasets[0].data = [];
-  }
-
-  // changeConsumptionChart(deviceName, ): void {
-
-  // }
-  /**
-   * Draw graph for total consumption of all devices
-   */
-  drawTotalConsumption(){
-
-  }
-
-  /**
-   * Draw graph for total consumption of a specific devices
-   */
-  drawDeviceConsumption(){
-
   }
 
 }
