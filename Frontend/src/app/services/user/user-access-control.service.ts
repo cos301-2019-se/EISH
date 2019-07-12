@@ -16,7 +16,7 @@ export class UserAccessControlService {
  /* Variables: */
   ROOT_URL = 'http://192.168.8.102:8080/api/';
   data:any;
-
+  JSON_URL ='assets/data/';
   constructor( private http: HttpClient) { }
 
   /**
@@ -142,8 +142,56 @@ export class UserAccessControlService {
        keyInstance.errorInForm())).subscribe();
   }
   
-  removeUser(){
-    
+  /**
+   * Removes user given userId
+   */
+  removeUser(userId){
+    console.log('in delete, userId: ' + userId)
+    this.http.delete(this.ROOT_URL, userId);
+  }
+
+  /**
+   * Retrieve array all registered users on the system
+   */
+  retrieveAllUsers(): Observable<User[]>{
+    return this.http.get<User[]>(this.ROOT_URL + 'users');
+  }
+
+  /**
+   * Retrieves users' presence
+   */
+  getUserPresence(userName){
+
+  }
+
+  /**
+   * Change user role/type
+   */
+  changeUserType(userDetails){
+    //{userId}/{userType}
+    //console.log(userDetails.userId)
+    //console.log(userDetails.userType)
+    const params = new HttpParams().set("userId", userDetails.userId);
+    params.set("userType", userDetails.userType)
+    this.http.patch(this.ROOT_URL + 'user/usertype/', {params})
+  }
+
+  /**
+   * Update users' expiration date
+   */
+  changeUserExpiration(userDetails){
+
+    //{userId}/{numDays}
+    //console.log(userDetails.userId)
+    //console.log(userDetails.nrDays)
+    const params = new HttpParams().set("userId", userDetails.userId);
+    params.set("userType", userDetails.nrDays)
+    this.http.patch(this.ROOT_URL + 'user/expiration/', {params})
+  }
+
+  getUserJSONArray(): Observable<User []>{
+    console.log('getting JSON user');
+    return this.http.get<User []>(this.JSON_URL +'user.json');
   }
 
 }

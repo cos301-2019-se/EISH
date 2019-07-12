@@ -12,7 +12,6 @@ table{
   width:100%;
 }
 
-.table-container{
-  height:250px;
-  overflow:auto;
+mat-dialog-close{
+  background-color: red;
 }
