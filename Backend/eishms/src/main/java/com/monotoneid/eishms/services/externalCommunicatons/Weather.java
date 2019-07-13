@@ -10,7 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
+@Service
 public class Weather {
     private String api = "http://api.openweathermap.org/data/2.5/weather";
     private String apiKey = "895db04440e712db9d40e21003d6eff9";

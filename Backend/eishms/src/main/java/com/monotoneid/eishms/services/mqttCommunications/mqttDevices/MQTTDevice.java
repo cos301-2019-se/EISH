@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 //@Service
 public class MQTTDevice {
-    String serverUrl = "tcp://192.168.8.100:1883";
+    String serverUrl = "tcp://eishms.ddns.net:1883";
     /* This Requires no ssl */
     //String caFilePath = "/your_ssl/cacert.pem";
     //String clientCrtFilePath = "/your_ssl/client.pem";
@@ -241,7 +241,7 @@ public class MQTTDevice {
         jsonConsumption.put("timestamp", currentTimestamp.toString());
         jsonConsumption.put("consumption", Float.toString(consumption));
         deviceManager.simpMessagingTemplate.convertAndSend("/device/" + device.getDeviceTopic() + "/consumption", jsonConsumption);
-        //System.out.println("Inserted Consumption in Database.");
+        System.out.println("Inserted Consumption in Database.");
     }
 
     private void handleState(String subscribeTopic, String message) {

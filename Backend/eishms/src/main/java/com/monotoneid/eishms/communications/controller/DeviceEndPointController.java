@@ -118,6 +118,18 @@ public class DeviceEndPointController{
       return deviceManager.controlDevice(deviceId,deviceState);
    }
 
+   @GetMapping("/on")
+   public String switchOn() {
+      deviceManager.controlDevice(1, "ON");
+      return "Device should be ON";
+   }
+
+   @GetMapping("/off")
+   public String switchOff() {
+      deviceManager.controlDevice(1, "OFF");
+      return "Device should be OFF";
+   }
+
    @Autowired
    Weather weat;
 
