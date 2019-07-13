@@ -30,6 +30,8 @@ import { IconsModule,ButtonsModule,WavesModule,TableModule, ChartsModule  } from
 import {DeviceService} from './services/devices/device.service';
 import { DailyPlannerComponent } from './pages/daily-planner/daily-planner.component';
 import { NgxGaugeModule } from 'node_modules/ngx-gauge';
+import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
+import { eishmsRxStompConfig } from './services/stomp/rx-stomp.config';
 
 @NgModule({
   declarations: [
@@ -89,6 +91,14 @@ import { NgxGaugeModule } from 'node_modules/ngx-gauge';
     useClass: AccessControlInterceptor,
     multi: true
 
+  }, {
+    provide: InjectableRxStompConfig,
+    useValue: eishmsRxStompConfig
+  },
+  {
+    provide: RxStompService,
+    useFactory: rxStompServiceFactory,
+    deps: [InjectableRxStompConfig]
   }],
   bootstrap: [AppComponent],
   entryComponents:[DeviceModalComponent ]

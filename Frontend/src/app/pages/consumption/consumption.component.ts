@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { webSocket } from "rxjs/webSocket";
 import { ConsumptionService } from 'src/app/services/consumption/consumption.service';
 import { ConsumptionChartComponent } from './consumption-chart/consumption-chart.component';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { Message } from '@stomp/stompjs';
 
 @Component({
   selector: 'app-consumption',
@@ -19,9 +21,9 @@ export class ConsumptionComponent implements OnInit {
   selectedDevice = "Home";
   selectedRange = "Last Hour";
   custom = false;
-  socketUrl = "ws://192.168.8.102/consumption";
+  topicSubscription = null;
 
-  constructor(private consumptionService: ConsumptionService) { 
+  constructor(private consumptionService: ConsumptionService, private rxStompService: RxStompService) { 
     this.startTime = this.toDateString(new Date());
     this.endTime = this.toDateString(new Date());
   }
@@ -72,16 +74,26 @@ export class ConsumptionComponent implements OnInit {
     );
   }
 
-  getCurrentDeviceConsumption(deviceId, specialRange) {
+  getCurrentDeviceConsumption(deviceId, deviceTopic, specialRange) {
+    if (this.topicSubscription != null)
+      this.topicSubscription.unsubscribe();
     this.consumptionService.getSpecialDeviceConsumption(deviceId, specialRange).subscribe(
       (res) => {
         this.consumptionChart.addBulkData(res);
-        const Socket = webSocket(this.socketUrl);
-        Socket.subscribe(
-          (msg) => {
-            console.log(msg);
-          }
-        );
+        this.topicSubscription = this.rxStompService.watch('/device/' + deviceTopic + '/consumption').subscribe((message: Message) => {
+            console.log(message);      
+            //add data point to chart
+             this.consumptionChart.addDataPoint(message);
+             this.consumptionChart.updateChart();
+        });
+      }
+    );
+  }
+
+  getSpecialConsumption(deviceId, specialRange) {
+    this.consumptionService.getSpecialDeviceConsumption(deviceId, specialRange).subscribe(
+      (res) => {
+        this.consumptionChart.addBulkData(res);
       }
     );
   }

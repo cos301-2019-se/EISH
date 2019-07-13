@@ -16,8 +16,8 @@ export class ConsumptionService {
 
   }
 
-  getAllDevices(): Observable<[]> {
-    return this.http.get<[]>(this.ROOT_URL + 'devices');
+  getAllDevices(): Observable<Device[]> {
+    return this.http.get<Device[]>(this.ROOT_URL + 'devices');
   }
 
   getCustomDeviceConsumption(deviceId, startTimeStamp, endTimeStamp): Observable<[]>{
@@ -28,4 +28,30 @@ export class ConsumptionService {
   getSpecialDeviceConsumption(deviceId, specialRange): Observable<[]> {
     return null
   }
+
+  convertSpecialRangeToTimestamps(specialRange) {
+    var currDate = new Date();
+    var pastDate = null;
+    switch(specialRange) {
+      case 'Last Hour':
+        pastDate = new Date();
+        break;
+      case 'Today':
+        break;
+      case 'This Week':
+        break;
+      case 'This Month':
+        break;
+      case 'This Year':
+        break;
+      default:
+
+    }
+    
+  }
+
+  newDate(objDate, year, month, day, hour, minute): Date {
+    return null;
+  }
+
 }

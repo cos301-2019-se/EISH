@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
-import { Device } from 'src/app/models/device-model';
+// import { Device } from 'src/app/models/device-model';
 
 @Component({
   selector: 'app-consumption-chart',
@@ -129,6 +129,10 @@ export class ConsumptionChartComponent implements OnInit {
   clearChart(): void {
     this.chartConfigration.data.labels = [];
     this.chartConfigration.data.datasets[0].data = [];
+  }
+
+  updateChart(): void {
+    this.chart.update();
   }
 
 }
