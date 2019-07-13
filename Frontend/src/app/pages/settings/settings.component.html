@@ -12,8 +12,8 @@
         <br>
         <br>
         <div class="searchDiv">
-            <form class="serchDevice">
-                <mat-form-field class="searchWidth">
+            <form class="searchDevice">
+                <mat-form-field class="searchBar">
                   <input type="text" placeholder="Enter device name" aria-label="device name" matInput [formControl]="userDeviceName" [matAutocomplete]="auto">
                   <mat-autocomplete #auto="matAutocomplete">
                     <mat-option *ngFor="let option of filteredOptions | async " [value]="option">

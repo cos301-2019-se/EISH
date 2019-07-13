@@ -4,7 +4,7 @@
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
-    <mat-toolbar ><span class="menu-heading">MENU</span></mat-toolbar>
+    <mat-toolbar> &#9776; MENU</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item routerLink="/homepage/dashboard">Dashboard</a>
       <a mat-list-item routerLink="/homepage/devices">Devices</a>
@@ -22,12 +22,12 @@
         mat-icon-button
         (click)="drawer.toggle()"
         *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon" ><h1 style="font-size:260%;">=</h1></mat-icon>
+        <h1>&#9776;</h1>
       </button>
 
       <!-----HEADING----->
-      <span class="homepage-heading">EISHMS</span>
-
+      <span class="logo"><img src="../../assets/logo/eishLogo.png"></span>
+      <span>EISHMS</span>
       <!-----Padding----->
       <span class="example-fill-remaining-space"></span>
 

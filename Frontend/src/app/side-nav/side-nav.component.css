@@ -1,28 +1,24 @@
 .sidenav-container {
   height: 100%;
 }
-
-.navHeader{
-  background-color: rgb(106, 210, 236);
-
-}
 .pageContent{
   padding: 20px;
   height: 100vh;
 }
 .sidenav {
   width: 200px;
+  background-color: #40c4ff;
 }
 
 button[mat-icon-button]{
   padding-right:15px;
 }
 .sidenav .mat-toolbar {
-  background:rgb(106, 210, 236);
+  background:#40c4ff;
 }
 
 .mat-toolbar.mat-primary {
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 1;
 }
@@ -37,4 +33,16 @@ button[mat-icon-button]{
   /* font-family: Arial, Helvetica, sans-serif; */
   font-family: 'Russo One';
   font-size: 30px;
+}
+
+.logo{
+  margin-top:0.8rem;
+}
+
+img{
+  height:3rem;
+}
+
+mat-nav-list a{
+  border-radius:0.8rem;
 }

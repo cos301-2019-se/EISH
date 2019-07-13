@@ -34,3 +34,46 @@
         </form>
       </div>
 </div>
+
+<mat-card class="loginCard">
+    <mat-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="login(loginForm)">
+            <div class="userMessages" *ngIf="incorrectCredentials">
+              <p>Incorrect name or email. Please try again</p>
+            </div>
+            <div class="form-group" >
+              <label for="userName">Username</label><br>
+              <input matInput placeholder="Name" name="userName" [formControlName]="userName">
+              <div class="form-control-feedback" *ngIf="getVariables.userName.errors && (getVariables.userName.dirty || getVariables.userName.touched)">
+                  <p *ngIf="getVariables.userName.errors.required"> Email is required</p>
+              </div>
+            </div>
+            
+            <div class="example-container">
+                <mat-form-field>
+                  <input matInput placeholder="Enter your email" [formControl]="userEmail" required>
+                  <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+                </mat-form-field>
+              </div>
+
+            <div class="form-group" >
+              <label for="userPassword">Password</label><br>
+              <input matInput placeholder="Password" name="userPassword" type="password" [formControl]="userPassword">
+              <mat-error *ngIf="getVariables.userPassword.errors && (getVariables.userPassword.dirty || getVariables.userPassword.touched)">
+                  <p *ngIf="getVariables.userPassword.errors.required"> Password is required</p>
+                  <p *ngIf="getVariables.userPassword.errors.minlength"> Password must be at least 8 characters long</p>
+                  <p *ngIf="getVariables.userPassword.errors.maxlength"> Password too long</p>
+              </mat-error>
+            </div>
+            <p>
+            Not a resident? <a routerLink="/key">Register!</a>  
+            </p>
+            <br>   
+            <br>
+          </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <!-- REGISTER BUTTON -->
+      <button type="submit" [disabled]="!getVariables.loginForm.valid">Log in</button>
+    </mat-card-actions>
+ </mat-card>
