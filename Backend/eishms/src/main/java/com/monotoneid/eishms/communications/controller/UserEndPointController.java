@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.monotoneid.eishms.dataPersistence.models.HomeKey;
 import com.monotoneid.eishms.dataPersistence.models.HomeUser;
 import com.monotoneid.eishms.dataPersistence.repositories.HomeKeys;

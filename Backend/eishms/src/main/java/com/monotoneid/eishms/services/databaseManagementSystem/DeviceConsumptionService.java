@@ -49,5 +49,22 @@ public class DeviceConsumptionService{
             System.out.println("Error: " + e.getMessage() + "!");
             throw e;
         }
-    }        
+    }  
+    
+    public List<DeviceConsumption> retrieveBetweenInterval(long deviceId,String interval){
+        try{
+            devicesRepository.findById(deviceId).orElseThrow(() -> new ResourceNotFoundException("device does not exist!"));
+              System.out.println(deviceId);
+              System.out.println(interval);
+                //String convertedInterval  =interval.replaceAll("^\"|\"$","");
+                String convertedInterval = "'" + interval +"'"; 
+                System.out.println(convertedInterval);
+            List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findDeviceConsumptionBetweenInterval(deviceId, convertedInterval)
+                        .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
+                return foundDeviceConsumptionList;
+        } catch(Exception e) {
+            System.out.println("Error: " + e.getMessage() + "!");
+            throw e;
+        }
+    }
 }

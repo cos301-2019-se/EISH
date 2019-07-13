@@ -1,14 +1,15 @@
 package com.monotoneid.eishms.communications.controller;
 
 import java.util.List;
-
+import net.minidev.json.*;
 import javax.validation.Valid;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.services.databaseManagementSystem.DeviceService;
-import com.monotoneid.eishms.services.externalCommunicatons.Weather;
+import com.monotoneid.eishms.services.externalCommunicatons.WeatherService;
 import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MQTTDeviceManager;
+
+import com.google.gson.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -128,13 +129,5 @@ public class DeviceEndPointController{
    public String switchOff() {
       deviceManager.controlDevice(1, "OFF");
       return "Device should be OFF";
-   }
-
-   @Autowired
-   Weather weat;
-
-   @GetMapping("/weather")
-   public StringBuffer getWeather() {
-      return weat.getCurrentWeather();
    }
 }

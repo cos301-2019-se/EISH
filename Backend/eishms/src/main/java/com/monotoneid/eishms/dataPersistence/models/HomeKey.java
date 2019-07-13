@@ -1,5 +1,7 @@
 package com.monotoneid.eishms.dataPersistence.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class HomeKey {
     private String keyName;
     private String userKey;
@@ -25,6 +27,7 @@ public class HomeKey {
         this.userKey = userkey;
     }
 
+    @JsonIgnore
     public String getUserkey() {
         return this.userKey;
     }
@@ -41,6 +44,7 @@ public class HomeKey {
         this.userType = usertype;
     }
 
+    @JsonIgnore
     public UserType getUsertype() {
         return this.userType;
     }
