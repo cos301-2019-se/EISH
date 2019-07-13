@@ -16,14 +16,12 @@ public class HttpConnection {
 
     public StringBuffer getContentFromURL(String api) {
         try {
-            System.out.println(api);
             StringBuffer content = null;
             url = new URL(api);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
             int status = connection.getResponseCode();
-            System.out.println("Status: " + status);
             Reader streamReader = null;
 
             if(status == 200) {

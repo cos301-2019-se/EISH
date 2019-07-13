@@ -45,7 +45,7 @@ public class WeatherService {
     public ResponseEntity<Object> getCurrentWeather() {
         try {
             StringBuffer content = connection.getContentFromURL(api);
-            System.out.println(api);
+    
             JsonObject jsonContent = new JsonParser().parse(content.toString()).getAsJsonObject();
             JsonArray weatherArray = jsonContent.get("data").getAsJsonArray();
             JsonObject weatherObject = weatherArray.get(0).getAsJsonObject();
@@ -67,7 +67,7 @@ public class WeatherService {
             weatherRepository.save(newWeather);            
 
             long lastIndex = weatherRepository.count();
-            Weather currentWeather = weatherRepository.getOne(lastIndex);///.orElseThrow(() -> new ResourceNotFoundException("Could not retrieve weather!"));
+            Weather currentWeather = weatherRepository.getOne(lastIndex);
             JSONObject weather = new JSONObject();
             weather.put("weatherLocation",currentWeather.getWeatherLocation());
             weather.put("weatherDescription",currentWeather.getWeatherDescription());
@@ -78,8 +78,6 @@ public class WeatherService {
             weather.put("weatherPressure",currentWeather.getWeatherPressure());
             weather.put("weatherDateTime",currentWeather.getWeatherLastOBTime());
             
-            //System.out.println("Is json: " + jsonContent.isJsonObject());
-            //System.out.println("Weather: " + jsonContent.get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString());
             return new ResponseEntity<>(weather,HttpStatus.OK);
         } catch(Exception e) {
             System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
