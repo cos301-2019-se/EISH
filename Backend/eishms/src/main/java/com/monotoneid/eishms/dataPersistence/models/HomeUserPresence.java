@@ -1,13 +1,13 @@
 package com.monotoneid.eishms.dataPersistence.models;
 
-import java.sql.Timestamp;
+// import java.sql.Timestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Table;
+// import javax.persistence.Column;
+// import javax.persistence.Entity;
+// import javax.persistence.EntityListeners;
+// import javax.persistence.Table;
 
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+//import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 /*
 @Entity(name = "homeuserpresence")
 @Table(name = "homeuserpresence")

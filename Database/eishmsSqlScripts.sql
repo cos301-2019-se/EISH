@@ -42,7 +42,7 @@ CREATE TABLE deviceconsumption(
 deviceid serial references device(deviceid) not null,
 deviceconsumptiontimestamp timestamp not null,
 deviceconsumptionstate text not null,
-deviceconsumption float not null,
+deviceconsumption float,
  primary key(deviceid,deviceconsumptiontimestamp)	
 );
 
@@ -55,6 +55,18 @@ homeconsumption float not null
 );
 insert into devicetype(devicetypename,devicetypestates) values('TV',ARRAY['ON','OFF','STANDBY']);
 
+
+/*selects from now till last minute*/
+select * from deviceconsumption where deviceconsumptiontimestamp >= NOW() - INTERVAL '1 minutes';
+select * from deviceconsumption where deviceconsumptiontimestamp >= NOW() - INTERVAL '10 minutes';
+select * from deviceconsumption where deviceconsumptiontimestamp >= NOW() - INTERVAL '1 hour';
+select * from deviceconsumption where deviceconsumptiontimestamp >= NOW() - INTERVAL '1 day';
+select * from deviceconsumption where deviceconsumptiontimestamp >= NOW() - INTERVAL '1 week';
+select * from deviceconsumption where deviceconsumptiontimestamp >= NOW() - INTERVAL '1 month';
+select * from deviceconsumption where deviceconsumptiontimestamp >= NOW() - INTERVAL '1 year';
+
+select * from deviceconsumption where deviceid =1  and deviceconsumptiontimestamp >= NOW() - INTERVAL '1 minutes' 
+order by deviceconsumptiontimestamp desc limit 1;
 /*
 GENERATORS AND ENTITIES RELATED TO GENERATORS
 */
