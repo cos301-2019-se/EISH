@@ -1,6 +1,6 @@
-export class Weather{
+export class Weather {
     weatherDescription: string;
-    weatherIcon:string;
-    weatherTemp:number;
+    weatherIcon: string;
+    weatherTemp: number;
     weatherLocation: string;
 }

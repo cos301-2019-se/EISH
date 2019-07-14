@@ -12,26 +12,26 @@ export class ConsumptionChartComponent implements OnInit {
   /**
    * Variables:
    */
-  heading: String;
+  heading: string;
   chart: Chart;
   currentDevice = null;
 
   chartConfigration = null;
 
-  constructor() { 
-    this.heading = "Home Consumption";
-    //connect to a socket
+  constructor() {
+    this.heading = 'Home Consumption';
+    // connect to a socket
   }
 
   ngOnInit() {
     this.configureConsumptionChart();
   }
 
-  setHeading(heading: String) {
+  setHeading(heading: string) {
     this.heading = heading;
   }
 
-  configureConsumptionChart() { 
+  configureConsumptionChart() {
     this.chartConfigration = {
       type: 'line',
       data: {
@@ -47,6 +47,12 @@ export class ConsumptionChartComponent implements OnInit {
       },
       options: {
         responsive: true,
+        legend: {
+            labels: {
+                // This more specific font property overrides the global property
+                fontFamily: 'Raleway'
+            }
+        },
         title: {
           display: true,
           text: 'Some Device Consumption'
@@ -79,16 +85,17 @@ export class ConsumptionChartComponent implements OnInit {
     };
     this.chart = new Chart('consumptionChart', this.chartConfigration);
     this.setChartHeading('Consumption');
-    //this.setXAxisLabel("Hours");
-    this.setYAxisLabel("Power Consumption");
+    // this.setXAxisLabel("Hours");
+    this.setYAxisLabel('Power Consumption');
   }
 
   addDataPoint(newData): void {
-    this.chartConfigration.data.labels.push(newData.deviceConsumptionTimestamp);//put timestamp here
-    this.chartConfigration.data.datasets[0].data.push(parseInt(newData.deviceConsumption));
-    //this.chart.update();
+    this.chartConfigration.data.labels.push(newData.timestamp); // put timestamp here
+    // tslint:disable-next-line: radix
+    this.chartConfigration.data.datasets[0].data.push(parseInt(newData.consumption));
+    // this.chart.update();
   }
-  
+
   setYAxisLabel(newLabel): void {
     this.chartConfigration.options.scales.yAxes[0].scaleLabel.labelString = newLabel;
     this.chart.update();
@@ -110,7 +117,7 @@ export class ConsumptionChartComponent implements OnInit {
       this.addDataPoint(dataPoint);
     });
 
-    //maybe update or ???
+    // maybe update or ???
     this.chart.update();
   }
 

@@ -1,7 +1,7 @@
-export interface Device{
-    deviceId:Number;
-    deviceName: String;
-    deviceTopic: String;
-    devicePriorityType: String;
+export interface Device {
+    deviceId: number;
+    deviceName: string;
+    deviceTopic: string;
+    devicePriorityType: string;
     deviceStates: {};
 }

@@ -11,17 +11,17 @@ import { ForecastComponent } from './pages/forecast/forecast.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
 
 const routes: Routes = [
-  { path: '', component:LoginComponent},
-  {path: 'homepage', component:SideNavComponent, children: [
-    {path: 'settings',component:SettingsComponent},
+  { path: '', component: LoginComponent},
+  {path: 'homepage', component: SideNavComponent, children: [
+    {path: 'settings', component: SettingsComponent},
     {path: 'dashboard', component: DashboardComponent},
     {path: 'devices', component: DevicesComponent},
     {path: 'consumption', component: ConsumptionComponent},
     {path: 'forecast', component: ForecastComponent}
   ]},
-  {path: 'register/:regType', component:ChangeCredentialsComponent},
-  {path: 'key', component:KeysComponent},
-  
+  {path: 'register/:regType', component: ChangeCredentialsComponent},
+  {path: 'key', component: KeysComponent},
+
 ];
 
 @NgModule({

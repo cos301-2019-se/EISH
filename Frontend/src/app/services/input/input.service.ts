@@ -5,21 +5,21 @@ import { Injectable } from '@angular/core';
 })
 export class InputService {
   /**
-   * Class will be used to sanitize and validate input 
+   * Class will be used to sanitize and validate input
    */
   constructor() { }
 
   /**
    * Checks input for malicious attacks against injections
    */
-  sanitizeInput(){
+  sanitizeInput() {
 
-  } 
-  
+  }
+
   /**
    * Checks input validity
    */
-  validateInput(){
+  validateInput() {
 
   }
 }

@@ -11,8 +11,8 @@ export class ConsumptionService {
   ROOT_URL = 'http://192.168.8.102:8080/api/';
 
   constructor(private http: HttpClient) { }
- 
-  getAllDevicesConsumption(){
+
+  getAllDevicesConsumption() {
 
   }
 
@@ -20,19 +20,19 @@ export class ConsumptionService {
     return this.http.get<Device[]>(this.ROOT_URL + 'devices');
   }
 
-  getCustomDeviceConsumption(deviceId, startTimeStamp, endTimeStamp): Observable<[]>{
-    const params = new HttpParams().set("deviceId", deviceId).set("startTimeStamp", startTimeStamp).set("endTimeStamp", endTimeStamp);
+  getCustomDeviceConsumption(deviceId, startTimeStamp, endTimeStamp): Observable<[]> {
+    const params = new HttpParams().set('deviceId', deviceId).set('startTimeStamp', startTimeStamp).set('endTimeStamp', endTimeStamp);
     return this.http.get<[]>(this.ROOT_URL + 'device/consumption', { params });
   }
 
   getSpecialDeviceConsumption(deviceId, specialRange): Observable<[]> {
-    return null
+    return null;
   }
 
   convertSpecialRangeToTimestamps(specialRange) {
-    var currDate = new Date();
-    var pastDate = null;
-    switch(specialRange) {
+    const CurrDate = new Date();
+    let pastDate = null;
+    switch (specialRange) {
       case 'Last Hour':
         pastDate = new Date();
         break;
@@ -47,7 +47,6 @@ export class ConsumptionService {
       default:
 
     }
-    
   }
 
   newDate(objDate, year, month, day, hour, minute): Date {

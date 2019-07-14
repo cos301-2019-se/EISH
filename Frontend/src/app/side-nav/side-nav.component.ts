@@ -9,8 +9,8 @@ import { MAT_DRAWER_DEFAULT_AUTOSIZE } from '@angular/material';
   templateUrl: './side-nav.component.html',
   styleUrls: ['./side-nav.component.css']
 })
-export class SideNavComponent implements OnInit{
-  initials: String;
+export class SideNavComponent implements OnInit {
+  initials: string;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -18,11 +18,11 @@ export class SideNavComponent implements OnInit{
     );
 
   constructor(private breakpointObserver: BreakpointObserver) {
-    this.initials="EU";
+    this.initials = 'EU';
   }
 
-  ngOnInit(){
-    this.initials="EU";
+  ngOnInit() {
+    this.initials = 'EU';
   }
 
   toggle(drawer) {

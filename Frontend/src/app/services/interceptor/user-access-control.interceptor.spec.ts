@@ -11,7 +11,7 @@ describe('AccessControlInterceptor', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
-            providers: [UserAccessControlService, 
+            providers: [UserAccessControlService,
                         {
                             provide: HTTP_INTERCEPTORS,
                             useClass: AccessControlInterceptor,
@@ -24,23 +24,23 @@ describe('AccessControlInterceptor', () => {
     });
 
     it('should add an authorization header', () => {
-        let key = 'userToken';
+        const key = 'userToken';
         const userToken = sessionStorage.getItem(key);
         const fullToken = 'Bearer ' + userToken;
 
-        //This checks whether we can make a request or not.
-        //service.changeCredentials().subscribe(response => {
+        // This checks whether we can make a request or not.
+        // service.changeCredentials().subscribe(response => {
         //    expect(response).toBeTruthy();
-        //});
+        // });
 
-        //Creates a mock http request.
+        // Creates a mock http request.
         const httpRequest = httpMock.expectOne(`${service.ROOT_URL}/v1/user`);
 
-        //Checks whether the mocked http request has an header that must been added by the interceptor.
+        // Checks whether the mocked http request has an header that must been added by the interceptor.
         expect(httpRequest.request.headers.has('Authorization')).toBe(true);
 
-        //Checks whether the mocked http request contains the same token request as the one saved.
+        // Checks whether the mocked http request contains the same token request as the one saved.
         expect(httpRequest.request.headers.get('Authorization')).toBe(fullToken);
-    });    
+    });
 });
 

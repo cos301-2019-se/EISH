@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GeneratorService } from "src/app/services/generators/generator.service";
+import { GeneratorService } from 'src/app/services/generators/generator.service';
 
 @Component({
   selector: 'app-battery-chart',
@@ -9,10 +9,10 @@ import { GeneratorService } from "src/app/services/generators/generator.service"
 export class BatteryChartComponent implements OnInit {
 
   /*Variables*/
-  gaugeType = "semi";
-  gaugeValue : BigInteger; //value needs to be retrieved 
-  gaugeLabel = "Speed";
-  gaugeAppendText = "km/hr";
+  gaugeType = 'semi';
+  gaugeValue: BigInteger; // value needs to be retrieved
+  gaugeLabel = 'Speed';
+  gaugeAppendText = 'km/hr';
 
   constructor() { }
 

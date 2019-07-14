@@ -10,7 +10,7 @@ export class WeatherService {
   WEATHER_API = 'http://192.168.8.102:8080/api/weather';
   constructor(private http: HttpClient) { }
 
-  getWeather():Observable<Weather[]>{
+  getWeather(): Observable<Weather[]> {
     return this.http.get<Weather[]>(this.WEATHER_API);
   }
 }

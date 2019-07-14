@@ -8,28 +8,34 @@ import {map, startWith} from 'rxjs/operators';
 })
 export class DashboardComponent implements OnInit {
 
-  title="Dashboard";
-  ///for battery
-  gaugeMin =0;
-  gaugemax = 100;
-  gaugeCap ="round"
-  gaugeType = "full";
-  gaugeValue = 92;
-  //gaugeLabel = "Battery Percentage";
-  gaugeAppendText = "%";
-  gaugeThickness = 8;
-  state="Charging"
+  constructor(private weatherService: WeatherService) { }
 
-  //for weather
-  
-  weatherData= {
-    "weatherDescription": "Sunny",
-    "weatherIcon":"http://openweathermap.org/img/wn/01n@2x.png",
-    "weatherTemp":25,
-    "weatherLocation": "Pretoria"
+  title = 'Dashboard';
+  // for battery
+  gaugeMin = 0;
+  gaugemax = 100;
+  gaugeCap = 'round';
+  gaugeType = 'full';
+  gaugeValue = 92;
+  // gaugeLabel = "Battery Percentage";
+  gaugeAppendText = '%';
+  gaugeThickness = 8;
+  state = 'Charging';
+
+  // for weather
+  weatherData = {
+    weatherDescription: 'Sunny',
+    weatherIcon: 'http://openweathermap.org/img/wn/01n@2x.png',
+    weatherTemp: 25,
+    weatherLocation: 'Pretoria'
   };
 
-  constructor(private weatherService: WeatherService) { }
+  thresholdConfig = {
+    0: {color: 'red'},
+    20 : {color: 'orange'},
+    40: {color: 'yellow'},
+    80: {color: 'green'}
+  };
 
   ngOnInit() {
     /*this.weatherService.getWeather().pipe(
@@ -40,11 +46,4 @@ export class DashboardComponent implements OnInit {
           })
     )*/
   }
-
-  thresholdConfig = {
-    '0': {color:'red'},
-    '20' : {color: 'orange'},
-    '40': {color:'yellow'},
-    '80': {color:'green'}
-  };
 }

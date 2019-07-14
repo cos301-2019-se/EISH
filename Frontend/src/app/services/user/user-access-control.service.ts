@@ -15,8 +15,8 @@ export class UserAccessControlService {
 
  /* Variables: */
   ROOT_URL = 'http://192.168.8.102:8080/api/';
-  data:any;
-  JSON_URL ='assets/data/';
+  data: any;
+  JSON_URL = 'assets/data/';
   constructor( private http: HttpClient) { }
 
   /**
@@ -25,45 +25,46 @@ export class UserAccessControlService {
    * POST Request
    * exposed endpoint:
    * @param userCredentials: json of user form data
-   * @returns Boolean 
+   * @returns Boolean
    */
-  authenticateUser(userCredentials, loginInstance){
-    var loginCred = {username : userCredentials.userName, password : userCredentials.userPassword};
-    
-     return this.http.post(this.ROOT_URL+'auth/login/',loginCred).pipe(
+  authenticateUser(userCredentials, loginInstance) {
+    const LoginCred = {username : userCredentials.userName, password : userCredentials.userPassword};
+
+    return this.http.post(this.ROOT_URL + 'auth/login/', LoginCred).pipe(
       map( response => {
             this.data =  response,
             sessionStorage.setItem('accessToken', this.data.accessToken),
             sessionStorage.setItem('userName' , userCredentials.userName);
-            
-            //check if details are admin if true:
-            if (userCredentials.userName == "admin")
-              loginInstance.routeToChange();
-            else //else go to dashboard
-              loginInstance.routeToHomepage();
 
-      }),catchError(error => 
+            // check if details are admin if true:
+            if (userCredentials.userName === 'admin') {
+              loginInstance.routeToChange();
+            } else { // else go to dashboard
+              loginInstance.routeToHomepage();
+            }
+
+      }), catchError(error =>
         loginInstance.error())
         ).subscribe();
 
   }
 
   /**
-   * Checks session storage to see if user is currently logged in  
+   * Checks session storage to see if user is currently logged in
    * @returns Boolean
    */
-  isUserLoggedIn(): Boolean {
-    return sessionStorage.getItem("userName") != null;
+  isUserLoggedIn(): boolean {
+    return sessionStorage.getItem('userName') != null;
   }
- 
+
   /**
    * Clears session storage, invalidates JWT
    * Route to login page
    * PUT Request
    */
-  userLogOut(): void{
-    sessionStorage.clear(); //window.sessionStorage.clear();
-    //load login page
+  userLogOut(): void {
+    sessionStorage.clear(); // window.sessionStorage.clear();
+    // load login page
 
   }
 
@@ -76,9 +77,9 @@ export class UserAccessControlService {
    */
   getUser(): Observable<User> {
 
-    let username = sessionStorage.getItem("userName");
-    const params = new HttpParams().set("userName", username);
-    return this.http.get<User>(this.ROOT_URL+'user/', { params });   
+    const username = sessionStorage.getItem('userName');
+    const params = new HttpParams().set('userName', username);
+    return this.http.get<User>(this.ROOT_URL + 'user/', { params });
   }
 
   /**
@@ -91,11 +92,12 @@ export class UserAccessControlService {
   changeCredentials(userCredentials, credentialInstance) {
 
     this.http.put(this.ROOT_URL + 'user/', userCredentials).subscribe(
-     ( res: Response) =>{ 
-       if(res.ok) 
-        credentialInstance.route('dashboard', '')
-      else 
-     credentialInstance.route('register', 'Change'); // error message?
+     ( res: Response) => {
+       if (res.ok) {
+        credentialInstance.route('dashboard', '');
+       } else {
+        credentialInstance.route('register', 'Change');
+       } // error message?
     });
   }
 
@@ -104,18 +106,18 @@ export class UserAccessControlService {
    * POST Request
    * exposed endpoint:
    * @param credential Object
-   * @returns
+   * @returns A message of whether a user was succesfully registered or not.
    */
-  registerUser(userCredentials, registerInstance):any{
+  registerUser(userCredentials, registerInstance): any {
 
-    return this.http.post(this.ROOT_URL+'user/',userCredentials).pipe(
-      map( 
+    return this.http.post(this.ROOT_URL + 'user/', userCredentials).pipe(
+      map(
         response => {
             this.data =  response,
-            sessionStorage.clear()
-            registerInstance.route('/', '')
+            sessionStorage.clear();
+            registerInstance.route('/', '');
           }
-      ),catchError(error => 
+      ), catchError(error =>
         registerInstance.error())
         ).subscribe();
   }
@@ -124,13 +126,15 @@ export class UserAccessControlService {
    * Authenticates given key and upon successful validation receives JWT
    * POST Request
    * exposed endpoint:
-   * @param
-   * @returns
+   * @param keyType Whether it is the general key or renewal key.
+   * @param key key provided by the user.
+   * @param keyInstance The component where this information is from.
+   * @returns a message and JSON Web Token.
    */
-  authenticateKey(keyType, key, keyInstance): any{
-    let keyLogin = {username: keyType, password: key.userKey};
-    
-    return this.http.post(this.ROOT_URL+'auth/login/', keyLogin).pipe(
+  authenticateKey(keyType, key, keyInstance): any {
+    const keyLogin = {username: keyType, password: key.userKey};
+
+    return this.http.post(this.ROOT_URL + 'auth/login/', keyLogin).pipe(
       map(
         response => {
             this.data =  response,
@@ -138,60 +142,60 @@ export class UserAccessControlService {
             sessionStorage.setItem('key', key);
             keyInstance.route();
           }
-      ),catchError(error => 
+      ), catchError(error =>
        keyInstance.errorInForm())).subscribe();
   }
-  
+
   /**
    * Removes user given userId
    */
-  removeUser(userId){
-    console.log('in delete, userId: ' + userId)
+  removeUser(userId) {
+    console.log('in delete, userId: ' + userId);
     this.http.delete(this.ROOT_URL, userId);
   }
 
   /**
    * Retrieve array all registered users on the system
    */
-  retrieveAllUsers(): Observable<User[]>{
+  retrieveAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.ROOT_URL + 'users');
   }
 
   /**
    * Retrieves users' presence
    */
-  getUserPresence(userName){
+  getUserPresence(userName) {
 
   }
 
   /**
    * Change user role/type
    */
-  changeUserType(userDetails){
-    //{userId}/{userType}
-    //console.log(userDetails.userId)
-    //console.log(userDetails.userType)
-    const params = new HttpParams().set("userId", userDetails.userId);
-    params.set("userType", userDetails.userType)
-    this.http.patch(this.ROOT_URL + 'user/usertype/', {params})
+  changeUserType(userDetails) {
+    // {userId}/{userType}
+    // console.log(userDetails.userId)
+    // console.log(userDetails.userType)
+    const params = new HttpParams().set('userId', userDetails.userId);
+    params.set('userType', userDetails.userType);
+    this.http.patch(this.ROOT_URL + 'user/usertype/', {params});
   }
 
   /**
    * Update users' expiration date
    */
-  changeUserExpiration(userDetails){
+  changeUserExpiration(userDetails) {
 
-    //{userId}/{numDays}
-    //console.log(userDetails.userId)
-    //console.log(userDetails.nrDays)
-    const params = new HttpParams().set("userId", userDetails.userId);
-    params.set("userType", userDetails.nrDays)
-    this.http.patch(this.ROOT_URL + 'user/expiration/', {params})
+    // {userId}/{numDays}
+    // console.log(userDetails.userId)
+    // console.log(userDetails.nrDays)
+    const params = new HttpParams().set('userId', userDetails.userId);
+    params.set('userType', userDetails.nrDays);
+    this.http.patch(this.ROOT_URL + 'user/expiration/', {params});
   }
 
-  getUserJSONArray(): Observable<User []>{
+  getUserJSONArray(): Observable<User []> {
     console.log('getting JSON user');
-    return this.http.get<User []>(this.JSON_URL +'user.json');
+    return this.http.get<User []>(this.JSON_URL + 'user.json');
   }
 
 }
