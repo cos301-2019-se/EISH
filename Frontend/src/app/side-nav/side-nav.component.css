@@ -1,13 +1,21 @@
+
 .sidenav-container {
   height: 100%;
+  background-color: #c9e0ea;
 }
+
 .pageContent{
-  padding: 20px;
+  /* padding: 20px; */
   height: 100vh;
+  background-color: transparent;
+  /* background-color: #c9e0ea; */
+  /* margin-top: 3px; */
+  z-index: -10;
 }
 .sidenav {
   width: 200px;
   background-color: #40c4ff;
+  /* background-color: #f93312; */
 }
 
 button[mat-icon-button]{
@@ -15,12 +23,18 @@ button[mat-icon-button]{
 }
 .sidenav .mat-toolbar {
   background:#40c4ff;
+  /* background: #f93312; */
 }
 
 .mat-toolbar.mat-primary {
   position: fixed;
   top: 0;
   z-index: 1;
+}
+
+.mat-toolbar {
+  box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.1);
+  /* z-index: 2; */
 }
 
 .menu-heading {
@@ -44,5 +58,5 @@ img{
 }
 
 mat-nav-list a{
-  border-radius:0.8rem;
+  /* border-radius:0.8rem; */
 }

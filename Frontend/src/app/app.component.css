@@ -1,4 +1,4 @@
-/* @font-face {
+ @font-face {
     font-family: 'Catamaran';
     src: url('../assets/eishms_fonts/Catamaran/Catamaran-Regular.ttf') format('truetype');
 }
@@ -8,16 +8,17 @@
     src: url('../assets/eishms_fonts/Catamaran/Catamaran-Bold.ttf') format('truetype');
 }
 
-@font-face {
+/* @font-face {
     font-family: 'Russo One';
     src: url('../assets/eishms_fonts/Russo_One/RussoOne-Regular.ttf') format('truetype');
-}  
+}   */
 
 @font-face {
     font-family: 'Raleway';
     src: url('../assets/eishms_fonts/Raleway/Raleway-Regular.ttf') format('truetype');
 }  
 
+/*
 @font-face {
     font-family: 'Monoton';
     src: url('../assets/eishms_fonts/Monoton/Monoton-Regular.ttf') format('truetype');
@@ -42,3 +43,8 @@
     font-family: 'Raleway';
     font-size: 15px;
 } */
+
+* {
+    font-family: 'Raleway';
+    font-size: 15px;
+}

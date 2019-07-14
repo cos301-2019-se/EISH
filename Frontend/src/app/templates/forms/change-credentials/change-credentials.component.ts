@@ -30,7 +30,7 @@ export class ChangeCredentialsComponent implements OnInit {
         'userName':[null,[Validators.required]],
         'userEmail':[null,[Validators.required,Validators.email]],
         'userPassword':[null,[Validators.required,Validators.minLength(8),Validators.maxLength(40)]],
-        'userDeviceName':[null,[Validators.minLength(3),Validators.maxLength(25)]]
+        'userDeviceName':[null,[Validators.required, Validators.minLength(3),Validators.maxLength(25)]]
       });
       this.Action = "Submit";
     }else{
@@ -42,7 +42,7 @@ export class ChangeCredentialsComponent implements OnInit {
           'userName':[res.userName,[Validators.required]],
           'userEmail':[res.userEmail,[Validators.required,Validators.email]],
           'userPassword':[null,[Validators.required,Validators.minLength(8),Validators.maxLength(40)]],
-          'userDeviceName':[res.userLocationTopic,[Validators.minLength(3),Validators.maxLength(25)]]
+          'userDeviceName':[res.userLocationTopic,[Validators.required,Validators.minLength(3),Validators.maxLength(25)]]
         });
       });
       this.Action = "Submit";
@@ -57,7 +57,7 @@ export class ChangeCredentialsComponent implements OnInit {
     this.routes.navigate([route, routeLocation]);
   }
   get getVariables(){
-    return this.credentialsForm.controls;
+    return this.credentialsForm;
   }
 
   /**

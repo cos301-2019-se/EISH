@@ -2,6 +2,7 @@ import { Component, OnInit  } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { MAT_DRAWER_DEFAULT_AUTOSIZE } from '@angular/material';
 
 @Component({
   selector: 'app-side-nav',
@@ -22,5 +23,14 @@ export class SideNavComponent implements OnInit{
 
   ngOnInit(){
     this.initials="EU";
+  }
+
+  toggle(drawer) {
+    this.isHandset$.subscribe(result => {
+      console.log(result);
+      if (result) {
+        drawer.toggle();
+      }
+    });
   }
 }

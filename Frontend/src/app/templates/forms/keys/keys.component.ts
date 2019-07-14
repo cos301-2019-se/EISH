@@ -37,13 +37,13 @@ export class KeysComponent implements OnInit {
     this.incorrectKey = true;
   }
   get getVariables(){
-    return this.keyForm.controls;
+    return this.keyForm;
   }
   /**
    * Determines which action to take depending on keyType
    */
   handleKey(formData){
-    this.authenticationService.authenticateKey('general',formData.value, this);
+    this.authenticationService.authenticateKey('general', formData.value, this);
  }
 
 }

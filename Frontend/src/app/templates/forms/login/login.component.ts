@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private route: Router,private fb: FormBuilder, private AuthenticationServices: UserAccessControlService) {
     this.incorrectCredentials = false;
-    this.formHeading="Login";
+    this.formHeading = "Login";
     this.loginForm = this.fb.group({
       'userName':[null,[Validators.required]],
       'userPassword':[null,[Validators.required,Validators.minLength(5),Validators.maxLength(40)]]
@@ -45,10 +45,11 @@ export class LoginComponent implements OnInit {
 
   error(): void {
     this.incorrectCredentials = true;
+    this.loginForm;
   }
 
   get getVariables(){
-    return this.loginForm.controls;
+    return this.loginForm;
   }
   
   /**

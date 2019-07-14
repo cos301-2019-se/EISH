@@ -38,8 +38,8 @@ export class ConsumptionChartComponent implements OnInit {
         labels: [],
         datasets: [{
           label: 'Device Consumption',
-          backgroundColor: 'rgba(24,48,35,0.5)',
-          borderColor: '#FF22DD',
+          backgroundColor: 'rgba(93, 217, 93, 0.6)',
+          borderColor: 'rgba(93, 217, 93, 1)',
           data: [
           ],
           fill: true,
