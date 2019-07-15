@@ -27,8 +27,11 @@
       value="./suppression.xml" /> -->
     <!-- <property name="file"
       value="${config_loc}/checkstyle-suppression.xml" /> -->
+    <!-- <property name="file"
+      value="${config_loc}\suppressions.xml" /> -->
+
     <property name="file"
-      value="${config_loc}\suppressions.xml" />    
+      value="C:\Users\Koketso\Documents\GitHub\EISH_BACK\EISH\Backend\eishms\config\checkstyle\suppressions.xml" />      
   </module>
 
   <module name="TreeWalker">
@@ -189,7 +192,7 @@
         value="GenericWhitespace ''{0}'' is not preceded with whitespace." />
     </module>
     <module name="Indentation">
-      <property name="basicOffset" value="2" />
+      <property name="basicOffset" value="4" />
       <property name="braceAdjustment" value="0" />
       <property name="caseIndent" value="2" />
       <property name="throwsIndent" value="4" />

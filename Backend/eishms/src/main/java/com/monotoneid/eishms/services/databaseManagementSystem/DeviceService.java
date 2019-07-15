@@ -10,7 +10,7 @@ import java.util.List;
 import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.dataPersistence.repositories.Devices;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
-import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MQTTDeviceManager;
+import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MqttDeviceManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ public class DeviceService {
     private Devices devicesRepository;
 
     @Autowired
-    private MQTTDeviceManager deviceManager;
+    private MqttDeviceManager deviceManager;
 
     /**
      * Retrieves all the devices in the database
@@ -87,7 +87,7 @@ public class DeviceService {
                     throw null;    
         } catch(Exception e) {
             System.out.println("Error: Input is " + e.getMessage() + "!");
-            return new ResponseEntity<>("Error: Failed to add device details!",HttpStatus.PRECONDITION_FAILED);
+            return new ResponseEntity<>("Error: Failed to add device details!", HttpStatus.PRECONDITION_FAILED);
         }
     }
 
@@ -131,9 +131,9 @@ public class DeviceService {
         } catch(Exception e) {
             System.out.println("Error: Input is " + e.getMessage() + "!");
             if(e.getCause() == null)
-                return new ResponseEntity<>("Error: Failed to update device!",HttpStatus.PRECONDITION_FAILED);
+                return new ResponseEntity<>("Error: Failed to update device!", HttpStatus.PRECONDITION_FAILED);
             else
-                return new ResponseEntity<>("Error: Failed to update device!",HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Error: Failed to update device!", HttpStatus.NOT_FOUND);
         }
     }
 

@@ -7,7 +7,7 @@ import javax.validation.Valid;
 import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.services.databaseManagementSystem.DeviceService;
 import com.monotoneid.eishms.services.externalCommunicatons.WeatherService;
-import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MQTTDeviceManager;
+import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MqttDeviceManager;
 
 import com.google.gson.*;
 
@@ -35,7 +35,7 @@ public class DeviceEndPointController{
    private DeviceService deviceService;
 
    @Autowired
-   private MQTTDeviceManager deviceManager;
+   private MqttDeviceManager deviceManager;
 
    /**
     * POST METHOD
@@ -101,11 +101,11 @@ public class DeviceEndPointController{
     * Implements getDeviceStates endpoint, that calls the getDeviceStates service
     * @return
     */
-   @GetMapping(value = "/device/state")
-   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public List<Object> getDeviceStates() {
-      return deviceManager.getDeviceStates();
-   }
+   // @GetMapping(value = "/device/state")
+   // @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+   // public List<Object> getDeviceStates() {
+   //    return deviceManager.getDeviceStates();
+   // }
 
    /**
     * PATCH METHOD
