@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {MatDialogModule, MatDialogConfig} from '@angular/material/dialog';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
@@ -18,20 +18,15 @@ import { DeviceService } from 'src/app/services/devices/device.service';
   styleUrls: ['./settings.component.css']
 })
 
-export class SettingsComponent implements OnInit, AfterViewInit {
+export class SettingsComponent implements OnInit {
   constructor(private generatorService: GeneratorService,
               private userService: UserAccessControlService,
-              private deviceService: DeviceService, private cdRef: ChangeDetectorRef,
+              private deviceService: DeviceService,
               private dialog: MatDialog) { }
 
   // for user table
   formData: any;
-
-  // for pagination
-  @ViewChild(MdbTablePaginationComponent, { static: true }) mdbTablePagination: MdbTablePaginationComponent;
-  @ViewChild(MdbTableDirective, { static: true }) mdbTable: MdbTableDirective;
-  previous: any = [];
-
+  isDataAvailable: boolean;
   // for search bar
   panelOpenState = false;
   deviceFound: boolean;
@@ -76,16 +71,6 @@ export class SettingsComponent implements OnInit, AfterViewInit {
      ).subscribe();
     this.getUserList();
     this.deviceFound = false;
-
-    this.mdbTable.setDataSource(this.userArray);
-    this.previous = this.mdbTable.getDataSource();
-  }
-
-  ngAfterViewInit(): void {
-    this.mdbTablePagination.setMaxVisibleItemsNumberTo(5);
-    this.mdbTablePagination.calculateFirstItemIndex();
-    this.mdbTablePagination.calculateLastItemIndex();
-    this.cdRef.detectChanges();
   }
 
     updateUserList(id: number, property: string, event: any) {
@@ -238,7 +223,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
         map( response => {
             this.userArray =  response,
             JSON.stringify(this.userArray);
-
+            this.isDataAvailable = true;
         })
     ).subscribe();
   }

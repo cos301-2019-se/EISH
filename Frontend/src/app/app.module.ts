@@ -28,7 +28,7 @@ import { MatProgressBarModule, MatCardModule,
         MatCheckboxModule, MatDialogModule,
         MatTableModule, MatMenuModule,
         MatToolbarModule, MatButtonModule,
-        MatSidenavModule, MatIconModule,
+        MatSidenavModule, MatIconModule, MatPaginatorModule,
         MatListModule } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
@@ -91,6 +91,7 @@ import { eishmsRxStompConfig } from './services/stomp/rx-stomp.config';
     WavesModule,
     TableModule,
     MatCardModule,
+    MatPaginatorModule,
     NgxGaugeModule,
     MatProgressBarModule,
     ChartsModule
