@@ -21,7 +21,7 @@ export class DevicesComponent implements OnInit {
     {deviceId: 3, deviceName: 'Kettle', deviceConsumption: 12},
     {deviceId: 4, deviceName: 'Sony Home Theatre', deviceConsumption: 8},
     {deviceId: 5, deviceName: 'Sony Playstation', deviceConsumption: 15},
-  ]
+  ];
   deviceList: any;
   consumptionArray: any;
   lastHourTotal: number;
@@ -34,11 +34,11 @@ export class DevicesComponent implements OnInit {
         map( response => {
             this.deviceList =  response,
             JSON.stringify(this.deviceList);
-            console.log(this.deviceList)
+            console.log(this.deviceList);
           })
         ).subscribe();
 
-        this.consumptionService.getJSONConsumption().pipe(
+      this.consumptionService.getJSONConsumption().pipe(
           map( response => {
               this.consumptionArray =  response,
               JSON.stringify(this.consumptionArray);
@@ -49,13 +49,13 @@ export class DevicesComponent implements OnInit {
   }
 
   /**
-   * 
+   *
    */
-  progressBarAgregation(){
-    //console.log('progress: '+ JSON.stringify(this.consumptionArray))
+  progressBarAgregation() {
+    // console.log('progress: '+ JSON.stringify(this.consumptionArray))
     let total = 0;
     for (let index = 0; index < this.consumptionArray.length; index++) {
-      //console.log(this.consumptionArray[index].deviceConsumption)
+      // console.log(this.consumptionArray[index].deviceConsumption)
       total += this.consumptionArray[index].deviceConsumption;
     }
 
@@ -66,15 +66,15 @@ export class DevicesComponent implements OnInit {
           continue
       else
           deviceIds.push(this.consumptionArray[index].deviceId)
-      
+
     }
     console.log('device Ids: ' + deviceIds)
     console.log('keys '+ keys)*/
-    console.log('total: '+ total);
+    console.log('total: ' + total);
   }
 
-  getDeviceState(deviceId){
-    //get device topic using id
+  getDeviceState(deviceId) {
+    // get device topic using id
     let topic;
     /*for (let index = 0; index < this.deviceList.length; index++) {
       if(this.deviceList[index].toLower().includes(deviceId)){
@@ -82,10 +82,10 @@ export class DevicesComponent implements OnInit {
             //subscribe to socket
             break;
       }
-      
+
     }*/
   }
-  toggelDevice(deviceId){
+  toggelDevice(deviceId) {
 
   }
   toggleDevice() {
