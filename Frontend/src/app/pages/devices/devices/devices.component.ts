@@ -22,7 +22,7 @@ export class DevicesComponent implements OnInit {
     {deviceId: 4, deviceName: 'Sony Home Theatre', deviceConsumption: 8},
     {deviceId: 5, deviceName: 'Sony Playstation', deviceConsumption: 15},
   ]
-  deviceArray: any;
+  deviceList: any;
   consumptionArray: any;
   lastHourTotal: number;
 
@@ -32,9 +32,9 @@ export class DevicesComponent implements OnInit {
 
       this.deviceService.getDeviceJSONArray().pipe(
         map( response => {
-            this.deviceArray =  response,
-            JSON.stringify(this.deviceArray);
-            console.log(this.deviceArray)
+            this.deviceList =  response,
+            JSON.stringify(this.deviceList);
+            console.log(this.deviceList)
           })
         ).subscribe();
 
@@ -76,14 +76,14 @@ export class DevicesComponent implements OnInit {
   getDeviceState(deviceId){
     //get device topic using id
     let topic;
-    for (let index = 0; index < this.deviceArray.length; index++) {
-      if(this.deviceArray[index].toLower().includes(deviceId)){
-            topic = this.deviceArray[index].deviceTopic
+    /*for (let index = 0; index < this.deviceList.length; index++) {
+      if(this.deviceList[index].toLower().includes(deviceId)){
+            topic = this.deviceList[index].deviceTopic
             //subscribe to socket
             break;
       }
       
-    }
+    }*/
   }
   toggelDevice(deviceId){
 
