@@ -53,15 +53,58 @@ public class DeviceConsumptionService{
     
     public List<DeviceConsumption> retrieveBetweenInterval(long deviceId,String interval){
         try{
+            
             devicesRepository.findById(deviceId).orElseThrow(() -> new ResourceNotFoundException("device does not exist!"));
-              System.out.println(deviceId);
-              System.out.println(interval);
-                //String convertedInterval  =interval.replaceAll("^\"|\"$","");
-                String convertedInterval = "'" + interval +"'"; 
-                System.out.println(convertedInterval);
-            List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findDeviceConsumptionBetweenInterval(deviceId, convertedInterval)
+              if(interval.matches("last10minutes")){
+                List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findDeviceConsumptionLastTenMinutes(deviceId)
                         .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
                 return foundDeviceConsumptionList;
+
+              }else if(interval.matches("lasthour")){
+                List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findDeviceConsumptionLastHour(deviceId)
+                        .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
+                return foundDeviceConsumptionList;
+
+              }else if(interval.matches("lastday")){
+                List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findDeviceConsumptionLastOneDay(deviceId)
+                        .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
+                return foundDeviceConsumptionList;
+
+              }else if(interval.matches("lastweek")){
+                List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findDeviceConsumptionLastOneWeek(deviceId)
+                        .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
+                return foundDeviceConsumptionList;
+              }else if(interval.matches("lastmonth")){
+                List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findDeviceConsumptionLastOneMonth(deviceId)
+                        .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
+                return foundDeviceConsumptionList;
+              }else if(interval.matches("lastyear")){
+                List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findDeviceConsumptionLastOneYear(deviceId)
+                        .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
+                return foundDeviceConsumptionList;
+              }else if(interval.matches("thishour")){
+                List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findByDeviceConsumptionIdForThisHour(deviceId)
+                .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
+                return foundDeviceConsumptionList;
+              }else if(interval.matches("thisday")){
+                List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findByDeviceConsumptionIdForThisDay(deviceId)
+                        .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
+                return foundDeviceConsumptionList;
+              }else if(interval.matches("thisweek")){
+                List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findByDeviceConsumptionIdForThisWeek(deviceId)
+                        .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
+                return foundDeviceConsumptionList;
+              }else if(interval.matches("thismonth")){
+                List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findByDeviceConsumptionIdForThisMonth(deviceId)
+                        .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
+                return foundDeviceConsumptionList;
+              } else if(interval.matches("thisyear")){
+                List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findByDeviceConsumptionIdForThisYear(deviceId)
+                        .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
+                return foundDeviceConsumptionList;
+              }else{
+                  throw null;
+              }
         } catch(Exception e) {
             System.out.println("Error: " + e.getMessage() + "!");
             throw e;

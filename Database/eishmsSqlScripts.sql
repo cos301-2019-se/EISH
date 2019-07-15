@@ -68,13 +68,51 @@ select * from deviceconsumption where deviceconsumptiontimestamp >= NOW() - INTE
 
 select * from deviceconsumption where deviceid =1  and deviceconsumptiontimestamp >= NOW() - INTERVAL '1 minutes' 
 order by deviceconsumptiontimestamp desc limit 1;
+
+
+select * from deviceconsumption
+where deviceconsumptiontimestamp between now()-interval '3 weeks' and now();
+
+select deviceid, AVG(deviceconsumption) 
+from deviceconsumption
+where deviceconsumptiontimestamp
+between now()- interval '10 minutes' and now()
+group by deviceid;
+
 /*
 GENERATORS AND ENTITIES RELATED TO GENERATORS
 */
+CREATE TYPE generatorPriorityType AS ENUM ('PRIORITY_USEWHENEMPTY','PRIORITY_USEWHENCRITICAL', 'PRIORITY_ALWAYSUSE', 'PRIORITY_NEUTRAL');
+
 CREATE TABLE generator(
 	generatorid serial primary key,
 	generatorname text not null unique,
 	generatorurl text not null unique,
+	generatorpriority generatorPriorityType not null,
+	generatorstates text[] not null
 );
 
-CREATE TABLE generatorgeneration();	
+CREATE TABLE generatorgeneration(
+generatorid serial references generator(generatorid) not null,
+generatorgenerationtimestamp timestamp not null,
+generatorgenerationstate text not null,
+generatorgenerationcapacity float,
+ primary key(generatorid,generatorgenerationtimestamp));
+
+
+CREATE TABLE battery(
+batteryid serial primary key,
+batteryname text not null unique,
+batteryurl text not null,
+batterytotalcapacity float not null,
+batterystates text[] not null 
+);
+CREATE TABLE batterycapacity(
+batteryid serial references battery(batteryid) not null,
+batterycapacitytimestamp timestamp not null,
+batterycapacitystate text not null,
+batterycurrentcapacity float 
+primary key(batteryid,batterycapacitytimestamp)
+);
+
+

@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.modeltests;
+package com.monotoneid.eishms.unittests.modeltests;
 
 public class DeviceConsumptionTest {
     public void testDeviceeConsumptionId(){

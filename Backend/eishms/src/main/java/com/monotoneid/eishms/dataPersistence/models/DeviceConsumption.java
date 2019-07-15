@@ -6,13 +6,13 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-//import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -53,6 +53,7 @@ public class DeviceConsumption {
     }
 
     //getters
+    @JsonIgnore
     public DeviceConsumptionId getDeviceConsumptionId(){
         return deviceConsumptionId;
     }
@@ -68,7 +69,7 @@ public class DeviceConsumption {
     public Timestamp getDeviceConsumptionTimestamp(){
         return deviceConsumptionTimestamp;
     }
-
+    @JsonIgnore
     public String getDeviceConsumptionState(){
         return deviceConsumptionState;
     }

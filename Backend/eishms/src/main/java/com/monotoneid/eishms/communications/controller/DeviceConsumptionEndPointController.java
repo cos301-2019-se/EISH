@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DeviceConsumptionEndPointController{
 
     @Autowired
-   private DeviceConsumptionService deviceConsumptionService;
+    private DeviceConsumptionService deviceConsumptionService;
 
     /**
     * GET METHOD
@@ -32,7 +32,6 @@ public class DeviceConsumptionEndPointController{
     public List<DeviceConsumption> retrieveDeviceConsumptionCases(@RequestParam(value ="deviceId", required = true) long deviceId
     ,@RequestParam(value ="startTimeStamp", required = true) String startTimeStamp,
     @RequestParam(value ="endTimeStamp", required = true) String endTimeStamp){
-        
         return deviceConsumptionService.retrieveAllDeviceCases(deviceId, startTimeStamp, endTimeStamp);
     }
 
@@ -42,7 +41,5 @@ public class DeviceConsumptionEndPointController{
     ,@RequestParam(value ="interval", required = true) String interval){
         return deviceConsumptionService.retrieveBetweenInterval(deviceId, interval);
     }
-    
-
 
 }

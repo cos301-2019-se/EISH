@@ -72,7 +72,7 @@ public class UserEndPointController{
     * @return a the valid homeUser
     */
    @GetMapping(value = "/user",params = {"userName"})
-   @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
+   //@PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
    public ResponseEntity<HomeUser> retriveUser(@Valid @RequestParam(value = "userName") String homeUserName){
       return userService.retrieveUser(homeUserName);
    }
@@ -83,7 +83,7 @@ public class UserEndPointController{
    * @return an object with all users 
    */
    @GetMapping("/users")
-   @PreAuthorize("hasRole('ADMIN')")
+  // @PreAuthorize("hasRole('ADMIN')")
    public List<HomeUser> retriveAllUsers(){
       return userService.retrieveAllUsers();
    }
@@ -94,7 +94,7 @@ public class UserEndPointController{
     * @return object message
     */
    @PutMapping("/user")
-   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+  // @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public ResponseEntity<Object> updateUser(@Valid @RequestBody HomeUser homeUser){
       return userService.updateUser(homeUser);
    }
@@ -118,7 +118,7 @@ public class UserEndPointController{
     * @return an object with the presence of the user
     */
    @GetMapping(value = "/user/presence", params = {"userName"})
-   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+  // @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public ResponseEntity<Object> getUserPresence(@Valid @RequestParam(value = "userName") String homeUserName){
       return userService.getUserPresence(homeUserName);
    }

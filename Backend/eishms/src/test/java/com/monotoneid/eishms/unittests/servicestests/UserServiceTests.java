@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.servicestests;
+package com.monotoneid.eishms.unittests.servicestests;
 
 //import static org.mockito.Mockito.times;
 //import static org.mockito.Mockito.verify;

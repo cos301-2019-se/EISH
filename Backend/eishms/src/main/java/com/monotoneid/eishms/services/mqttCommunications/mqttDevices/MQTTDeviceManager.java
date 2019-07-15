@@ -36,7 +36,12 @@ public class MQTTDeviceManager {
     }
 
     public void addDevice(Device newDevice) {
-        mqttDevices.add(new MQTTDevice(newDevice,this));
+        try{
+            mqttDevices.add(new MQTTDevice(newDevice,this));
+        }catch(Exception e){
+            System.out.println("Problem");
+        }
+        
     }
 
     public List<Object> getDeviceStates() {
