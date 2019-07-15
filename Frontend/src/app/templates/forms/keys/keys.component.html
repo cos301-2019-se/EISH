@@ -1,23 +1,34 @@
-<div class="container">
-    <div class="heading"><h2>{{formHeading}}</h2></div>
-    <div class="formContainer">
-        <form [formGroup]="keyForm" (ngSubmit)="handleKey(keyForm)">
-          <div class="userMessages" *ngIf="incorrectCredentials">
-            <p>Incorrect Key. Please try again</p>
-          </div>
-          <div class="form-group">
-            <label for="key">Key</label><br>
-            <input placeholder="Insert Key..." class="form-control" name="userKey" type="text" formControlName="userKey">
-            <div class="form-control-feedback" *ngIf="getVariables.userKey.errors && (getVariables.userKey.dirty || getVariables.userKey.touched)">
-                <p *ngIf="getVariables.userKey.errors.required"> Key is required</p>
+<div class="page-background">
+    <div class="push-down"></div>
+    <div class="container">
+        <div class="header">
+            <div class="logo-holder">
+                <div class="header-logo">
+                    <div class="logo-img"><img src="../../assets/logo/eishLogo.png"></div>
+                    <div class="logo-title">EISHMS</div>
+                </div>
             </div>
-          </div>
-      
-          <br>   
-          <button type="submit" class="submitButton" [disabled]="!getVariables.keyForm.valid">Register!</button>
-          <br>   
-          <br>   
+            <div class="heading-title"><h2>{{ formHeading }}</h2></div>
+        </div>
+        <div class="formContainer">
+            <form [formGroup]="keyForm" (ngSubmit)="handleKey(keyForm)">
+              <div class="form-control-feedback" *ngIf="incorrectKey">
+                <p>Incorrect Key. Please try again.</p>
+              </div>
+              <div class="form-group">
+                <label for="key">Key</label><br>
+                <input placeholder="Insert Key" class="form-control" name="userKey" type="text" formControlName="userKey">
+                <div class="form-control-feedback" *ngIf="getVariables.controls.userKey.errors && (getVariables.controls.userKey.dirty || getVariables.controls.userKey.touched)">
+                    <p *ngIf="getVariables.controls.userKey.errors.required"> Key is required</p>
+                </div>
+              </div>
           
-        </form>
-      </div>
+              <br>   
+              <button type="submit" class="submitButton" [disabled]="getVariables.invalid">Register</button>
+              <br>   
+              <br>   
+              
+            </form>
+          </div>
+    </div>
 </div>

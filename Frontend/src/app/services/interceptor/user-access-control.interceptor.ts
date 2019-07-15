@@ -6,18 +6,19 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class AccessControlInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        let key = "accessToken";
-        let tokenType = "Bearer ";
-        const userToken = sessionStorage.getItem(key); 
+        const key = 'accessToken';
+        const tokenType = 'Bearer ';
+        const userToken = sessionStorage.getItem(key);
 
-        if (userToken == null)
+        if (userToken == null) {
             return next.handle(req);
-           
+        }
+
         const newHttpRequest = req.clone({
-            headers: req.headers.set("Authorization", tokenType + userToken),
-        });     
+            headers: req.headers.set('Authorization', tokenType + userToken),
+        });
 
         return next.handle(newHttpRequest);
     }
-    
+
 }

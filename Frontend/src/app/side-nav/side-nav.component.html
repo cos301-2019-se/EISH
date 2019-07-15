@@ -4,13 +4,13 @@
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
-    <mat-toolbar>Menu</mat-toolbar>
+    <mat-toolbar> &#9776; MENU</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/dashboard">Dashboard</a>
-      <a mat-list-item routerLink="/devices">Devices</a>
-      <a mat-list-item routerLink="/consumption">Consumption</a>
-      <a mat-list-item routerLink="/forecast">Forecasting</a>
-      <a mat-list-item routerLink="/settings">Settings</a>
+      <a mat-list-item routerLink="/homepage/dashboard" (click)="toggle(drawer)">Dashboard</a>
+      <a mat-list-item routerLink="/homepage/devices" (click)="toggle(drawer)">Devices</a>
+      <a mat-list-item routerLink="/homepage/consumption" (click)="toggle(drawer)">Consumption</a>
+      <a mat-list-item routerLink="/homepage/forecast" (click)="toggle(drawer)">Forecasting</a>
+      <a mat-list-item routerLink="/homepage/settings" (click)="toggle(drawer)">Settings</a>
     </mat-nav-list>
   </mat-sidenav>
 
@@ -22,12 +22,12 @@
         mat-icon-button
         (click)="drawer.toggle()"
         *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon" ><h1 style="font-size:260%;">=</h1></mat-icon>
+        <h1>&#9776;</h1>
       </button>
 
       <!-----HEADING----->
+      <span class="logo"><img src="../../assets/logo/eishLogo.png"></span>
       <span>EISHMS</span>
-
       <!-----Padding----->
       <span class="example-fill-remaining-space"></span>
 
@@ -35,14 +35,16 @@
       <button mat-button>Who's Home?</button>
       <mat-menu #profileMenu="matMenu">
           <button mat-menu-item routerLink="/register/Change">Edit credentials</button>
-          <button mat-menu-item routerLink=".">Logout</button>
+          <button mat-menu-item routerLink="">Logout</button>
         </mat-menu>
       <button mat-mini-fab color="primary" [matMenuTriggerFor]="profileMenu">{{initials}}</button>
     </mat-toolbar>
 
     <!--CONTENT OF PAGE-->
+    
     <div class="pageContent">
-    <router-outlet></router-outlet>
+        <!-- <router-outlet name="navOutlet"></router-outlet> -->
+        <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

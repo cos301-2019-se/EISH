@@ -1,12 +1,11 @@
-export class User{
-    userId: Number;
-    userName: String;
-    userEmail: String;
-    userPassword: String;
-    userLocationTopic: String;
+export class User {
+    userId: number;
+    userName: string;
+    userEmail: string;
+    userPassword: string;
+    userLocationTopic: string;
     userExpiryDate: any;
-    userType: String;
-    userPresence: Boolean;
-    //userRole: String
-
+    userType: string;
+    userPresence: boolean;
+    // userRole: Strin
 }

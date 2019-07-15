@@ -1,62 +1,177 @@
-.container{
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.push-down {
+  height: 160px;
+  width: 100%;
+}
+
+.container {
+  width: 30%;
+  margin-left: auto;
+  margin-right: auto;
   border: 0px;
   border-radius: 5px;
-  background-color:rgb(28, 52, 71);
+  background-color:white;
+  box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.2);
+}
 
-}
-.formContainer{
- text-align: center;
-}
-label{
-  font-size: 120%;
-  color: rgb(246, 246, 246);
-  text-align: left;
-  
-}
-input{
-  text-indent: 2%;
-}
-.heading{
-  background-color:lightgrey;
-  border-radius: 3px;
+.formContainer {
   text-align: center;
 }
 
-.form-control{
+label {
+  font-size: 120%;
+  color: #1b1b1b;
+  text-align: left;  
+}
+
+input{
+  text-indent: 2%;
+}
+
+.form-control {
   border-radius: 5px;
-  width:30%;
+  width:80%;
   height:5%;
   font-size: 120%;
-  border-color: black;
+  border: 1px solid lightgray;
+  color: #1b1b1b;
+  outline: none;
 }
 
-.submitButton{
-  width: 15%;
-  height: 25px;
-  border-radius: 5px;
-  border: 0px;
-  background-color:chartreuse;
+.form-control:focus {
+  outline: 1px solid #40c4ff;
 }
+
+/* .form-control: {
+  outline: 1px solid red;
+} */
+
+p {
+  margin: 0px;
+}
+
+
 
 .errorMessages{
+  padding: 5px;
   color: red;
   font-size: 100%;
-  
 }
 
 .form-control-feedback{
+  padding: 5px;
   color:red;
   font-size: 100%;
 }
-.submitButton[disabled]{
+
+.button-holder {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.submitButton {
+  width: 100px;
+  height: 30px;
+  border-radius: .3em;
+  border: 0px;
+  background-color: #40c4ff;
+  /* background-color: #5dd95d; */
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+.submitButton:hover {
+  cursor: pointer;
+  background-color: #3eb1e4;
+}
+
+.submitButton[disabled] {
   background-color: grey;
-  color: black;
+  color: white;
+}
+
+.submitButton[disabled]:hover {
+  cursor: not-allowed;
 }
 
 a {
-  color: white;
+  color: #1b1b1b;
+  text-decoration: underline;
 }
+
+a:hover {
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+}
+
 .copyright{
   color: white;
   font-size: 60%;
+}
+
+.page-background {
+  height: 100vh;
+  background: url("../../../../assets/back_img/solar1.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  /* background-color: #40c4ff; */
+  /* background-color: #5dd95d; */
+  font-family: 'Raleway';
+  font-size: 17px;
+}
+
+.logo-holder {
+  width: 100%;
+  background-color: whitesmoke;
+  padding-bottom: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom: 1px solid lightgray;
+}
+
+.logo-img {
+  width: 50px;
+  height: 50px;
+  float: left;
+}
+
+.logo-img img {
+  width: 50px;
+  height: 50px;
+}
+
+.logo-title {
+  height: 30px;
+  width: 70px;
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+  padding-top: 15px;
+  padding-bottom: 10px;
+}
+
+.header-logo {
+  width: 135px;
+  height: 50px;
+  margin-left: auto;
+  margin-right: auto; 
+  padding-top: 10px; 
+}
+
+.heading-title {
+  text-align: center;
+}
+
+.heading-title h2 {
+  margin: 0px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #1b1b1b;
 }

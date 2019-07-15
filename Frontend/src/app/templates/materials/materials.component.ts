@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import  { MatSidenavModule,MatMenuModule} from  '@angular/material';
+import { MatSidenavModule, MatMenuModule} from '@angular/material';
 
-const material = [MatSidenavModule,MatMenuModule];
+const material = [MatSidenavModule, MatMenuModule];
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
@@ -10,7 +10,7 @@ const material = [MatSidenavModule,MatMenuModule];
 export class MaterialsComponent implements OnInit {
 
   constructor() { }
-  
+
   ngOnInit() {
   }
 
