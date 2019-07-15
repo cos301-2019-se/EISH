@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.messaging.simp.*;
 
-import net.minidev.json.JSONObject;
+import net.minidev.json.*;
 
 @Service
 public class MQTTDeviceManager {

@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import net.minidev.json.JSONObject;
+import net.minidev.json.*;
 
 @Service
 public class DeviceService {
