@@ -23,34 +23,35 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 //@Service
 public class MQTTDevice {
-    String serverUrl = "tcp://192.168.8.100:1883";
+    // String serverUrl = "tcp://eishms.ddns.net:1883";
+    private String serverUrl = "tcp://192.168.8.101:1883";
     /* This Requires no ssl */
     //String caFilePath = "/your_ssl/cacert.pem";
     //String clientCrtFilePath = "/your_ssl/client.pem";
     //String clientKeyFilePath = "/your_ssl/client.key";
-    String mqttUserName = "eishms";
-    String mqttPassword = "eishms";
+    private String mqttUserName = "eishms";
+    private String mqttPassword = "eishms";
 
-    String asyncClientId;
-    String[] subscribeTopics;
-    String[] publishTopics;
-    int[] deviceQos; 
+    private String asyncClientId;
+    private String[] subscribeTopics;
+    private String[] publishTopics;
+    private int[] deviceQos; 
 
-    String deviceState;
+    private String deviceState;
 
-    List<String> consumptionBacklog;
+    private List<String> consumptionBacklog;
 
-    MQTTDeviceManager deviceManager;
+    private MqttDeviceManager deviceManager;
 
-    Device device;
+    private Device device;
 
-    IMqttAsyncClient asyncClient;
+    private IMqttAsyncClient asyncClient;
 
-    QueryReplyManager queryReplyManager;
+    private QueryReplyManager queryReplyManager;
 
-    boolean isAvailable;
+    private boolean isAvailable;
 
-    public MQTTDevice(Device device, MQTTDeviceManager deviceManager) {
+    public MQTTDevice(Device device, MqttDeviceManager deviceManager) {
         this.device = device;
         //this.asyncClientId = device.getDeviceName();
         this.asyncClientId = UUID.randomUUID().toString();
@@ -84,10 +85,11 @@ public class MQTTDevice {
                     queryReplyManager.setReply(topic, jsonMessage);
                     handleWill(topic, jsonMessage);
                     handleState(topic, jsonMessage);
-                    if (topic.matches(subscribeTopics[0]) && deviceState.length() == 0)
+                    if (topic.matches(subscribeTopics[0]) && deviceState.length() == 0) {
                         consumptionBacklog.add(jsonMessage);
-                    else
+                    } else {
                         handleConsumption(topic, jsonMessage);   
+                    }                        
                     //System.out.println( jsonMessage + "jsonMessage Handled"); 
                 }
             
@@ -99,7 +101,7 @@ public class MQTTDevice {
                     System.out.println("Connection to MQTT Broker lost.");
                 }
             });
-        } catch(MqttException me) {
+        } catch (MqttException me) {
             me.printStackTrace();
             //Handle the exception appropriate
         }
@@ -143,7 +145,7 @@ public class MQTTDevice {
     public void turnOff() {
         try {
             asyncClient.publish(publishTopics[0], "OFF".getBytes(), 0, false);
-        } catch(MqttException me) {
+        } catch (MqttException me) {
             me.printStackTrace();
         }
     }
@@ -151,7 +153,7 @@ public class MQTTDevice {
     public void turnOn() {
         try {
             asyncClient.publish(publishTopics[0], "ON".getBytes(), 0, false);
-        } catch(MqttException me) {
+        } catch (MqttException me) {
             me.printStackTrace();
         }
     }
@@ -159,7 +161,7 @@ public class MQTTDevice {
     public void toggle() {
         try {
             asyncClient.publish(publishTopics[0], "TOGGLE".getBytes(), 0, false);
-        } catch(MqttException me) {
+        } catch (MqttException me) {
             me.printStackTrace();
         }
     }
@@ -177,7 +179,7 @@ public class MQTTDevice {
                 //decode mqttReply and set deviceState
                 deviceState = mqttReply;
             }
-        } catch(MqttException me) {
+        } catch (MqttException me) {
             //It failed to publish a message so handle the error appropiately.
             me.printStackTrace();
         }
@@ -192,7 +194,7 @@ public class MQTTDevice {
         
         try {
             jsonMap = mapper.readValue(strJSON, Map.class);
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -205,7 +207,7 @@ public class MQTTDevice {
         
         try {
             jsonMap = mapper.readValue(strJSON, Map.class);
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -214,40 +216,48 @@ public class MQTTDevice {
 
     /* Handler Functions */
     private void processConsumptionBacklog() {
-        if (consumptionBacklog.isEmpty())
+        if (consumptionBacklog.isEmpty()) {
             return;
-        
+        }
+            
         while (!consumptionBacklog.isEmpty()) {
             parseAndSaveConsumption(consumptionBacklog.remove(0));
         }         
     }
 
     private void handleConsumption(String subscribeTopic, String message) {
-        if (!subscribeTopic.matches(subscribeTopics[0]))
+        if (!subscribeTopic.matches(subscribeTopics[0])) {
             return;
-        
+        }
+            
         processConsumptionBacklog();
         parseAndSaveConsumption(message);
     }
 
     private void parseAndSaveConsumption(String message) {
         Map<String, Map<String, Float>> telemetryObject = jsonToMap(message);
-        String hack = new String(""+telemetryObject.get("ENERGY").get("Power")+"");
+        String hack = new String("" + telemetryObject.get("ENERGY").get("Power") + "");
         float consumption = Float.parseFloat(hack);
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         //Remember to use the timestamp from the device not the server one
-        deviceManager.deviceConsumptionService.addDeviceConsumption(device.getDeviceId(), currentTimestamp, deviceState, consumption);                
+        deviceManager.deviceConsumptionService.addDeviceConsumption(
+            device.getDeviceId(), 
+            currentTimestamp, deviceState, consumption);
+
         Map<String, String> jsonConsumption = new HashMap<>();
         jsonConsumption.put("timestamp", currentTimestamp.toString());
         jsonConsumption.put("consumption", Float.toString(consumption));
-        deviceManager.simpMessagingTemplate.convertAndSend("/device/" + device.getDeviceTopic() + "/consumption", jsonConsumption);
-        //System.out.println("Inserted Consumption in Database.");
+        deviceManager.simpMessagingTemplate.convertAndSend("/device/" 
+            + device.getDeviceTopic() 
+            + "/consumption", jsonConsumption);
+        System.out.println("Inserted Consumption in Database.");
     }
 
     private void handleState(String subscribeTopic, String message) {
-        if (!subscribeTopic.matches(subscribeTopics[1]))
+        if (!subscribeTopic.matches(subscribeTopics[1])) {
             return;
-
+        }
+            
         deviceState = message;
         Map<String, String> jsonDeviceState = new HashMap<>();
         jsonDeviceState.put("state", deviceState);
@@ -256,9 +266,10 @@ public class MQTTDevice {
     }
 
     private void handleWill(String subscribeTopic, String message) {
-        if (!subscribeTopic.matches(subscribeTopics[3]))
+        if (!subscribeTopic.matches(subscribeTopics[3])) {
             return;
-
+        }
+            
         isAvailable = message.toLowerCase().matches("online");
         Map<String, Boolean> jsonDeviceState = new HashMap<>();
         jsonDeviceState.put("available", isAvailable);
@@ -271,10 +282,9 @@ public class MQTTDevice {
         //configure telemetry
         try {
             asyncClient.publish(publishTopics[0], "".getBytes(), 0, false).waitForCompletion();
-        } catch(MqttException me) {
+        } catch (MqttException me) {
             me.printStackTrace();
         }
-        
     }
 
 }

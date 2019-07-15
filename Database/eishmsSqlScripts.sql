@@ -9,13 +9,12 @@ USERS AND ENTITIES RELATED TO USERS
  useremail text not null,
  userpassword text not null,
  userlocationtopic text not null,
- usertype userType not null,
  userexpirydate TIMESTAMP not null
  );
 
- insert into homeuser(username,useremail,userpassword,userlocationtopic,usertype,userexpirydate) values('admin','admin@eishms.io','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','owntracks/admin/iPhone/house','ROLE_ADMIN','2050-01-31 00:00:00');
- insert into homeuser(username,useremail,userpassword,userlocationtopic,usertype,userexpirydate) values('Eben','eben@labs.epiuse.com','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','owntracks/admin/iPhone/house','ROLE_GUEST','2019-07-31 00:00:00');
-insert into homeuser(username,useremail,userpassword,userlocationtopic,usertype,userexpirydate) values('Charl','charl@labs.epiuse.com','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','owntracks/admin/iPhone/house','ROLE_RESIDENT','2019-07-31 00:00:00');
+ insert into homeuser(username,useremail,userpassword,userlocationtopic,userexpirydate) values('admin','admin@eishms.io','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','owntracks/admin/iPhone/house','ROLE_ADMIN','2050-01-31 00:00:00');
+ insert into homeuser(username,useremail,userpassword,userlocationtopic,userexpirydate) values('Eben','eben@labs.epiuse.com','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','owntracks/admin/iPhone/house','ROLE_GUEST','2019-07-31 00:00:00');
+insert into homeuser(username,useremail,userpassword,userlocationtopic,userexpirydate) values('Charl','charl@labs.epiuse.com','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','owntracks/admin/iPhone/house','ROLE_RESIDENT','2019-07-31 00:00:00');
 
 select * from homeuser;
 
@@ -116,3 +115,20 @@ primary key(batteryid,batterycapacitytimestamp)
 );
 
 
+
+
+/*
+
+WEATHER AND ENTITIES RELATED TO WEATHER
+*/
+CREATE TABLE weather(
+	weaterid serial primary key,
+	weatherlocation text not null,
+    weatherdescription text not null,
+    weathericon text not null,
+    weathertemperature float not null,
+    weatherhumidity int not null,
+    weatherpressure float not null, 
+    weatherwindspeed float not null,
+    weatherlastobtime timestamp not null
+);

@@ -1,12 +1,15 @@
 package com.monotoneid.eishms.communications.controller;
 
 import java.util.List;
-
+import net.minidev.json.*;
 import javax.validation.Valid;
 
 import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.services.databaseManagementSystem.DeviceService;
-import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MQTTDeviceManager;
+import com.monotoneid.eishms.services.externalCommunicatons.WeatherService;
+import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MqttDeviceManager;
+
+import com.google.gson.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +35,7 @@ public class DeviceEndPointController{
    private DeviceService deviceService;
 
    @Autowired
-   private MQTTDeviceManager deviceManager;
+   private MqttDeviceManager deviceManager;
 
    /**
     * POST METHOD
@@ -98,11 +101,11 @@ public class DeviceEndPointController{
     * Implements getDeviceStates endpoint, that calls the getDeviceStates service
     * @return
     */
-   @GetMapping(value = "/device/state")
-   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public List<Object> getDeviceStates() {
-      return deviceManager.getDeviceStates();
-   }
+   // @GetMapping(value = "/device/state")
+   // @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+   // public List<Object> getDeviceStates() {
+   //    return deviceManager.getDeviceStates();
+   // }
 
    /**
     * PATCH METHOD
@@ -116,4 +119,15 @@ public class DeviceEndPointController{
       return deviceManager.controlDevice(deviceId,deviceState);
    }
 
+   @GetMapping("/on")
+   public String switchOn() {
+      deviceManager.controlDevice(1, "ON");
+      return "Device should be ON";
+   }
+
+   @GetMapping("/off")
+   public String switchOff() {
+      deviceManager.controlDevice(1, "OFF");
+      return "Device should be OFF";
+   }
 }
