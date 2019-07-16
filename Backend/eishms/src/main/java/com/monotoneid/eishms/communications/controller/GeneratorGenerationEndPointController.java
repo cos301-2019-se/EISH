@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ *CLASS GENERATOR GENERATION ENDPOINT CONTROLLER. 
+ */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/generator")
@@ -22,9 +25,9 @@ public class GeneratorGenerationEndPointController {
     private GeneratorGenerationService generatorGenerationService;
 
     /**
-    * GET METHOD
-    * Implements retrieveGeneratorGeneration endpoint, that calls the retrieveGeneratorGeneration service
-    * @param generatorId
+    * GET METHOD.
+    * Implements retrieveGeneratorGeneration endpoint, 
+        that calls the retrieveGeneratorGeneration service
     * @return a the valid GeneratorGenerationList
     */
      
@@ -34,7 +37,8 @@ public class GeneratorGenerationEndPointController {
         @RequestParam(value = "generatorId", required = true) long generatorId,
         @RequestParam(value = "startTimeStamp", required = true) String startTimeStamp,
         @RequestParam(value = "endTimeStamp", required = true) String endTimeStamp) {
-        return generatorGenerationService.retrieveAllGeneratorCases(generatorId, startTimeStamp, endTimeStamp);
+        return generatorGenerationService
+                .retrieveAllGeneratorCases(generatorId, startTimeStamp, endTimeStamp);
     }
 
     @GetMapping(value = "/generation", params = {"generatorId","interval"})

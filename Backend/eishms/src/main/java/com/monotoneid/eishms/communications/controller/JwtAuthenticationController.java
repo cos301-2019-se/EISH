@@ -1,9 +1,5 @@
 package com.monotoneid.eishms.communications.controller;
 
-import java.util.Date;
-
-import javax.validation.Valid;
-
 import com.monotoneid.eishms.configuration.JwtTokenUtil;
 import com.monotoneid.eishms.dataPersistence.models.HomeUser;
 import com.monotoneid.eishms.dataPersistence.models.UserType;
@@ -11,6 +7,10 @@ import com.monotoneid.eishms.dataPersistence.repositories.HomeKeys;
 import com.monotoneid.eishms.dataPersistence.repositories.Users;
 import com.monotoneid.eishms.messages.JwtRequest;
 import com.monotoneid.eishms.messages.JwtResponse;
+
+import java.util.Date;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,24 +26,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ *CLASS JWT AUTHENTICATION CONTROLLER. 
+ */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class JwtAuthenticationController {
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
  
     @Autowired
-    Users userRepository;
+    private Users userRepository;
 
     @Autowired
-    HomeKeys myHouseKeys;
+    private HomeKeys myHouseKeys;
+ 
+    //@Autowired
+    //private PasswordEncoder encoder;
  
     @Autowired
-    PasswordEncoder encoder;
- 
-    @Autowired
-    JwtTokenUtil jwtProvider;
+    private JwtTokenUtil jwtProvider;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody JwtRequest loginRequest) {

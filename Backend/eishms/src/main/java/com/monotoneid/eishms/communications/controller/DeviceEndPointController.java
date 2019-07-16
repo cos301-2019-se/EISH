@@ -1,15 +1,11 @@
 package com.monotoneid.eishms.communications.controller;
 
-import com.google.gson.*;
-
 import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.services.databaseManagementSystem.DeviceService;
 import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MqttDeviceManager;
 
 import java.util.List;
 import javax.validation.Valid;
-
-import net.minidev.json.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ *CLASS DEVICE ENDPOINT CONTROLLER. 
+ */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
@@ -37,10 +36,10 @@ public class DeviceEndPointController {
     @Autowired
    private MqttDeviceManager deviceManager;
 
-   /**
+    /**
     * POST METHOD.
     * Implements the DeviceUser endpoint, that calls the addDevice service
-    * @param newDevice
+    * @param newDevice this is the new device to be added
     * @return the status message
     */
     @PostMapping("/device")
@@ -49,10 +48,10 @@ public class DeviceEndPointController {
         return deviceService.addDevice(newDevice);
     }
 
-   /**
+    /**
     * PUT METHOD.
     * Implements updateDevice endpoint, that calls the updateDevice service
-    * @param newDevice
+    * @param device this is the new device to be update
     * @return object message
     */
     @PutMapping("/device")
@@ -75,19 +74,20 @@ public class DeviceEndPointController {
     /**
     * GET METHOD.
     * Implements retrieveDevice endpoint, that calls the retrieveDevice service
-    * @param deviceId
+    * @param deviceId this is the deviceid it will look for
     * @return a the valid Device
     */
     @GetMapping(value = "/device",params = {"deviceId"})
     //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-    public ResponseEntity<Device> retriveDevice(@Valid @RequestParam(value = "deviceId") long deviceId) {
+    public ResponseEntity<Device> retriveDevice(
+        @Valid @RequestParam(value = "deviceId") long deviceId) {
         return deviceService.retrieveDevice(deviceId);
     }
   
     /**
     * DELETE METHOD.
     * Implements removeDevice endpoint, that calls the removeDevice service
-    * @param deviceToDelete
+    * @param deviceId this is the device id to delete
     * @return an object with deleted device
     */
     @DeleteMapping("/device/{deviceId}")
@@ -96,21 +96,11 @@ public class DeviceEndPointController {
         return deviceService.removeDevice(deviceId);
     }
 
-   /**
-    * GET METHOD
-    * Implements getDeviceStates endpoint, that calls the getDeviceStates service
-    * @return
-    */
-   // @GetMapping(value = "/device/state")
-   // @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   // public List<Object> getDeviceStates() {
-   //    return deviceManager.getDeviceStates();
-   // }
-
     /**
     * PATCH METHOD.
     * Implements the controlDevice endpoint, that calls the controlDevice service from deviceManager
-    * @param deviceToDelete
+    * @param deviceId this represents the device id of the device
+    * @param deviceState this device state to be used to updated
     * @return device state
     */
     @PatchMapping("/device/{deviceId}/{deviceState}")
