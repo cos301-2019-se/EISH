@@ -10,3 +10,9 @@
     width:70%;
     color: greenyellow;
 }
+.off{
+    background-color: lightgray;
+}
+.on{
+    background-color: transparent;
+}

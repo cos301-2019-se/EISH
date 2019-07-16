@@ -34,15 +34,13 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { DeviceModalComponent } from './pages/settings/device-modal/device-modal.component';
 import 'hammerjs';
-import { IconsModule, ButtonsModule,
-        WavesModule, TableModule,
-        ChartsModule, CardsModule,
-        InputsModule } from 'node_modules/angular-bootstrap-md';
+import { MDBBootstrapModule,WavesModule, InputsModule, ButtonsModule } from 'node_modules/angular-bootstrap-md';
 import {DeviceService} from './services/devices/device.service';
 import { DailyPlannerComponent } from './pages/daily-planner/daily-planner.component';
 import { NgxGaugeModule } from 'node_modules/ngx-gauge';
 import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 import { eishmsRxStompConfig } from './services/stomp/rx-stomp.config';
+import { SingleDeviceComponent } from './pages/devices/single-device/single-device.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +59,8 @@ import { eishmsRxStompConfig } from './services/stomp/rx-stomp.config';
     ConsumptionChartComponent,
     SideNavComponent,
     DeviceModalComponent,
-    DailyPlannerComponent
+    DailyPlannerComponent,
+    SingleDeviceComponent
   ],
   imports: [
     BrowserModule,
@@ -85,16 +84,12 @@ import { eishmsRxStompConfig } from './services/stomp/rx-stomp.config';
     MatTableModule,
     MatCheckboxModule, MatDialogModule,
     BrowserAnimationsModule,
-    CardsModule, InputsModule,
-    IconsModule,
-    ButtonsModule,
-    WavesModule,
-    TableModule,
+    MDBBootstrapModule,
     MatCardModule,
     MatPaginatorModule,
     NgxGaugeModule,
-    MatProgressBarModule,
-    ChartsModule
+    WavesModule, InputsModule, ButtonsModule,
+    MatProgressBarModule
   ],
   exports: [
     BrowserAnimationsModule

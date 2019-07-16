@@ -4,10 +4,7 @@ import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {SelectionModel} from '@angular/cdk/collections';
-import {MatTableDataSource} from '@angular/material/table';
 import { DeviceModalComponent } from './device-modal/device-modal.component';
-import { MdbTablePaginationComponent, MdbTableDirective, WavesModule } from 'node_modules/angular-bootstrap-md';
 import { UserAccessControlService } from 'src/app/services/user/user-access-control.service';
 import { GeneratorService } from 'src/app/services/generators/generator.service';
 import { DeviceService } from 'src/app/services/devices/device.service';
@@ -47,6 +44,7 @@ export class SettingsComponent implements OnInit {
 
   deviceArray: any;
   userArray: any;
+  
   ngOnInit() {
     this.deviceService.getDeviceJSONArray().pipe(
       map( response => {

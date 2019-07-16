@@ -7,6 +7,8 @@
 
 table{
   width:100%;
+  justify-content: center;
+  text-align: center;
 }
 
 mat-dialog-close{

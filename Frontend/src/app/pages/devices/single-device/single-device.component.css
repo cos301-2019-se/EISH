@@ -1,0 +1,32 @@
+.deviceInfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.toggleButton{
+    float: right;
+}
+mat-progress-bar{
+    width:80%;
+}
+p,mat-progress-bar,button{
+    padding:0;
+    margin:0;
+}
+h4{
+    margin: 0;
+    padding: 0;
+}
+mat-card .off{
+    background-color: rgb(97, 97, 97);
+}
+mat-card .on{
+    background-color:transparent;
+}
+mat-card{
+    flex-direction: row;
+    align-items: center;
+    border-radius: 0px;
+    background-color: rgb(246, 246, 246);
+}

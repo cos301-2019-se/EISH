@@ -1,0 +1,30 @@
+<mat-card>
+    <mat-card-content>
+        <div class="deviceCard">
+            <div *ngIf="deviceState==='ON'" class="on">
+            <div class="toggleButton">
+                    <button mat-stroked-button (click)="toggleState()">{{deviceState}}</button>
+            </div>  
+            <div class="deviceInfo">
+                <h4>{{device.deviceName}}</h4>
+                <p>{{device.deviceConsumption}} W </p>
+                <mat-progress-bar mode="determinate" 
+                                  [value]="device.deviceConsumption">
+                </mat-progress-bar>
+                </div>
+        </div>
+        <div *ngIf="deviceState==='OFF'" class="off">
+            <div class="toggleButton">
+                <button mat-stroked-button (click)="toggleState()">{{deviceState}}</button>
+            </div>  
+            <div class="deviceInfo">
+                <h4>{{device.deviceName}}</h4>
+                <p>{{device.deviceConsumption}} W </p>
+                <mat-progress-bar mode="determinate" 
+                                   [value]="device.deviceConsumption">
+                </mat-progress-bar>
+            </div>
+        </div>
+        </div>
+    </mat-card-content>
+</mat-card>
