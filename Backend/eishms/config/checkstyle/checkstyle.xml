@@ -31,7 +31,7 @@
       value="${config_loc}\suppressions.xml" /> -->
 
     <property name="file"
-      value="C:\Users\Apprentice\Documents\GitHub\Capstone\EISH\Backend\eishms\config\checkstyle\suppressions.xml" />      
+      value="C:\Users\Narishment\Desktop\GitHub\EISH\Backend\eishms\config\checkstyle\suppressions.xml" />      
   </module>
 
   <module name="TreeWalker">
