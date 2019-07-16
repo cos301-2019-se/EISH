@@ -28,21 +28,20 @@ public class HomeConsumptionService{
      * Once per minute everyday
      */
     @Scheduled(fixedRate = 60000, initialDelay = 60000)
-    public void aggregateDeviceConsumption(){
-        System.out.println("aggregating every 1 minutes");
-        try{
+    public void aggregateDeviceConsumption() {
+        try {
                 
                 List<Float> foundAggergatedDeviceConsumption = deviceConsumptionsRepository.findAverageEveryOneMinutes();
                                // .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
                 HomeConsumption newHomeConsumptionToAdd = null;
-                if(foundAggergatedDeviceConsumption!=null){
-                        float totalHouseComsumption=0;
-                        for(int i=0;i<foundAggergatedDeviceConsumption.size();i++){
-                        totalHouseComsumption+=foundAggergatedDeviceConsumption.get(i);
+                if (foundAggergatedDeviceConsumption != null) {
+                        float totalHouseComsumption = 0;
+                        for (int i = 0; i < foundAggergatedDeviceConsumption.size();i++) {
+                        totalHouseComsumption += foundAggergatedDeviceConsumption.get(i);
                         }
-                        newHomeConsumptionToAdd = new HomeConsumption(new Timestamp(System.currentTimeMillis()), totalHouseComsumption);
+                        newHomeConsumptionToAdd = new HomeConsumption(new Timestamp(System.currentTimeMillis()), (float)Math.ceil(totalHouseComsumption));
                         homeConsumptionsRepository.save(newHomeConsumptionToAdd);
-                }else{
+                } else {
                         newHomeConsumptionToAdd = new HomeConsumption(new Timestamp(System.currentTimeMillis()), null);
                         homeConsumptionsRepository.save(newHomeConsumptionToAdd);   
                 }
@@ -51,7 +50,7 @@ public class HomeConsumptionService{
                 jsonConsumption.put("consumption", Float.toString(newHomeConsumptionToAdd.getHomeConsumption()));
                 simpMessagingTemplate.convertAndSend("/home/consumption", jsonConsumption);
 
-        }catch(Exception e){
+        } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage() + "!");
                 throw e;
         }
@@ -60,10 +59,10 @@ public class HomeConsumptionService{
     public List<HomeConsumption> retrieveAllHomeConsumptionCases(String startTimeStamp, String endTimeStamp){
         try{
                   
-            String removeQuotesStartTimeStamp =startTimeStamp.replaceAll("^\"|\"$","");
+            String removeQuotesStartTimeStamp = startTimeStamp.replaceAll("^\"|\"$","");
             Timestamp convertedStartTimestamp = Timestamp.valueOf(removeQuotesStartTimeStamp);
 
-            String removeQuotesEndTimeStamp =endTimeStamp.replaceAll("^\"|\"$","");
+            String removeQuotesEndTimeStamp = endTimeStamp.replaceAll("^\"|\"$","");
             Timestamp convertedEndTimestamp = Timestamp.valueOf(removeQuotesEndTimeStamp);
 
             List<HomeConsumption> foundHomeConsumptionList =  homeConsumptionsRepository.findByHomeConsumptionTimestampBetween(convertedStartTimestamp,convertedEndTimestamp)

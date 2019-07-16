@@ -15,21 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/battery")
-public class BatteryCapacityEndPointController{
+public class BatteryCapacityEndPointController {
 
     @Autowired
     private BatteryCapacityService batteryCapacityService;
 
-    @GetMapping(value ="/capacity", params={"startTimeStamp","endTimeStamp"})
+    @GetMapping(value = "/capacity", params = {"startTimeStamp","endTimeStamp"})
     @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-    public List<BatteryCapacity> retrieveBatteryCapacityCases(@RequestParam(value ="startTimeStamp", required = true) String startTimeStamp,
-    @RequestParam(value ="endTimeStamp", required = true) String endTimeStamp){
+    public List<BatteryCapacity> retrieveBatteryCapacityCases(@RequestParam(value = "startTimeStamp", required = true) String startTimeStamp,
+        @RequestParam(value = "endTimeStamp", required = true) String endTimeStamp) {
         return batteryCapacityService.retrieveAllBatteryCapacityCases(startTimeStamp, endTimeStamp);
     }
 
-    @GetMapping(value = "/capacity", params={"interval"})
+    @GetMapping(value = "/capacity", params = {"interval"})
     @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-    public List<BatteryCapacity> retrieveBatteryCapacityBetweenInterval(@RequestParam(value ="interval", required = true) String interval){
+    public List<BatteryCapacity> retrieveBatteryCapacityBetweenInterval(@RequestParam(value = "interval", required = true) String interval) {
         return batteryCapacityService.retrieveBetweenInterval(interval);
     }
 

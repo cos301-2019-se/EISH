@@ -1,15 +1,15 @@
 package com.monotoneid.eishms.communications.controller;
 
-import java.util.List;
-import net.minidev.json.*;
-import javax.validation.Valid;
+import com.google.gson.*;
 
 import com.monotoneid.eishms.dataPersistence.models.Device;
 import com.monotoneid.eishms.services.databaseManagementSystem.DeviceService;
-import com.monotoneid.eishms.services.externalCommunicatons.WeatherService;
 import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MqttDeviceManager;
 
-import com.google.gson.*;
+import java.util.List;
+import javax.validation.Valid;
+
+import net.minidev.json.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,72 +29,72 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
-public class DeviceEndPointController{
+public class DeviceEndPointController {
 
-   @Autowired
+    @Autowired
    private DeviceService deviceService;
 
-   @Autowired
+    @Autowired
    private MqttDeviceManager deviceManager;
 
    /**
-    * POST METHOD
+    * POST METHOD.
     * Implements the DeviceUser endpoint, that calls the addDevice service
     * @param newDevice
     * @return the status message
     */
-   @PostMapping("/device")
+    @PostMapping("/device")
    //@PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> addDevice(@Valid @RequestBody Device newDevice){
-      return deviceService.addDevice(newDevice);
-   }
+   public ResponseEntity<Object> addDevice(@Valid @RequestBody Device newDevice) {
+        return deviceService.addDevice(newDevice);
+    }
 
    /**
-    * PUT METHOD
+    * PUT METHOD.
     * Implements updateDevice endpoint, that calls the updateDevice service
     * @param newDevice
     * @return object message
     */
-   @PutMapping("/device")
+    @PutMapping("/device")
    //@PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> updateDevice(@Valid @RequestBody Device device){
-      return deviceService.updateDevice(device);
-   }
+   public ResponseEntity<Object> updateDevice(@Valid @RequestBody Device device) {
+        return deviceService.updateDevice(device);
+    }
     
-   /**
-    * GET METHOD
+    /**
+    * GET METHOD.
     * Implements retrieveAllDevices endpoint, that calls the retrieveAllDevices service
     * @return an object with all devices 
     */
-   @GetMapping("/devices")
+    @GetMapping("/devices")
    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public List<Device> retrieveAllDevices(){
-   return deviceService.retrieveAllDevices();
-   }
+   public List<Device> retrieveAllDevices() {
+        return deviceService.retrieveAllDevices();
+    }
 
-   /**
-    * GET METHOD
+    /**
+    * GET METHOD.
     * Implements retrieveDevice endpoint, that calls the retrieveDevice service
     * @param deviceId
     * @return a the valid Device
     */
-   @GetMapping(value = "/device",params = {"deviceId"})
-   //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<Device> retriveDevice(@Valid @RequestParam(value = "deviceId") long deviceId){
-      return deviceService.retrieveDevice(deviceId);
-   }
+    @GetMapping(value = "/device",params = {"deviceId"})
+    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    public ResponseEntity<Device> retriveDevice(@Valid @RequestParam(value = "deviceId") long deviceId) {
+        return deviceService.retrieveDevice(deviceId);
+    }
   
-   /**
-    * DELETE METHOD
+    /**
+    * DELETE METHOD.
     * Implements removeDevice endpoint, that calls the removeDevice service
     * @param deviceToDelete
     * @return an object with deleted device
     */
-   @DeleteMapping("/device/{deviceId}")
-   @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> removeDevice(@PathVariable long deviceId){
-      return deviceService.removeDevice(deviceId);
-   }
+    @DeleteMapping("/device/{deviceId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Object> removeDevice(@PathVariable long deviceId) {
+        return deviceService.removeDevice(deviceId);
+    }
 
    /**
     * GET METHOD
@@ -107,27 +107,28 @@ public class DeviceEndPointController{
    //    return deviceManager.getDeviceStates();
    // }
 
-   /**
-    * PATCH METHOD
+    /**
+    * PATCH METHOD.
     * Implements the controlDevice endpoint, that calls the controlDevice service from deviceManager
     * @param deviceToDelete
     * @return device state
     */
-   @PatchMapping("/device/{deviceId}/{deviceState}")
-   @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
-   public ResponseEntity<Object> controlDevice(@PathVariable long deviceId, @PathVariable String deviceState) {
-      return deviceManager.controlDevice(deviceId,deviceState);
-   }
+    @PatchMapping("/device/{deviceId}/{deviceState}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
+    public ResponseEntity<Object> controlDevice(@PathVariable long deviceId,
+         @PathVariable String deviceState) {
+        return deviceManager.controlDevice(deviceId,deviceState);
+    }
 
-   @GetMapping("/on")
+    @GetMapping("/on")
    public String switchOn() {
-      deviceManager.controlDevice(1, "ON");
-      return "Device should be ON";
-   }
+        deviceManager.controlDevice(1, "ON");
+        return "Device should be ON";
+    }
 
-   @GetMapping("/off")
+    @GetMapping("/off")
    public String switchOff() {
-      deviceManager.controlDevice(1, "OFF");
-      return "Device should be OFF";
-   }
+        deviceManager.controlDevice(1, "OFF");
+        return "Device should be OFF";
+    }
 }

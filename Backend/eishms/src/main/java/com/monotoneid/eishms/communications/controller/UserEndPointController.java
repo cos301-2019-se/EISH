@@ -1,14 +1,14 @@
 package com.monotoneid.eishms.communications.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.validation.Valid;
-
 import com.monotoneid.eishms.dataPersistence.models.HomeKey;
 import com.monotoneid.eishms.dataPersistence.models.HomeUser;
 import com.monotoneid.eishms.dataPersistence.repositories.HomeKeys;
 import com.monotoneid.eishms.services.databaseManagementSystem.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,120 +29,120 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
 @RequestMapping("/api")
-public class UserEndPointController{
-   @Autowired
-   PasswordEncoder encoder;
+public class UserEndPointController {
+    @Autowired
+    PasswordEncoder encoder;
 
-   @Autowired
-   private UserService userService;
+    @Autowired
+    private UserService userService;
 
-   @Autowired
-   HomeKeys myHouseKeys;
+    @Autowired
+    private HomeKeys myHouseKeys;
 
-   /**
-    * GET METHOD
+    /**
+    * GET METHOD.
     * Implements the getKeys() endpoint, it is used for the admin to retrieve the GENERAL and RENEWAL keys.
     * @return keyList
     */
-   @GetMapping("/keys")
-   @PreAuthorize("hasRole('ADMIN')") 
-   public List<HomeKey> getKeys() {
-      List<HomeKey> keyList = new ArrayList<HomeKey>();
-      keyList.add(myHouseKeys.findByKeyName("general"));
-      keyList.add(myHouseKeys.findByKeyName("renewal"));
-      return keyList;
-   }
+    @GetMapping("/keys")
+    @PreAuthorize("hasRole('ADMIN')") 
+    public List<HomeKey> getKeys() {
+        List<HomeKey> keyList = new ArrayList<HomeKey>();
+        keyList.add(myHouseKeys.findByKeyName("general"));
+        keyList.add(myHouseKeys.findByKeyName("renewal"));
+        return keyList;
+    }
 
-   /**
-    * POST METHOD
+    /**
+    * POST METHOD.
     * Implements the addUser endpoint, that calls the addUser service
     * @param newHomeUser
     * @return the status message
     */
-   @PostMapping("/user")
-   @PreAuthorize("hasRole('ADMIN') or hasRole('GENERAL')")
-   public ResponseEntity<Object> addUser(@Valid @RequestBody HomeUser newHomeUser){
-      return userService.addUser(newHomeUser);
-   }
+    @PostMapping("/user")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('GENERAL')")
+    public ResponseEntity<Object> addUser(@Valid @RequestBody HomeUser newHomeUser) {
+        return userService.addUser(newHomeUser);
+    }
 
-   /**
-    * GET METHOD
+    /**
+    * GET METHOD.
     * Implements retrieveUser endpoint, that calls the retrieveUser service
     * @param homeUserName
     * @return a the valid homeUser
     */
-   @GetMapping(value = "/user",params = {"userName"})
-   //@PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
-   public ResponseEntity<HomeUser> retriveUser(@Valid @RequestParam(value = "userName") String homeUserName){
-      return userService.retrieveUser(homeUserName);
-   }
+    @GetMapping(value = "/user",params = {"userName"})
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
+    public ResponseEntity<HomeUser> retriveUser(@Valid @RequestParam(value = "userName") String homeUserName) {
+        return userService.retrieveUser(homeUserName);
+    }
 
    /**
-   * GET METHOD
+   * GET METHOD.
    * Implements retrieveAllUsers endpoint, that calls the retrieveAllUsers service
    * @return an object with all users 
    */
-   @GetMapping("/users")
-  // @PreAuthorize("hasRole('ADMIN')")
-   public List<HomeUser> retriveAllUsers(){
-      return userService.retrieveAllUsers();
-   }
+    @GetMapping("/users")
+   // @PreAuthorize("hasRole('ADMIN')")
+   public List<HomeUser> retriveAllUsers() {
+        return userService.retrieveAllUsers();
+    }
 
    /**
     * Implements updateUser endpoint, that calls the updateUser service
     * @param newHomeUser
     * @return object message
     */
-   @PutMapping("/user")
-  // @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<Object> updateUser(@Valid @RequestBody HomeUser homeUser){
-      return userService.updateUser(homeUser);
-   }
+    @PutMapping("/user")
+   //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+   public ResponseEntity<Object> updateUser(@Valid @RequestBody HomeUser homeUser) {
+        return userService.updateUser(homeUser);
+    }
 
-   /**
-    * DELETE METHOD
+    /**
+    * DELETE METHOD.
     * Implements removeUser endpoint, that calls the removeUser service
     * @param homeUser
     * @return an object with all the remaining users
     */
-   @DeleteMapping("/user/{userId}")
-   @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> removeUser(@PathVariable long userId){
-      return userService.removeUser(userId);
-   }
+    @DeleteMapping("/user/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+   public ResponseEntity<Object> removeUser(@PathVariable long userId) {
+        return userService.removeUser(userId);
+    }
 
-   /**
-    * GET METHOD
+    /**
+    * GET METHOD.
     * Implements getUserPresence endpoint, that calls the getUserPresence service
     * @param homeUserName
     * @return an object with the presence of the user
     */
-   @GetMapping(value = "/user/presence", params = {"userName"})
-  // @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-   public ResponseEntity<Object> getUserPresence(@Valid @RequestParam(value = "userName") String homeUserName){
-      return userService.getUserPresence(homeUserName);
-   }
+    @GetMapping(value = "/user/presence", params = {"userName"})
+     //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+     public ResponseEntity<Object> getUserPresence(@Valid @RequestParam(value = "userName") String homeUserName) {
+        return userService.getUserPresence(homeUserName);
+    }
 
-   /**
-    * PATCH METHOD
+    /**
+    * PATCH METHOD.
     * Implements updateUserType endpoint, that calls the updateUserType service
     * @param homeUser
     * @return Object message
     */
-   @PatchMapping("/user/usertype/{userId}/{userType}")
-   @PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> updateUserType(@PathVariable long userId, @PathVariable String userType){
-      return userService.updateUserType(userId,userType);
-   }
+    @PatchMapping("/user/usertype/{userId}/{userType}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Object> updateUserType(@PathVariable long userId, @PathVariable String userType) {
+        return userService.updateUserType(userId,userType);
+    }
   
-   /**
-    * update user expirydate
+    /**
+    * update user expirydate.
     * @param homeUser
     * @return object message
     */
-   @PatchMapping("/user/expiration/{userId}/{numDays}")
-   @PreAuthorize("hasRole('ADMIN') or hasRole('RENEWAL')")
-   public ResponseEntity<Object> renewUser(@PathVariable long userId, @PathVariable int numDays){
-      return userService.renewUser(userId,numDays);
-   }
+    @PatchMapping("/user/expiration/{userId}/{numDays}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('RENEWAL')")
+    public ResponseEntity<Object> renewUser(@PathVariable long userId, @PathVariable int numDays) {
+        return userService.renewUser(userId,numDays);
+    }
 }

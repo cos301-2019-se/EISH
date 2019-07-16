@@ -15,32 +15,32 @@ import org.springframework.stereotype.Repository;
 public interface BatteryCapacities extends JpaRepository<BatteryCapacity,Long> {
 
     //custom query
-    @Query(value="select * from batterycapacity  where batterycapacitytimestamp between ?1 and ?2",nativeQuery =true)
+    @Query(value = "select * from batterycapacity  where batterycapacitytimestamp between ?1 and ?2", nativeQuery = true)
     public Optional<List<BatteryCapacity>> findByBatteryCapacityTimestampBetween(Timestamp startTimeStamp,Timestamp endTimeStamp);
   
      //quick ranges
     //last 10 minutes
-    @Query(value="select * from batterycapacity where batterycapacitytimestamp between now() - interval '10 minutes' and now() order by batterycapacitytimestamp desc",nativeQuery=true)
+    @Query(value = "select * from batterycapacity where batterycapacitytimestamp between now() - interval '10 minutes' and now() order by batterycapacitytimestamp desc", nativeQuery = true)
     public Optional<List<BatteryCapacity>> findBatteryCapacityLastTenMinutes();
 
     //last 1 hours
-    @Query(value="select * from batterycapacity where batterycapacitytimestamp between now() - interval '1 hours' and now() order by batterycapacitytimestamp desc",nativeQuery=true)
+    @Query(value = "select * from batterycapacity where batterycapacitytimestamp between now() - interval '1 hours' and now() order by batterycapacitytimestamp desc", nativeQuery = true)
     public Optional<List<BatteryCapacity>> findBatteryCapacityLastHour();
 
     //last  1 day
-    @Query(value="select * from batterycapacity where batterycapacitytimestamp between now() - interval '1 days' and now() order by batterycapacitytimestamp desc",nativeQuery=true)
+    @Query(value = "select * from batterycapacity where batterycapacitytimestamp between now() - interval '1 days' and now() order by batterycapacitytimestamp desc", nativeQuery = true)
     public Optional<List<BatteryCapacity>> findBatteryCapacityLastOneDay();
 
     //last 1 week
-    @Query(value="select * from batterycapacity where batterycapacitytimestamp between now() - interval '1 weeks' and now() order by batterycapacitytimestamp desc",nativeQuery=true)
+    @Query(value = "select * from batterycapacity where batterycapacitytimestamp between now() - interval '1 weeks' and now() order by batterycapacitytimestamp desc", nativeQuery = true)
     public Optional<List<BatteryCapacity>> findBatteryCapacityLastOneWeek();
 
     //last 1 month
-    @Query(value="select * from batterycapacity where batterycapacitytimestamp between now() - interval '1 months' and now() order by batterycapacitytimestamp desc",nativeQuery=true)
+    @Query(value = "select * from batterycapacity where batterycapacitytimestamp between now() - interval '1 months' and now() order by batterycapacitytimestamp desc", nativeQuery = true)
     public Optional<List<BatteryCapacity>> findBatteryCapacityLastOneMonth();
 
     //last 1 year
-    @Query(value="select * from batterycapacity where batterycapacitytimestamp between now() - interval '1 years' and now() order by batterycapacitytimestamp desc",nativeQuery=true)
+    @Query(value = "select * from batterycapacity where batterycapacitytimestamp between now() - interval '1 years' and now() order by batterycapacitytimestamp desc", nativeQuery = true)
     public Optional<List<BatteryCapacity>> findBatteryCapacityLastOneYear();
 
     //current till fixed end

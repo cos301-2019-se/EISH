@@ -1,8 +1,9 @@
 package com.monotoneid.eishms.communications.controller;
-import java.util.List;
 
 import com.monotoneid.eishms.dataPersistence.models.GeneratorGeneration;
 import com.monotoneid.eishms.services.databaseManagementSystem.GeneratorGenerationService;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/generator")
-public class GeneratorGenerationEndPointController{
+public class GeneratorGenerationEndPointController {
 
     @Autowired
     private GeneratorGenerationService generatorGenerationService;
@@ -27,18 +28,20 @@ public class GeneratorGenerationEndPointController{
     * @return a the valid GeneratorGenerationList
     */
      
-    @GetMapping(value ="/generation", params={"generatorId","startTimeStamp","endTimeStamp"})
+    @GetMapping(value = "/generation", params = {"generatorId","startTimeStamp","endTimeStamp"})
     @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-    public List<GeneratorGeneration> retrieveGeneratorGenerationCases(@RequestParam(value ="generatorId", required = true) long generatorId
-    ,@RequestParam(value ="startTimeStamp", required = true) String startTimeStamp,
-    @RequestParam(value ="endTimeStamp", required = true) String endTimeStamp){
+    public List<GeneratorGeneration> retrieveGeneratorGenerationCases(
+        @RequestParam(value = "generatorId", required = true) long generatorId,
+        @RequestParam(value = "startTimeStamp", required = true) String startTimeStamp,
+        @RequestParam(value = "endTimeStamp", required = true) String endTimeStamp) {
         return generatorGenerationService.retrieveAllGeneratorCases(generatorId, startTimeStamp, endTimeStamp);
     }
 
-    @GetMapping(value = "/generation", params={"generatorId","interval"})
+    @GetMapping(value = "/generation", params = {"generatorId","interval"})
     @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-    public List<GeneratorGeneration> retrieveGeneratorGenerationBetweenInterval(@RequestParam(value ="generatorId", required = true) long generatorId
-    ,@RequestParam(value ="interval", required = true) String interval){
+    public List<GeneratorGeneration> retrieveGeneratorGenerationBetweenInterval(
+        @RequestParam(value = "generatorId", required = true) long generatorId,
+        @RequestParam(value = "interval", required = true) String interval) {
         return generatorGenerationService.retrieveBetweenInterval(generatorId, interval);
     }
 

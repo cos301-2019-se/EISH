@@ -9,19 +9,20 @@ USERS AND ENTITIES RELATED TO USERS
  useremail text not null,
  userpassword text not null,
  userlocationtopic text not null,
+ usertype userType not null,
  userexpirydate TIMESTAMP not null
  );
 
- insert into homeuser(username,useremail,userpassword,userlocationtopic,userexpirydate) values('admin','admin@eishms.io','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','owntracks/admin/iPhone/house','ROLE_ADMIN','2050-01-31 00:00:00');
- insert into homeuser(username,useremail,userpassword,userlocationtopic,userexpirydate) values('Eben','eben@labs.epiuse.com','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','owntracks/admin/iPhone/house','ROLE_GUEST','2019-07-31 00:00:00');
-insert into homeuser(username,useremail,userpassword,userlocationtopic,userexpirydate) values('Charl','charl@labs.epiuse.com','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','owntracks/admin/iPhone/house','ROLE_RESIDENT','2019-07-31 00:00:00');
-
+insert into homeuser(username,useremail,userpassword,userlocationtopic,usertype,userexpirydate) values('admin','admin@eishms.io','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','house','ROLE_ADMIN','2050-01-31 00:00:00');
+insert into homeuser(username,useremail,userpassword,userlocationtopic,usertype,userexpirydate) values('Eben','eben@labs.epiuse.com','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','house','ROLE_GUEST','2019-07-31 00:00:00');
+insert into homeuser(username,useremail,userpassword,userlocationtopic,usertype,userexpirydate) values('Charl','charl@labs.epiuse.com','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','house','ROLE_RESIDENT','2019-07-31 00:00:00');
+				
 select * from homeuser;
 
 CREATE TABLE homeuserpresence(
 	homeuserpresencetimestamp timestamp not null,
 	homeuserpresence boolean not null,
-	userid serial references homeuserpresence(userid) not null,
+	userid serial references homeuser(userid) not null,
 	primary key(userid,homeuserpresencetimestamp));
 
 
@@ -98,20 +99,20 @@ generatorgenerationstate text not null,
 generatorgenerationcapacity float,
  primary key(generatorid,generatorgenerationtimestamp));
 
+/*
+BATTERY AND ENTITIES RELATED 
+*/
+CREATE TYPE powerStateType AS ENUM ('STATE_FULL', 'STATE_NORMAL', 'STATE_LOW', 'STATE_CRITICALLYLOW','STATE_EMPTY');
+CREATE TYPE chargingState AS ENUM ('CHARGING','DISCHARGING','IDLE');
 
-CREATE TABLE battery(
-batteryid serial primary key,
-batteryname text not null unique,
-batteryurl text not null,
-batterytotalcapacity float not null,
-batterystates text[] not null 
-);
 CREATE TABLE batterycapacity(
-batteryid serial references battery(batteryid) not null,
+batterycapacityid serial primary key,
+batterycapacitystorage int not null,
+batterycapacitycurrentpower int not null,
+batterycapacitypowerstate powerStateType not null,
+batterycapacitychargingstate chargingState not null,
 batterycapacitytimestamp timestamp not null,
-batterycapacitystate text not null,
-batterycurrentcapacity float 
-primary key(batteryid,batterycapacitytimestamp)
+batterycapacitypowerpercentage int not null
 );
 
 

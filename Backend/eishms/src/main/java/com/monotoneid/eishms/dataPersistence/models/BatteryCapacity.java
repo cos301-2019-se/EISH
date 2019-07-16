@@ -3,95 +3,148 @@ package com.monotoneid.eishms.dataPersistence.models;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity(name = "batterycapacity")
 @Table(name = "batterycapacity")
 @EntityListeners(AuditingEntityListener.class)
-public class BatteryCapacity{
+@TypeDefs({
+    @TypeDef(
+    name = "pgsql_enum",
+    typeClass = PostgreSQLEnumType.class
+)})
+public class BatteryCapacity {
 
-    
-    @EmbeddedId
-    private BatteryCapacityId batteryCapacityId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "batterycapacityid", 
+        columnDefinition = "serial", 
+        updatable = false, 
+        nullable = false)
+    private long batteryCapacityId;
+    @Column(name = "batterycapacitystorage", 
+        columnDefinition = "int", 
+        updatable = true, 
+        nullable = false)
+    private int batteryCapacityStorage;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name="batteryid", insertable = false ,updatable = false, nullable = false)
-    private Battery battery;
+    @Column(name = "batterycapacitycurrentpower", 
+        columnDefinition = "int", 
+        updatable = true, 
+        nullable = false)
+    private int batteryCapacityCurrentPower;
+     
+    @Enumerated(EnumType.STRING)
+    @Column(name = "batterycapacitypowerstate", 
+        columnDefinition = "powerStateType", 
+        updatable = true, 
+        nullable = false)
+    @Type(type = "pgsql_enum")
+    private PowerStateType batteryCapacityPowerState;
 
-    @Column(name = "batterycapacitytimestamp", columnDefinition = "TIMESTAMP", insertable = false , updatable = false, nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "batterycapacitychargingstate", 
+        columnDefinition = "chargingState", 
+        updatable = true, 
+        nullable = false)
+    @Type(type = "pgsql_enum")
+    private ChargingStateType batteryCapacityChargingState;
+  
+    @Column(name = "batterycapacitytimestamp", 
+        columnDefinition = "TIMESTAMP", 
+        insertable = false, 
+        updatable = false, 
+        nullable = false)
     private Timestamp batteryCapacityTimestamp;
 
-    @Size(min = 1, message = "generator states must be one or more characters")
-    @Column(name = "batterycapacitystate", columnDefinition = "text", updatable = true, nullable = false)
-    private String batteryCapacityState;
-
-    @Column(name = "batterycurrentcapacity", columnDefinition = "float", updatable = true, nullable = true)
-    private Float batteryCurrentCapacity;
+    @Column(name = "batterycapacitypowerpercentage", 
+        columnDefinition = "int", 
+        updatable = true, 
+        nullable = false)
+    private int batteryCapacityPowerPercentage;
 
     public BatteryCapacity() {}
 
-    public BatteryCapacity(float newBatteryCurrentCapacity, Battery newBattery, 
-    Timestamp newBatteryCapacityTimestamp, String newBatteryCapacityState) {
-        setBatteryCurrentCapacity(newBatteryCurrentCapacity);
-        setBattery(newBattery);
-        setBatteryCapacityTimestamp(newBatteryCapacityTimestamp);
-        setBatteryCapacityState(newBatteryCapacityState);
-        setBatteryCapacityId();
-
+    public BatteryCapacity(int newBatteryCapacityStorage,
+        int newBatteryCapacityCurrentPower,
+        String newBatteryCapacityPowerState,
+        String newBatteryCapacityChargingState,
+        Timestamp newBatteryCapacityTimeStamp,
+        int newBatteryCapacityPowerPercentage) {
+        setBatteryCapacityStorage(newBatteryCapacityStorage);
+        setBatteryCapacityCurrentPower(newBatteryCapacityCurrentPower);
+        setBatteryCapacityPowerState(batteryCapacityPowerState
+            .valueOf(newBatteryCapacityPowerState));
+        setBatteryCapacityChargingState(batteryCapacityChargingState
+            .valueOf(newBatteryCapacityChargingState));
+        setBatteryCapacityTimeStamp(newBatteryCapacityTimeStamp);
+        setBatteryCapacityPowerPercentage(newBatteryCapacityPowerPercentage);
     }
-    //getters
-    @JsonIgnore
-    public BatteryCapacityId getBatteryCapacityId(){
+
+    public long getBatteryId() {
         return batteryCapacityId;
     }
 
-    public Battery getBattery() {
-       return battery;
+    public int getBatteryCapacityStorage() {
+        return batteryCapacityStorage;
     }
 
-    public Float getBatteryCurrentCapacity() {
-        return batteryCurrentCapacity;
+    public int getBatteryCapacityCurrentPower() {
+        return batteryCapacityCurrentPower;
+    }
+
+    public PowerStateType getBatteryCapacityPowerState() {
+        return batteryCapacityPowerState;
+    }
+
+    public ChargingStateType getbatteryCapacityChargingState() {
+        return batteryCapacityChargingState;
     }
 
     public Timestamp getBatteryCapacityTimestamp() {
         return batteryCapacityTimestamp;
     }
-    @JsonIgnore
-    public String getBatteryCapacityState() {
-        return batteryCapacityState;
+
+    public int getBatteryCapacityPowerPercentage() {
+        return batteryCapacityPowerPercentage;
     }
 
-    //setters
-    public void setBatteryCapacityId() {
-        this.batteryCapacityId = new BatteryCapacityId(getBattery().getBatteryId(),getBatteryCapacityTimestamp());
+    public void setBatteryCapacityStorage(int newBatteryCapacityStorage) {
+        this.batteryCapacityStorage = newBatteryCapacityStorage;
     }
 
-    public void setBattery(Battery newBattery) {
-        this.battery = newBattery;
+    public void setBatteryCapacityCurrentPower(int newBatteryCapacityCurrentPower) {
+        this.batteryCapacityCurrentPower = newBatteryCapacityCurrentPower;
     }
 
-    public void setBatteryCurrentCapacity(Float newBatteryCurrentCapacity) {
-        this.batteryCurrentCapacity = newBatteryCurrentCapacity;
+    public void setBatteryCapacityPowerState(PowerStateType newBatteryCapacityPowerState) {
+        this.batteryCapacityPowerState = newBatteryCapacityPowerState;
     }
 
-    public void setBatteryCapacityTimestamp(Timestamp newBatteryCapacityTimestamp) {
-        this.batteryCapacityTimestamp = newBatteryCapacityTimestamp;
+    public void setBatteryCapacityChargingState(ChargingStateType newBatteryCapacityChargingState) {
+        this.batteryCapacityChargingState = newBatteryCapacityChargingState;
     }
 
-    public void setBatteryCapacityState(String newBatteryCapacityState) {
-        this.batteryCapacityState = newBatteryCapacityState;
+    public void setBatteryCapacityTimeStamp(Timestamp newBatteryCapacityTimeStamp) {
+        this.batteryCapacityTimestamp = newBatteryCapacityTimeStamp;
     }
+
+    public void setBatteryCapacityPowerPercentage(int newBatteryCapacityPowerPercentage) {
+        this.batteryCapacityPowerPercentage = newBatteryCapacityPowerPercentage;
+    }
+   
+
 
 }

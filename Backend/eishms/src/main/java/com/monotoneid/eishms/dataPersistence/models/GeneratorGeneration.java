@@ -1,5 +1,8 @@
 package com.monotoneid.eishms.dataPersistence.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -11,29 +14,26 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity(name = "generatorgeneration")
 @Table(name = "generatorgeneration")
 @EntityListeners(AuditingEntityListener.class)
-public class GeneratorGeneration{
+public class GeneratorGeneration {
 
     @EmbeddedId
     private GeneratorGenerationId generatorGenerationId;
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name="generatorid", insertable = false ,updatable = false, nullable = false)
+    @JoinColumn(name = "generatorid", insertable = false, updatable = false, nullable = false)
     private Generator generator;
 
     @Column(name = "generatorgeneration", columnDefinition = "float", updatable = true, nullable = true)
     private Float generatorGeneration;
 
     //@Id
-    @Column(name = "generatorgenerationtimestamp", columnDefinition = "TIMESTAMP", insertable = false , updatable = false, nullable = false)
+    @Column(name = "generatorgenerationtimestamp", columnDefinition = "TIMESTAMP", insertable = false, updatable = false, nullable = false)
     private Timestamp generatorGenerationTimestamp;
 
     @Size(min = 1, message = "generator states must be one or more characters")
@@ -43,7 +43,7 @@ public class GeneratorGeneration{
     public GeneratorGeneration() {}
 
     public GeneratorGeneration(float newGeneratorGeneration, Generator newGenerator, 
-    Timestamp newGeneratorGenerationTimestamp, String newGeneratorGenerationState) {
+        Timestamp newGeneratorGenerationTimestamp, String newGeneratorGenerationState) {
         setGeneratorGeneration(newGeneratorGeneration);
         setGenerator(newGenerator);
         setGeneratorGenerationTimestamp(newGeneratorGenerationTimestamp);
@@ -54,44 +54,45 @@ public class GeneratorGeneration{
 
     //getters
     @JsonIgnore
-    public GeneratorGenerationId getGeneratorGenerationId(){
+    public GeneratorGenerationId getGeneratorGenerationId() {
         return generatorGenerationId;
     }
 
-    public Generator getGenerator(){
-       return generator;
+    public Generator getGenerator() {
+        return generator;
     }
 
-    public Float getGeneratorGeneration(){
+    public Float getGeneratorGeneration() {
         return generatorGeneration;
     }
 
-    public Timestamp getGeneratorGenerationTimestamp(){
+    public Timestamp getGeneratorGenerationTimestamp() {
         return generatorGenerationTimestamp;
     }
+
     @JsonIgnore
-    public String getGeneratorGenerationState(){
+    public String getGeneratorGenerationState() {
         return generatorGenerationState;
     }
 
     //setters
-    public void setGeneratorGenerationId(){
+    public void setGeneratorGenerationId() {
         this.generatorGenerationId = new GeneratorGenerationId(getGenerator().getGeneratorId(),getGeneratorGenerationTimestamp());
     }
 
-    public void setGenerator(Generator newGenerator){
+    public void setGenerator(Generator newGenerator) {
         this.generator = newGenerator;
     }
 
-    public void setGeneratorGeneration(Float newGeneratorGeneration){
+    public void setGeneratorGeneration(Float newGeneratorGeneration) {
         this.generatorGeneration = newGeneratorGeneration;
     }
 
-    public void setGeneratorGenerationTimestamp(Timestamp newGeneratorGenerationTimestamp){
+    public void setGeneratorGenerationTimestamp(Timestamp newGeneratorGenerationTimestamp) {
         this.generatorGenerationTimestamp = newGeneratorGenerationTimestamp;
     }
 
-    public void setGeneratorGenerationState(String newGeneratorGenerationState){
+    public void setGeneratorGenerationState(String newGeneratorGenerationState) {
         this.generatorGenerationState = newGeneratorGenerationState;
     }
     

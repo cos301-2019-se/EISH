@@ -1,5 +1,9 @@
 package com.monotoneid.eishms.dataPersistence.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +19,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vladmihalcea.hibernate.type.array.StringArrayType;
-
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
@@ -32,11 +32,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
         name = "string-array",
         typeClass = StringArrayType.class
     ),
-@TypeDef(
-    name = "pgsql_enum",
-    typeClass = PostgreSQLEnumType.class
+    @TypeDef(
+        name = "pgsql_enum",
+        typeClass = PostgreSQLEnumType.class
 )})
-public class Generator{
+public class Generator {
          
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,11 +53,11 @@ public class Generator{
 
     @Enumerated(EnumType.STRING)
     @Column(name = "generatorpriority", columnDefinition = "generatorPriorityType", updatable = true, nullable = false)
-    @Type( type = "pgsql_enum" )
+    @Type(type = "pgsql_enum")
     private GeneratorPriorityType generatorPriority;
 
     //@Size(min = 1, message = "number of device states must be one or more")
-    @Type( type = "string-array" )
+    @Type(type = "string-array")
     @Column(name = "generatorstates", columnDefinition = "text[]", updatable = true, nullable = false)
     private String[] generatorStates;
 
@@ -69,14 +69,14 @@ public class Generator{
     public Generator(){}
 
     public Generator(@JsonProperty("generatorName") String newGeneratorName,
-    @JsonProperty("generatorUrl") String newGeneratorUrl,
-    @JsonProperty("generatorPriorityType") String newGeneratorPriorityType,
-    @JsonProperty("generatorStates") String[] newGeneratorStates){
+        @JsonProperty("generatorUrl") String newGeneratorUrl,
+        @JsonProperty("generatorPriorityType") String newGeneratorPriorityType,
+        @JsonProperty("generatorStates") String[] newGeneratorStates) {
         setGeneratorName(newGeneratorName);
         setGeneratorUrl(newGeneratorUrl);
         setGeneratorPriorityType(generatorPriority.valueOf(newGeneratorPriorityType));
         String[] newStates = new String[newGeneratorStates.length];
-        for(int i=0;i<newGeneratorStates.length;i++){
+        for (int i = 0; i < newGeneratorStates.length; i++) {
             newStates[i] = new String(newGeneratorStates[i]);
         }
         setGeneratorStates(newStates);
@@ -84,41 +84,49 @@ public class Generator{
     }
   
     //getter
-    public long getGeneratorId(){
+    public long getGeneratorId() {
         return generatorId;
     }
-    public String getGeneratorName(){
+
+    public String getGeneratorName() {
         return generatorName;
     }
-    public String getGeneratorUrl(){
+
+    public String getGeneratorUrl() {
         return generatorUrl;
     }
-    public String[] getGeneratorStates(){
+
+    public String[] getGeneratorStates() {
         return generatorStates;
     }
-    public GeneratorPriorityType getGeneratorPriority(){
+
+    public GeneratorPriorityType getGeneratorPriority() {
         return generatorPriority;
     }
     
-    public List<GeneratorGeneration> getGeneratorGeneration(){
+    public List<GeneratorGeneration> getGeneratorGeneration() {
         return generatorGeneration;
     }
     
     
     //setter
-    public void setGeneratorName(String newGeneratorName){
+    public void setGeneratorName(String newGeneratorName) {
         this.generatorName = newGeneratorName;
     }
-    public void setGeneratorUrl(String newGeneratorUrl){
+
+    public void setGeneratorUrl(String newGeneratorUrl) {
         this.generatorUrl = newGeneratorUrl;
     }
-    public void setGeneratorStates(String[] newGeneratorStates){
+
+    public void setGeneratorStates(String[] newGeneratorStates) {
         this.generatorStates = newGeneratorStates;
     }
-    public void setGeneratorPriorityType(GeneratorPriorityType newGeneratorPriorityType){
+
+    public void setGeneratorPriorityType(GeneratorPriorityType newGeneratorPriorityType) {
         this.generatorPriority = newGeneratorPriorityType;
     }
-    public void setGeneratorGeneration(List<GeneratorGeneration> newGeneratorGeneration){
-       this.generatorGeneration = newGeneratorGeneration;
+
+    public void setGeneratorGeneration(List<GeneratorGeneration> newGeneratorGeneration) {
+        this.generatorGeneration = newGeneratorGeneration;
     }
 }
