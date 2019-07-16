@@ -24,7 +24,7 @@ export class DevicesComponent implements OnInit {
   ];
   deviceList: any;
   consumptionArray: any;
-  lastHourTotal: number;
+  lastHour: any;
 
   constructor(private consumptionService: ConsumptionService, private deviceService: DeviceService) { }
 
@@ -46,6 +46,7 @@ export class DevicesComponent implements OnInit {
               this.progressBarAgregation();
             })
           ).subscribe();
+      // this.progressBarAgregation();
   }
 
   /**
@@ -54,28 +55,55 @@ export class DevicesComponent implements OnInit {
   progressBarAgregation() {
     // console.log('progress: '+ JSON.stringify(this.consumptionArray))
     let total = 0;
+    // tslint:disable-next-line: prefer-for-of
     for (let index = 0; index < this.consumptionArray.length; index++) {
-      // console.log(this.consumptionArray[index].deviceConsumption)
       total += this.consumptionArray[index].deviceConsumption;
     }
 
-   /* let keys = Object.keys(this.consumptionArray)
-    let deviceIds;
-    for (let index = 0; index < keys.length; index++) {
-      if(deviceIds.includes(this.consumptionArray[index].deviceId))
-          continue
-      else
-          deviceIds.push(this.consumptionArray[index].deviceId)
-
+    const deviceIds: any[] = [];
+    // tslint:disable-next-line: prefer-for-of
+    for (let index = 0; index < this.consumptionArray.length; index++) {
+     if (deviceIds.indexOf(this.consumptionArray[index].deviceConsumptionId.deviceId) === -1) {
+        deviceIds.push(this.consumptionArray[index].deviceConsumptionId.deviceId);
+      }
     }
-    console.log('device Ids: ' + deviceIds)
-    console.log('keys '+ keys)*/
+
+    const consumptions: any[] = [];
+    let sum = 0;
+    let deviceName: string;
+    deviceIds.forEach(element => {
+      sum = 0;
+      // tslint:disable-next-line: prefer-for-of
+      for (let index = 0; index < this.consumptionArray.length; index++) {
+        if (this.consumptionArray[index].deviceConsumptionId.deviceId === element) {
+          sum += this.consumptionArray[index].deviceConsumption;
+        }
+      }
+      // tslint:disable-next-line: prefer-for-of
+      for (let index = 0; index < this.deviceList.length; index++) {
+       if (this.deviceList[index].deviceId === element){
+        deviceName = this.deviceList[index].deviceName;
+       }
+      }
+      consumptions.push(
+        {
+          deviceId: element,
+          deviceName : deviceName,
+          deviceConsumption : (sum / total) * 100
+        }
+      );
+    });
+
+    console.log('device Ids: ' + deviceIds);
+    // console.log('consumption: ' + JSON.stringify(consumptions));
     console.log('total: ' + total);
+    this.lastHour = consumptions;
+    console.log('last hour: ' + JSON.stringify(this.lastHour));
   }
 
   getDeviceState(deviceId) {
     // get device topic using id
-    let topic;
+    // let topic;
     /*for (let index = 0; index < this.deviceList.length; index++) {
       if(this.deviceList[index].toLower().includes(deviceId)){
             topic = this.deviceList[index].deviceTopic

@@ -32,13 +32,12 @@ export class SettingsComponent implements OnInit {
   deviceFound: boolean;
   userDeviceName = new FormControl();
   filteredOptions: Observable<string[]>;
-
   // for devices
   deviceName: string;
   deviceTopic: string;
   maxWatt: number;
   minWatt: number;
-  priority: string[] = ['Nice-to-have', 'Always-on', 'Must-have'];
+  devicePriority: string;
   deviceResult: string[];
   deviceTableHeaders = ['Device Name ', 'Device Topic', 'Device Priority' ];
   userTableHeaders = ['Name', 'Email', 'Current Expiry Date', 'Extend Expiry Date', 'Resident', 'Remove'];
@@ -75,7 +74,7 @@ export class SettingsComponent implements OnInit {
 
     updateUserList(id: number, property: string, event: any) {
       if (property === 'userType') {
-        console.log(this.deviceArray[id].deviceName);
+        // console.log(this.deviceArray[id].deviceName);
         const userUpdate = {
          userId: this.userArray[id].userId ,
          userType:  this.userArray[id].userType
@@ -118,7 +117,6 @@ export class SettingsComponent implements OnInit {
           console.log('in changing device topic');
 
           const editField = event.target.textContent;
-          console.log('edit field: ' + editField);
           const deviceUpdate = {
           deviceId: this.deviceArray[id].deviceId,
           deviceName: this.deviceArray[id].deviceName,
@@ -133,13 +131,12 @@ export class SettingsComponent implements OnInit {
       } else {
           console.log('changing device priortity');
 
-          const editField = event.target.textContent;
-          console.log('edit field: ' + editField);
+          console.log('priority type change: ' + this.devicePriority);
           const deviceUpdate = {
           deviceId: this.deviceArray[id].deviceId,
           deviceName: this.deviceArray[id].deviceName,
           deviceTopic: this.deviceArray[id].deviceTopic,
-          devicePriorityType: editField
+          devicePriorityType: this.devicePriority
           // deviceStates: this.deviceArray[id].device.deviceStates
           };
           console.log('object: ' + JSON.stringify(deviceUpdate));
@@ -156,7 +153,6 @@ export class SettingsComponent implements OnInit {
     }
 
     removeUser(id: any) {
-      console.log('removing user with id: ' + id);
       this.userService.removeUser(id);
       // this.userArray.splice(id, 1);
     }
@@ -166,10 +162,17 @@ export class SettingsComponent implements OnInit {
 
     }
 
+    changeSelectValue(priority: string) {
+      console.log('priority selected: ' + priority);
+      this.devicePriority = priority;
+    }
+
   openDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.disableClose = true;
+    dialogConfig.width = '400px';
+
     const dialogRef = this.dialog.open(DeviceModalComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
@@ -194,10 +197,9 @@ export class SettingsComponent implements OnInit {
     this.deviceResult = [];
     this.deviceFound = false;
     let arrayIndex = 0;
+    // tslint:disable-next-line: prefer-for-of
     for (let index = 0; index < this.deviceArray.length; index++) {
         if (this.deviceArray[index].deviceName.toLowerCase().includes(option) ) {
-          console.log('device result: ' + this.deviceResult);
-          console.log('index: ' + index);
           this.deviceFound = true;
           this.deviceResult[arrayIndex] = this.deviceArray[index];
           arrayIndex++;
@@ -209,7 +211,8 @@ export class SettingsComponent implements OnInit {
 
       // JSON.parse(this.deviceResult)
 
-      /*if(this.deviceResult == ''){
+      /* WHAT HAPPENS IF NOT FOUND
+      if(this.deviceResult == ''){
         console.log('Not Found')
         this.deviceResult = JSON.stringify("{Not Found}")
     }*/
@@ -229,15 +232,10 @@ export class SettingsComponent implements OnInit {
   }
 
   /**
-   * Remove user from system
-   */
-
-
-  /**
    * Changes guest users' expiry date
    */
   editUserExpiry(userForm) {
-    this.userService.changeUserExpiration(userForm.value);
+    this.userService.changeUserExpiration(userForm);
   }
 
   /**

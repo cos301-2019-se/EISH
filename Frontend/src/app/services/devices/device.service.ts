@@ -54,6 +54,7 @@ export class DeviceService {
    * @param deviceForm;
    */
   addDevice(deviceForm) {
+    // console.log(JSON.stringify(deviceForm));
     this.http.post(this.ROOT_URL + 'device', deviceForm);
   }
 

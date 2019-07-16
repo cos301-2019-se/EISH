@@ -23,7 +23,7 @@
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
-                <button mat-button color="primary" (click)="returnDevice()">Search</button>
+                <button mat-stroked-button color="primary" (click)="returnDevice()">Search</button>
               </form>
                 <div *ngIf=deviceFound >
                   <table mdbTable striped="true" responsive="true" hover="true" small="true">
@@ -33,13 +33,20 @@
                     <tbody>
                        <tr *ngFor="let device of deviceResult; let deviceId = index">
                            <td>
-                             <span  contenteditable="true" (keyup)="changeValue(userId, 'expiryDate', $event)" (blur)="updateDeviceList(deviceId, 'deviceName', $event)">{{device.deviceName}}</span>
+                             <span  contenteditable="true" (keyup)="changeValue(deviceId, 'deviceName', $event)" (blur)="updateDeviceList(deviceId, 'deviceName', $event)">{{device.deviceName}}</span>
                            </td>
                            <td>
-                             <span  contenteditable="true" (keyup)="changeValue(userId, 'expiryDate', $event)" (blur)="updateDeviceList(deviceId, 'deviceTopic', $event)">{{device.deviceTopic}}</span>
+                             <span  contenteditable="true" (keyup)="changeValue(deviceId, 'deviceTopic', $event)" (blur)="updateDeviceList(deviceId, 'deviceTopic', $event)">{{device.deviceTopic}}</span>
                            </td>
                            <td>
-                             <span  contenteditable="true" (keyup)="changeValue(userId, 'expiryDate', $event)" (blur)="updateDeviceList(deviceId, 'devicePriorityType', $event)">{{device.devicePriorityType}}</span>
+                             <span  contenteditable="true" (blur)="updateDeviceList(deviceId, 'devicePriorityType', $event)">
+                                <mat-select>
+                                    <mat-option value="PRIORITY_ALWAYSON" (mouseenter)="changeSelectValue('PRIORITY_ALWAYSON')">Always on</mat-option>
+                                    <mat-option value="PRIORITY_MUSTHAVE" (mouseenter)="changeSelectValue('PRIORITY_MUSTHAVE')">Must have</mat-option>
+                                    <mat-option value="PRIORITY_NICETOHAVE" (mouseenter)="changeSelectValue('PRIORITY_NICETOHAVE')">Nice to have</mat-option>
+                                    <mat-option value="PRIORITY_NEUTRAL" (mouseenter)="changeSelectValue('PRIORITY_NEUTRAL')">Neutral</mat-option>
+                            </mat-select>
+                             </span>
                            </td>
                            
                            <td>
