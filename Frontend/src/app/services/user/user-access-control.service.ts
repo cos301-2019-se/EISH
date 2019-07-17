@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import { map, catchError } from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import {Observable, pipe} from 'rxjs';
 import { User } from 'src/app/models/user-model';
 
 @Injectable({
@@ -40,6 +40,13 @@ export class UserAccessControlService {
             if (userCredentials.userName === 'admin') {
               loginInstance.routeToChange();
             } else { // else go to dashboard
+              this.getUser().pipe(
+                // tslint:disable-next-line: no-shadowed-variable
+                map(res => {
+                  const userType = res.userType;
+                  sessionStorage.setItem('userType' , userType);
+                })
+              ).subscribe();
               loginInstance.routeToHomepage();
             }
 
@@ -149,9 +156,9 @@ export class UserAccessControlService {
   /**
    * Removes user given userId
    */
-  removeUser(userId) {
+  removeUser(userId): Observable<any> {
     console.log('in delete, userId: ' + userId);
-    this.http.delete(this.ROOT_URL, userId);
+    return this.http.delete(this.ROOT_URL, userId);
   }
 
   /**

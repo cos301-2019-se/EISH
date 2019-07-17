@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import {MatDialogModule, MatDialogConfig} from '@angular/material/dialog';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import {map, startWith, catchError} from 'rxjs/operators';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { DeviceModalComponent } from './device-modal/device-modal.component';
 import { UserAccessControlService } from 'src/app/services/user/user-access-control.service';
 import { GeneratorService } from 'src/app/services/generators/generator.service';
 import { DeviceService } from 'src/app/services/devices/device.service';
+import { Response } from 'selenium-webdriver/http';
 
 @Component({
   selector: 'app-settings',
@@ -24,6 +25,7 @@ export class SettingsComponent implements OnInit {
   // for user table
   formData: any;
   isDataAvailable: boolean;
+  userRemoveFailed: boolean;
   // for search bar
   panelOpenState = false;
   deviceFound: boolean;
@@ -40,10 +42,11 @@ export class SettingsComponent implements OnInit {
   userTableHeaders = ['Name', 'Email', 'Current Expiry Date', 'Extend Expiry Date', 'Resident', 'Remove'];
   editField: string;
   deviceNames: string[];
+  deviceRemoveFailed: boolean;
 
   deviceArray: any;
   userArray: any;
-  
+
   ngOnInit() {
     this.deviceService.getDeviceJSONArray().pipe(
       map( response => {
@@ -68,6 +71,32 @@ export class SettingsComponent implements OnInit {
      ).subscribe();
     this.getUserList();
     this.deviceFound = false;
+    this.userRemoveFailed = false;
+    this.deviceRemoveFailed = false;
+  }
+
+  getDeviceList() {
+    this.deviceService.getDeviceJSONArray().pipe(
+      map( response => {
+          this.deviceArray =  response,
+          JSON.stringify(this.deviceArray);
+
+          let devices: string[];
+          devices = [];
+          for (let index = 0; index < this.deviceArray.length; index++) {
+              devices[index] = this.deviceArray[index].deviceName;
+            }
+          this.deviceNames = devices;
+
+          this.filteredOptions = this.userDeviceName.valueChanges
+            .pipe(
+              startWith(''),
+              map(value => this._filter(value))
+
+            );
+
+          })
+     ).subscribe();
   }
 
     updateUserList(id: number, property: string, event: any) {
@@ -151,8 +180,15 @@ export class SettingsComponent implements OnInit {
     }
 
     removeUser(id: any) {
-      this.userService.removeUser(id);
-      // this.userArray.splice(id, 1);
+      this.userRemoveFailed = false;
+      this.userService.removeUser(id).subscribe(
+        (res: Response) => {
+            if (res.status === 200) {
+              this.getUserList();
+              this.userRemoveFailed = false;
+            } else {
+              this.userRemoveFailed = true; }
+        });
     }
 
     changeValue(id: number, property: string, event: any) {
@@ -255,7 +291,15 @@ export class SettingsComponent implements OnInit {
    */
   removeDevice(deviceId) {
     console.log('removing device with ID: ' + deviceId);
-    this.deviceService.removeDevice(deviceId);
+    this.deviceRemoveFailed =  false;
+    this.deviceService.removeDevice(deviceId).subscribe(
+      (res: Response) => {
+          if (res.status === 200) {
+            this.getDeviceList();
+            this.deviceRemoveFailed = false;
+          } else {
+            this.deviceRemoveFailed = true; }
+      });
   }
 
   /**

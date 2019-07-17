@@ -8,9 +8,6 @@
             <div class="deviceInfo">
                 <h4>{{device.deviceName}}</h4>
                 <p>{{device.deviceConsumption}} W </p>
-                <mat-progress-bar mode="determinate" 
-                                  [value]="device.deviceConsumption">
-                </mat-progress-bar>
                 </div>
         </div>
         <div *ngIf="deviceState==='OFF'" class="off">

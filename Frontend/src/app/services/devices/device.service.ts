@@ -74,10 +74,10 @@ export class DeviceService {
    * DELETE Request
    * @param deviceId;
    */
-  removeDevice(deviceId) {
+  removeDevice(deviceId) : Observable<any> {
     console.log('inside service, device id: ' + deviceId);
     const params = new HttpParams().set('deviceId', deviceId);
-    this.http.delete(this.ROOT_URL  + 'device', {params} );
+    return this.http.delete(this.ROOT_URL  + 'device', {params} );
   }
 
   /**
@@ -85,8 +85,9 @@ export class DeviceService {
    * PATCH Request
    * @param deviceId; ID of device in question
    */
-  controlDevice(deviceId) {
+  controlDevice(device) {
     // {deviceId}/{deviceState}
+    /**
     let deviceState;
     this.getCurrentState().pipe(
       map( response => {
@@ -95,9 +96,10 @@ export class DeviceService {
 
       })
     ); // .subscribe();
+     */
 
-    const params = new HttpParams().set('deviceId', deviceId);
-    params.set('deviceState', deviceState);
+    const params = new HttpParams().set('deviceId', device.deviceId);
+    params.set('deviceState', device.deviceState);
     this.http.patch(this.ROOT_URL + '', {HttpParams});
   }
 
