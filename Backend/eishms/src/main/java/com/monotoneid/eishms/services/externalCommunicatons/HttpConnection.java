@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,28 +22,27 @@ public class HttpConnection {
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
-            int status = connection.getResponseCode();
+            HttpStatus status = HttpStatus.resolve(connection.getResponseCode());
             Reader streamReader = null;
 
-            if(status == 200) {
+            if (status == HttpStatus.OK) {
                 BufferedReader in = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()));
                 String inputLine;
                 content = new StringBuffer();
-                while((inputLine = in.readLine()) != null) {
+                while ((inputLine = in.readLine()) != null) {
                     content.append(inputLine);
                 }
                 in.close();
                 connection.disconnect();
                 return content;
-            }
-            else {
+            } else {
                 streamReader = new InputStreamReader(connection.getErrorStream());
                 System.out.println("Stream Reader: " + streamReader.toString());
                 connection.disconnect();
                 return content;
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
             throw null;
         }
