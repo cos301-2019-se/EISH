@@ -11,10 +11,11 @@
                           [label]="gaugeLabel"
                           [append]="gaugeAppendText"
                           [thick] = "gaugeThickness"
-                          [thresholds] = "thresholdConfig">       
+                          [thresholds] = "thresholdConfig">      
     </ngx-gauge>
     <div class="batteryFooter">
-      <h4>Estimated Charging time: 56 mins</h4>
+      <h4>Battery Status: {{batteryStatus}} </h4>
+      <p>{{batteryMode}}</p>
     </div>
   </div>    
 </div>
@@ -23,13 +24,13 @@
   <div class="col">
   <div class="weather__card" >
       <!-- TODO: make the city name dynamic -->
-      <span class="city-name__text">{{weatherData.weatherLocation}}</span>
+      <span class="city-name__text">{{weather.weatherLocation}}</span>
         <div class="weather-icon__container" [ngSwitch]="true">
-          <img src="../../../assets/icons/r01n.png">
+          <img src="../../../assets/icons/{{weather.weatherIcon}}.png">
         </div>
         <div class="temperature-text__container">
-            <div class="temperature__text">{{ weatherData.weatherTemp }}°C</div>
-            <div class="weather-condition__text">{{ weatherData.weatherDescription }}</div>
+            <div class="temperature__text">{{ weather.weatherTemperature }}°C</div>
+            <div class="weather-condition__text">{{ weather.weatherDescription }}</div>
         </div>
        
     </div>
@@ -38,6 +39,9 @@
   <div class="col">
     <div class="generationInfo">
       <div class="batteryHeader">Energy Consumption</div>
+      <div class="temperature-text__container">
+        <img src="../../../assets/icons/consumption_graph_icon.png" width="50%" height="50%">
+      </div>
       <div class="batterySubtitle">
         <p>Energy used this month: 2388 KWh</p>
         <p>Energy used this week: 112 KWh</p>

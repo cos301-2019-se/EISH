@@ -1,6 +1,6 @@
 export class Weather {
     weatherDescription: string;
     weatherIcon: string;
-    weatherTemp: number;
+    weatherTemperature: number;
     weatherLocation: string;
 }
