@@ -43,6 +43,8 @@ import { DailyPlannerComponent } from './pages/daily-planner/daily-planner.compo
 import { NgxGaugeModule } from 'node_modules/ngx-gauge';
 import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 import { eishmsRxStompConfig } from './services/stomp/rx-stomp.config';
+import { GenerationComponent } from './pages/generation/generation.component';
+import { GenerationChartComponent } from './pages/generation/generation-chart/generation-chart.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +63,9 @@ import { eishmsRxStompConfig } from './services/stomp/rx-stomp.config';
     ConsumptionChartComponent,
     SideNavComponent,
     DeviceModalComponent,
-    DailyPlannerComponent
+    DailyPlannerComponent,
+    GenerationComponent,
+    GenerationChartComponent
   ],
   imports: [
     BrowserModule,

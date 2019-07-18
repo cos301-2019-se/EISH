@@ -1,10 +1,10 @@
 <div style="width: 100%">
     <div class="chart-controls">
-        <h1>Power Consumption</h1>
-        <label>View Consumption: </label>
-        <select [ngModel]="selectedDevice" (ngModelChange)="selectDevice($event)">
+        <h1 class="gen-heading">Power Generation</h1>
+        <label>View Generation: </label>
+        <select [ngModel]="selectedGenerator" (ngModelChange)="selectGenerator($event)">
             <option value="Home">Home</option>
-            <option [value]="device" *ngFor="let device of devices">{{ device }}</option>
+            <option [value]="generator" *ngFor="let generator of generators">{{ generator }}</option>
         </select>
         <label>Range: </label>
         <select [ngModel]="selectedRange" (ngModelChange)="selectRange($event)">
@@ -24,6 +24,6 @@
         </span>
         
     </div>
-    <app-consumption-chart #consumptionChart></app-consumption-chart>
+    <app-generation-chart #generationChart></app-generation-chart>
 </div>
 

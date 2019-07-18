@@ -68,6 +68,31 @@ export class GeneratorService {
   removePowerGenerator(generatorId) {
     this.http.delete(this.ROOT_URL + '', generatorId);
   }
+
+
+  getAllGenerators(): Observable<Generator[]> {
+    return this.http.get<Generator[]>(this.ROOT_URL + 'generators');
+  }
+
+  getCustomGeneratorGeneration(generatorId, startTimeStamp, endTimeStamp): Observable<[]> {
+    const params = new HttpParams().set('generatorId', generatorId).set('startTimeStamp', startTimeStamp).set('endTimeStamp', endTimeStamp);
+    return this.http.get<[]>(this.ROOT_URL + 'generator/generation', { params });
+  }
+
+  // getCustomHomeGeneration(startTimeStamp, endTimeStamp): Observable<[]> {
+  //   const params = new HttpParams().set('startTimeStamp', startTimeStamp).set('endTimeStamp', endTimeStamp);
+  //   return this.http.get<[]>(this.ROOT_URL + 'home/generation', { params });
+  // }
+
+  getSpecialGeneratorGeneration(generatorId, specialRange): Observable<[]> {
+    const params = new HttpParams().set('generatorId', generatorId).set('interval', specialRange);
+    return this.http.get<[]>(this.ROOT_URL + 'generator/generation', { params });
+  }
+
+  getSpecialHomeGeneration(specialRange): Observable<[]> {
+    const params = new HttpParams().set('interval', specialRange);
+    return this.http.get<[]>(this.ROOT_URL + 'home/generation', { params });
+  }
 }
 
 

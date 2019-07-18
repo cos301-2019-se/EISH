@@ -18,7 +18,8 @@ export class ConsumptionComponent implements OnInit {
   startTime = null;
   endTime = null;
   selectedDevice = 'Home';
-  selectedRange = 'Last Hour';
+  selectedRange = 'lasthour';
+  consumptionType = 'home';
   custom = false;
   topicSubscription = null;
 
@@ -30,7 +31,6 @@ export class ConsumptionComponent implements OnInit {
   ngOnInit() {
     this.getDevices();
     this.consumptionChart.setHeading('Home Consumption');
-    this.testConsumption();
   }
 
   private toDateString(date: Date): string {
@@ -74,43 +74,65 @@ export class ConsumptionComponent implements OnInit {
     );
   }
 
-  getCurrentDeviceConsumption(deviceId, deviceTopic, specialRange) {
+  getHomeConsumption(startTimestamp, endTimestamp) {
+    this.consumptionService.getCustomHomeConsumption(startTimestamp, endTimestamp).subscribe(
+      (res) => {
+        this.consumptionChart.addBulkData(res);
+      }
+    );
+  }
+
+  getSpecialDeviceConsumption(deviceId, range) {
+    this.consumptionService.getSpecialDeviceConsumption(deviceId, range).subscribe(
+      (res) => {
+        this.consumptionChart.addBulkData(res);
+      }
+    );
+  }
+
+  getSpecialHomeConsumption(range) {
+    this.consumptionService.getSpecialHomeConsumption(range).subscribe(
+      (res) => {
+        this.consumptionChart.addBulkData(res);
+      }
+    );
+  }
+
+  getCurrentDeviceConsumption(deviceTopic) {
     if (this.topicSubscription != null) {
       this.topicSubscription.unsubscribe();
     }
 
-    this.consumptionService.getSpecialDeviceConsumption(deviceId, specialRange).subscribe(
-      (res) => {
-        this.consumptionChart.addBulkData(res);
-        this.topicSubscription = this.rxStompService.watch('/device/' + deviceTopic + '/consumption').subscribe((message: Message) => {
-            console.log(message);
-            // add data point to chart
-            this.consumptionChart.addDataPoint(message);
-            this.consumptionChart.updateChart();
-        });
-      }
-    );
+    this.consumptionChart.clearChart();
+
+    this.topicSubscription = this.rxStompService.watch('/device/' + deviceTopic + '/consumption').subscribe((message: Message) => {
+      const consumptionData = JSON.parse(message.body);
+        // add data point to chart
+      this.consumptionChart.addDataPoint(consumptionData);
+      this.consumptionChart.updateChart();
+    });
   }
 
-  testConsumption() {
-    this.topicSubscription = this.rxStompService.watch('/device/sonoff-light/consumption').subscribe((message: Message) => {
-            console.log(JSON.parse(message.body));
-            // add data point to chart
-            this.consumptionChart.addDataPoint(JSON.parse(message.body));
-            this.consumptionChart.updateChart();
-        });
-  }
+  getCurrentHomeConsumption() {
+    if (this.topicSubscription != null) {
+      this.topicSubscription.unsubscribe();
+    }
 
-  getSpecialConsumption(deviceId, specialRange) {
-    this.consumptionService.getSpecialDeviceConsumption(deviceId, specialRange).subscribe(
-      (res) => {
-        this.consumptionChart.addBulkData(res);
-      }
-    );
+    this.consumptionChart.clearChart();
+
+    this.topicSubscription = this.rxStompService.watch('/home/consumption').subscribe((message: Message) => {
+      const consumptionData = JSON.parse(message.body);
+        // add data point to chart
+      console.log(consumptionData);
+      this.consumptionChart.addDataPoint(consumptionData);
+      this.consumptionChart.updateChart();
+    });
   }
 
   selectDevice(dropDownValue) {
+    console.log(dropDownValue);
     this.selectedDevice = dropDownValue;
+    this.consumptionType = (dropDownValue == 'Home') ? 'home' : 'device';
     if (!this.custom) {
       this.updateSpecial();
     } else {
@@ -149,19 +171,29 @@ export class ConsumptionComponent implements OnInit {
   getDeviceTopic(deviceName) {
     for (let i = 0; i < this.devices.length; i++) {
       if (this.devices[i] === deviceName) {
+        console.log(deviceName);
         return this.deviceTopics[i];
       }
     }
   }
 
   updateCustom() {
+    if (this.topicSubscription != null) {
+      this.topicSubscription.unsubscribe();
+    }
     if (this.selectedDevice === 'Home') {
       this.consumptionChart.setHeading('Home Consumption');
       this.consumptionChart.setChartHeading('Consumption');
-      return;
+      this.consumptionChart.setDatasetHeading('Home Consumption');
+      this.consumptionChart.clearChart();
+      if (this.isCustomValid()) {
+        this.getHomeConsumption(this.addSeconds(this.startTime), this.addSeconds(this.endTime));
+      }
     } else {
       this.consumptionChart.setHeading('Device Consumption');
       this.consumptionChart.setChartHeading(this.selectedDevice + ' Consumption');
+      this.consumptionChart.setDatasetHeading('Device Consumption');
+      this.consumptionChart.clearChart();
       if (this.isCustomValid()) {
         this.getDeviceConsumption(this.getDeviceId(this.selectedDevice), this.addSeconds(this.startTime), this.addSeconds(this.endTime));
       }
@@ -169,7 +201,43 @@ export class ConsumptionComponent implements OnInit {
   }
 
   updateSpecial() {
+    if (this.selectedRange === 'Current') {
+      if (this.consumptionType === 'home') {
+        this.consumptionChart.setHeading('Home Consumption');
+        this.consumptionChart.setChartHeading('Consumption');
+        this.consumptionChart.setDatasetHeading('Home Consumption');
+        this.consumptionChart.clearChart();
+        this.getCurrentHomeConsumption();
+      }
 
+      if (this.consumptionType === 'device') {
+        this.consumptionChart.setHeading('Device Consumption');
+        this.consumptionChart.setChartHeading(this.selectedDevice + ' Consumption');
+        this.consumptionChart.setDatasetHeading('Device Consumption');
+        this.consumptionChart.clearChart();
+        this.getCurrentDeviceConsumption(this.getDeviceTopic(this.selectedDevice));
+      }
+    } else {
+      if (this.topicSubscription != null) {
+        this.topicSubscription.unsubscribe();
+      }
+
+      if (this.consumptionType === 'home') {
+        this.consumptionChart.setHeading('Home Consumption');
+        this.consumptionChart.setChartHeading('Consumption');
+        this.consumptionChart.setDatasetHeading('Home Consumption');
+        this.consumptionChart.clearChart();
+        this.getSpecialHomeConsumption(this.selectedRange);
+      }
+
+      if (this.consumptionType === 'device') {
+        this.consumptionChart.setHeading('Device Consumption');
+        this.consumptionChart.setChartHeading(this.selectedDevice + ' Consumption');
+        this.consumptionChart.setDatasetHeading('Device Consumption');
+        this.consumptionChart.clearChart();
+        this.getSpecialDeviceConsumption(this.getDeviceId(this.selectedDevice), this.selectedRange);
+      }
+    }
   }
 
 }
