@@ -1,5 +1,7 @@
 package com.monotoneid.eishms.communications.controller;
 
+import com.google.gson.Gson;
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +12,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
-import com.google.gson.Gson;
-
 /**
- * .
+ *CLASS SOCKET CONTROLLER. 
  */
 @Controller
 public class SocketController {

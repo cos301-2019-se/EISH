@@ -3,10 +3,10 @@ package com.monotoneid.eishms.services.databaseManagementSystem;
 import java.sql.Timestamp;
 import java.util.List;
 
-import com.monotoneid.eishms.dataPersistence.models.Device;
-import com.monotoneid.eishms.dataPersistence.models.DeviceConsumption;
-import com.monotoneid.eishms.dataPersistence.repositories.DeviceConsumptions;
-import com.monotoneid.eishms.dataPersistence.repositories.Devices;
+import com.monotoneid.eishms.datapersistence.models.Device;
+import com.monotoneid.eishms.datapersistence.models.DeviceConsumption;
+import com.monotoneid.eishms.datapersistence.repositories.DeviceConsumptions;
+import com.monotoneid.eishms.datapersistence.repositories.Devices;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,7 @@ public class DeviceConsumptionService{
         }
     }  
     
-    public List<DeviceConsumption> retrieveBetweenInterval(long deviceId,String interval){
+    public List<DeviceConsumption> retrieveBetweenInterval(long deviceId,String interval) {
         try{
             
             devicesRepository.findById(deviceId).orElseThrow(() -> new ResourceNotFoundException("device does not exist!"));

@@ -22,8 +22,8 @@ import org.springframework.stereotype.Service;
 import com.google.gson.*;
 import net.minidev.json.*;
 
-import com.monotoneid.eishms.dataPersistence.models.Weather;
-import com.monotoneid.eishms.dataPersistence.repositories.Weathers;
+import com.monotoneid.eishms.datapersistence.models.Weather;
+import com.monotoneid.eishms.datapersistence.repositories.Weathers;
 
 @Service
 public class WeatherService {

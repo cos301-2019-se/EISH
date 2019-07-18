@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.dataPersistence.models;
+package com.monotoneid.eishms.datapersistence.models;
 
 import java.sql.Timestamp;
 

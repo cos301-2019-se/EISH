@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.dataPersistence.models;
+package com.monotoneid.eishms.datapersistence.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -37,7 +37,8 @@ public class HomeUserPresence {
 
     public HomeUserPresence() {}
 
-    public HomeUserPresence(boolean newHomeUserPresence, HomeUser newHomeUser, 
+    public HomeUserPresence(boolean newHomeUserPresence, 
+        HomeUser newHomeUser, 
         Timestamp newHomeUserPresenceTimestamp) {
         setHomeUserPresence(newHomeUserPresence);
         setHomeUser(newHomeUser);

@@ -3,10 +3,10 @@ package com.monotoneid.eishms.services.databaseManagementSystem;
 import java.sql.Timestamp;
 import java.util.List;
 
-import com.monotoneid.eishms.dataPersistence.models.Generator;
-import com.monotoneid.eishms.dataPersistence.models.GeneratorGeneration;
-import com.monotoneid.eishms.dataPersistence.repositories.GeneratorGenerations;
-import com.monotoneid.eishms.dataPersistence.repositories.Generators;
+import com.monotoneid.eishms.datapersistence.models.Generator;
+import com.monotoneid.eishms.datapersistence.models.GeneratorGeneration;
+import com.monotoneid.eishms.datapersistence.repositories.GeneratorGenerations;
+import com.monotoneid.eishms.datapersistence.repositories.Generators;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;

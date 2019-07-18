@@ -1,15 +1,19 @@
 package com.monotoneid.eishms.services.databaseManagementSystem;
 
-import com.monotoneid.eishms.dataPersistence.models.HomeUser;
-import com.monotoneid.eishms.dataPersistence.models.HomeUserPresence;
-import com.monotoneid.eishms.dataPersistence.repositories.UserPresences;
-import com.monotoneid.eishms.dataPersistence.repositories.Users;
+import com.monotoneid.eishms.datapersistence.models.HomeUser;
+import com.monotoneid.eishms.datapersistence.models.HomeUserPresence;
+import com.monotoneid.eishms.datapersistence.repositories.UserPresences;
+import com.monotoneid.eishms.datapersistence.repositories.Users;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 
 import java.sql.Timestamp;
 import java.util.List;
 
+import net.minidev.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service()
@@ -120,6 +124,33 @@ public class UserPresenceService {
             System.out.println("Error: " + e.getMessage() + "!");
             throw e;
         }
+    }
+
+    public ResponseEntity<Object> getCurrentUserPresence(long userId) {
+        try {
+            usersRepository.findById(userId)
+                        .orElseThrow(() -> new ResourceNotFoundException("user does not exist!"));
+           
+            HomeUserPresence foundHomeUserPresence = 
+                userPresenceRespository.findCurrentHomeUserPresence(userId)
+                        .orElseThrow(() 
+                            -> new ResourceNotFoundException("presence does not exist!"));
+            boolean isPresent = foundHomeUserPresence.getHomeUserPresence();
+            JSONObject responseObject = new JSONObject();
+            //check if the statement works in java
+            if (isPresent) {
+                responseObject.put("homeUserPresence",  "User is home!");
+                return new ResponseEntity<>(responseObject,HttpStatus.OK);
+            } else {
+                
+                responseObject.put("message","User is not at home!");
+                return new ResponseEntity<>(responseObject,HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage() + "!");
+            throw e;
+        }
+
     }
 
 }

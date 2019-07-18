@@ -1,7 +1,7 @@
 package com.monotoneid.eishms.services.mqttCommunications.mqttDevices;
 
-import com.monotoneid.eishms.dataPersistence.models.Device;
-import com.monotoneid.eishms.dataPersistence.repositories.Devices;
+import com.monotoneid.eishms.datapersistence.models.Device;
+import com.monotoneid.eishms.datapersistence.repositories.Devices;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 import com.monotoneid.eishms.services.databaseManagementSystem.DeviceConsumptionService;
 
@@ -33,16 +33,26 @@ public class MqttDeviceManager {
     public MqttDeviceManager(Devices devicesRepository) {
         List<Device> deviceModels = devicesRepository.findAll();
         mqttDevices = new ArrayList<MQTTDevice>();
-        deviceModels.forEach((device) -> {
-            addDevice(device);
-        });
+        for (int i = 0; i < deviceModels.size(); i++) {
+            addDevice(deviceModels.get(i));
+        }
+        // deviceModels.forEach((device) -> {
+            // addDevice(device);
+        // });
     }
 
     public void addDevice(Device newDevice) {
         try {
-            mqttDevices.add(new MQTTDevice(newDevice, this));
+            MQTTDevice newMqttDevice = new MQTTDevice(newDevice, this); 
+            if (newMqttDevice != null) {
+                mqttDevices.add(newMqttDevice);
+            } else {
+                System.out.println("new Mqtt device doesnt exist");
+            }
+            
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("error in adding device");
         }
     }
 
@@ -63,10 +73,10 @@ public class MqttDeviceManager {
             for (int i = 0; i < mqttDevices.size()
                 && (foundDevice = mqttDevices.get(i)).getId() != deviceId; i++) {}
             if (foundDevice != null) {
-                deviceState.toUpperCase();
-                if (deviceState == "ON") {
+                deviceState = deviceState.toUpperCase();
+                if (deviceState.matches("ON")) {
                     foundDevice.turnOn();
-                } else if (deviceState == "OFF") {
+                } else if (deviceState.matches("OFF")) {
                     foundDevice.turnOff();
                 } else {
                     throw null;
@@ -87,6 +97,11 @@ public class MqttDeviceManager {
             }
         }
     }
+    /**
+     * .
+     * @param deviceId represents the device id
+     * @return
+     */
 
     public String getDeviceStateById(long deviceId) {
         MQTTDevice foundDevice = mqttDevices.get(0);

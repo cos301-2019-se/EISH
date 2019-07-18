@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.dataPersistence.models;
+package com.monotoneid.eishms.datapersistence.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,24 +26,39 @@ public class GeneratorGeneration {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "generatorid", insertable = false, updatable = false, nullable = false)
+    @JoinColumn(name = "generatorid", 
+                insertable = false, 
+                updatable = false, 
+                nullable = false)
     private Generator generator;
 
-    @Column(name = "generatorgeneration", columnDefinition = "float", updatable = true, nullable = true)
+    @Column(name = "generatorgeneration", 
+            columnDefinition = "float", 
+            updatable = true, 
+            nullable = true)
     private Float generatorGeneration;
 
     //@Id
-    @Column(name = "generatorgenerationtimestamp", columnDefinition = "TIMESTAMP", insertable = false, updatable = false, nullable = false)
+    @Column(name = "generatorgenerationtimestamp", 
+            columnDefinition = "TIMESTAMP", 
+            insertable = false, 
+            updatable = false, 
+            nullable = false)
     private Timestamp generatorGenerationTimestamp;
 
     @Size(min = 1, message = "generator states must be one or more characters")
-    @Column(name = "generatorgenerationstate", columnDefinition = "text", updatable = true, nullable = false)
+    @Column(name = "generatorgenerationstate", 
+            columnDefinition = "text", 
+            updatable = true, 
+            nullable = false)
     private String generatorGenerationState;
 
     public GeneratorGeneration() {}
 
-    public GeneratorGeneration(float newGeneratorGeneration, Generator newGenerator, 
-        Timestamp newGeneratorGenerationTimestamp, String newGeneratorGenerationState) {
+    public GeneratorGeneration(float newGeneratorGeneration, 
+        Generator newGenerator, 
+        Timestamp newGeneratorGenerationTimestamp, 
+        String newGeneratorGenerationState) {
         setGeneratorGeneration(newGeneratorGeneration);
         setGenerator(newGenerator);
         setGeneratorGenerationTimestamp(newGeneratorGenerationTimestamp);
@@ -77,7 +92,8 @@ public class GeneratorGeneration {
 
     //setters
     public void setGeneratorGenerationId() {
-        this.generatorGenerationId = new GeneratorGenerationId(getGenerator().getGeneratorId(),getGeneratorGenerationTimestamp());
+        this.generatorGenerationId = new GeneratorGenerationId(getGenerator().getGeneratorId(),
+                getGeneratorGenerationTimestamp());
     }
 
     public void setGenerator(Generator newGenerator) {

@@ -1,6 +1,6 @@
 package com.monotoneid.eishms.communications.controller;
 
-import com.monotoneid.eishms.dataPersistence.models.GeneratorGeneration;
+import com.monotoneid.eishms.datapersistence.models.GeneratorGeneration;
 import com.monotoneid.eishms.services.databaseManagementSystem.GeneratorGenerationService;
 
 import java.util.List;

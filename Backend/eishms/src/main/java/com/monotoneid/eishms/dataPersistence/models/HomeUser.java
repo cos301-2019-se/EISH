@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.dataPersistence.models;
+package com.monotoneid.eishms.datapersistence.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -25,6 +25,9 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ *CLASS HOMEUSER MODEL. 
+ */
 @Entity(name = "homeuser")
 @Table(name = "homeuser")
 @EntityListeners(AuditingEntityListener.class)
@@ -36,44 +39,75 @@ public class HomeUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userid", columnDefinition = "serial", updatable = false, nullable = false)
+    @Column(name = "userid", 
+            columnDefinition = "serial", 
+            updatable = false, 
+            nullable = false)
     private long userId;
 
-    @Column(name = "username", columnDefinition = "text", updatable = true, unique = true, nullable = false)
+    @Column(name = "username", 
+            columnDefinition = "text",
+            updatable = true, 
+            unique = true, 
+            nullable = false)
     private String userName;
 
-    @Column(name = "useremail", columnDefinition = "text", updatable = true, nullable = false)
+    @Column(name = "useremail", 
+            columnDefinition = "text", 
+            updatable = true, 
+            nullable = false)
     // @Pattern(regexp="^\\w+[\\w-\\.]*\\@\\w+((-\\w+)|(\\w*))\\.[a-z]{2,3}$")
     @Pattern(regexp = "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$")
     private String userEmail;
 
 
-    @Column(name = "userpassword", columnDefinition = "text", updatable = true, nullable = false)
+    @Column(name = "userpassword", 
+            columnDefinition = "text", 
+            updatable = true, 
+            nullable = false)
     private String userPassword;
 
-    @Column(name = "userlocationtopic", columnDefinition = "text", updatable = true, unique = true, nullable = false)
+    @Column(name = "userlocationtopic", 
+            columnDefinition = "text", 
+            updatable = true, 
+            unique = true, 
+            nullable = false)
     private String userLocationTopic;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "usertype", columnDefinition = "userType", updatable = true, nullable = false)
+    @Column(name = "usertype", 
+            columnDefinition = "userType", 
+            updatable = true, 
+            nullable = false)
     @Type(type = "pgsql_enum")
     private UserType userType;
 
     
-    @Column(name = "userexpirydate", columnDefinition = "TIMESTAMP", updatable = true, nullable = false)
+    @Column(name = "userexpirydate", 
+            columnDefinition = "TIMESTAMP", 
+            updatable = true, 
+            nullable = false)
     private Timestamp userExpiryDate;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "homeuser")
     private List<HomeUserPresence> homeUserPresence = new ArrayList<HomeUserPresence>();
 
-    public HomeUser(){}
+    public HomeUser() {
 
-    public HomeUser(String userName, String userEmail){
+    }
+
+    public HomeUser(String userName, String userEmail) {
             
     }
 
-    
+    /**
+     * .
+     * @param newUserName represents the users name
+     * @param newEmail represents the users email
+     * @param newPassword represents the users password
+     * @param newLocationTopic represents the users location topic
+     */
     public HomeUser(@JsonProperty("userName") String newUserName,
         @JsonProperty("userEmail") String newEmail, 
         @JsonProperty("userPassword") String newPassword,
@@ -115,6 +149,7 @@ public class HomeUser {
         return userExpiryDate;
     }
 
+    @JsonIgnore
     public List<HomeUserPresence> getHomeUserPresence() {
         return homeUserPresence;
     }

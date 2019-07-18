@@ -1,10 +1,10 @@
-package com.monotoneid.eishms.dataPersistence.repositories;
+package com.monotoneid.eishms.datapersistence.repositories;
 
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
-import com.monotoneid.eishms.dataPersistence.models.BatteryCapacity;
+import com.monotoneid.eishms.datapersistence.models.BatteryCapacity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

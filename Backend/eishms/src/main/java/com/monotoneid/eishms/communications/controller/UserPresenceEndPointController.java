@@ -1,11 +1,12 @@
 package com.monotoneid.eishms.communications.controller;
 
-import com.monotoneid.eishms.dataPersistence.models.HomeUserPresence;
+import com.monotoneid.eishms.datapersistence.models.HomeUserPresence;
 import com.monotoneid.eishms.services.databaseManagementSystem.UserPresenceService;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,5 +46,15 @@ public class UserPresenceEndPointController {
         return userPresenceService.retrieveBetweenInterval(userId, interval);
     }
 
-
+    /**
+    * GET METHOD.
+    * Implements getUserPresence endpoint, that calls the getUserPresence service
+    * @param userId represents the user id
+    * @return an object with the presence of the user
+    */
+    @GetMapping(value = "/presence", params = {"userId"})
+    public ResponseEntity<Object> getUserPresence(
+        @RequestParam(value = "userId", required = true) long userId) {
+        return userPresenceService.getCurrentUserPresence(userId);
+    }
 }

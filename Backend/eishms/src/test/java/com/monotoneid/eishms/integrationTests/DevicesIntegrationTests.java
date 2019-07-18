@@ -1,7 +1,7 @@
 package com.monotoneid.eishms.integrationTests;
 
-// import com.monotoneid.eishms.dataPersistence.models.Device;
-// import com.monotoneid.eishms.dataPersistence.repositories.Devices;
+// import com.monotoneid.eishms.datapersistence.models.Device;
+// import com.monotoneid.eishms.datapersistence.repositories.Devices;
 // import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 
 // import org.junit.Test;
@@ -12,7 +12,7 @@ package com.monotoneid.eishms.integrationTests;
 // import org.springframework.test.context.ActiveProfiles;
 // import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 // import org.springframework.test.context.junit4.SpringRunner;
-// import static com.monotoneid.eishms.dataPersistence.models.DevicePriorityType.PRIORITY_NICETOHAVE;
+// import static com.monotoneid.eishms.datapersistence.models.DevicePriorityType.PRIORITY_NICETOHAVE;
 // import static org.assertj.core.api.Assertions.*;
 // import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
