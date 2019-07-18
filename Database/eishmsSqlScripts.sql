@@ -8,7 +8,7 @@ USERS AND ENTITIES RELATED TO USERS
  username text not null unique,
  useremail text not null,
  userpassword text not null,
- userlocationtopic text not null,
+ userlocationtopic text not null unique,
  usertype userType not null,
  userexpirydate TIMESTAMP not null
  );
@@ -98,6 +98,9 @@ generatorgenerationtimestamp timestamp not null,
 generatorgenerationstate text not null,
 generatorgenerationcapacity float,
  primary key(generatorid,generatorgenerationtimestamp));
+
+insert into generator("generatorname","generatorurl","generatorpriority","generatorstates")
+values ('PV System','http://eishms.ddns.net:3001/v2/installations/0/SolarCharger','PRIORITY_NEUTRAL',ARRAY['OFFLINE','ONLINE']);	
 
 /*
 BATTERY AND ENTITIES RELATED 

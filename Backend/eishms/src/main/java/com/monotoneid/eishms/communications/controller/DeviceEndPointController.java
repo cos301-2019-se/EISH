@@ -44,7 +44,7 @@ public class DeviceEndPointController {
     */
     @PostMapping("/device")
    //@PreAuthorize("hasRole('ADMIN')")
-   public ResponseEntity<Object> addDevice(@Valid @RequestBody Device newDevice) {
+   public ResponseEntity<Object> addDevice(@RequestBody Device newDevice) {
         return deviceService.addDevice(newDevice);
     }
 
@@ -91,7 +91,7 @@ public class DeviceEndPointController {
     * @return an object with deleted device
     */
     @DeleteMapping("/device/{deviceId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> removeDevice(@PathVariable long deviceId) {
         return deviceService.removeDevice(deviceId);
     }

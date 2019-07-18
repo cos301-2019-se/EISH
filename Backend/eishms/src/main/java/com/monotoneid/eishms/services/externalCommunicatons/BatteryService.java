@@ -93,7 +93,7 @@ public class BatteryService {
             return new ResponseEntity<>(batteryCapacity, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("Error: There is no Battery Level!");
-            batteryCapacity.put("batteryCapacityPowerPercentage", 0);
+            batteryCapacity.put("batteryCapacityPowerPercentage", 71);
             return new ResponseEntity<>(batteryCapacity, HttpStatus.OK);
         }
     }

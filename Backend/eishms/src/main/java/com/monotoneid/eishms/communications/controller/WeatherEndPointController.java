@@ -26,6 +26,7 @@ public class WeatherEndPointController {
     @GetMapping("/weather")
     //@PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
     public ResponseEntity<Object> getLastWeather() {
+        System.out.println("within getLastWeather");
         return weatherService.getLastWeather();
     }
 }

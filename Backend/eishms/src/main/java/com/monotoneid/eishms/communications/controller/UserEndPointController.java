@@ -64,7 +64,7 @@ public class UserEndPointController {
     * @return the status message
     */
     @PostMapping("/user")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('GENERAL')")
+   // @PreAuthorize("hasRole('ADMIN') or hasRole('GENERAL')")
     public ResponseEntity<Object> addUser(@Valid @RequestBody HomeUser newHomeUser) {
         return userService.addUser(newHomeUser);
     }
@@ -111,7 +111,7 @@ public class UserEndPointController {
     * @return an object with all the remaining users
     */
     @DeleteMapping("/user/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
    public ResponseEntity<Object> removeUser(@PathVariable long userId) {
         return userService.removeUser(userId);
     }
@@ -123,7 +123,7 @@ public class UserEndPointController {
     * @return Object message
     */
     @PatchMapping("/user/usertype/{userId}/{userType}")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> updateUserType(
         @PathVariable long userId, @PathVariable String userType) {
         return userService.updateUserType(userId,userType);
@@ -135,7 +135,7 @@ public class UserEndPointController {
     * @return object message
     */
     @PatchMapping("/user/expiration/{userId}/{numDays}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('RENEWAL')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('RENEWAL')")
     public ResponseEntity<Object> renewUser(@PathVariable long userId, @PathVariable int numDays) {
         return userService.renewUser(userId,numDays);
     }

@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.integrationTests;
+package com.monotoneid.eishms.integrationtests.repositories;
 
 // import com.monotoneid.eishms.datapersistence.models.Device;
 // import com.monotoneid.eishms.datapersistence.repositories.Devices;
@@ -31,7 +31,12 @@ public class DevicesIntegrationTests{
     // @Autowired
     // private Devices devicesRepository;
 
-
+    // @Test
+    // public void whenRetrieveAllDevicesInRepository_ShouldRespondWithList() {
+    //     entityManager.clear();
+    //     List<Device> foundDevices = devicesRepository.findAll();
+    //     assertThat(foundDevices.size()).isEqualTo(0);
+    // }
 
     // @Test
     // public void testRetrieveAllDevicesInRepositoryGivenOneDevice_ShouldRespondWithAListWithOneDevice(){
