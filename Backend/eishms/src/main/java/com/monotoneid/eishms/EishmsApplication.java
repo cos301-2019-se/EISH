@@ -5,7 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- *CLASS EISHMS. 
+ * CLASS EISHMS. 
+ * This is the entry point of the application.
  */
 @SpringBootApplication
 @EnableScheduling

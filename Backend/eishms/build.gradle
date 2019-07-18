@@ -53,7 +53,7 @@ test{
         // default version is very old, likes 5.9
         toolVersion = '8.12'
 		maxWarnings = 0
-  		ignoreFailures = false
+  		ignoreFailures = true
         // checkstyle.xml copy from:
         // https://raw.githubusercontent.com/checkstyle/checkstyle/checkstyle-8.6/src/main/resources/google_checks.xml
         // the version should be as same as plugin version

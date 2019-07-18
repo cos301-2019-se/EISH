@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.integrationtests;
+package com.monotoneid.eishms.integrationTests;
 
 // import com.monotoneid.eishms.datapersistence.models.Device;
 // import com.monotoneid.eishms.datapersistence.repositories.Devices;

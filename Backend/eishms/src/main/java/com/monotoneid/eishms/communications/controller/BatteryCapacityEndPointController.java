@@ -2,10 +2,12 @@ package com.monotoneid.eishms.communications.controller;
 
 import com.monotoneid.eishms.datapersistence.models.BatteryCapacity;
 import com.monotoneid.eishms.services.databaseManagementSystem.BatteryCapacityService;
+import com.monotoneid.eishms.services.externalCommunicatons.BatteryService;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,15 @@ public class BatteryCapacityEndPointController {
 
     @Autowired
     private BatteryCapacityService batteryCapacityService;
+
+    @Autowired
+    private BatteryService batteryService;
+
+    @GetMapping("/default")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
+    public ResponseEntity<Object> getLastBatteryLevel() {
+        return batteryService.getLastBatteryLevel();
+    }
 
     @GetMapping(value = "/capacity", params = {"startTimeStamp","endTimeStamp"})
     @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")

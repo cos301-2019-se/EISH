@@ -109,7 +109,7 @@ public class BatteryCapacity {
         return batteryCapacityPowerState;
     }
 
-    public ChargingStateType getbatteryCapacityChargingState() {
+    public ChargingStateType getBatteryCapacityChargingState() {
         return batteryCapacityChargingState;
     }
 
