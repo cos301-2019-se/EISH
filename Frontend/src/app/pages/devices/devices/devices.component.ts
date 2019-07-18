@@ -134,7 +134,7 @@ export class DevicesComponent implements OnInit {
     // console.log('consumption: ' + JSON.stringify(consumptions));
     console.log('total: ' + total);
     this.lastHour = consumptions;
-    console.log('last hour: ' + JSON.stringify(this.lastHour));
+    console.log('last hour: ' + (this.lastHour));
   }
 
   getDeviceState(deviceId) {

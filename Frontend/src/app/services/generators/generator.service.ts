@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { Generator } from 'src/app/models/generator-model';
+import { Generator, Battery } from 'src/app/models/generator-model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class GeneratorService {
   /**
    * Variables:
    */
-  ROOT_URL = 'http://192.168.8.102:8080/api/';
+  ROOT_URL = 'http://192.168.8.100:8080/api/';
 
   constructor(private http: HttpClient) { }
   /**
@@ -20,8 +20,8 @@ export class GeneratorService {
    * GET Request
    * @return returns an observable
    */
-  getBatteryPercentage(): Observable<{}> {
-    return this.http.get(this.ROOT_URL + '');
+  getBatteryPercentage(): Observable<Battery[]> {
+    return this.http.get<Battery[]>(this.ROOT_URL + 'battery/default');
   }
 
   /**

@@ -86,6 +86,10 @@ export class DeviceService {
    * @param deviceId; ID of device in question
    */
   controlDevice(device) {
+    const params = new HttpParams().set('deviceId', device.deviceId);
+    params.set('deviceState', device.deviceState);
+    this.http.patch(this.ROOT_URL + '/device/', {HttpParams});
+
     // {deviceId}/{deviceState}
     /**
     let deviceState;
@@ -98,9 +102,6 @@ export class DeviceService {
     ); // .subscribe();
      */
 
-    const params = new HttpParams().set('deviceId', device.deviceId);
-    params.set('deviceState', device.deviceState);
-    this.http.patch(this.ROOT_URL + '', {HttpParams});
   }
 
 }

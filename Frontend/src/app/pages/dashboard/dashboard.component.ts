@@ -4,6 +4,9 @@ import { map, startWith} from 'rxjs/operators';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { Message} from '@stomp/stompjs';
 import { Weather } from 'src/app/models/weather-model';
+import { GeneratorService } from 'src/app/services/generators/generator.service';
+import { pipe } from 'rxjs';
+import { ConsumptionService } from 'src/app/services/consumption/consumption.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -14,11 +17,14 @@ export class DashboardComponent implements OnInit {
   batteryTopic: any;
   weatherTopic: any;
   weatherAPI: Weather;
+  dayConsumption = 50;
+  weekConsumption = 150;
+  monthConsumption = 5000;
   batteryStatus: string;
   batteryMode: string;
   batteryObject: any;
   
-  constructor(private rxStompService: RxStompService,private weatherService: WeatherService) { }
+  constructor(private rxStompService: RxStompService,private weatherService: WeatherService, private generatorService: GeneratorService, private consumptionService: ConsumptionService) { }
 
   // for battery
     gaugeMin= 0;
@@ -49,9 +55,18 @@ export class DashboardComponent implements OnInit {
       map(response =>
         {this.weather = response,
          this.weather.weatherTemperature = Math.ceil(this.weather.weatherTemperature);
-        console.log(this.weather),
-        console.log('respose: '+ response)} )
+        console.log(this.weather)
+        })
         
+    ).subscribe();
+    this.generatorService.getBatteryPercentage().pipe(
+      map(response =>{
+        let battery:any
+        battery = ( response)
+         console.log(battery);
+         this.gaugeValue = battery.batteryCapacityPowerPercentage;
+         // might have to move gauge if's into this map
+       })
     ).subscribe();
 
     if(this.gaugeValue >= 80 && this.gaugeValue < 100){
@@ -70,6 +85,29 @@ export class DashboardComponent implements OnInit {
       this.batteryStatus = "Critcal"
       this.batteryMode = "Energy usage limited to essential devices only."
     }
+
+
+    /*this.consumptionService.getDayTotalConsumption().pipe(
+      map(response =>{
+        console.log(response[0].getDayTotalConsumption);
+        this.dayConsumption = response[0].getDayTotalConsumption;
+      })
+    ).subscribe();
+
+    this.consumptionService.getDayTotalConsumption().pipe(
+      map(response =>{
+        console.log(response[0].response[0].getWeekTotalConsumption);
+        this.weekConsumption = response[0].getWeekTotalConsumption;
+      })
+    ).subscribe();
+
+    this.consumptionService.getDayTotalConsumption().pipe(
+      map(response =>{
+        console.log(response[0].getMonthTotalConsumption);
+        this.monthConsumption = response[0].getMonthTotalConsumption;
+      })
+    ).subscribe();*/
+
     // this.batteryTopic = this.rxStompService.watch('/battery').subscribe((message: Message) =>{
     //   this.batteryObject = JSON.parse(message.body);
     //   console.log(JSON.stringify(message.body));

@@ -2,8 +2,8 @@
   <h1>Consumption Heavy Devices</h1>
   <div class="topDevices">
   <div class="device" *ngFor="let device of lastHour">
-    <span class="deviceName">{{device.deviceName}}</span>
-    <span class="toggleButton"><button mat-stroked-button color="primary" (click)="toggleDevice()">ON</button></span>
+    <span class="deviceName">{{device.deviceName}} </span>
+    <span ><p>{{device.deviceConsumption}} %</p></span>
     <div class="deviceConsumptionBar"><mat-progress-bar mode="determinate" [value]="device.deviceConsumption"></mat-progress-bar></div>
   </div>
 </div>
@@ -36,7 +36,7 @@
         <br><br>
   </div>
   <div class="deviceTable">
-    <app-single-device *ngFor="let device of deviceResult" [device]="device" []></app-single-device>
+    <app-single-device *ngFor="let device of deviceResult" [device]="device"></app-single-device>
   </div>
 </div>
 <br>
