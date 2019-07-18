@@ -15,8 +15,12 @@ public class HttpConnection {
     private URL url;
     private HttpURLConnection connection;
 
+    /**
+     * .
+     */
     public StringBuffer getContentFromURL(String api) {
         try {
+            System.out.println(api);
             StringBuffer content = null;
             url = new URL(api);
             connection = (HttpURLConnection) url.openConnection();
@@ -44,7 +48,7 @@ public class HttpConnection {
             }
         } catch (Exception e) {
             System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
-            throw null;
+            return null;
         }
     }
 }

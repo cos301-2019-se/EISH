@@ -64,7 +64,6 @@ public class BatteryCapacity {
   
     @Column(name = "batterycapacitytimestamp", 
         columnDefinition = "TIMESTAMP", 
-        insertable = false, 
         updatable = false, 
         nullable = false)
     private Timestamp batteryCapacityTimestamp;

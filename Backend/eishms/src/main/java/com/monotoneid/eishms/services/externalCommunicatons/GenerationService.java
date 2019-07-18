@@ -5,8 +5,9 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.monotoneid.eishms.dataPersistence.models.Generator;
-import com.monotoneid.eishms.dataPersistence.models.GeneratorGeneration;
+import com.monotoneid.eishms.datapersistence.models.Generator;
+import com.monotoneid.eishms.datapersistence.models.GeneratorGeneration;
+import com.monotoneid.eishms.datapersistence.repositories.GeneratorGenerations;
 import com.monotoneid.eishms.services.databaseManagementSystem.GeneratorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,49 +32,64 @@ public class GenerationService {
     private GeneratorService generatorService;
 
     @Autowired
+    private GeneratorGenerations generationRepository;
+
+    @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
-    //private String apiCurrent = "http://localhost:6000/v2/installations/0/SolarCharger/current";
+    private String apiCurrent = "http://192.168.8.101:3001/v2/installations/0/SolarCharger/current";
     //private String apiAll = "http://localhost:6000/v2/installations/0/all";
-    private final long rate = 900000;
-    private final long delay = 60000;
+    private final long rate = 180000;
+    private final long delay = 30000;
 
     /**
      * .
      */
-    //@Scheduled(fixedRate = rate, initialDelay = delay)
+    @Scheduled(fixedRate = rate, initialDelay = delay)
     public void getCurrentGeneration() {
         try {
             List<Generator> generators = generatorService.retrieveAllGenerators();
             JSONObject generation = new JSONObject();
             float generationValue = 0;
-            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            Timestamp currentTimestamp1 = new Timestamp(System.currentTimeMillis());
             for (Generator generator : generators) {
-                StringBuffer content = connection.getContentFromURL(generator.getGeneratorUrl());
+                //StringBuffer content = connection.getContentFromURL
+                //(generator.getGeneratorUrl() + "/current");
+                StringBuffer content = connection.getContentFromURL(apiCurrent);
                 GeneratorGeneration newGeneratorGeneration;
-
+                System.out.println("Return from the HttpConnection");
                 if (content == null) {
                     newGeneratorGeneration = new GeneratorGeneration(
-                        0, generator, currentTimestamp, "OFFLINE");
+                        0, generator, currentTimestamp1, "OFFLINE");
                     generationValue += newGeneratorGeneration.getGeneratorGeneration();
                 } else {
                     JsonObject jsonContent = new JsonParser().parse(content.toString())
                                                             .getAsJsonObject();
+                    JsonObject solarData = jsonContent.get("SolarData").getAsJsonObject();
+                    String time = solarData.get("timestamp").getAsString();
+                    time = time.replace("T", " ");
+                    time = time.replace("Z",  "");
+                    Timestamp currentTimestamp = Timestamp.valueOf(time);
                     newGeneratorGeneration = new GeneratorGeneration(
-                        jsonContent.get("generation").getAsFloat(),
+                        solarData.get("generation").getAsInt(),
                         generator,
-                        Timestamp.valueOf(jsonContent.get("timestamp").getAsString()),
-                        "ON"
+                        currentTimestamp,
+                        "ONLINE"
                     );
+                    generation.put("generatorGenerationTimestamp", currentTimestamp.toString());
+                    generation.put("generatorGeneration", generationValue);
+                    simpMessagingTemplate.convertAndSend("/generator/" + generator.getGeneratorId() + "/generation", generation);
+                    System.out.println("Published generation of generator " + generator.getGeneratorId() + " at " + currentTimestamp);
                     generationValue += newGeneratorGeneration.getGeneratorGeneration();
                 }
+                generationRepository.save(newGeneratorGeneration);
             }
-            generation.put("generationTimestamp", currentTimestamp);
-            generation.put("generationValue", generationValue);
-            simpMessagingTemplate.convertAndSend("/generation", generation);
+            generation.put("generatorGenerationTimestamp", currentTimestamp1.toString());
+            generation.put("generatorGeneration", generationValue);
+            simpMessagingTemplate.convertAndSend("/home/generation", generation);
+            System.out.println("Published home generation at " + currentTimestamp1.toString());
         } catch (Exception e) {
             System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
-            throw null;
         }
     }
 }
