@@ -1,6 +1,6 @@
 package com.monotoneid.eishms.communications.controller;
 
-import com.monotoneid.eishms.dataPersistence.models.DeviceConsumption;
+import com.monotoneid.eishms.datapersistence.models.DeviceConsumption;
 import com.monotoneid.eishms.services.databaseManagementSystem.DeviceConsumptionService;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class DeviceConsumptionEndPointController {
     */
      
     @GetMapping(value = "/consumption", params = {"deviceId","startTimeStamp","endTimeStamp"})
-    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public List<DeviceConsumption> retrieveDeviceConsumptionCases(
         @RequestParam(value = "deviceId", required = true) long deviceId,
         @RequestParam(value = "startTimeStamp", required = true) String startTimeStamp,
@@ -42,7 +42,7 @@ public class DeviceConsumptionEndPointController {
     }
 
     @GetMapping(value = "/consumption", params = {"deviceId","interval"})
-    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public List<DeviceConsumption> retrieveDeviceConsumptionBetweenInterval(
         @RequestParam(value = "deviceId", required = true) long deviceId,
         @RequestParam(value = "interval", required = true) String interval) {

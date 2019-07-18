@@ -4,7 +4,7 @@ import io.jsonwebtoken.*;
 
 import java.util.Date;
 
-import com.monotoneid.eishms.dataPersistence.models.HomeUserDetails;
+import com.monotoneid.eishms.datapersistence.models.HomeUserDetails;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

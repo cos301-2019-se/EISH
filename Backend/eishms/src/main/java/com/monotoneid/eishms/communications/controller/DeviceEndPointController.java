@@ -1,6 +1,6 @@
 package com.monotoneid.eishms.communications.controller;
 
-import com.monotoneid.eishms.dataPersistence.models.Device;
+import com.monotoneid.eishms.datapersistence.models.Device;
 import com.monotoneid.eishms.services.databaseManagementSystem.DeviceService;
 import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MqttDeviceManager;
 
@@ -104,7 +104,7 @@ public class DeviceEndPointController {
     * @return device state
     */
     @PatchMapping("/device/{deviceId}/{deviceState}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
     public ResponseEntity<Object> controlDevice(@PathVariable long deviceId,
          @PathVariable String deviceState) {
         return deviceManager.controlDevice(deviceId,deviceState);

@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.dataPersistence.models;
+package com.monotoneid.eishms.datapersistence.models;
 
 public enum ChargingStateType {
     CHARGINGSTATE_CHARGING, 

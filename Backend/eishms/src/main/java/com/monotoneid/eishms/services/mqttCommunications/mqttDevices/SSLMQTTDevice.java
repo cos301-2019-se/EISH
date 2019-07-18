@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import com.monotoneid.eishms.dataPersistence.models.Device;
-import com.monotoneid.eishms.dataPersistence.repositories.DeviceConsumptions;
+import com.monotoneid.eishms.datapersistence.models.Device;
+import com.monotoneid.eishms.datapersistence.repositories.DeviceConsumptions;
 import com.monotoneid.eishms.services.mqttCommunications.SSLSocketUtility;
 
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;

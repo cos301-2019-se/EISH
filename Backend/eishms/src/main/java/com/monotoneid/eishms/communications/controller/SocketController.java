@@ -1,5 +1,7 @@
 package com.monotoneid.eishms.communications.controller;
 
+import com.google.gson.Gson;
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,25 +12,26 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
-import com.google.gson.Gson;
-
+/**
+ *CLASS SOCKET CONTROLLER. 
+ */
 @Controller
 public class SocketController {
 
-	@Autowired
-	private SimpMessageSendingOperations messagingTemplate;
+    @Autowired
+    private SimpMessageSendingOperations messagingTemplate;
 
-	@MessageMapping("/message")
+    @MessageMapping("/message")
     @SendTo("/topic/reply")
-	public String processMessageFromClient(@Payload String message) throws Exception {
-		String name = new Gson().fromJson(message, Map.class).get("name").toString();
-		return name;
-	}
-	
-	@MessageExceptionHandler
+    public String processMessageFromClient(@Payload String message) throws Exception {
+        String name = new Gson().fromJson(message, Map.class).get("name").toString();
+        return name;
+    }
+
+    @MessageExceptionHandler
     public String handleException(Throwable exception) {
         messagingTemplate.convertAndSend("/errors", exception.getMessage());
-	    return exception.getMessage();
+        return exception.getMessage();
     }
 
 }

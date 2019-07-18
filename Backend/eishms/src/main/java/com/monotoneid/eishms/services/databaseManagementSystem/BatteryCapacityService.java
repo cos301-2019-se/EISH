@@ -3,8 +3,8 @@ package com.monotoneid.eishms.services.databaseManagementSystem;
 import java.sql.Timestamp;
 import java.util.List;
 
-import com.monotoneid.eishms.dataPersistence.models.BatteryCapacity;
-import com.monotoneid.eishms.dataPersistence.repositories.BatteryCapacities;
+import com.monotoneid.eishms.datapersistence.models.BatteryCapacity;
+import com.monotoneid.eishms.datapersistence.repositories.BatteryCapacities;
 
 
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;

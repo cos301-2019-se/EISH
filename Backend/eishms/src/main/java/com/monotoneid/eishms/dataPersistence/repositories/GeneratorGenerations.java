@@ -1,11 +1,11 @@
-package com.monotoneid.eishms.dataPersistence.repositories;
+package com.monotoneid.eishms.datapersistence.repositories;
 
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
-import com.monotoneid.eishms.dataPersistence.models.GeneratorGeneration;
-import com.monotoneid.eishms.dataPersistence.models.GeneratorGenerationId;
+import com.monotoneid.eishms.datapersistence.models.GeneratorGeneration;
+import com.monotoneid.eishms.datapersistence.models.GeneratorGenerationId;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

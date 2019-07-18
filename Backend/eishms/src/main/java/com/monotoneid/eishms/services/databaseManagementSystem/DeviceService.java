@@ -1,12 +1,12 @@
 package com.monotoneid.eishms.services.databaseManagementSystem;
 
-import static com.monotoneid.eishms.dataPersistence.models.DevicePriorityType.PRIORITY_ALWAYSON;
-import static com.monotoneid.eishms.dataPersistence.models.DevicePriorityType.PRIORITY_MUSTHAVE;
-import static com.monotoneid.eishms.dataPersistence.models.DevicePriorityType.PRIORITY_NEUTRAL;
-import static com.monotoneid.eishms.dataPersistence.models.DevicePriorityType.PRIORITY_NICETOHAVE;
+import static com.monotoneid.eishms.datapersistence.models.DevicePriorityType.PRIORITY_ALWAYSON;
+import static com.monotoneid.eishms.datapersistence.models.DevicePriorityType.PRIORITY_MUSTHAVE;
+import static com.monotoneid.eishms.datapersistence.models.DevicePriorityType.PRIORITY_NEUTRAL;
+import static com.monotoneid.eishms.datapersistence.models.DevicePriorityType.PRIORITY_NICETOHAVE;
 
-import com.monotoneid.eishms.dataPersistence.models.Device;
-import com.monotoneid.eishms.dataPersistence.repositories.Devices;
+import com.monotoneid.eishms.datapersistence.models.Device;
+import com.monotoneid.eishms.datapersistence.repositories.Devices;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MqttDeviceManager;
 

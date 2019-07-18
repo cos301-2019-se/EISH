@@ -1,6 +1,6 @@
-package com.monotoneid.eishms.dataPersistence.repositories;
+package com.monotoneid.eishms.datapersistence.repositories;
 
-import com.monotoneid.eishms.dataPersistence.models.Weather;
+import com.monotoneid.eishms.datapersistence.models.Weather;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

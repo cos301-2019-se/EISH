@@ -1,6 +1,6 @@
 package com.monotoneid.eishms.communications.controller;
 
-import com.monotoneid.eishms.dataPersistence.models.BatteryCapacity;
+import com.monotoneid.eishms.datapersistence.models.BatteryCapacity;
 import com.monotoneid.eishms.services.databaseManagementSystem.BatteryCapacityService;
 
 import java.util.List;

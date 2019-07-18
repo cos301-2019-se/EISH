@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.UUID;
 
-import com.monotoneid.eishms.dataPersistence.models.Device;
+import com.monotoneid.eishms.datapersistence.models.Device;
 import com.monotoneid.eishms.services.mqttCommunications.QueryReplyManager;
 
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
@@ -24,7 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 //@Service
 public class MQTTDevice {
     // String serverUrl = "tcp://eishms.ddns.net:1883";
-    private String serverUrl = "tcp://192.168.8.101:1883";
+    private String serverUrl = "tcp://192.168.8.103:1883";
+    //private String serverUrl = "tcp://localhost:1883";
     /* This Requires no ssl */
     //String caFilePath = "/your_ssl/cacert.pem";
     //String clientCrtFilePath = "/your_ssl/client.pem";
@@ -102,8 +103,10 @@ public class MQTTDevice {
                 }
             });
         } catch (MqttException me) {
-            me.printStackTrace();
+            // me.printStackTrace();
             //Handle the exception appropriate
+            System.out.println( "connection error");
+            //throw new Exception("Connection error mqtt device");
         }
         configureDevice();
     }
@@ -245,8 +248,8 @@ public class MQTTDevice {
             currentTimestamp, deviceState, consumption);
 
         Map<String, String> jsonConsumption = new HashMap<>();
-        jsonConsumption.put("timestamp", currentTimestamp.toString());
-        jsonConsumption.put("consumption", Float.toString(consumption));
+        jsonConsumption.put("deviceConsumptionTimestamp", currentTimestamp.toString());
+        jsonConsumption.put("deviceConsumption", Float.toString(consumption));
         deviceManager.simpMessagingTemplate.convertAndSend("/device/" 
             + device.getDeviceTopic() 
             + "/consumption", jsonConsumption);

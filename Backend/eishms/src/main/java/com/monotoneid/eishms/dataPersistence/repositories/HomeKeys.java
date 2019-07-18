@@ -1,10 +1,10 @@
-package com.monotoneid.eishms.dataPersistence.repositories;
+package com.monotoneid.eishms.datapersistence.repositories;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.monotoneid.eishms.dataPersistence.models.*;
+import com.monotoneid.eishms.datapersistence.models.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

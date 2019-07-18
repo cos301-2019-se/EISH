@@ -1,14 +1,14 @@
 package com.monotoneid.eishms.services.databaseManagementSystem;
 
-import static com.monotoneid.eishms.dataPersistence.models.GeneratorPriorityType.PRIORITY_ALWAYSUSE;
-import static com.monotoneid.eishms.dataPersistence.models.GeneratorPriorityType.PRIORITY_NEUTRAL;
-import static com.monotoneid.eishms.dataPersistence.models.GeneratorPriorityType.PRIORITY_USEWHENCRITICAL;
-import static com.monotoneid.eishms.dataPersistence.models.GeneratorPriorityType.PRIORITY_USEWHENEMPTY;
+import static com.monotoneid.eishms.datapersistence.models.GeneratorPriorityType.PRIORITY_ALWAYSUSE;
+import static com.monotoneid.eishms.datapersistence.models.GeneratorPriorityType.PRIORITY_NEUTRAL;
+import static com.monotoneid.eishms.datapersistence.models.GeneratorPriorityType.PRIORITY_USEWHENCRITICAL;
+import static com.monotoneid.eishms.datapersistence.models.GeneratorPriorityType.PRIORITY_USEWHENEMPTY;
 
 import java.util.List;
 
-import com.monotoneid.eishms.dataPersistence.models.Generator;
-import com.monotoneid.eishms.dataPersistence.repositories.Generators;
+import com.monotoneid.eishms.datapersistence.models.Generator;
+import com.monotoneid.eishms.datapersistence.repositories.Generators;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;

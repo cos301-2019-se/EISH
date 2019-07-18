@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.dataPersistence.models;
+package com.monotoneid.eishms.datapersistence.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -40,25 +40,46 @@ public class Generator {
          
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "generatorid", columnDefinition = "serial", updatable = false, nullable = false)
+    @Column(name = "generatorid", 
+            columnDefinition = "serial", 
+            updatable = false, 
+            nullable = false)
     private long generatorId;
     
-    @Size(min = 4, max = 30, message = "generator Name must be between 4 and 30 characters")
-    @Column(name = "generatorname", columnDefinition = "text", updatable = true, unique = true, nullable = false)
+    @Size(min = 4, 
+            max = 30, 
+            message = "generator Name must be between 4 and 30 characters")
+    @Column(name = "generatorname", 
+            columnDefinition = "text", 
+            updatable = true, 
+            unique = true, 
+            nullable = false)
     private String generatorName;
 
-    @Size(min = 4, max = 30, message = "generator url must be between 4 and 30 characters")
-    @Column(name = "generatorurl", columnDefinition = "text", updatable = true, unique = true, nullable = false)
+    @Size(min = 4, 
+            max = 30, 
+            message = "generator url must be between 4 and 30 characters")
+    @Column(name = "generatorurl", 
+            columnDefinition = "text", 
+            updatable = true, 
+            unique = true, 
+            nullable = false)
     private String generatorUrl;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "generatorpriority", columnDefinition = "generatorPriorityType", updatable = true, nullable = false)
+    @Column(name = "generatorpriority", 
+            columnDefinition = "generatorPriorityType", 
+            updatable = true, 
+            nullable = false)
     @Type(type = "pgsql_enum")
     private GeneratorPriorityType generatorPriority;
 
     //@Size(min = 1, message = "number of device states must be one or more")
     @Type(type = "string-array")
-    @Column(name = "generatorstates", columnDefinition = "text[]", updatable = true, nullable = false)
+    @Column(name = "generatorstates", 
+            columnDefinition = "text[]", 
+            updatable = true, 
+            nullable = false)
     private String[] generatorStates;
 
     

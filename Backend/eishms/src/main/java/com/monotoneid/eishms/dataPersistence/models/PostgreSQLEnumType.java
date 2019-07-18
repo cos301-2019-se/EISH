@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.dataPersistence.models;
+package com.monotoneid.eishms.datapersistence.models;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
