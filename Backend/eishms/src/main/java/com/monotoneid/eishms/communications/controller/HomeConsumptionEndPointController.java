@@ -42,19 +42,19 @@ public class HomeConsumptionEndPointController {
     }
 
     @GetMapping(value = "/consumption/week")
-    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public ResponseEntity<Object> retrieveTotalHomeConsumptionWeek() {
         return homeConsumptionService.retrieveWeekHomeConsumption();
     }
 
     @GetMapping(value = "/consumption/day")
-    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public ResponseEntity<Object> retrieveTotalHomeConsumptionDay() {
         return homeConsumptionService.retrieveDayHomeConsumption();
     }
 
     @GetMapping(value = "/consumption/month")
-    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public ResponseEntity<Object> retrieveTotalHomeConsumptionMonth() {
         return homeConsumptionService.retrieveMonthHomeConsumption();
     }

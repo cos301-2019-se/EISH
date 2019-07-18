@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 public interface BatteryCapacities extends JpaRepository<BatteryCapacity,Long> {
 
     //default batteryLevel
-    @Query(value = "select * from batterycapacity order by batterycapacityid desc limit 1")
+    @Query(value = "select * from batterycapacity order by batterycapacityid desc limit 1", nativeQuery = true )
     public BatteryCapacity findLastBatteryLevel();
 
     //custom query

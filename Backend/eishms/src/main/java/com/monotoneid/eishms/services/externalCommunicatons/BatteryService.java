@@ -4,8 +4,8 @@ import java.sql.Timestamp;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.monotoneid.eishms.dataPersistence.models.BatteryCapacity;
-import com.monotoneid.eishms.dataPersistence.repositories.BatteryCapacities;
+import com.monotoneid.eishms.datapersistence.models.BatteryCapacity;
+import com.monotoneid.eishms.datapersistence.repositories.BatteryCapacities;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

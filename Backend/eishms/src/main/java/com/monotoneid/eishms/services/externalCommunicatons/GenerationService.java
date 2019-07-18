@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.monotoneid.eishms.dataPersistence.models.Generator;
-import com.monotoneid.eishms.dataPersistence.models.GeneratorGeneration;
+import com.monotoneid.eishms.datapersistence.models.Generator;
+import com.monotoneid.eishms.datapersistence.models.GeneratorGeneration;
 import com.monotoneid.eishms.services.databaseManagementSystem.GeneratorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
