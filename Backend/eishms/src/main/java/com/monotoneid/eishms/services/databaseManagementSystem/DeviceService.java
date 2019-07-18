@@ -96,10 +96,8 @@ public class DeviceService {
 
     /**
      * Updates the data of the specified with parsed in data.
-     * @param device
+     * @param device represent device information
      * @return Object message
-     * @exception null
-     * @exception ResourceNotFound
      */
     public ResponseEntity<Object> updateDevice(Device device) {
         try {
@@ -138,19 +136,19 @@ public class DeviceService {
         } catch (Exception e) {
             System.out.println("Error: Input is " + e.getMessage() + "!");
             if (e.getCause() == null) {
-                return new ResponseEntity<>("Error: Failed to update device!", HttpStatus.PRECONDITION_FAILED);
+                return new ResponseEntity<>("Error: Failed to update device!",
+                 HttpStatus.PRECONDITION_FAILED);
             } else {
-                return new ResponseEntity<>("Error: Failed to update device!", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Error: Failed to update device!",
+                 HttpStatus.NOT_FOUND);
             }
         }
     }
 
     /**
      * Removes the specified device. 
-     * @param deviceId
+     * @param deviceId represent the devices id
      * @return Object message
-     * @exception
-     * @exception 
      */
     public ResponseEntity<Object> removeDevice(long deviceId) {
         try {

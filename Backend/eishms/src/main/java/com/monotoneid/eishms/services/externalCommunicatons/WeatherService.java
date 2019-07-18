@@ -95,7 +95,7 @@ public class WeatherService {
             }
         } catch (Exception e) {
             System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
-            throw null;
+            //throw null;
         }
     }
 

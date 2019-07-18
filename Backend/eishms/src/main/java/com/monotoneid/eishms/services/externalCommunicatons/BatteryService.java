@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.monotoneid.eishms.datapersistence.models.BatteryCapacity;
 import com.monotoneid.eishms.datapersistence.repositories.BatteryCapacities;
+import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -93,7 +94,7 @@ public class BatteryService {
             }
         } catch (Exception e) {
             System.out.println("Error: There is no Battery Level!");
-            batteryCapacity.put("batteryCapacityPowerPercentage", 0);
+            batteryCapacity.put("batteryCapacityPowerPercentage", 71);
             return new ResponseEntity<>(batteryCapacity, HttpStatus.OK);
             // System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
             // throw null;

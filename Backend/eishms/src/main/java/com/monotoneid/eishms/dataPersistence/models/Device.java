@@ -46,11 +46,11 @@ public class Device {
     @Column(name = "deviceid", columnDefinition = "serial", updatable = false, nullable = false)
     private long deviceId;
     
-    @Size(min = 4, max = 30, message = "Device Name must be between 4 and 30 characters")
+    //@Size(min = 4, max = 30, message = "Device Name must be between 4 and 30 characters")
     @Column(name = "devicename", columnDefinition = "text", updatable = true, unique = true, nullable = false)
     private String deviceName;
 
-    @Size(min = 4, max = 30, message = "Device Topic must be between 4 and 30 characters")
+    //@Size(min = 4, max = 30, message = "Device Topic must be between 4 and 30 characters")
     @Column(name = "devicetopic", columnDefinition = "text", updatable = true, unique = true, nullable = false)
     private String deviceTopic;
 
@@ -69,8 +69,9 @@ public class Device {
     @OneToMany(mappedBy = "device")
     private List<DeviceConsumption> deviceConsumption = new ArrayList<DeviceConsumption>();
 
-    public Device(){}
+    public Device() {}
 
+    /**. */
     public Device(
         @JsonProperty("deviceName") String newDeviceName,
         @JsonProperty("deviceTopic") String newDeviceTopic,
@@ -84,7 +85,6 @@ public class Device {
             newStates[i] = new String(newDeviceStates[i]);
         }
         setDeviceStates(newStates);
-        
     }
   
     //getter

@@ -16,20 +16,20 @@ import org.springframework.stereotype.Repository;
 public interface DeviceConsumptions extends JpaRepository<DeviceConsumption,DeviceConsumptionId> {
 
     //custom query
-    @Query(value="select * from deviceconsumption  where deviceid= ?1 and deviceconsumptiontimestamp between ?2 and ?3", nativeQuery = true)
+    @Query(value = "select * from deviceconsumption  where deviceid= ?1 and deviceconsumptiontimestamp between ?2 and ?3", nativeQuery = true)
     public Optional<List<DeviceConsumption>> findByDeviceConsumptionIdAndDeviceConsumptionTimestampBetween(long deviceId, Timestamp startTimeStamp, Timestamp endTimeStamp);
   
     //quick ranges
     //last 10 minutes
-    @Query(value="select * from deviceconsumption where deviceid= ?1 and deviceconsumptiontimestamp between now() - interval '10 minutes' and now() order by deviceconsumptiontimestamp asc", nativeQuery=true)
+    @Query(value = "select * from deviceconsumption where deviceid= ?1 and deviceconsumptiontimestamp between now() - interval '10 minutes' and now() order by deviceconsumptiontimestamp asc", nativeQuery=true)
     public Optional<List<DeviceConsumption>> findDeviceConsumptionLastTenMinutes(long deviceId);
 
     //last 1 hours
-    @Query(value="select * from deviceconsumption where deviceid= ?1 and deviceconsumptiontimestamp between now() - interval '1 hours' and now() order by deviceconsumptiontimestamp asc", nativeQuery=true)
+    @Query(value = "select * from deviceconsumption where deviceid= ?1 and deviceconsumptiontimestamp between now() - interval '1 hours' and now() order by deviceconsumptiontimestamp asc", nativeQuery=true)
     public Optional<List<DeviceConsumption>> findDeviceConsumptionLastHour(long deviceId);
 
     //last  1 day
-    @Query(value="select * from deviceconsumption where deviceid= ?1 and deviceconsumptiontimestamp between now() - interval '1 days' and now() order by deviceconsumptiontimestamp asc", nativeQuery=true)
+    @Query(value = "select * from deviceconsumption where deviceid= ?1 and deviceconsumptiontimestamp between now() - interval '1 days' and now() order by deviceconsumptiontimestamp asc", nativeQuery=true)
     public Optional<List<DeviceConsumption>> findDeviceConsumptionLastOneDay(long deviceId);
 
     //last 1 week
