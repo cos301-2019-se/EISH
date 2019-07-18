@@ -41,7 +41,7 @@ public class GenerationService {
     /**
      * .
      */
-    @Scheduled(fixedRate = rate, initialDelay = delay)
+    //@Scheduled(fixedRate = rate, initialDelay = delay)
     public void getCurrentGeneration() {
         try {
             List<Generator> generators = generatorService.retrieveAllGenerators();

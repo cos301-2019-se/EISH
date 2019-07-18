@@ -261,8 +261,8 @@ public class MQTTDevice {
         deviceState = message;
         Map<String, String> jsonDeviceState = new HashMap<>();
         jsonDeviceState.put("state", deviceState);
-        //deviceManager.simpMessagingTemplate.convertAndSend("/device/" + device.getDeviceTopic() + "/deviceState", jsonDeviceState);
-        //System.out.println("Device State is now: " + deviceState);
+        deviceManager.simpMessagingTemplate.convertAndSend("/device/" + device.getDeviceTopic() + "/state", jsonDeviceState);
+        System.out.println("Device State is now: " + deviceState);
     }
 
     private void handleWill(String subscribeTopic, String message) {

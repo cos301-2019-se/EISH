@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.monotoneid.eishms.dataPersistence.models.BatteryCapacity;
+import com.monotoneid.eishms.dataPersistence.repositories.BatteryCapacities;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,9 @@ public class BatteryService {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
+    @Autowired
+    private BatteryCapacities batteryCapacityRepository;
+
     private String api = "http://localhost:6000/v2/installations/0/battery";
     private final long rate = 180000;
     private final long delay = 30000;
@@ -34,7 +38,7 @@ public class BatteryService {
     /**
      * The funtion returns JSONobject with the current information of the battery.
      */
-    @Scheduled(fixedRate = rate, initialDelay = delay)
+    //@Scheduled(fixedRate = rate, initialDelay = delay)
     public void getBatteryCapacity() {
         try {
             StringBuffer content = connection.getContentFromURL(api);
@@ -62,6 +66,28 @@ public class BatteryService {
             batteryCapacity.put("batteryCapacityPowerPercentage", 
                             newBatteryCapacity.getBatteryCapacityPowerPercentage());
             simpMessagingTemplate.convertAndSend("/battery", batteryCapacity);
+        } catch (Exception e) {
+            System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
+            throw null;
+        }
+    }
+
+    /**
+     * .
+     * @return
+     */
+    public ResponseEntity<Object> getLastBatteryLevel() {
+        try {
+            BatteryCapacity lastBatteryCapacity = batteryCapacityRepository.findLastBatteryLevel();
+            if (lastBatteryCapacity == null) {
+                System.out.println("Error: There is no Battery Level!");
+                throw null;
+            } else {
+                JSONObject batteryCapacity = new JSONObject();
+                batteryCapacity.put("batteryCapacityPowerPercentage", 
+                            lastBatteryCapacity.getBatteryCapacityPowerPercentage());
+                return new ResponseEntity<>(batteryCapacity, HttpStatus.OK);
+            }
         } catch (Exception e) {
             System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
             throw null;

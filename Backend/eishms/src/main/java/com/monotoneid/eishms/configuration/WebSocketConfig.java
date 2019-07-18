@@ -13,6 +13,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/device");
+        config.enableSimpleBroker("/weather");
+        config.enableSimpleBroker("/battery");
+        config.enableSimpleBroker("/generation");
+        config.enableSimpleBroker("");
         config.setApplicationDestinationPrefixes("/app");
     }
 
