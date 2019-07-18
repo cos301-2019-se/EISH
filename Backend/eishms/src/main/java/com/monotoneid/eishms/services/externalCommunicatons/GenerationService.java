@@ -33,7 +33,7 @@ public class GenerationService {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
-    //private String apiCurrent = "http://localhost:6000/v2/installations/0/current";
+    //private String apiCurrent = "http://localhost:6000/v2/installations/0/SolarCharger/current";
     //private String apiAll = "http://localhost:6000/v2/installations/0/all";
     private final long rate = 900000;
     private final long delay = 60000;

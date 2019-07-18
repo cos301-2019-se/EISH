@@ -30,7 +30,7 @@ public class BatteryCapacityEndPointController {
     private BatteryService batteryService;
 
     @GetMapping("/default")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
     public ResponseEntity<Object> getLastBatteryLevel() {
         return batteryService.getLastBatteryLevel();
     }
