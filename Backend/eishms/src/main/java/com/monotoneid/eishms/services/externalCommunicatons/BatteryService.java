@@ -77,20 +77,26 @@ public class BatteryService {
      * @return
      */
     public ResponseEntity<Object> getLastBatteryLevel() {
+        JSONObject batteryCapacity = new JSONObject();
         try {
-            BatteryCapacity lastBatteryCapacity = batteryCapacityRepository.findLastBatteryLevel();
+            BatteryCapacity lastBatteryCapacity = batteryCapacityRepository.findLastBatteryLevel()
+                                    .orElseThrow(() -> new ResourceNotFoundException("BatteryCapacity does not exist"));
             if (lastBatteryCapacity == null) {
                 System.out.println("Error: There is no Battery Level!");
-                throw null;
+                batteryCapacity.put("batteryCapacityPowerPercentage", 5);
+                return new ResponseEntity<>(batteryCapacity, HttpStatus.OK);
+                //throw null;
             } else {
-                JSONObject batteryCapacity = new JSONObject();
                 batteryCapacity.put("batteryCapacityPowerPercentage", 
                             lastBatteryCapacity.getBatteryCapacityPowerPercentage());
                 return new ResponseEntity<>(batteryCapacity, HttpStatus.OK);
             }
         } catch (Exception e) {
-            System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
-            throw null;
+            System.out.println("Error: There is no Battery Level!");
+            batteryCapacity.put("batteryCapacityPowerPercentage", 0);
+            return new ResponseEntity<>(batteryCapacity, HttpStatus.OK);
+            // System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
+            // throw null;
         }
     }
 }
