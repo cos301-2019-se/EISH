@@ -25,6 +25,9 @@ import net.minidev.json.*;
 import com.monotoneid.eishms.datapersistence.models.Weather;
 import com.monotoneid.eishms.datapersistence.repositories.Weathers;
 
+/**
+ * .
+ */
 @Service
 public class WeatherService {
 
@@ -48,10 +51,10 @@ public class WeatherService {
     private final long rate = 900000;
     private final long delay = 30000;
 
-    /**
+    /** 
      * Sends the current weather after 15 mins through the socket "weather".
      */
-    @Scheduled(fixedRate = rate, initialDelay = delay)
+    //@Scheduled(fixedRate = rate, initialDelay = delay)
     public void getCurrentWeather() {
         try {
             StringBuffer content = connection.getContentFromURL(api);
@@ -95,7 +98,6 @@ public class WeatherService {
             }
         } catch (Exception e) {
             System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
-            //throw null;
         }
     }
 
