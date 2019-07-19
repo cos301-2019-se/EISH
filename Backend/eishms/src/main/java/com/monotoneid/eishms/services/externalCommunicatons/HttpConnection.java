@@ -42,11 +42,12 @@ public class HttpConnection {
                 return content;
             } else {
                 streamReader = new InputStreamReader(connection.getErrorStream());
-                System.out.println("Stream Reader: " + streamReader.toString());
+                System.out.println("Stream Reader: " + streamReader.toString() + "Weather status: " + status);
                 connection.disconnect();
                 return content;
             }
         } catch (Exception e) {
+            System.out.println("Failed to connect to weather api!");
             System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
             return null;
         }

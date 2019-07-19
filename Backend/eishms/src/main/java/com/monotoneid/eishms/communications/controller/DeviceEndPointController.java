@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  *CLASS DEVICE ENDPOINT CONTROLLER. 
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 360000000)
 @RestController
 @RequestMapping("/api")
 public class DeviceEndPointController {
@@ -117,8 +117,7 @@ public class DeviceEndPointController {
     }
 
     @GetMapping("/off")
-   public String switchOff() {
-        deviceManager.controlDevice(1, "OFF");
+   public String switchOff() {        deviceManager.controlDevice(1, "OFF");
         return "Device should be OFF";
     }
 }

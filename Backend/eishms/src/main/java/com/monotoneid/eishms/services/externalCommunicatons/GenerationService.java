@@ -37,9 +37,9 @@ public class GenerationService {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
-    private String apiCurrent = "http://192.168.8.101:3001/v2/installations/0/SolarCharger/current";
+    private String apiCurrent = "http://192.168.8.103:3001/v2/installations/0/SolarCharger/current";
     //private String apiAll = "http://localhost:6000/v2/installations/0/all";
-    private final long rate = 180000;
+    private final long rate = 20000;
     private final long delay = 30000;
 
     /**
@@ -77,7 +77,7 @@ public class GenerationService {
                         "ONLINE"
                     );
                     generation.put("generatorGenerationTimestamp", currentTimestamp.toString());
-                    generation.put("generatorGeneration", generationValue);
+                    generation.put("generatorGeneration", newGeneratorGeneration.getGeneratorGeneration());
                     simpMessagingTemplate.convertAndSend("/generator/" + generator.getGeneratorId() + "/generation", generation);
                     System.out.println("Published generation of generator " + generator.getGeneratorId() + " at " + currentTimestamp);
                     generationValue += newGeneratorGeneration.getGeneratorGeneration();
@@ -89,6 +89,7 @@ public class GenerationService {
             simpMessagingTemplate.convertAndSend("/home/generation", generation);
             System.out.println("Published home generation at " + currentTimestamp1.toString());
         } catch (Exception e) {
+            System.out.println("Couldn't get generation data!");
             System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
         }
     }

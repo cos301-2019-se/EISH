@@ -32,8 +32,8 @@ public class BatteryService {
     @Autowired
     private BatteryCapacities batteryCapacityRepository;
 
-    private String api = "http://192.168.8.101:3001/v2/installations/0/Battery";
-    private final long rate = 180000;
+    private String api = "http://192.168.8.103:3001/v2/installations/0/Battery";
+    private final long rate = 15000;
     private final long delay = 30000;
     
     /**
@@ -41,16 +41,17 @@ public class BatteryService {
      */
     @Scheduled(fixedRate = rate, initialDelay = delay)
     public void getBatteryCapacity() {
+        JSONObject batteryCapacity = new JSONObject();
+
         try {
             Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
             StringBuffer content = connection.getContentFromURL(api);
-            JSONObject batteryCapacity = new JSONObject();
             BatteryCapacity newBatteryCapacity;
 
             if (content == null) {
                 System.out.println("Content from api is null!");
-                newBatteryCapacity = new BatteryCapacity(
-                    0, 0,"POWERSTATE_OFFLINE", "CHARGINGSTATE_OFFLINE", currentTimestamp, 0);
+                //newBatteryCapacity = new BatteryCapacity(
+                  //  0, 0,"POWERSTATE_OFFLINE", "CHARGINGSTATE_OFFLINE", currentTimestamp, 0);
             } else {
                 JsonObject jsonContent = new JsonParser().parse(content.toString())
                                                         .getAsJsonObject();
@@ -66,13 +67,14 @@ public class BatteryService {
                     currentTimestamp,
                     jsonContent.get("powerPercentage").getAsInt()
                 );
-            }
-            batteryCapacityRepository.save(newBatteryCapacity);
-            batteryCapacity.put("batteryCapacityPowerPercentage", 
+                batteryCapacityRepository.save(newBatteryCapacity);
+                batteryCapacity.put("batteryCapacityPowerPercentage", 
                             newBatteryCapacity.getBatteryCapacityPowerPercentage());
-            System.out.println("Published battery power percentage at " + currentTimestamp);
-            simpMessagingTemplate.convertAndSend("/battery", batteryCapacity);
+                System.out.println("Published battery power percentage at " + currentTimestamp);
+                simpMessagingTemplate.convertAndSend("/battery", batteryCapacity);
+            }
         } catch (Exception e) {
+            System.out.println("Could'nt get data from battery!");
             System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
         }
     }
@@ -93,7 +95,7 @@ public class BatteryService {
             return new ResponseEntity<>(batteryCapacity, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("Error: There is no Battery Level!");
-            batteryCapacity.put("batteryCapacityPowerPercentage", 71);
+            batteryCapacity.put("batteryCapacityPowerPercentage", 0);
             return new ResponseEntity<>(batteryCapacity, HttpStatus.OK);
         }
     }
