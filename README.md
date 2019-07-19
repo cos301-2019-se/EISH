@@ -10,13 +10,15 @@ usage patterns of specific devices to prioritize devices and optimize energy con
 
 ### Documentation
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH_Demo2.pdf" target="_blank">Software Requirement Specification AND Architectural Design </a>
+### <a href="https://github.com/cos301-2019-se/EISH/blob/admin/Documentation/SRS_EISHDemo3.pdf" target="_blank">Software Requirement Specification AND Architectural Design Demo 3</a>
+
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH_Demo2.pdf" target="_blank">Software Requirement Specification AND Architectural Design Demo 2</a>
 
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH.pdf" target="_blank">Software Requirement Specification Demo1</a>
 
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/User_Manual.pdf" target="_blank">User Manual</a>
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/Coding_Standards.pdf" target="_blank">Coding Standards</a>
+### <a href="https://github.com/cos301-2019-se/EISH/blob/admin/Documentation/CodingStandard.pdf" target="_blank">Coding Standards</a>
 
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/Testing_Policy.pdf" target="_blank">Testing Policy</a>
 
