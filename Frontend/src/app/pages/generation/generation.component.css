@@ -2,3 +2,7 @@ h1.gen-heading {
     padding-top: 20px;
     margin: 0;
 }
+
+.chart-controls {
+    padding-left: 20px;
+}
