@@ -1,4 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+body{
+    margin:0;
+}
+
+.example-fill-remaining-space {
+    /* This fills the remaining space, by using flexbox. 
+       Every toolbar row uses a flexbox row layout. */
+    flex: 1 1 auto;
+  }
+  .searchBar{
+    width: 50%;
+  }
+  
+  .errorMessages{
+    padding: 5px;
+    color: #ff3547;
+    font-size: 100%;
+    text-align: center;
+  }
 .pages {
     padding-top: 54px;
 }

@@ -1,0 +1,54 @@
+<div class="cardContainer">
+<div class="col">
+  <div class="batteryCard">
+    <div class="batteryHeader">Battery</div>
+    <div class="batterySubtitle"></div>
+    <ngx-gauge  [type]="gaugeType"
+                          [min] ="gaugeMin"
+                          [max] ="gaugeMax"
+                          [cap] = "gaugeCap"
+                          [value]= "gaugeValue"
+                          [label]="gaugeLabel"
+                          [append]="gaugeAppendText"
+                          [thick] = "gaugeThickness"
+                          [thresholds] = "thresholdConfig">      
+    </ngx-gauge>
+    <div class="batteryFooter">
+      <h4>Battery Status: {{batteryStatus}} </h4>
+      <p>{{batteryMode}}</p>
+    </div>
+  </div>    
+</div>
+
+
+  <div class="col">
+  <div class="weather__card" >
+      <!-- TODO: make the city name dynamic -->
+      <span class="city-name__text">{{weather.weatherLocation}}</span>
+        <div class="weather-icon__container" [ngSwitch]="true">
+          <img src="../../../assets/icons/{{weather.weatherIcon}}.png">
+        </div>
+        <div class="temperature-text__container">
+            <div class="temperature__text">{{ weather.weatherTemperature }}°C</div>
+            <div class="weather-condition__text">{{ weather.weatherDescription }}</div>
+        </div>
+       
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="generationInfo">
+      <div class="batteryHeader">Energy Consumption</div>
+      <div class="temperature-text__container">
+        <img src="../../../assets/icons/consumption_graph_icon.png" width="50%" height="50%">
+      </div>
+      <div class="batterySubtitle">
+        <p>Energy used this month: {{monthConsumption}} KWh</p>
+        <p>Energy used this week: {{weekConsumption}} KWh</p>
+        <p>Energy used this today: {{dayConsumption}} KWh</p>
+      </div>
+      
+    </div>
+  </div>
+  <div class="clearfix"></div>
+</div>
