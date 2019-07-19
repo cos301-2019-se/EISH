@@ -59,14 +59,6 @@ p {
   margin: 0px;
 }
 
-
-
-.errorMessages{
-  padding: 5px;
-  color: red;
-  font-size: 100%;
-}
-
 .form-control-feedback{
   padding: 5px;
   color:red;

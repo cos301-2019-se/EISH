@@ -5,3 +5,7 @@ export class Generator {
     generatorId: number;
     generatorPriority: string;
 }
+ 
+export class Battery{
+    batteryCapacityPowerPercentage: number;
+}

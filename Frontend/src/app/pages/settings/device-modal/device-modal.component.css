@@ -1,11 +1,13 @@
 [mat-dialog-close]{
-    background-color: red;
+    background-color: #ff3547;
+    color: white;
 }
 
 .submit{
-    background-color: greenyellow;
+    background-color: #51d651;
+    color: white;
 }
 
 .modal{
-    width:60%; 
+    text-align: center;
 }

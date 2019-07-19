@@ -1,16 +1,14 @@
-import { Component, OnInit, ViewChild, HostListener, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {MatDialogModule, MatDialogConfig} from '@angular/material/dialog';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import {map, startWith, catchError} from 'rxjs/operators';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {SelectionModel} from '@angular/cdk/collections';
-import {MatTableDataSource} from '@angular/material/table';
 import { DeviceModalComponent } from './device-modal/device-modal.component';
-import { MdbTablePaginationComponent, MdbTableDirective, WavesModule } from 'node_modules/angular-bootstrap-md';
 import { UserAccessControlService } from 'src/app/services/user/user-access-control.service';
 import { GeneratorService } from 'src/app/services/generators/generator.service';
 import { DeviceService } from 'src/app/services/devices/device.service';
+import { Response } from 'selenium-webdriver/http';
 
 @Component({
   selector: 'app-settings',
@@ -18,40 +16,37 @@ import { DeviceService } from 'src/app/services/devices/device.service';
   styleUrls: ['./settings.component.css']
 })
 
-export class SettingsComponent implements OnInit, AfterViewInit {
+export class SettingsComponent implements OnInit {
   constructor(private generatorService: GeneratorService,
               private userService: UserAccessControlService,
-              private deviceService: DeviceService, private cdRef: ChangeDetectorRef,
+              private deviceService: DeviceService,
               private dialog: MatDialog) { }
 
   // for user table
   formData: any;
-
-  // for pagination
-  @ViewChild(MdbTablePaginationComponent, { static: true }) mdbTablePagination: MdbTablePaginationComponent;
-  @ViewChild(MdbTableDirective, { static: true }) mdbTable: MdbTableDirective;
-  previous: any = [];
-
+  isDataAvailable: boolean;
+  userRemoveFailed: boolean;
   // for search bar
   panelOpenState = false;
   deviceFound: boolean;
   userDeviceName = new FormControl();
   filteredOptions: Observable<string[]>;
-
   // for devices
   deviceName: string;
   deviceTopic: string;
   maxWatt: number;
   minWatt: number;
-  priority: string[] = ['Nice-to-have', 'Always-on', 'Must-have'];
+  devicePriority: string;
   deviceResult: string[];
   deviceTableHeaders = ['Device Name ', 'Device Topic', 'Device Priority' ];
   userTableHeaders = ['Name', 'Email', 'Current Expiry Date', 'Extend Expiry Date', 'Resident', 'Remove'];
   editField: string;
   deviceNames: string[];
+  deviceRemoveFailed: boolean;
 
   deviceArray: any;
   userArray: any;
+
   ngOnInit() {
     this.deviceService.getDeviceJSONArray().pipe(
       map( response => {
@@ -76,21 +71,37 @@ export class SettingsComponent implements OnInit, AfterViewInit {
      ).subscribe();
     this.getUserList();
     this.deviceFound = false;
-
-    this.mdbTable.setDataSource(this.userArray);
-    this.previous = this.mdbTable.getDataSource();
+    this.userRemoveFailed = false;
+    this.deviceRemoveFailed = false;
   }
 
-  ngAfterViewInit(): void {
-    this.mdbTablePagination.setMaxVisibleItemsNumberTo(5);
-    this.mdbTablePagination.calculateFirstItemIndex();
-    this.mdbTablePagination.calculateLastItemIndex();
-    this.cdRef.detectChanges();
+  getDeviceList() {
+    this.deviceService.getDeviceJSONArray().pipe(
+      map( response => {
+          this.deviceArray =  response,
+          JSON.stringify(this.deviceArray);
+
+          let devices: string[];
+          devices = [];
+          for (let index = 0; index < this.deviceArray.length; index++) {
+              devices[index] = this.deviceArray[index].deviceName;
+            }
+          this.deviceNames = devices;
+
+          this.filteredOptions = this.userDeviceName.valueChanges
+            .pipe(
+              startWith(''),
+              map(value => this._filter(value))
+
+            );
+
+          })
+     ).subscribe();
   }
 
     updateUserList(id: number, property: string, event: any) {
       if (property === 'userType') {
-        console.log(this.deviceArray[id].deviceName);
+        // console.log(this.deviceArray[id].deviceName);
         const userUpdate = {
          userId: this.userArray[id].userId ,
          userType:  this.userArray[id].userType
@@ -133,7 +144,6 @@ export class SettingsComponent implements OnInit, AfterViewInit {
           console.log('in changing device topic');
 
           const editField = event.target.textContent;
-          console.log('edit field: ' + editField);
           const deviceUpdate = {
           deviceId: this.deviceArray[id].deviceId,
           deviceName: this.deviceArray[id].deviceName,
@@ -148,13 +158,12 @@ export class SettingsComponent implements OnInit, AfterViewInit {
       } else {
           console.log('changing device priortity');
 
-          const editField = event.target.textContent;
-          console.log('edit field: ' + editField);
+          console.log('priority type change: ' + this.devicePriority);
           const deviceUpdate = {
           deviceId: this.deviceArray[id].deviceId,
           deviceName: this.deviceArray[id].deviceName,
           deviceTopic: this.deviceArray[id].deviceTopic,
-          devicePriorityType: editField
+          devicePriorityType: this.devicePriority
           // deviceStates: this.deviceArray[id].device.deviceStates
           };
           console.log('object: ' + JSON.stringify(deviceUpdate));
@@ -171,9 +180,15 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     }
 
     removeUser(id: any) {
-      console.log('removing user with id: ' + id);
-      this.userService.removeUser(id);
-      // this.userArray.splice(id, 1);
+      this.userRemoveFailed = false;
+      this.userService.removeUser(id).subscribe(
+        (res: Response) => {
+            if (res.status === 200) {
+              this.getUserList();
+              this.userRemoveFailed = false;
+            } else {
+              this.userRemoveFailed = true; }
+        });
     }
 
     changeValue(id: number, property: string, event: any) {
@@ -181,10 +196,17 @@ export class SettingsComponent implements OnInit, AfterViewInit {
 
     }
 
+    changeSelectValue(priority: string) {
+      console.log('priority selected: ' + priority);
+      this.devicePriority = priority;
+    }
+
   openDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.disableClose = true;
+    dialogConfig.width = '400px';
+
     const dialogRef = this.dialog.open(DeviceModalComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
@@ -209,10 +231,9 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     this.deviceResult = [];
     this.deviceFound = false;
     let arrayIndex = 0;
+    // tslint:disable-next-line: prefer-for-of
     for (let index = 0; index < this.deviceArray.length; index++) {
         if (this.deviceArray[index].deviceName.toLowerCase().includes(option) ) {
-          console.log('device result: ' + this.deviceResult);
-          console.log('index: ' + index);
           this.deviceFound = true;
           this.deviceResult[arrayIndex] = this.deviceArray[index];
           arrayIndex++;
@@ -224,7 +245,8 @@ export class SettingsComponent implements OnInit, AfterViewInit {
 
       // JSON.parse(this.deviceResult)
 
-      /*if(this.deviceResult == ''){
+      /* WHAT HAPPENS IF NOT FOUND
+      if(this.deviceResult == ''){
         console.log('Not Found')
         this.deviceResult = JSON.stringify("{Not Found}")
     }*/
@@ -238,21 +260,16 @@ export class SettingsComponent implements OnInit, AfterViewInit {
         map( response => {
             this.userArray =  response,
             JSON.stringify(this.userArray);
-
+            this.isDataAvailable = true;
         })
     ).subscribe();
   }
 
   /**
-   * Remove user from system
-   */
-
-
-  /**
    * Changes guest users' expiry date
    */
   editUserExpiry(userForm) {
-    this.userService.changeUserExpiration(userForm.value);
+    this.userService.changeUserExpiration(userForm);
   }
 
   /**
@@ -274,7 +291,15 @@ export class SettingsComponent implements OnInit, AfterViewInit {
    */
   removeDevice(deviceId) {
     console.log('removing device with ID: ' + deviceId);
-    this.deviceService.removeDevice(deviceId);
+    this.deviceRemoveFailed =  false;
+    this.deviceService.removeDevice(deviceId).subscribe(
+      (res: Response) => {
+          if (res.status === 200) {
+            this.getDeviceList();
+            this.deviceRemoveFailed = false;
+          } else {
+            this.deviceRemoveFailed = true; }
+      });
   }
 
   /**

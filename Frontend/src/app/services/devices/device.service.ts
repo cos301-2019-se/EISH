@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { Device } from 'src/app/models/device-model';
+import {Device} from 'src/app/models/device-model';
 // import { Socket } from "ngx-socket-io";
 @Injectable({
   providedIn: 'root'
@@ -33,8 +33,8 @@ export class DeviceService {
   /**
    * Retrieves object given specified deviceId
    * GET Request
-   * @param deviceId The device id is used find a device with that id.
-   * @returns Observable object of type Device.
+   * @param deviceId;
+   * @returns Observable object of type Device
    */
   getDevice(deviceId): Observable<Device[]> {
     const params = new HttpParams().set('deviceId', deviceId);
@@ -45,15 +45,16 @@ export class DeviceService {
    * Get devices' current power/consumption state
    */
   getCurrentState() {
-
+    return this.http.get(this.ROOT_URL + '');
   }
 
   /**
    * Sends request to add new device through API
    * POST Reqest
-   * @param deviceForm is the information that the user has provided.
+   * @param deviceForm;
    */
   addDevice(deviceForm) {
+    // console.log(JSON.stringify(deviceForm));
     this.http.post(this.ROOT_URL + 'device', deviceForm);
   }
 
@@ -61,7 +62,7 @@ export class DeviceService {
   /**
    * Sends a request to edit an existing device througth API
    * PUT Request
-   * @param deviceForm is the information that the user has provided.
+   * @param deviceForm;
    */
   editDevice(deviceForm) {
     console.log('editing service: ' + deviceForm.deviceName);
@@ -71,15 +72,36 @@ export class DeviceService {
   /**
    * Sends a request to remove an existing device through API
    * DELETE Request
-   * @param deviceId The device id is used find a device with that id.
+   * @param deviceId;
    */
-  removeDevice(deviceId) {
+  removeDevice(deviceId) : Observable<any> {
     console.log('inside service, device id: ' + deviceId);
     const params = new HttpParams().set('deviceId', deviceId);
-    this.http.delete(this.ROOT_URL  + 'device', {params} );
+    return this.http.delete(this.ROOT_URL  + 'device', {params} );
   }
 
-  controlDevice() {
+  /**
+   * Send a request to change a devices' power consumption state
+   * PATCH Request
+   * @param deviceId; ID of device in question
+   */
+  controlDevice(device) {
+    const params = new HttpParams().set('deviceId', device.deviceId);
+    params.set('deviceState', device.deviceState);
+    this.http.patch(this.ROOT_URL + '/device/', {HttpParams});
+
+    // {deviceId}/{deviceState}
+    /**
+    let deviceState;
+    this.getCurrentState().pipe(
+      map( response => {
+        deviceState =  response,
+        JSON.stringify(deviceState);
+
+      })
+    ); // .subscribe();
+     */
 
   }
+
 }

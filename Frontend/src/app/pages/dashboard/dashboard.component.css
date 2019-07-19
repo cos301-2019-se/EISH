@@ -43,10 +43,11 @@ Weather Card Styling
     margin-top: 1rem;
     margin-bottom: 1rem;
     justify-content: center;
+    
   }
   
-  .weather-icon__container > svg {
-    width: 8rem;
+  .weather-icon__container > img {
+    width: 10rem;
     height: 10rem;
   }
 

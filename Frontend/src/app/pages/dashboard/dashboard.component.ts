@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { WeatherService } from 'src/app/services/weather/weather.service';
-import {map, startWith} from 'rxjs/operators';
+import { map, startWith} from 'rxjs/operators';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { Message} from '@stomp/stompjs';
+import { Weather } from 'src/app/models/weather-model';
+import { GeneratorService } from 'src/app/services/generators/generator.service';
+import { pipe } from 'rxjs';
+import { ConsumptionService } from 'src/app/services/consumption/consumption.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -8,42 +14,126 @@ import {map, startWith} from 'rxjs/operators';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private weatherService: WeatherService) { }
+  batteryTopic: any;
+  weatherTopic: any;
+  weatherAPI: Weather;
+  dayConsumption = 50;
+  weekConsumption = 150;
+  monthConsumption = 5000;
+  batteryStatus: string;
+  batteryMode: string;
+  batteryObject: any;
+  
+  constructor(private rxStompService: RxStompService,private weatherService: WeatherService, private generatorService: GeneratorService, private consumptionService: ConsumptionService) { }
 
-  title = 'Dashboard';
   // for battery
-  gaugeMin = 0;
-  gaugemax = 100;
-  gaugeCap = 'round';
-  gaugeType = 'full';
-  gaugeValue = 92;
-  // gaugeLabel = "Battery Percentage";
-  gaugeAppendText = '%';
-  gaugeThickness = 8;
-  state = 'Charging';
-
-  // for weather
-  weatherData = {
-    weatherDescription: 'Sunny',
-    weatherIcon: 'http://openweathermap.org/img/wn/01n@2x.png',
-    weatherTemp: 25,
-    weatherLocation: 'Pretoria'
-  };
-
-  thresholdConfig = {
-    0: {color: 'red'},
-    20 : {color: 'orange'},
-    40: {color: 'yellow'},
-    80: {color: 'green'}
-  };
+    gaugeMin= 0;
+    gaugemax= 100;
+    gaugeCap= 'round';
+    gaugeType= 'full';
+    gaugeValue= 15;
+    gaugeAppendText='%';
+    gaugeThickness= 8;
+    state= 'Charging';
+     weather:any;
+    //={
+    //   weatherTemperature:-1,
+    //   weatherIcon:'s01d',
+    //   weatherDescription:'Snowy',
+    //   weatherLocation: 'Pretoria'
+    // }
+    thresholdConfig = {
+      0: {color: 'red'},
+      5: {color: 'orange'},
+      15: {color: 'yellow'},
+      49: {color: 'yellowgreen'},
+      80: {color: 'green'}
+    };
 
   ngOnInit() {
-    /*this.weatherService.getWeather().pipe(
-        map( response => {
-            this.weatherData =  response,
-            JSON.stringify(this.weatherData),
-            console.log(this.weatherData);
-          })
-    )*/
+    this.weatherService.getWeather().pipe(
+      map(response =>
+        {this.weather = response,
+         this.weather.weatherTemperature = Math.ceil(this.weather.weatherTemperature);
+        console.log(this.weather)
+        })
+        
+    ).subscribe();
+    this.generatorService.getBatteryPercentage().pipe(
+      map(response =>{
+        let battery:any
+        battery = ( response)
+         console.log(battery);
+         this.gaugeValue = battery.batteryCapacityPowerPercentage;
+         // might have to move gauge if's into this map
+       })
+    ).subscribe();
+
+    if(this.gaugeValue >= 80 && this.gaugeValue < 100){
+      this.batteryStatus = "Full"
+      this.batteryMode = "We're doing great!"
+    }else if(this.gaugeValue >= 49 && this.gaugeValue < 80){
+      this.batteryStatus = "Good"
+      this.batteryMode = "We're still okay"
+    }else if(this.gaugeValue > 15 && this.gaugeValue < 50){
+      this.batteryStatus = "Normal"
+      this.batteryMode = "We could be doing better. Please switch off unused devices"
+    }else if(this.gaugeValue > 5 && this.gaugeValue < 16){
+      this.batteryStatus = "Low"
+      this.batteryMode = "Save power by switching off unused and non-essential devices"
+    }else{
+      this.batteryStatus = "Critcal"
+      this.batteryMode = "Energy usage limited to essential devices only."
+    }
+
+
+    /*this.consumptionService.getDayTotalConsumption().pipe(
+      map(response =>{
+        console.log(response[0].getDayTotalConsumption);
+        this.dayConsumption = response[0].getDayTotalConsumption;
+      })
+    ).subscribe();
+
+    this.consumptionService.getDayTotalConsumption().pipe(
+      map(response =>{
+        console.log(response[0].response[0].getWeekTotalConsumption);
+        this.weekConsumption = response[0].getWeekTotalConsumption;
+      })
+    ).subscribe();
+
+    this.consumptionService.getDayTotalConsumption().pipe(
+      map(response =>{
+        console.log(response[0].getMonthTotalConsumption);
+        this.monthConsumption = response[0].getMonthTotalConsumption;
+      })
+    ).subscribe();*/
+
+    // this.batteryTopic = this.rxStompService.watch('/battery').subscribe((message: Message) =>{
+    //   this.batteryObject = JSON.parse(message.body);
+    //   console.log(JSON.stringify(message.body));
+    //   this.gaugeValue = this.batteryObject.percentage;
+
+    //   if(this.gaugeValue >= 80 && this.gaugeValue < 100){
+    //     this.batteryStatus = "Full"
+    //     this.batteryMode = "We're doing great!"
+    //   }else if(this.gaugeValue >= 49 && this.gaugeValue < 80){
+    //     this.batteryStatus = "Good"
+    //     this.batteryMode = "We're still okay"
+    //   }else if(this.gaugeValue > 15 && this.gaugeValue < 50){
+    //     this.batteryStatus = "Normal"
+    //     this.batteryMode = "We could be doing better. Please switch off unused devices"
+    //   }else if(this.gaugeValue > 5 && this.gaugeValue < 16){
+    //     this.batteryStatus = "Low"
+    //     this.batteryMode = "We are running low. Let's save power by switching off unused and non-essential devices"
+    //   }else{
+    //     this.batteryStatus = "Critcal"
+    //     this.batteryMode = "We are in critical status. Energy usage limited to essential devices only."
+    //   }
+
+    //})
+
   }
+
+  
 }
+

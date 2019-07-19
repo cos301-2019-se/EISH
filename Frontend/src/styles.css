@@ -13,3 +13,10 @@ body{
   .searchBar{
     width: 50%;
   }
+  
+  .errorMessages{
+    padding: 5px;
+    color: #ff3547;
+    font-size: 100%;
+    text-align: center;
+  }

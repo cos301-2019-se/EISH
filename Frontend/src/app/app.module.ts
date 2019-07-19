@@ -28,16 +28,13 @@ import { MatProgressBarModule, MatCardModule,
         MatCheckboxModule, MatDialogModule,
         MatTableModule, MatMenuModule,
         MatToolbarModule, MatButtonModule,
-        MatSidenavModule, MatIconModule,
+        MatSidenavModule, MatIconModule, MatPaginatorModule,
         MatListModule } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { DeviceModalComponent } from './pages/settings/device-modal/device-modal.component';
 import 'hammerjs';
-import { IconsModule, ButtonsModule,
-        WavesModule, TableModule,
-        ChartsModule, CardsModule,
-        InputsModule } from 'node_modules/angular-bootstrap-md';
+import { MDBBootstrapModule,WavesModule, InputsModule, ButtonsModule } from 'node_modules/angular-bootstrap-md';
 import {DeviceService} from './services/devices/device.service';
 import { DailyPlannerComponent } from './pages/daily-planner/daily-planner.component';
 import { NgxGaugeModule } from 'node_modules/ngx-gauge';
@@ -45,6 +42,7 @@ import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '
 import { eishmsRxStompConfig } from './services/stomp/rx-stomp.config';
 import { GenerationComponent } from './pages/generation/generation.component';
 import { GenerationChartComponent } from './pages/generation/generation-chart/generation-chart.component';
+import { SingleDeviceComponent } from './pages/devices/single-device/single-device.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +63,8 @@ import { GenerationChartComponent } from './pages/generation/generation-chart/ge
     DeviceModalComponent,
     DailyPlannerComponent,
     GenerationComponent,
-    GenerationChartComponent
+    GenerationChartComponent,
+    SingleDeviceComponent
   ],
   imports: [
     BrowserModule,
@@ -89,15 +88,12 @@ import { GenerationChartComponent } from './pages/generation/generation-chart/ge
     MatTableModule,
     MatCheckboxModule, MatDialogModule,
     BrowserAnimationsModule,
-    CardsModule, InputsModule,
-    IconsModule,
-    ButtonsModule,
-    WavesModule,
-    TableModule,
+    MDBBootstrapModule,
     MatCardModule,
+    MatPaginatorModule,
     NgxGaugeModule,
-    MatProgressBarModule,
-    ChartsModule
+    WavesModule, InputsModule, ButtonsModule,
+    MatProgressBarModule
   ],
   exports: [
     BrowserAnimationsModule

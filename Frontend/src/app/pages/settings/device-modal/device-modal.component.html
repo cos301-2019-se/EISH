@@ -1,21 +1,24 @@
 <div class="modal">
         <h2 mat-dialog-title>Add Device</h2>
-        <mat-dialog-content formGroup="addDeviceForm">
-            <p>Device Name*</p>
-            <input type="text" matInput placeholder="device name"
-                    formControlName="deviceName">
-        
-            <p>Device Topic*</p>
-            <input type="text" matInput placeholder="Topic"
-                    formControlName="deviceTopic">
-            
-            <p>Device Priority*</p>
-            <mat-select [(value)]="selected">
-                <mat-option>None</mat-option>
-                <mat-option value="Always-on">Always on</mat-option>
-                <mat-option value="Must-have">Must have</mat-option>
-                <mat-option value="Nice-to-have">Nice to have</mat-option>
-              </mat-select>
+        <mat-dialog-content [formGroup]="addDeviceForm">
+                <mat-form-field>
+                        <mat-label>Device Name*</mat-label>
+                        <input type="text" matInput placeholder="device name" formControlName="deviceName">
+                </mat-form-field>
+                <mat-form-field>
+                        <mat-label>Device Topic*</mat-label>
+                        <input type="text" matInput placeholder="Topic"
+                                formControlName="deviceTopic">
+                </mat-form-field>
+                <mat-form-field>
+                        <mat-label>Device Priority*</mat-label>
+                        <mat-select formControlName="devicePriority">
+                                <mat-option value="PRIORITY_ALWAYSON">Always on</mat-option>
+                                <mat-option value="PRIORITY_MUSTHAVE">Must have</mat-option>
+                                <mat-option value="PRIORITY_NICETOHAVE">Nice to have</mat-option>
+                                <mat-option value="PRIORITY_NEUTRAL">Neutral</mat-option>
+                        </mat-select>
+                </mat-form-field>
         </mat-dialog-content>
         <mat-dialog-actions align="end">
             <button mat-button mat-dialog-close>Cancel</button>

@@ -18,14 +18,15 @@
                 <mat-form-field class="searchBar">
                   <input type="text" placeholder="Enter device name" aria-label="device name" matInput [formControl]="userDeviceName" [matAutocomplete]="auto">
                   <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let option of filteredOptions | async " [value]="option">
+                    <mat-option *ngFor="let option of filteredOptions | async  " [value]="option">
                       {{option}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
-                <button mat-button color="primary" (click)="returnDevice()">Search</button>
+                <button mat-stroked-button color="primary" (click)="returnDevice()">Search</button>
               </form>
                 <div *ngIf=deviceFound >
+                  <p class="errorMessages" *ngIf="deviceRemoveFailed">ERROR: Could Not Remove Device</p>
                   <table mdbTable striped="true" responsive="true" hover="true" small="true">
                     <thead>
                        <th *ngFor="let head of deviceTableHeaders" scope="col">{{head}}</th>
@@ -33,13 +34,20 @@
                     <tbody>
                        <tr *ngFor="let device of deviceResult; let deviceId = index">
                            <td>
-                             <span  contenteditable="true" (keyup)="changeValue(userId, 'expiryDate', $event)" (blur)="updateDeviceList(deviceId, 'deviceName', $event)">{{device.deviceName}}</span>
+                             <span  contenteditable="true" (keyup)="changeValue(deviceId, 'deviceName', $event)" (blur)="updateDeviceList(deviceId, 'deviceName', $event)">{{device.deviceName}}</span>
                            </td>
                            <td>
-                             <span  contenteditable="true" (keyup)="changeValue(userId, 'expiryDate', $event)" (blur)="updateDeviceList(deviceId, 'deviceTopic', $event)">{{device.deviceTopic}}</span>
+                             <span  contenteditable="true" (keyup)="changeValue(deviceId, 'deviceTopic', $event)" (blur)="updateDeviceList(deviceId, 'deviceTopic', $event)">{{device.deviceTopic}}</span>
                            </td>
                            <td>
-                             <span  contenteditable="true" (keyup)="changeValue(userId, 'expiryDate', $event)" (blur)="updateDeviceList(deviceId, 'devicePriorityType', $event)">{{device.devicePriorityType}}</span>
+                             <span  contenteditable="true" (blur)="updateDeviceList(deviceId, 'devicePriorityType', $event)">
+                                <mat-select>
+                                    <mat-option value="PRIORITY_ALWAYSON" (mouseenter)="changeSelectValue('PRIORITY_ALWAYSON')">Always on</mat-option>
+                                    <mat-option value="PRIORITY_MUSTHAVE" (mouseenter)="changeSelectValue('PRIORITY_MUSTHAVE')">Must have</mat-option>
+                                    <mat-option value="PRIORITY_NICETOHAVE" (mouseenter)="changeSelectValue('PRIORITY_NICETOHAVE')">Nice to have</mat-option>
+                                    <mat-option value="PRIORITY_NEUTRAL" (mouseenter)="changeSelectValue('PRIORITY_NEUTRAL')">Neutral</mat-option>
+                            </mat-select>
+                             </span>
                            </td>
                            
                            <td>
@@ -66,26 +74,29 @@
       </mat-expansion-panel-header>
       <br>
       <br>
-      <div class="table-container mat-elevation-z8" >
-        <table mdbTable striped="true" responsive="true" hover="true" small="true">
+      <div *ngIf="isDataAvailable" class="table-container mat-elevation-z8" >
+        <p class="errorMessages" *ngIf="userRemoveFailed">ERROR: Could Not Remove User</p>
+        <table mdbTable class="userTable">
           <thead>
+            <tr>
              <th *ngFor="let head of userTableHeaders" scope="col">{{head}}</th>
+            </tr>
           </thead>
           <tbody>
              <tr *ngFor="let person of userArray; let userId = index">
-                 <th *ngIf="userId+1 >= mdbTablePagination.firstItemIndex && userId < mdbTablePagination.lastItemIndex" scope="row">
+                 <th scope="row">
                    <span contenteditable="false">{{person.userName}}</span>
                  </th>
-                 <td *ngIf="userId+1 >= mdbTablePagination.firstItemIndex && userId < mdbTablePagination.lastItemIndex">
+                 <td>
                    <span contenteditable="false">{{person.userEmail}}</span>
                  </td>
                  <td>
                    <span>{{person.userExpiryDate}}</span>
                  </td>
-                 <td *ngIf="userId+1 >= mdbTablePagination.firstItemIndex && userId < mdbTablePagination.lastItemIndex">
+                 <td >
                     <span contenteditable="true" (keyup)="changeValue(userId, 'expiryDate', $event)" (blur)="updateUserList(userId, 'expiryDate', $event)">0</span>
                   </td>
-                 <td *ngIf="userId+1 >= mdbTablePagination.firstItemIndex && userId < mdbTablePagination.lastItemIndex">
+                 <td >
                    <span contenteditable="true" (keyup)="changeValue(userId, 'resident', $event)" (blur)="updateUserList(userId, 'resident', $event)">
                     <mat-slide-toggle [checked]=resolveUserType(person.userType) (change)="updateUserList(userId, 'userType', $event)"></mat-slide-toggle>
                    </span>
@@ -95,12 +106,12 @@
                      <button type="button" mdbBtn color="danger" rounded="true" size="sm" class="my-0" (click)="removeUser(person.userId)">Remove</button>
                    </span>
                  </td>
-               </tr>
+              </tr>
           </tbody>
-          <tfoot>
+          <tfoot class="grey lighten-5 w-100">
             <tr>
               <td colspan="5">
-                <mdb-table-pagination [tableEl]="tableEl" [searchDataSource]="personList"></mdb-table-pagination>
+                <mat-paginator [length]=userArray.length [pageSize]="8"></mat-paginator>
               </td>
             </tr>
           </tfoot>
