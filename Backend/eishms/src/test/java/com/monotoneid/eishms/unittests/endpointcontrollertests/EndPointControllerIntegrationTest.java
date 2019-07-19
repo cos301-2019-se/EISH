@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.endpointcontrollertests;
+package com.monotoneid.eishms.unittests.endpointcontrollertests;
 
 //import static org.junit.Assert.assertTrue;
 
@@ -24,10 +24,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 //import org.springframework.test.web.reactive.server.WebTestClient;
 //import org.springframework.test.web.servlet.MockMvc;
 
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)
 // @WebMvcTest(EndPointController.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@AutoConfigureMockMvc
 public class EndPointControllerIntegrationTest {
 
     //@Autowired

@@ -1,13 +1,13 @@
 package com.monotoneid.eishms.services.databaseManagementSystem;
 
-import com.monotoneid.eishms.dataPersistence.models.HomeUserDetails;
+import com.monotoneid.eishms.datapersistence.models.HomeUserDetails;
 
 import java.util.List;
 
-import com.monotoneid.eishms.dataPersistence.models.HomeKey;
-import com.monotoneid.eishms.dataPersistence.models.HomeUser;
-import com.monotoneid.eishms.dataPersistence.repositories.HomeKeys;
-import com.monotoneid.eishms.dataPersistence.repositories.Users;
+import com.monotoneid.eishms.datapersistence.models.HomeKey;
+import com.monotoneid.eishms.datapersistence.models.HomeUser;
+import com.monotoneid.eishms.datapersistence.repositories.HomeKeys;
+import com.monotoneid.eishms.datapersistence.repositories.Users;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

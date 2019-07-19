@@ -8,20 +8,21 @@ USERS AND ENTITIES RELATED TO USERS
  username text not null unique,
  useremail text not null,
  userpassword text not null,
- userlocationtopic text not null,
+ userlocationtopic text not null unique,
+ usertype userType not null,
  userexpirydate TIMESTAMP not null
  );
 
- insert into homeuser(username,useremail,userpassword,userlocationtopic,userexpirydate) values('admin','admin@eishms.io','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','owntracks/admin/iPhone/house','ROLE_ADMIN','2050-01-31 00:00:00');
- insert into homeuser(username,useremail,userpassword,userlocationtopic,userexpirydate) values('Eben','eben@labs.epiuse.com','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','owntracks/admin/iPhone/house','ROLE_GUEST','2019-07-31 00:00:00');
-insert into homeuser(username,useremail,userpassword,userlocationtopic,userexpirydate) values('Charl','charl@labs.epiuse.com','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','owntracks/admin/iPhone/house','ROLE_RESIDENT','2019-07-31 00:00:00');
-
+insert into homeuser(username,useremail,userpassword,userlocationtopic,usertype,userexpirydate) values('admin','admin@eishms.io','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','house','ROLE_ADMIN','2050-01-31 00:00:00');
+insert into homeuser(username,useremail,userpassword,userlocationtopic,usertype,userexpirydate) values('Eben','eben@labs.epiuse.com','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','house','ROLE_GUEST','2019-07-31 00:00:00');
+insert into homeuser(username,useremail,userpassword,userlocationtopic,usertype,userexpirydate) values('Charl','charl@labs.epiuse.com','$2a$10$Es.jaJFtj/OIXfzq9dlnjOYKRItsGWhDLyiv8jxA7.76rVSy21sMi','house','ROLE_RESIDENT','2019-07-31 00:00:00');
+				
 select * from homeuser;
 
 CREATE TABLE homeuserpresence(
 	homeuserpresencetimestamp timestamp not null,
 	homeuserpresence boolean not null,
-	userid serial references homeuserpresence(userid) not null,
+	userid serial references homeuser(userid) not null,
 	primary key(userid,homeuserpresencetimestamp));
 
 
@@ -67,16 +68,60 @@ select * from deviceconsumption where deviceconsumptiontimestamp >= NOW() - INTE
 
 select * from deviceconsumption where deviceid =1  and deviceconsumptiontimestamp >= NOW() - INTERVAL '1 minutes' 
 order by deviceconsumptiontimestamp desc limit 1;
+
+
+select * from deviceconsumption
+where deviceconsumptiontimestamp between now()-interval '3 weeks' and now();
+
+select deviceid, AVG(deviceconsumption) 
+from deviceconsumption
+where deviceconsumptiontimestamp
+between now()- interval '10 minutes' and now()
+group by deviceid;
+
 /*
 GENERATORS AND ENTITIES RELATED TO GENERATORS
 */
+CREATE TYPE generatorPriorityType AS ENUM ('PRIORITY_USEWHENEMPTY','PRIORITY_USEWHENCRITICAL', 'PRIORITY_ALWAYSUSE', 'PRIORITY_NEUTRAL');
+
 CREATE TABLE generator(
 	generatorid serial primary key,
 	generatorname text not null unique,
 	generatorurl text not null unique,
+	generatorpriority generatorPriorityType not null,
+	generatorstates text[] not null
 );
 
-CREATE TABLE generatorgeneration();	
+CREATE TABLE generatorgeneration(
+generatorid serial references generator(generatorid) not null,
+generatorgenerationtimestamp timestamp not null,
+generatorgenerationstate text not null,
+generatorgenerationcapacity float,
+ primary key(generatorid,generatorgenerationtimestamp));
+
+insert into generator("generatorname","generatorurl","generatorpriority","generatorstates")
+values ('PV System','http://eishms.ddns.net:3001/v2/installations/0/SolarCharger','PRIORITY_NEUTRAL',ARRAY['OFFLINE','ONLINE']);	
+
+/*
+BATTERY AND ENTITIES RELATED 
+*/
+
+CREATE TYPE powerStateType AS ENUM ('POWERSTATE_FULL', 'POWERSTATE_NORMAL', 'POWERSTATE_LOW', 'POWERSTATE_CRITICALLYLOW','POWERSTATE_EMPTY','POWERSTATE_OFFLINE');
+CREATE TYPE chargingState AS ENUM ('CHARGINGSTATE_CHARGING','CHARGINGSTATE_DISCHARGING','CHARGINGSTATE_IDLE','CHARGINGSTATE_OFFLINE');
+
+
+CREATE TABLE batterycapacity(
+batterycapacityid serial primary key,
+batterycapacitystorage int not null,
+batterycapacitycurrentpower int not null,
+batterycapacitypowerstate powerStateType not null,
+batterycapacitychargingstate chargingState not null,
+batterycapacitytimestamp timestamp not null,
+batterycapacitypowerpercentage int not null
+);
+
+
+
 
 /*
 

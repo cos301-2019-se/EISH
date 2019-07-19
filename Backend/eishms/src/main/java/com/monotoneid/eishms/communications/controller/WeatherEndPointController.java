@@ -20,12 +20,13 @@ public class WeatherEndPointController {
 
     /**
      * GET METHOD
-     * Implements the getCurrentWeather endpoint, which calls the getCurrentWeather service from WeatherSerice
+     * Implements the getCurrentWeather endpoint, to get the latest weather.
      * @return JSONObject with weather data
      */
     @GetMapping("/weather")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
-    public ResponseEntity<Object> getCurrentWeather() {
-        return weatherService.getCurrentWeather();
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
+    public ResponseEntity<Object> getLastWeather() {
+        System.out.println("within getLastWeather");
+        return weatherService.getLastWeather();
     }
 }

@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.dataPersistence.models;
+package com.monotoneid.eishms.datapersistence.models;
 
 import java.sql.Timestamp;
 
@@ -19,21 +19,26 @@ public class HomeConsumption {
     @Column(name = "homeconsumptiontimestamp", columnDefinition = "TIMESTAMP", updatable = true, nullable = false)
     private Timestamp homeConsumptionTimeStamp;
 
-    @Column(name = "homeconsumption", columnDefinition = "float", updatable = true, nullable = false)
-    private float homeConsumption;
+    @Column(name = "homeconsumption", columnDefinition = "float", updatable = true, nullable = true)
+    private Float homeConsumption;
 
+    public HomeConsumption(){}
+    public HomeConsumption(Timestamp newHomeConsumptionTimeStamp, Float newHomeConsumption){
+        setHomeConsumptiontimeStamp(newHomeConsumptionTimeStamp);
+        setHomeConsumption(newHomeConsumption);
+    }
     //getter
     public Timestamp getHomeConsumptionTimeStamp(){
         return homeConsumptionTimeStamp;
     }
-    public float getHomeConsumption(){
+    public Float getHomeConsumption(){
         return homeConsumption;
     }
     //setter
     public void setHomeConsumptiontimeStamp(Timestamp newHomeConsumptionTimeStamp){
         this.homeConsumptionTimeStamp = newHomeConsumptionTimeStamp;
     }
-    public void setHomeConsumption(float newHomeConsumption){
+    public void setHomeConsumption(Float newHomeConsumption){
         this.homeConsumption = newHomeConsumption;
     }
 

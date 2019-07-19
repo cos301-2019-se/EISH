@@ -1,4 +1,7 @@
-package com.monotoneid.eishms.dataPersistence.models;
+package com.monotoneid.eishms.datapersistence.models;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.sql.Timestamp;
 
@@ -6,13 +9,10 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-//import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -26,14 +26,14 @@ public class DeviceConsumption {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name="deviceid", insertable = false ,updatable = false, nullable = false)
+    @JoinColumn(name = "deviceid", insertable = false, updatable = false, nullable = false)
     private Device device;
 
     @Column(name = "deviceconsumption", columnDefinition = "float", updatable = true, nullable = true)
     private Float deviceConsumption;
 
     //@Id
-    @Column(name = "deviceconsumptiontimestamp", columnDefinition = "TIMESTAMP", insertable = false , updatable = false, nullable = false)
+    @Column(name = "deviceconsumptiontimestamp", columnDefinition = "TIMESTAMP", insertable = false, updatable = false, nullable = false)
     private Timestamp deviceConsumptionTimestamp;
 
     @Size(min = 1, message = "device states must be one or more characters")
@@ -42,8 +42,10 @@ public class DeviceConsumption {
 
     public DeviceConsumption() {}
 
-    public DeviceConsumption(float newDeviceConsumption, Device newDevice, 
-    Timestamp newDeviceConsumptionTimestamp, String newDeviceConsumptionState) {
+    public DeviceConsumption(
+        float newDeviceConsumption, Device newDevice, 
+        Timestamp newDeviceConsumptionTimestamp,
+        String newDeviceConsumptionState) {
         setDeviceConsumption(newDeviceConsumption);
         setDevice(newDevice);
         setDeviceConsumptionTimestamp(newDeviceConsumptionTimestamp);
@@ -53,44 +55,46 @@ public class DeviceConsumption {
     }
 
     //getters
-    public DeviceConsumptionId getDeviceConsumptionId(){
+    @JsonIgnore
+    public DeviceConsumptionId getDeviceConsumptionId() {
         return deviceConsumptionId;
     }
 
-    public Device getDevice(){
-       return device;
+    public Device getDevice() {
+        return device;
     }
 
-    public Float getDeviceConsumption(){
+    public Float getDeviceConsumption() {
         return deviceConsumption;
     }
 
-    public Timestamp getDeviceConsumptionTimestamp(){
+    public Timestamp getDeviceConsumptionTimestamp() {
         return deviceConsumptionTimestamp;
     }
 
-    public String getDeviceConsumptionState(){
+    @JsonIgnore
+    public String getDeviceConsumptionState() {
         return deviceConsumptionState;
     }
 
     //setters
-    public void setDeviceConsumptionId(){
+    public void setDeviceConsumptionId() {
         this.deviceConsumptionId = new DeviceConsumptionId(getDevice().getDeviceId(),getDeviceConsumptionTimestamp());
     }
 
-    public void setDevice(Device newDevice){
+    public void setDevice(Device newDevice) {
         this.device = newDevice;
     }
 
-    public void setDeviceConsumption(Float newDeviceConsumption){
+    public void setDeviceConsumption(Float newDeviceConsumption) {
         this.deviceConsumption = newDeviceConsumption;
     }
 
-    public void setDeviceConsumptionTimestamp(Timestamp newDeviceConsumptionTimestamp){
+    public void setDeviceConsumptionTimestamp(Timestamp newDeviceConsumptionTimestamp) {
         this.deviceConsumptionTimestamp = newDeviceConsumptionTimestamp;
     }
 
-    public void setDeviceConsumptionState(String newDeviceConsumptionState){
+    public void setDeviceConsumptionState(String newDeviceConsumptionState) {
         this.deviceConsumptionState = newDeviceConsumptionState;
     }
     
