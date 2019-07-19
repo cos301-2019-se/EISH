@@ -45,17 +45,26 @@ app.post("/add/device", function(req,res) {
 })
 
 const wss = new SocketServer({server});
+let outletSocket = null;
 
 wss.on('connection', (ws) => {
 	ws.on('message', (message) => {
 		var msgJson = JSON.parse(message);
-		if (msgJson.type == 'name')
-			activeDevices.forEach((device) => {
-				if (device.name == msgJson.deviceName) {
+        if (msgJson.type == 'pv') {
+            outletSocket = ws;
+            console.log("Connected to pv socket");
+        }
+
+		if (msgJson.type == 'name') {
+            activeDevices.forEach((device) => {
+                if (device.name == msgJson.deviceName) {
                     //console.log("Found the device");
                     device.setSocket(ws);
+                    device.setPowerOutletConnection(outletSocket);
                 }
-			});
+            });
+        }
+			
 	});
 });
 

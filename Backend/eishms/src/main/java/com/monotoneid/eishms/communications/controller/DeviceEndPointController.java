@@ -127,7 +127,7 @@ public class DeviceEndPointController{
 
    @GetMapping("/off")
    public String switchOff() {
-      deviceManager.controlDevice(1, "OFF");
-      return "Device should be OFF";
+		deviceManager.controlDevice(1, "OFF");
+		return "Device should be OFF";
    }
 }
