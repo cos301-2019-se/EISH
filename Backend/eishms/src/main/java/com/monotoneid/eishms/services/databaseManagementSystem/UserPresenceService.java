@@ -55,7 +55,8 @@ public class UserPresenceService {
             Timestamp convertedEndTimestamp = Timestamp.valueOf(removeQuotesEndTimeStamp);
 
             List<HomeUserPresence> foundHomeUserPresenceList = 
-                userPresenceRespository.findByHomeUserPresenceIdAndHomeUserPresenceeTimestampBetween(userId,convertedStartTimestamp,convertedEndTimestamp)
+            userPresenceRespository.findByHomeUserPresenceIdAndHomeUserPresenceeTimestampBetween(
+                    userId,convertedStartTimestamp,convertedEndTimestamp)
                         .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
             return foundHomeUserPresenceList;
         } catch (Exception e) {
@@ -126,6 +127,7 @@ public class UserPresenceService {
         }
     }
 
+    /**. */
     public ResponseEntity<Object> getCurrentUserPresence(long userId) {
         try {
             usersRepository.findById(userId)
@@ -137,7 +139,6 @@ public class UserPresenceService {
                             -> new ResourceNotFoundException("presence does not exist!"));
             boolean isPresent = foundHomeUserPresence.getHomeUserPresence();
             JSONObject responseObject = new JSONObject();
-            //check if the statement works in java
             if (isPresent) {
                 responseObject.put("homeUserPresence",  "User is home!");
                 return new ResponseEntity<>(responseObject,HttpStatus.OK);
