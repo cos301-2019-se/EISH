@@ -15,11 +15,7 @@ export class ConsumptionService {
   ROOT_URL = 'http://192.168.8.105:8080/api/';
   JSON_URL = 'assets/data/';
 
-  constructor(private http: HttpClient) { }
-
-  getAllDevicesConsumption() {
-
-  }
+  constructor(private http: HttpClient) {}
 
   getAllDevices(): Observable<Device[]> {
     return this.http.get<Device[]>(this.ROOT_URL + 'devices');
@@ -36,10 +32,6 @@ export class ConsumptionService {
     return this.http.get<Consumption[]>(this.JSON_URL + 'consumption.json');
   }
 
-  getSpecialDeviceConsumption(deviceId, specialRange): Observable<[]> {
-    return null;
-  }
-
   getDayTotalConsumption(): Observable<any> {
     return this.http.get(this.ROOT_URL + 'home/consumption/day');
   }
@@ -52,28 +44,19 @@ export class ConsumptionService {
     return this.http.get(this.ROOT_URL + 'home/consumption/month');
   }
 
-  convertSpecialRangeToTimestamps(specialRange) {
-    const CurrDate = new Date();
-    let pastDate = null;
-    switch (specialRange) {
-      case 'Last Hour':
-        pastDate = new Date();
-        break;
-      case 'Today':
-        break;
-      case 'This Week':
-        break;
-      case 'This Month':
-        break;
-      case 'This Year':
-        break;
-      default:
-
-    }
+  getCustomHomeConsumption(startTimeStamp, endTimeStamp): Observable<[]> {
+    const params = new HttpParams().set('startTimeStamp', startTimeStamp).set('endTimeStamp', endTimeStamp);
+    return this.http.get<[]>(this.ROOT_URL + 'home/consumption', { params });
   }
 
-  newDate(objDate, year, month, day, hour, minute): Date {
-    return null;
+  getSpecialDeviceConsumption(deviceId, specialRange): Observable<[]> {
+    const params = new HttpParams().set('deviceId', deviceId).set('interval', specialRange);
+    return this.http.get<[]>(this.ROOT_URL + 'device/consumption', { params });
+  }
+
+  getSpecialHomeConsumption(specialRange): Observable<[]> {
+    const params = new HttpParams().set('interval', specialRange);
+    return this.http.get<[]>(this.ROOT_URL + 'home/consumption', { params });
   }
 
 }

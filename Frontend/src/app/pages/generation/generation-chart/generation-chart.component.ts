@@ -1,17 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { Chart } from 'chart.js';
-// import { Device } from 'src/app/models/device-model';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { GeneratorService } from 'src/app/services/generators/generator.service';
+import Chart from 'chart.js';
 
 @Component({
-  selector: 'app-consumption-chart',
-  templateUrl: './consumption-chart.component.html',
-  styleUrls: ['./consumption-chart.component.css']
+  selector: 'app-generation-chart',
+  templateUrl: './generation-chart.component.html',
+  styleUrls: ['./generation-chart.component.css']
 })
-export class ConsumptionChartComponent implements OnInit {
+export class GenerationChartComponent implements OnInit {
 
-  /**
-   * Variables:
-   */
   heading: string;
   chart: Chart;
   currentDevice = null;
@@ -19,7 +17,7 @@ export class ConsumptionChartComponent implements OnInit {
   chartConfigration = null;
 
   constructor() {
-    this.heading = 'Home Consumption';
+    this.heading = 'Home Generation';
     // connect to a socket
   }
 
@@ -35,12 +33,12 @@ export class ConsumptionChartComponent implements OnInit {
     this.chartConfigration = {
       type: 'line',
       data: {
-        labels: [],
+        labels: [1, 2, 3, 4, 5],
         datasets: [{
-          label: 'Device Consumption',
-          backgroundColor: 'rgba(93, 217, 93, 0.6)',
-          borderColor: 'rgba(93, 217, 93, 1)',
-          data: [
+          label: 'Generator Generation',
+          backgroundColor: 'rgba(250, 63, 30, 0.6)',
+          borderColor: 'rgba(250, 63, 30, 1)',
+          data: [ 2, 8, 9, 4, 2
           ],
           fill: true,
         }]
@@ -83,26 +81,25 @@ export class ConsumptionChartComponent implements OnInit {
         }
       }
     };
-    this.chart = new Chart('consumptionChart', this.chartConfigration);
-    this.setChartHeading('Consumption');
+    this.chart = new Chart('generationChart', this.chartConfigration);
+    this.setChartHeading('Generation');
     // this.setXAxisLabel("Hours");
-    this.setYAxisLabel('Power Consumption');
+    this.setYAxisLabel('Power Generation');
   }
 
   addDataPoint(newData): void {
-    if (typeof newData.deviceConsumptionTimestamp != 'undefined') {
-      this.chartConfigration.data.labels.push(newData.deviceConsumptionTimestamp); // put timestamp here
+    if (typeof newData.generatorGenerationTimestamp != 'undefined') {
+      this.chartConfigration.data.labels.push(newData.generatorGenerationTimestamp); // put timestamp here
     } else {
-      this.chartConfigration.data.labels.push(newData.homeConsumptionTimeStamp);
+      this.chartConfigration.data.labels.push(newData.homeGenerationTimeStamp);
     }
 
-
-    if (typeof newData.deviceConsumption != 'undefined') {
+    if (typeof newData.generatorGeneration != 'undefined') {
       // tslint:disable-next-line: radix
-      this.chartConfigration.data.datasets[0].data.push(parseInt(newData.deviceConsumption));
+      this.chartConfigration.data.datasets[0].data.push(parseInt(newData.generatorGeneration));
     } else {
       // tslint:disable-next-line: radix
-      this.chartConfigration.data.datasets[0].data.push(parseInt(newData.homeConsumption));
+      this.chartConfigration.data.datasets[0].data.push(parseInt(newData.homeGeneration));
     }
     // this.chart.update();
   }

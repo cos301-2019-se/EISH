@@ -9,6 +9,7 @@ import { DevicesComponent } from './pages/devices/devices/devices.component';
 import { ConsumptionComponent } from './pages/consumption/consumption.component';
 import { ForecastComponent } from './pages/forecast/forecast.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
+import { GenerationComponent } from './pages/generation/generation.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent},
@@ -17,7 +18,8 @@ const routes: Routes = [
     {path: 'dashboard', component: DashboardComponent},
     {path: 'devices', component: DevicesComponent},
     {path: 'consumption', component: ConsumptionComponent},
-    {path: 'forecast', component: ForecastComponent}
+    {path: 'forecast', component: ForecastComponent},
+    {path: 'generation', component: GenerationComponent}
   ]},
   {path: 'register/:regType', component: ChangeCredentialsComponent},
   {path: 'key', component: KeysComponent},
