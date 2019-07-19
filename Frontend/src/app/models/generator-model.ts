@@ -1,6 +1,6 @@
 export class Generator {
 }
- 
-export class Battery{
+
+export class Battery {
     batteryCapacityPowerPercentage: number;
 }

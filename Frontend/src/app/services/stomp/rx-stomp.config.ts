@@ -3,7 +3,7 @@ import { InjectableRxStompConfig } from '@stomp/ng2-stompjs';
 
 export const eishmsRxStompConfig: InjectableRxStompConfig = {
   // Which server?
-  brokerURL: 'ws://192.168.8.100:8080/deviceStatus',
+  brokerURL: 'ws://192.168.8.105:8080/deviceStatus',
 
   // Headers
   // Typical keys: login, passcode, host

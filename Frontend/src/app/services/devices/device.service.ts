@@ -11,7 +11,7 @@ export class DeviceService {
 /**
  * Variables
  */
-  ROOT_URL = 'http://192.168.8.102:8080/api/';
+  ROOT_URL = 'http://192.168.8.105:8080/api/';
   JSON_URL = 'assets/data/';
 
   constructor(private http: HttpClient) { }
@@ -54,8 +54,14 @@ export class DeviceService {
    * @param deviceForm;
    */
   addDevice(deviceForm) {
-    // console.log(JSON.stringify(deviceForm));
-    this.http.post(this.ROOT_URL + 'device', deviceForm);
+    console.log('new device: ' + JSON.stringify(deviceForm));
+    this.http.post(this.ROOT_URL + 'device', deviceForm).subscribe(
+      /*( res: Response) => {
+        if (res.status !== 200 || res.ok === false ) {
+          console.log('error');
+        }*/
+     );
+
   }
 
 
@@ -65,8 +71,8 @@ export class DeviceService {
    * @param deviceForm;
    */
   editDevice(deviceForm) {
-    console.log('editing service: ' + deviceForm.deviceName);
-    this.http.put(this.ROOT_URL + 'device', deviceForm);
+    console.log('editing service: ' + JSON.stringify(deviceForm));
+    return this.http.put(this.ROOT_URL + 'device', deviceForm);
   }
 
   /**
@@ -74,10 +80,8 @@ export class DeviceService {
    * DELETE Request
    * @param deviceId;
    */
-  removeDevice(deviceId) : Observable<any> {
-    console.log('inside service, device id: ' + deviceId);
-    const params = new HttpParams().set('deviceId', deviceId);
-    return this.http.delete(this.ROOT_URL  + 'device', {params} );
+  removeDevice(deviceId): Observable<any> {
+    return this.http.delete(this.ROOT_URL  + 'device/' + deviceId );
   }
 
   /**
@@ -91,7 +95,7 @@ export class DeviceService {
     this.http.patch(this.ROOT_URL + '/device/', {HttpParams});
 
     // {deviceId}/{deviceState}
-    /**
+    /*
     let deviceState;
     this.getCurrentState().pipe(
       map( response => {
@@ -100,7 +104,7 @@ export class DeviceService {
 
       })
     ); // .subscribe();
-     */
+    */
 
   }
 

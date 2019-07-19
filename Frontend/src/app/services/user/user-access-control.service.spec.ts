@@ -4,7 +4,8 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { UserAccessControlService} from './user-access-control.service';
 import { HttpEvent, HttpEventType} from '@angular/common/http';
 import { User } from 'src/app/models/user-model';
-describe('UserService', () => {
+
+describe('UserAccessControlService', () => {
   let service: UserAccessControlService;
   let httpMock: HttpTestingController;
 
@@ -28,8 +29,10 @@ describe('UserService', () => {
 
 
   /* Unit test for authenticateUser */
-it('should successfully authenticate user', () => {
-    const user: User [] = [{
+it('should successfully authenticate user', inject(
+  [HttpTestingController, UserAccessControlService],
+  (httpMock: HttpTestingController, userService: UserAccessControlService) => {
+    const user: User = {
         userId: 6,
         userName: 'Charl',
         userPassword: '123456',
@@ -37,18 +40,15 @@ it('should successfully authenticate user', () => {
         userLocationTopic: 'location',
         userExpiryDate: '2019-12-31T21:59:59.000Z',
         userType: 'RESIDENT'
-    },
-    {
-        userId: 5,
-        userName: 'Mpho',
-        userPassword: '123456',
-        userEmail: 'mpho@email.com',
-        userLocationTopic: 'location',
-        userExpiryDate: '2019-12-31T21:59:59.000Z',
-        userType: 'GUEST',
-    }
-  ];
-});
+    };
+
+    let test = userService.authenticateUser(user, this);
+    const mockReq = httpMock.expectOne(userService.ROOT_URL);
+    expect(mockReq.cancelled).toBeFalsy();
+    expect(mockReq.request.responseType).toEqual('json');
+    mockReq.flush(user);
+})
+);
 
 /* Unit test for isUserLoggedIn*/
 it('should confirm that user is correctly logged in', () => {

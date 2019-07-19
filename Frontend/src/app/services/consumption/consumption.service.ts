@@ -12,8 +12,8 @@ export class ConsumptionService {
   /**
    * Variables:
    */
-  ROOT_URL='http://192.168.8.100:8080/api/';
-  JSON_URL ='assets/data/';
+  ROOT_URL = 'http://192.168.8.105:8080/api/';
+  JSON_URL = 'assets/data/';
 
   constructor(private http: HttpClient) { }
 
@@ -30,9 +30,9 @@ export class ConsumptionService {
     return this.http.get<[]>(this.ROOT_URL + 'device/consumption', { params });
   }
   /**
-   * 
+   *
    */
-  getJSONConsumption():Observable<Consumption[]>{
+  getJSONConsumption(): Observable<Consumption[]> {
     return this.http.get<Consumption[]>(this.JSON_URL + 'consumption.json');
   }
 
@@ -40,16 +40,16 @@ export class ConsumptionService {
     return null;
   }
 
-  getDayTotalConsumption(): Observable<any>{
-    return this.http.get(this.ROOT_URL + '/consumption/day')
+  getDayTotalConsumption(): Observable<any> {
+    return this.http.get(this.ROOT_URL + 'home/consumption/day');
   }
 
-  getWeekTotalConsumption(){
-    return this.http.get(this.ROOT_URL + '/consumption/week')
+  getWeekTotalConsumption(): Observable<any> {
+    return this.http.get(this.ROOT_URL + 'home/consumption/week');
   }
 
-  gethMontTotalConsumption(){
-    return this.http.get(this.ROOT_URL + '/consumption/month')
+  gethMontTotalConsumption(): Observable<any> {
+    return this.http.get(this.ROOT_URL + 'home/consumption/month');
   }
 
   convertSpecialRangeToTimestamps(specialRange) {

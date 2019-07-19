@@ -137,25 +137,6 @@ export class DevicesComponent implements OnInit {
     console.log('last hour: ' + (this.lastHour));
   }
 
-  getDeviceState(deviceId) {
-    // get device topic using id
-    // let topic;
-    /*for (let index = 0; index < this.deviceList.length; index++) {
-      if(this.deviceList[index].toLower().includes(deviceId)){
-            topic = this.deviceList[index].deviceTopic
-            //subscribe to socket
-            break;
-      }
-
-    }*/
-  }
-  toggelDevice(deviceId) {
-
-  }
-  toggleDevice() {
-    console.log('Toggling Device!!!!');
-  }
-
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.deviceNames.filter(option => option.toLowerCase().includes(filterValue));

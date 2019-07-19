@@ -26,7 +26,6 @@
                 <button mat-stroked-button color="primary" (click)="returnDevice()">Search</button>
               </form>
                 <div *ngIf=deviceFound >
-                  <p class="errorMessages" *ngIf="deviceRemoveFailed">ERROR: Could Not Remove Device</p>
                   <table mdbTable striped="true" responsive="true" hover="true" small="true">
                     <thead>
                        <th *ngFor="let head of deviceTableHeaders" scope="col">{{head}}</th>
@@ -40,8 +39,8 @@
                              <span  contenteditable="true" (keyup)="changeValue(deviceId, 'deviceTopic', $event)" (blur)="updateDeviceList(deviceId, 'deviceTopic', $event)">{{device.deviceTopic}}</span>
                            </td>
                            <td>
-                             <span  contenteditable="true" (blur)="updateDeviceList(deviceId, 'devicePriorityType', $event)">
-                                <mat-select>
+                             <span  contenteditable="true" (blur)="updateDeviceList(deviceId, 'devicePriority', $event)">
+                                <mat-select [value]="device.devicePriority">
                                     <mat-option value="PRIORITY_ALWAYSON" (mouseenter)="changeSelectValue('PRIORITY_ALWAYSON')">Always on</mat-option>
                                     <mat-option value="PRIORITY_MUSTHAVE" (mouseenter)="changeSelectValue('PRIORITY_MUSTHAVE')">Must have</mat-option>
                                     <mat-option value="PRIORITY_NICETOHAVE" (mouseenter)="changeSelectValue('PRIORITY_NICETOHAVE')">Nice to have</mat-option>
@@ -75,7 +74,7 @@
       <br>
       <br>
       <div *ngIf="isDataAvailable" class="table-container mat-elevation-z8" >
-        <p class="errorMessages" *ngIf="userRemoveFailed">ERROR: Could Not Remove User</p>
+       
         <table mdbTable class="userTable">
           <thead>
             <tr>
