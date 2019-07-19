@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - EishmsApplication",
+            "request": "launch",
+            "mainClass": "com.monotoneid.eishms.EishmsApplication",
+            "projectName": "eishms"
+        }
+    ]
+}

@@ -151,7 +151,7 @@ function addToDevices(deviceObject) {
 
 	deviceObject.powerBtn.addEventListener('click', () => {
 		toggleDevice(deviceObject); 
-		//send a message to the server
+		// send a message to the server
 		deviceObject.deviceSocket.send(JSON.stringify({type: 'command',Power : deviceObject.deviceState}));
 	}); 
 }
