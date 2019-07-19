@@ -20,7 +20,7 @@ export class DeviceModalComponent implements OnInit {
     this.addDeviceForm = this.fb.group({
       deviceName: [null, [Validators.required]],
       deviceTopic: [null, [Validators.required]],
-      devicePriority: [null, [Validators.required]]
+      devicePriorityType: [null, [Validators.required]]
     });
 
   }
@@ -34,8 +34,9 @@ export class DeviceModalComponent implements OnInit {
     const device = {
       deviceName: this.addDeviceForm.get('deviceName').value,
       deviceTopic: this.addDeviceForm.get('deviceTopic').value,
-      devicePriority: this.selected,
-      deviceState: '[\'OF\', \'ON\', \'OFFLINE\']'
+      devicePriorityType: this.addDeviceForm.get('devicePriorityType').value,
+      // tslint:disable-next-line: quotemark
+      deviceStates: ["ON", "OFF", "OFFLINE"]
     };
     console.log(device);
     this.deviceService.addDevice(device);

@@ -26,6 +26,7 @@ export class SettingsComponent implements OnInit {
   formData: any;
   isDataAvailable: boolean;
   userRemoveFailed: boolean;
+  userChangeFailed: boolean;
   // for search bar
   panelOpenState = false;
   deviceFound: boolean;
@@ -37,18 +38,18 @@ export class SettingsComponent implements OnInit {
   maxWatt: number;
   minWatt: number;
   devicePriority: string;
-  deviceResult: string[];
+  deviceResult: any;
   deviceTableHeaders = ['Device Name ', 'Device Topic', 'Device Priority' ];
   userTableHeaders = ['Name', 'Email', 'Current Expiry Date', 'Extend Expiry Date', 'Resident', 'Remove'];
   editField: string;
   deviceNames: string[];
   deviceRemoveFailed: boolean;
-
+  deviceChangeFailed: boolean;
   deviceArray: any;
   userArray: any;
 
   ngOnInit() {
-    this.deviceService.getDeviceJSONArray().pipe(
+    this.deviceService.getAllDevices().pipe(
       map( response => {
           this.deviceArray =  response,
           JSON.stringify(this.deviceArray);
@@ -72,11 +73,13 @@ export class SettingsComponent implements OnInit {
     this.getUserList();
     this.deviceFound = false;
     this.userRemoveFailed = false;
+    this.userChangeFailed = false;
     this.deviceRemoveFailed = false;
+    this.deviceChangeFailed = false;
   }
 
   getDeviceList() {
-    this.deviceService.getDeviceJSONArray().pipe(
+    this.deviceService.getAllDevices().pipe(
       map( response => {
           this.deviceArray =  response,
           JSON.stringify(this.deviceArray);
@@ -101,14 +104,24 @@ export class SettingsComponent implements OnInit {
 
     updateUserList(id: number, property: string, event: any) {
       if (property === 'userType') {
-        // console.log(this.deviceArray[id].deviceName);
-        const userUpdate = {
-         userId: this.userArray[id].userId ,
-         userType:  this.userArray[id].userType
+        console.log(this.userArray[id].userName);
+        if (this.userArray[id].userType === 'ROLE_RESIDENT') {
+          console.log('i am a ')
+          const userUpdate = {
+            userId: this.userArray[id].userId ,
+            userType:  "ROLE_GUEST"
+           };
+          this.userService.changeUserType(userUpdate);
 
-        };
+        } else {
+          const userUpdate = {
+            userId: this.userArray[id].userId ,
+            userType:  "ROLE_RESIDENT"
 
-        this.userService.changeUserType(userUpdate);
+           };
+          this.userService.changeUserType(userUpdate);
+          this.getUserList();
+        }
 
       } else {
         const editField = event.target.textContent;
@@ -119,6 +132,7 @@ export class SettingsComponent implements OnInit {
           nrDays: editField
         };
         this.userService.changeUserExpiration(userUpdate);
+        this.getUserList();
       }
     }
 
@@ -130,65 +144,80 @@ export class SettingsComponent implements OnInit {
           const editField = event.target.textContent;
           console.log('edit field: ' + editField);
           const deviceUpdate = {
-          deviceId: this.deviceArray[id].deviceId,
+          deviceId: this.deviceResult[id].deviceId,
           deviceName: editField,
-          deviceTopic: this.deviceArray[id].deviceTopic,
-          devicePriorityType: this.deviceArray[id].devicePriorityType
-          // deviceStates: this.deviceArray[id].device.deviceStates
+          deviceTopic: this.deviceResult[id].deviceTopic,
+          devicePriorityType: this.deviceResult[id].devicePriority,
+          // tslint:disable-next-line: quotemark
+          deviceStates: ["ON", "OFF", "OFFLINE"]
           };
 
           console.log('object: ' + JSON.stringify(deviceUpdate));
-          this.deviceService.editDevice(deviceUpdate);
+          this.deviceService.editDevice(deviceUpdate).subscribe(
+            ( res: Response) => {
+              if (res.status !== 200) {
+                this.deviceChangeFailed = true;
+              }
+           });
 
       } else if (property === 'deviceTopic') {
           console.log('in changing device topic');
 
           const editField = event.target.textContent;
           const deviceUpdate = {
-          deviceId: this.deviceArray[id].deviceId,
-          deviceName: this.deviceArray[id].deviceName,
+          deviceId: this.deviceResult[id].deviceId,
+          deviceName: this.deviceResult[id].deviceName,
           deviceTopic: editField,
-          devicePriorityType: this.deviceArray[id].devicePriorityType
-          // deviceStates: this.deviceArray[id].device.deviceStates
+          devicePriorityType: this.deviceResult[id].devicePriority,
+          // tslint:disable-next-line: quotemark
+          deviceStates: ["ON", "OFF", "OFFLINE"]
           };
 
           console.log('object: ' + JSON.stringify(deviceUpdate));
-          this.deviceService.editDevice(deviceUpdate);
+          this.deviceService.editDevice(deviceUpdate).subscribe(
+            ( res: Response) => {
+              if (res.status !== 200) {
+                this.deviceChangeFailed = true;
+              }
+           });
 
       } else {
           console.log('changing device priortity');
 
           console.log('priority type change: ' + this.devicePriority);
+          console.log(this.deviceResult[id]);
           const deviceUpdate = {
-          deviceId: this.deviceArray[id].deviceId,
-          deviceName: this.deviceArray[id].deviceName,
-          deviceTopic: this.deviceArray[id].deviceTopic,
-          devicePriorityType: this.devicePriority
-          // deviceStates: this.deviceArray[id].device.deviceStates
+          deviceId: this.deviceResult[id].deviceId,
+          deviceName: this.deviceResult[id].deviceName,
+          deviceTopic: this.deviceResult[id].deviceTopic,
+          devicePriorityType: this.devicePriority,
+          // tslint:disable-next-line: quotemark
+          deviceStates: ["ON", "OFF", "OFFLINE"]
           };
           console.log('object: ' + JSON.stringify(deviceUpdate));
-          this.deviceService.editDevice(deviceUpdate);
+          this.deviceService.editDevice(deviceUpdate).subscribe(
+            ( res: Response) => {
+              if (res.status !== 200) {
+                this.deviceChangeFailed = true;
+              }
+           });
       }
     }
 
     resolveUserType(userType) {
-      if (userType === 'RESIDENT') {
+      if (userType === 'ROLE_RESIDENT') {
         return true;
       } else {
         return false;
+        
       }
     }
 
     removeUser(id: any) {
       this.userRemoveFailed = false;
-      this.userService.removeUser(id).subscribe(
-        (res: Response) => {
-            if (res.status === 200) {
-              this.getUserList();
-              this.userRemoveFailed = false;
-            } else {
-              this.userRemoveFailed = true; }
-        });
+      this.userService.removeUser(id).subscribe();
+      this.userArray.splice(id, 1);
+      return;
     }
 
     changeValue(id: number, property: string, event: any) {
@@ -256,10 +285,11 @@ export class SettingsComponent implements OnInit {
 
   getUserList() {
     console.log('getting user list');
-    this.userService.getUserJSONArray().pipe(
+    this.userService.getAllUsers().pipe(
         map( response => {
             this.userArray =  response,
             JSON.stringify(this.userArray);
+            console.log(this.userArray);
             this.isDataAvailable = true;
         })
     ).subscribe();
@@ -290,15 +320,35 @@ export class SettingsComponent implements OnInit {
    * Removes a device from the system
    */
   removeDevice(deviceId) {
+    let deviceObject: any;
+    let arrayIndex: number;
+    // tslint:disable-next-line: prefer-for-of
+    for (let index = 0; index < this.deviceResult.length; index++) {
+      if (this.deviceResult[index].deviceId === deviceId) {
+        deviceObject = this.deviceResult[index];
+        this.deviceResult.splice(index, 1);
+        arrayIndex = this.deviceArray.indexOf(deviceObject);
+        this.deviceArray.splice(arrayIndex, 1);
+
+        arrayIndex = this.deviceNames.indexOf(deviceObject);
+        this.deviceNames.splice(arrayIndex, 1);
+        break;
+      }
+    }
+    console.log('string: ' + this.userDeviceName.value);
     console.log('removing device with ID: ' + deviceId);
     this.deviceRemoveFailed =  false;
     this.deviceService.removeDevice(deviceId).subscribe(
       (res: Response) => {
           if (res.status === 200) {
+            console.log('remove successful');
+            let index = this.deviceArray
+            this.deviceArray.splice(deviceId, 1);
+            this.deviceResult.splice(deviceId, 1);
             this.getDeviceList();
-            this.deviceRemoveFailed = false;
+            this.deviceRemoveFailed = true;
           } else {
-            this.deviceRemoveFailed = true; }
+            this.deviceRemoveFailed = false; }
       });
   }
 
