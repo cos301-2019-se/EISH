@@ -28,3 +28,8 @@ HELP.md
 
 ### VS Code ###
 .vscode/
+
+### All Java Class Files ###
+*.class
+
+### node js ###
