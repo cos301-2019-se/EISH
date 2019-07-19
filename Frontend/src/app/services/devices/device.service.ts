@@ -86,9 +86,8 @@ export class DeviceService {
    * @param deviceId; ID of device in question
    */
   controlDevice(device) {
-    const params = new HttpParams().set('deviceId', device.deviceId);
-    params.set('deviceState', device.deviceState);
-    this.http.patch(this.ROOT_URL + '/device/', {HttpParams});
+    device.deviceState = (device.deviceState == 'ON')?'OFF':'ON';
+    this.http.patch(this.ROOT_URL + 'device/'+device.deviceId+'/'+device.deviceState,{}).subscribe();
 
     // {deviceId}/{deviceState}
     /**

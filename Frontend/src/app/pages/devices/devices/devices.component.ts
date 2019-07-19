@@ -4,6 +4,7 @@ import { DeviceService } from 'src/app/services/devices/device.service';
 import {map, startWith} from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { Device } from 'src/app/models/device-model';
 
 @Component({
   selector: 'app-devices',
@@ -16,13 +17,7 @@ export class DevicesComponent implements OnInit {
   userDeviceName = new FormControl();
   filteredOptions: Observable<string[]>;
   deviceNames: string[];
-  deviceArray: Devices[] = [
-    {deviceId: 1, deviceName: 'Sony TV', deviceConsumption: 30, devicePriority:'PRIORITY_MUSTHAVE'},
-    {deviceId: 2, deviceName: 'Samsung Fridge', deviceConsumption: 60,devicePriority:'PRIORITY_MUSTHAVE'},
-    {deviceId: 3, deviceName: 'Kettle', deviceConsumption: 12, devicePriority:'PRIORITY_NEUTRAL'},
-    {deviceId: 4, deviceName: 'Sony Home Theatre', deviceConsumption: 8, devicePriority:'PRIORITY_NICETOHAVE'},
-    {deviceId: 5, deviceName: 'Sony Playstation', deviceConsumption: 15,devicePriority:'PRIORITY_NICETOHAVE'},
-  ];
+  deviceArray: Device[];
   deviceList: any[];
   deviceResult: any[];
   consumptionArray: any[];
@@ -32,9 +27,9 @@ export class DevicesComponent implements OnInit {
 
   ngOnInit() {
 
-      this.deviceService.getDeviceJSONArray().pipe(
+      this.deviceService.getAllDevices().pipe(
         map( response => {
-            this.deviceList =  response,
+            this.deviceList =  response;
             JSON.stringify(this.deviceList);
             this.deviceResult = this.deviceList;
             console.log(this.deviceList);
@@ -45,7 +40,7 @@ export class DevicesComponent implements OnInit {
                 devices[index] = this.deviceList[index].deviceName;
               }
             this.deviceNames = devices;
-            console.log(this.deviceNames);
+            //console.log(this.deviceNames);
             this.filteredOptions = this.userDeviceName.valueChanges
               .pipe(
                 startWith(' '),
@@ -54,13 +49,14 @@ export class DevicesComponent implements OnInit {
               );
 
           })
-        ).subscribe();
+        ).subscribe(
+        );
 
       this.consumptionService.getJSONConsumption().pipe(
           map( response => {
               this.consumptionArray =  response,
               JSON.stringify(this.consumptionArray);
-              console.log(this.consumptionArray);
+              //console.log(this.consumptionArray);
               this.progressBarAgregation();
             })
           ).subscribe();
@@ -76,13 +72,13 @@ export class DevicesComponent implements OnInit {
     let arrayIndex = 0;
     for (let index = 0; index < this.deviceList.length; index++) {
         if (this.deviceList[index].devicePriorityType.toLowerCase().includes(option) ) {
-          console.log('device result: ' + this.deviceResult);
+          //console.log('device result: ' + this.deviceResult);
           this.deviceResult[arrayIndex] = this.deviceList[index];
           arrayIndex++;
         }
       }
     JSON.stringify(this.deviceResult);
-    console.log(this.deviceResult);
+    //console.log(this.deviceResult);
     return;
   }
   /**
@@ -173,13 +169,13 @@ export class DevicesComponent implements OnInit {
     let arrayIndex = 0;
     for (let index = 0; index < this.deviceList.length; index++) {
         if (this.deviceList[index].deviceName.toLowerCase().includes(option) ) {
-          console.log('device result: ' + this.deviceResult);
+          //console.log('device result: ' + this.deviceResult);
           this.deviceResult[arrayIndex] = this.deviceList[index];
           arrayIndex++;
         }
       }
     JSON.stringify(this.deviceResult);
-    console.log(this.deviceResult);
+    //console.log(this.deviceResult);
     return;
   }
 

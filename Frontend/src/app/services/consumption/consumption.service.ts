@@ -12,7 +12,7 @@ export class ConsumptionService {
   /**
    * Variables:
    */
-  ROOT_URL = 'http://192.168.8.100:8080/api/';
+  ROOT_URL = 'http://192.168.8.102:8080/api/';
   JSON_URL = 'assets/data/';
 
   constructor(private http: HttpClient) {}

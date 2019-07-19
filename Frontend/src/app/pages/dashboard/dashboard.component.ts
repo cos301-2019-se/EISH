@@ -23,8 +23,16 @@ export class DashboardComponent implements OnInit {
   batteryStatus: string;
   batteryMode: string;
   batteryObject: any;
+  weather:any;
   
-  constructor(private rxStompService: RxStompService,private weatherService: WeatherService, private generatorService: GeneratorService, private consumptionService: ConsumptionService) { }
+  constructor(private rxStompService: RxStompService,private weatherService: WeatherService, private generatorService: GeneratorService, private consumptionService: ConsumptionService) { 
+    this.weather ={
+      weatherTemperature:null,
+      weatherIcon:null,
+      weatherDescription:null,
+      weatherLocation: null
+    };
+  }
 
   // for battery
     gaugeMin= 0;
@@ -34,14 +42,10 @@ export class DashboardComponent implements OnInit {
     gaugeValue= 15;
     gaugeAppendText='%';
     gaugeThickness= 8;
-    state= 'Charging';
-     weather:any;
-    //={
-    //   weatherTemperature:-1,
-    //   weatherIcon:'s01d',
-    //   weatherDescription:'Snowy',
-    //   weatherLocation: 'Pretoria'
-    // }
+    state = 'Charging';
+    
+    
+    //weather:Weather; 
     thresholdConfig = {
       0: {color: 'red'},
       5: {color: 'orange'},
@@ -66,25 +70,26 @@ export class DashboardComponent implements OnInit {
          console.log(battery);
          this.gaugeValue = battery.batteryCapacityPowerPercentage;
          // might have to move gauge if's into this map
+         if(this.gaugeValue >= 80 && this.gaugeValue <= 100){
+          this.batteryStatus = "Full"
+          this.batteryMode = "We're doing great!"
+        }else if(this.gaugeValue >= 49 && this.gaugeValue < 80){
+          this.batteryStatus = "Good"
+          this.batteryMode = "We're still okay"
+        }else if(this.gaugeValue > 15 && this.gaugeValue < 50){
+          this.batteryStatus = "Normal"
+          this.batteryMode = "We could be doing better. Please switch off unused devices"
+        }else if(this.gaugeValue > 5 && this.gaugeValue < 16){
+          this.batteryStatus = "Low"
+          this.batteryMode = "Save power by switching off unused and non-essential devices"
+        }else{
+          this.batteryStatus = "Critcal"
+          this.batteryMode = "Energy usage limited to essential devices only."
+        }
        })
     ).subscribe();
 
-    if(this.gaugeValue >= 80 && this.gaugeValue < 100){
-      this.batteryStatus = "Full"
-      this.batteryMode = "We're doing great!"
-    }else if(this.gaugeValue >= 49 && this.gaugeValue < 80){
-      this.batteryStatus = "Good"
-      this.batteryMode = "We're still okay"
-    }else if(this.gaugeValue > 15 && this.gaugeValue < 50){
-      this.batteryStatus = "Normal"
-      this.batteryMode = "We could be doing better. Please switch off unused devices"
-    }else if(this.gaugeValue > 5 && this.gaugeValue < 16){
-      this.batteryStatus = "Low"
-      this.batteryMode = "Save power by switching off unused and non-essential devices"
-    }else{
-      this.batteryStatus = "Critcal"
-      this.batteryMode = "Energy usage limited to essential devices only."
-    }
+    
 
 
     /*this.consumptionService.getDayTotalConsumption().pipe(
@@ -108,29 +113,29 @@ export class DashboardComponent implements OnInit {
       })
     ).subscribe();*/
 
-    // this.batteryTopic = this.rxStompService.watch('/battery').subscribe((message: Message) =>{
-    //   this.batteryObject = JSON.parse(message.body);
-    //   console.log(JSON.stringify(message.body));
-    //   this.gaugeValue = this.batteryObject.percentage;
+    this.batteryTopic = this.rxStompService.watch('/battery').subscribe((message: Message) =>{
+      this.batteryObject = JSON.parse(message.body);
+      console.log(message.body);
+      this.gaugeValue = this.batteryObject.batteryCapacityPowerPercentage;
 
-    //   if(this.gaugeValue >= 80 && this.gaugeValue < 100){
-    //     this.batteryStatus = "Full"
-    //     this.batteryMode = "We're doing great!"
-    //   }else if(this.gaugeValue >= 49 && this.gaugeValue < 80){
-    //     this.batteryStatus = "Good"
-    //     this.batteryMode = "We're still okay"
-    //   }else if(this.gaugeValue > 15 && this.gaugeValue < 50){
-    //     this.batteryStatus = "Normal"
-    //     this.batteryMode = "We could be doing better. Please switch off unused devices"
-    //   }else if(this.gaugeValue > 5 && this.gaugeValue < 16){
-    //     this.batteryStatus = "Low"
-    //     this.batteryMode = "We are running low. Let's save power by switching off unused and non-essential devices"
-    //   }else{
-    //     this.batteryStatus = "Critcal"
-    //     this.batteryMode = "We are in critical status. Energy usage limited to essential devices only."
-    //   }
+      if(this.gaugeValue >= 80 && this.gaugeValue <= 100){
+        this.batteryStatus = "Full"
+        this.batteryMode = "We're doing great!"
+      }else if(this.gaugeValue >= 49 && this.gaugeValue < 80){
+        this.batteryStatus = "Good"
+        this.batteryMode = "We're still okay"
+      }else if(this.gaugeValue > 15 && this.gaugeValue < 50){
+        this.batteryStatus = "Normal"
+        this.batteryMode = "We could be doing better. Please switch off unused devices"
+      }else if(this.gaugeValue > 5 && this.gaugeValue < 16){
+        this.batteryStatus = "Low"
+        this.batteryMode = "We are running low. Let's save power by switching off unused and non-essential devices"
+      }else{
+        this.batteryStatus = "Critcal"
+        this.batteryMode = "We are in critical status. Energy usage limited to essential devices only."
+      }
 
-    //})
+    })
 
   }
 

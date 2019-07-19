@@ -6,6 +6,7 @@
 
 .toggleButton{
     float: right;
+    color:red;
 }
 mat-progress-bar{
     width:80%;
@@ -18,12 +19,7 @@ h4{
     margin: 0;
     padding: 0;
 }
-mat-card .off{
-    background-color: rgb(97, 97, 97);
-}
-mat-card .on{
-    background-color:transparent;
-}
+
 mat-card{
     flex-direction: row;
     align-items: center;

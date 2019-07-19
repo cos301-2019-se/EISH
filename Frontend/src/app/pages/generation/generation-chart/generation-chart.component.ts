@@ -33,12 +33,12 @@ export class GenerationChartComponent implements OnInit {
     this.chartConfigration = {
       type: 'line',
       data: {
-        labels: [1, 2, 3, 4, 5],
+        labels: [],
         datasets: [{
           label: 'Generator Generation',
           backgroundColor: 'rgba(250, 63, 30, 0.6)',
           borderColor: 'rgba(250, 63, 30, 1)',
-          data: [ 2, 8, 9, 4, 2
+          data: [
           ],
           fill: true,
         }]
