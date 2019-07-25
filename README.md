@@ -16,11 +16,11 @@ usage patterns of specific devices to prioritize devices and optimize energy con
 
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH.pdf" target="_blank">Software Requirement Specification Demo1</a>
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/User_Manual.pdf" target="_blank">User Manual</a>
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/usermanual.pdf" target="_blank">User Manual</a>
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/admin/Documentation/CodingStandard.pdf" target="_blank">Coding Standards</a>
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/CodingStandard.pdf" target="_blank">Coding Standards</a>
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/admin/Documentation/testingPolicyVersion2.pdf" target="_blank">Testing Policy</a>
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/testingPolicyVersion2.pdf" target="_blank">Testing Policy</a>
 
 ### Project Management Tools
 
