@@ -1,0 +1,29 @@
+<div style="width: 100%">
+    <div class="chart-controls">
+        <h1 class="gen-heading">Power Generation</h1>
+        <label>View Generation: </label>
+        <select [ngModel]="selectedGenerator" (ngModelChange)="selectGenerator($event)">
+            <option value="Home">Home</option>
+            <option [value]="generator" *ngFor="let generator of generators">{{ generator }}</option>
+        </select>
+        <label>Range: </label>
+        <select [ngModel]="selectedRange" (ngModelChange)="selectRange($event)">
+            <option value="Current">Current</option>
+            <option value="lasthour">Last Hour</option>
+            <option value="thisday">Today</option>
+            <option value="thisweek">This Week</option>
+            <option value="thismonth">This Month</option>
+            <option value="thisyear">This Year</option>
+            <option value="Custom" >Custom</option>
+        </select>
+        <span *ngIf="custom">
+            <label>From: </label>
+            <input type="datetime-local" [value]="startTime" (change)="setStartDateTime($event.target.value)">
+            <label>To: </label>
+            <input type="datetime-local" [value]="endTime" (change)="setEndDateTime($event.target.value)">
+        </span>
+        
+    </div>
+    <app-generation-chart #generationChart></app-generation-chart>
+</div>
+

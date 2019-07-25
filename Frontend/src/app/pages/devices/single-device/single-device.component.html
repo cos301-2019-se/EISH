@@ -1,0 +1,14 @@
+
+<mat-card>
+    <mat-card-content>
+        <div class="deviceCard">
+            <div class="toggleButton">
+                    <button mat-stroked-button (click)="toggleState()">{{ deviceState }}</button>
+            </div>  
+            <div class="deviceInfo">
+                <h4>{{ device.deviceName }}</h4>
+                <p>{{ deviceConsumption }} W </p>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
