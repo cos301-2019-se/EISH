@@ -1,0 +1,18 @@
+.toggleButton{
+    float: right;
+}
+
+.device{
+    padding:1rem;
+}
+
+.deviceConsumptionBar{
+    width:70%;
+    color: greenyellow;
+}
+.off{
+    background-color: lightgray;
+}
+.on{
+    background-color: transparent;
+}

@@ -1,0 +1,16 @@
+.searchDevice {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+
+table{
+  width:100%;
+  justify-content: center;
+  text-align: center;
+}
+
+mat-dialog-close{
+  background-color: red;
+}
