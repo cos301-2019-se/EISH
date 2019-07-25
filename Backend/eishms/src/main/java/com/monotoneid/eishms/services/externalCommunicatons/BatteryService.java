@@ -32,7 +32,7 @@ public class BatteryService {
     @Autowired
     private BatteryCapacities batteryCapacityRepository;
 
-    private String api = "http://192.168.8.103:3001/v2/installations/0/Battery";
+    private String api = "http://192.168.8.110:3001/v2/installations/0/Battery";
     private final long rate = 15000;
     private final long delay = 30000;
     
