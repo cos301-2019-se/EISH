@@ -184,7 +184,7 @@ export class UserAccessControlService {
     // console.log(userDetails.userType)
     const params = new HttpParams().set('userId', userDetails.userId);
     params.set('userType', userDetails.userType);
-    this.http.patch(this.ROOT_URL + 'user/usertype/'+ userDetails.userId + '/' + userDetails.userType, {}).subscribe();
+    this.http.patch(this.ROOT_URL + 'user/usertype/' + userDetails.userId + '/' + userDetails.userType, {}).subscribe();
   }
 
   /**

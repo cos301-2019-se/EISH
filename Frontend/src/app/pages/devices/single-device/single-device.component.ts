@@ -20,12 +20,12 @@ export class SingleDeviceComponent implements OnInit, OnDestroy {
   ngOnInit() {
     console.log(this.device.deviceName);
 
-    this.socket = this.rxStompService.watch('/device/' + this.device.deviceTopic + '/state').subscribe((message: Message) =>{
+    this.socket = this.rxStompService.watch('/device/' + this.device.deviceTopic + '/state').subscribe((message: Message) => {
       this.deviceState = JSON.parse(message.body).state;
       console.log(this.deviceState);
     });
 
-    this.socket = this.rxStompService.watch('/device/' + this.device.deviceTopic + '/consumption').subscribe((message: Message) =>{
+    this.socket = this.rxStompService.watch('/device/' + this.device.deviceTopic + '/consumption').subscribe((message: Message) => {
       this.deviceConsumption = (JSON.parse(message.body)).deviceConsumption;
       console.log(this.deviceConsumption);
     });

@@ -130,7 +130,7 @@ export class GenerationComponent implements OnInit {
   selectGenerator(dropDownValue) {
     console.log(dropDownValue);
     this.selectedGenerator = dropDownValue;
-    this.generationType = (dropDownValue == 'Home') ? 'home' : 'generator';
+    this.generationType = (dropDownValue === 'Home') ? 'home' : 'generator';
     if (!this.custom) {
       this.updateSpecial();
     } else {

@@ -90,14 +90,14 @@ export class ConsumptionChartComponent implements OnInit {
   }
 
   addDataPoint(newData): void {
-    if (typeof newData.deviceConsumptionTimestamp != 'undefined') {
+    if (typeof newData.deviceConsumptionTimestamp !== 'undefined') {
       this.chartConfigration.data.labels.push(newData.deviceConsumptionTimestamp); // put timestamp here
     } else {
       this.chartConfigration.data.labels.push(newData.homeConsumptionTimeStamp);
     }
 
 
-    if (typeof newData.deviceConsumption != 'undefined') {
+    if (typeof newData.deviceConsumption !== 'undefined') {
       // tslint:disable-next-line: radix
       this.chartConfigration.data.datasets[0].data.push(parseInt(newData.deviceConsumption));
     } else {

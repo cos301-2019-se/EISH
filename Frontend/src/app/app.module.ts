@@ -34,7 +34,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { DeviceModalComponent } from './pages/settings/device-modal/device-modal.component';
 import 'hammerjs';
-import { MDBBootstrapModule,WavesModule, InputsModule, ButtonsModule } from 'node_modules/angular-bootstrap-md';
+import { MDBBootstrapModule, WavesModule, InputsModule, ButtonsModule } from 'node_modules/angular-bootstrap-md';
 import {DeviceService} from './services/devices/device.service';
 import { DailyPlannerComponent } from './pages/daily-planner/daily-planner.component';
 import { NgxGaugeModule } from 'node_modules/ngx-gauge';

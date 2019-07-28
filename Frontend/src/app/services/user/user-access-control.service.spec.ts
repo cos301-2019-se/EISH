@@ -42,7 +42,7 @@ it('should successfully authenticate user', inject(
         userType: 'RESIDENT'
     };
 
-    let test = userService.authenticateUser(user, this);
+    const test = userService.authenticateUser(user, this);
     const mockReq = httpMock.expectOne(userService.ROOT_URL);
     expect(mockReq.cancelled).toBeFalsy();
     expect(mockReq.request.responseType).toEqual('json');

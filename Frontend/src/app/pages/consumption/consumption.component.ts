@@ -132,7 +132,7 @@ export class ConsumptionComponent implements OnInit {
   selectDevice(dropDownValue) {
     console.log(dropDownValue);
     this.selectedDevice = dropDownValue;
-    this.consumptionType = (dropDownValue == 'Home') ? 'home' : 'device';
+    this.consumptionType = (dropDownValue === 'Home') ? 'home' : 'device';
     if (!this.custom) {
       this.updateSpecial();
     } else {

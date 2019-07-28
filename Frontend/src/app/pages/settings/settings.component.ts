@@ -106,17 +106,17 @@ export class SettingsComponent implements OnInit {
       if (property === 'userType') {
         console.log(this.userArray[id].userName);
         if (this.userArray[id].userType === 'ROLE_RESIDENT') {
-          console.log('i am a ')
+          console.log('i am a ');
           const userUpdate = {
             userId: this.userArray[id].userId ,
-            userType:  "ROLE_GUEST"
+            userType:  'ROLE_GUEST'
            };
           this.userService.changeUserType(userUpdate);
 
         } else {
           const userUpdate = {
             userId: this.userArray[id].userId ,
-            userType:  "ROLE_RESIDENT"
+            userType:  'ROLE_RESIDENT'
 
            };
           this.userService.changeUserType(userUpdate);
@@ -209,7 +209,7 @@ export class SettingsComponent implements OnInit {
         return true;
       } else {
         return false;
-        
+
       }
     }
 
@@ -342,7 +342,7 @@ export class SettingsComponent implements OnInit {
       (res: Response) => {
           if (res.status === 200) {
             console.log('remove successful');
-            let index = this.deviceArray
+            const index = this.deviceArray;
             this.deviceArray.splice(deviceId, 1);
             this.deviceResult.splice(deviceId, 1);
             this.getDeviceList();

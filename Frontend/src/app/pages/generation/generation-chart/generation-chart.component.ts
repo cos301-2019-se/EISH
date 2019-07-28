@@ -88,13 +88,13 @@ export class GenerationChartComponent implements OnInit {
   }
 
   addDataPoint(newData): void {
-    if (typeof newData.generatorGenerationTimestamp != 'undefined') {
+    if (typeof newData.generatorGenerationTimestamp !== 'undefined') {
       this.chartConfigration.data.labels.push(newData.generatorGenerationTimestamp); // put timestamp here
     } else {
       this.chartConfigration.data.labels.push(newData.homeGenerationTimeStamp);
     }
 
-    if (typeof newData.generatorGeneration != 'undefined') {
+    if (typeof newData.generatorGeneration !== 'undefined') {
       // tslint:disable-next-line: radix
       this.chartConfigration.data.datasets[0].data.push(parseInt(newData.generatorGeneration));
     } else {
