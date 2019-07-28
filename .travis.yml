@@ -1,13 +1,69 @@
-language: java
-name: SpringBoot
-jdk: oraclejdk11
-services:
-  - postgresql
-addons:
-  postgresql: "9.5"
-before_script:
-  - cd Backend/eishms
-  - psql -c 'create database eishdb;' -U postgres
-  - sudo -u postgres psql -c "ALTER ROLE postgres WITH password '12345';"
-script:
-  - ./gradlew build --info
+sudo: enabled
+
+matrix:
+  include:
+    - language: java
+      name: Backend
+      jdk: oraclejdk11
+      services:
+        - postgresql
+      addons:
+        postgresql: "9.5"
+      before_script:
+        - cd Backend/eishms
+        - psql -c 'create database eishmsdb;' -U postgres
+        - sudo -u postgres psql -c "ALTER ROLE postgres WITH password '12345';"
+      script:
+        - ./gradlew build --info
+
+    - language: node_js
+      name: Frontend
+      node_js:
+        - "stable"
+      dist: trusty
+      sudo: required
+
+      branches:
+        only:
+          - master
+      cache:
+        directories:
+          - "node_modules"
+      before_script:
+        - cd Frontend
+        - npm install
+      script:
+        - ng lint
+        - ng build
+      #  - ng serve
+      #deploy:
+      #  provider: heroku
+      #  api_key:
+      #    secure: 7f504e09-2888-4583-a328-e953228f4213
+      #  app: eish-ui      
+
+    - language: node_js
+      name: "Device Simualtions"
+      node_js: 
+        - "stable"
+      cache:
+        directories:
+          - "node_modules"
+      before_script:
+        - cd "Device Simulations"    
+      script:
+        - npm run
+
+    # - language: node_js
+    #   name: "PV System Simualtions"
+    #   node_js: 
+    #     - "stable"
+    #   cache:
+    #     directories:
+    #       - "node_modules"
+    #   before_script:
+    #     - cd "Device Simulations"    
+    #   script:
+    #     - npm run
+
+
