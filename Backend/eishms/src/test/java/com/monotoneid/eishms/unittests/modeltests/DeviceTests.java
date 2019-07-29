@@ -9,12 +9,12 @@ public class DeviceTests{
  * if list not empty should return list of relevant size
  */
 
- public void testRetrieveAllDevicesGivenThatListHasNoDevices_ShouldRespondWithEmptyList(){
+//  public void testRetrieveAllDevicesGivenThatListHasNoDevices_ShouldRespondWithEmptyList(){
 
- } 
- public void testRetrieveAllDevicesGivenThatListHasDevices_ShouldRespondWithAListOfDevices(){
+//  } 
+//  public void testRetrieveAllDevicesGivenThatListHasDevices_ShouldRespondWithAListOfDevices(){
 
- }
+//  }
 /**
  * get device
  *  check for device with deviceid, if exists should return the device
