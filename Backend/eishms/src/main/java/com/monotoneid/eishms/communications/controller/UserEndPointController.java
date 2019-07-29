@@ -139,4 +139,9 @@ public class UserEndPointController {
     public ResponseEntity<Object> renewUser(@PathVariable long userId, @PathVariable int numDays) {
         return userService.renewUser(userId,numDays);
     }
+
+    @GetMapping("/forTest")
+    public String doit() {
+        return "ForTest";
+    }
 }
