@@ -32,7 +32,7 @@ import { MatProgressBarModule, MatCardModule,
         MatListModule } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { DeviceModalComponent } from './pages/settings/device-modal/device-modal.component';
+import { DeviceModalComponent } from './templates/forms/device-modal/device-modal.component';
 import 'hammerjs';
 import { MDBBootstrapModule, WavesModule, InputsModule, ButtonsModule } from 'node_modules/angular-bootstrap-md';
 import {DeviceService} from './services/devices/device.service';
@@ -43,6 +43,7 @@ import { eishmsRxStompConfig } from './services/stomp/rx-stomp.config';
 import { GenerationComponent } from './pages/generation/generation.component';
 import { GenerationChartComponent } from './pages/generation/generation-chart/generation-chart.component';
 import { SingleDeviceComponent } from './pages/devices/single-device/single-device.component';
+import { GeneratorModalComponent } from './templates/forms/generator-modal/generator-modal.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { SingleDeviceComponent } from './pages/devices/single-device/single-devi
     DailyPlannerComponent,
     GenerationComponent,
     GenerationChartComponent,
-    SingleDeviceComponent
+    SingleDeviceComponent,
+    GeneratorModalComponent
   ],
   imports: [
     BrowserModule,
@@ -114,7 +116,7 @@ import { SingleDeviceComponent } from './pages/devices/single-device/single-devi
     deps: [InjectableRxStompConfig]
   }],
   bootstrap: [AppComponent],
-  entryComponents: [DeviceModalComponent ]
+  entryComponents: [DeviceModalComponent, GeneratorModalComponent]
 })
 
 export class AppModule {}

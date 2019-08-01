@@ -4,7 +4,8 @@ import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith, catchError} from 'rxjs/operators';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import { DeviceModalComponent } from './device-modal/device-modal.component';
+import { DeviceModalComponent } from 'src/app/templates/forms/device-modal/device-modal.component';
+import { GeneratorModalComponent } from 'src/app/templates/forms/generator-modal/generator-modal.component';
 import { UserAccessControlService } from 'src/app/services/user/user-access-control.service';
 import { GeneratorService } from 'src/app/services/generators/generator.service';
 import { DeviceService } from 'src/app/services/devices/device.service';
@@ -230,13 +231,19 @@ export class SettingsComponent implements OnInit {
       this.devicePriority = priority;
     }
 
-  openDialog() {
+  openDialog(modalName) {
+    console.log('name: ' + modalName);
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.disableClose = true;
     dialogConfig.width = '400px';
 
-    const dialogRef = this.dialog.open(DeviceModalComponent, dialogConfig);
+    let dialogRef;
+    if (modalName === 'DeviceModalComponent') {
+      dialogRef = this.dialog.open(DeviceModalComponent, dialogConfig);
+    } else {
+      dialogRef = this.dialog.open(GeneratorModalComponent, dialogConfig);
+    }
 
     dialogRef.afterClosed().subscribe(
       data => {this.formData = data; }

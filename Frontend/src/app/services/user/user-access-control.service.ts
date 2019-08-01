@@ -171,8 +171,9 @@ export class UserAccessControlService {
   /**
    * Retrieves users' presence
    */
-  getUserPresence(userName) {
-
+  getUserPresence(): Observable<User []> {
+    console.log('user presence');
+    return this.http.get<User []>(this.ROOT_URL + '');
   }
 
   /**

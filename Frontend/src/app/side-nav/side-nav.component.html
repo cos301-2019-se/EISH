@@ -33,7 +33,7 @@
       <span class="example-fill-remaining-space"></span>
 
       <!---toolbar buttons-->
-      <button mat-button>Who's Home?</button>
+      <button mat-button (click)="getUserPresence()">Who's Home?</button>
       <mat-menu #profileMenu="matMenu">
           <button mat-menu-item routerLink="/register/Change">Edit credentials</button>
           <button mat-menu-item routerLink="">Logout</button>
