@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {MatDialogModule, MatDialogConfig} from '@angular/material/dialog';
+import { MatDialogConfig} from '@angular/material/dialog';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {map, startWith, catchError} from 'rxjs/operators';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {map, startWith} from 'rxjs/operators';
+import {MatDialog} from '@angular/material';
 import { DeviceModalComponent } from 'src/app/templates/forms/device-modal/device-modal.component';
 import { GeneratorModalComponent } from 'src/app/templates/forms/generator-modal/generator-modal.component';
 import { UserAccessControlService } from 'src/app/services/user/user-access-control.service';
@@ -18,12 +18,11 @@ import { Response } from 'selenium-webdriver/http';
 })
 
 export class SettingsComponent implements OnInit {
-  constructor(private generatorService: GeneratorService,
-              private userService: UserAccessControlService,
-              private deviceService: DeviceService,
-              private dialog: MatDialog) { }
+  /**
+   * Variables:
+   */
 
-  // for user table
+   // for user table
   formData: any;
   isDataAvailable: boolean;
   userRemoveFailed: boolean;
@@ -49,6 +48,20 @@ export class SettingsComponent implements OnInit {
   deviceArray: any;
   userArray: any;
 
+  /**
+   * Functions:
+   */
+
+  /**
+   * Default constuctor
+   */
+  constructor(private generatorService: GeneratorService,
+              private userService: UserAccessControlService,
+              private deviceService: DeviceService,
+              private dialog: MatDialog) { }
+  /**
+   * default function executed on intialisation of page
+   */
   ngOnInit() {
     this.deviceService.getAllDevices().pipe(
       map( response => {
@@ -79,6 +92,10 @@ export class SettingsComponent implements OnInit {
     this.deviceChangeFailed = false;
   }
 
+  // Device Functions //
+  /**
+   * Retrieves list of system devices
+   */
   getDeviceList() {
     this.deviceService.getAllDevices().pipe(
       map( response => {
@@ -103,90 +120,68 @@ export class SettingsComponent implements OnInit {
      ).subscribe();
   }
 
-    updateUserList(id: number, property: string, event: any) {
-      if (property === 'userType') {
-        console.log(this.userArray[id].userName);
-        if (this.userArray[id].userType === 'ROLE_RESIDENT') {
-          console.log('i am a ');
-          const userUpdate = {
-            userId: this.userArray[id].userId ,
-            userType:  'ROLE_GUEST'
-           };
-          this.userService.changeUserType(userUpdate);
+  /**
+   * Helper function
+   * Stores selected value from select list
+   * @param priority: selected priority from list
+   */
+  changeSelectValue(priority: string) {
+      console.log('priority selected: ' + priority);
+      this.devicePriority = priority;
+  }
 
-        } else {
-          const userUpdate = {
-            userId: this.userArray[id].userId ,
-            userType:  'ROLE_RESIDENT'
+  /**
+   * Update device properties
+   * @param id: device id
+   * @param property: device property being changed
+   * @param event: click | key press
+   */
+  updateDeviceList(id: number, property: string, event: any) {
+    // change device name
+    if (property === 'deviceName') {
+      console.log('in changing device name');
+      const editField = event.target.textContent;
+      console.log('edit field: ' + editField);
+      const deviceUpdate = {
+      deviceId: this.deviceResult[id].deviceId,
+      deviceName: editField,
+      deviceTopic: this.deviceResult[id].deviceTopic,
+      devicePriorityType: this.deviceResult[id].devicePriority,
+      // tslint:disable-next-line: quotemark
+      deviceStates: ["ON", "OFF", "OFFLINE"]
+    };
 
-           };
-          this.userService.changeUserType(userUpdate);
-          this.getUserList();
-        }
-
-      } else {
-        const editField = event.target.textContent;
-
-        // console.log(this.editField);
-        const userUpdate = {
-          userId: this.userArray[id].userId,
-          nrDays: editField
-        };
-        this.userService.changeUserExpiration(userUpdate);
-        this.getUserList();
-      }
-    }
-
-
-    updateDeviceList(id: number, property: string, event: any) {
-      if (property === 'deviceName') {
-
-          console.log('in changing device name');
-          const editField = event.target.textContent;
-          console.log('edit field: ' + editField);
-          const deviceUpdate = {
-          deviceId: this.deviceResult[id].deviceId,
-          deviceName: editField,
-          deviceTopic: this.deviceResult[id].deviceTopic,
-          devicePriorityType: this.deviceResult[id].devicePriority,
-          // tslint:disable-next-line: quotemark
-          deviceStates: ["ON", "OFF", "OFFLINE"]
-          };
-
-          console.log('object: ' + JSON.stringify(deviceUpdate));
-          this.deviceService.editDevice(deviceUpdate).subscribe(
-            ( res: Response) => {
-              if (res.status !== 200) {
+      console.log('object: ' + JSON.stringify(deviceUpdate));
+      this.deviceService.editDevice(deviceUpdate).subscribe(
+        ( res: Response) => {
+          if (res.status !== 200) {
                 this.deviceChangeFailed = true;
               }
-           });
+          });
 
-      } else if (property === 'deviceTopic') {
-          console.log('in changing device topic');
+    } else if (property === 'deviceTopic') {
+        // changing device topic
 
-          const editField = event.target.textContent;
-          const deviceUpdate = {
+        const editField = event.target.textContent;
+        const deviceUpdate = {
           deviceId: this.deviceResult[id].deviceId,
           deviceName: this.deviceResult[id].deviceName,
           deviceTopic: editField,
           devicePriorityType: this.deviceResult[id].devicePriority,
           // tslint:disable-next-line: quotemark
           deviceStates: ["ON", "OFF", "OFFLINE"]
-          };
+        };
 
-          console.log('object: ' + JSON.stringify(deviceUpdate));
-          this.deviceService.editDevice(deviceUpdate).subscribe(
-            ( res: Response) => {
+        this.deviceService.editDevice(deviceUpdate).subscribe(
+          ( res: Response) => {
               if (res.status !== 200) {
                 this.deviceChangeFailed = true;
               }
            });
 
       } else {
-          console.log('changing device priortity');
+          // changing device priortity
 
-          console.log('priority type change: ' + this.devicePriority);
-          console.log(this.deviceResult[id]);
           const deviceUpdate = {
           deviceId: this.deviceResult[id].deviceId,
           deviceName: this.deviceResult[id].deviceName,
@@ -195,7 +190,7 @@ export class SettingsComponent implements OnInit {
           // tslint:disable-next-line: quotemark
           deviceStates: ["ON", "OFF", "OFFLINE"]
           };
-          console.log('object: ' + JSON.stringify(deviceUpdate));
+          // console.log('object: ' + JSON.stringify(deviceUpdate));
           this.deviceService.editDevice(deviceUpdate).subscribe(
             ( res: Response) => {
               if (res.status !== 200) {
@@ -203,61 +198,12 @@ export class SettingsComponent implements OnInit {
               }
            });
       }
-    }
-
-    resolveUserType(userType) {
-      if (userType === 'ROLE_RESIDENT') {
-        return true;
-      } else {
-        return false;
-
-      }
-    }
-
-    removeUser(id: any) {
-      this.userRemoveFailed = false;
-      this.userService.removeUser(id).subscribe();
-      this.userArray.splice(id, 1);
-      return;
-    }
-
-    changeValue(id: number, property: string, event: any) {
-      this.editField = event.target.textContent;
-
-    }
-
-    changeSelectValue(priority: string) {
-      console.log('priority selected: ' + priority);
-      this.devicePriority = priority;
-    }
-
-  openDialog(modalName) {
-    console.log('name: ' + modalName);
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.autoFocus = true;
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '400px';
-
-    let dialogRef;
-    if (modalName === 'DeviceModalComponent') {
-      dialogRef = this.dialog.open(DeviceModalComponent, dialogConfig);
-    } else {
-      dialogRef = this.dialog.open(GeneratorModalComponent, dialogConfig);
-    }
-
-    dialogRef.afterClosed().subscribe(
-      data => {this.formData = data; }
-    );
   }
 
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.deviceNames.filter(option => option.toLowerCase().includes(filterValue));
-  }
-
+  /**
+   * Returns all details of searched / selected device
+   */
   returnDevice() {
-
     if (this.userDeviceName.value === null || this.userDeviceName.value == null) {
       return;
     }
@@ -275,12 +221,6 @@ export class SettingsComponent implements OnInit {
           arrayIndex++;
         }
       }
-    JSON.stringify(this.deviceResult);
-
-    console.log(this.deviceResult);
-
-      // JSON.parse(this.deviceResult)
-
       /* WHAT HAPPENS IF NOT FOUND
       if(this.deviceResult == ''){
         console.log('Not Found')
@@ -290,41 +230,9 @@ export class SettingsComponent implements OnInit {
     return;
   }
 
-  getUserList() {
-    console.log('getting user list');
-    this.userService.getAllUsers().pipe(
-        map( response => {
-            this.userArray =  response,
-            JSON.stringify(this.userArray);
-            console.log(this.userArray);
-            this.isDataAvailable = true;
-        })
-    ).subscribe();
-  }
-
-  /**
-   * Changes guest users' expiry date
-   */
-  editUserExpiry(userForm) {
-    this.userService.changeUserExpiration(userForm);
-  }
-
-  /**
-   * Changes users Type between Guest and Resident
-   */
-  editUserType(userForm) {
-    this.userService.changeUserType(userForm.value);
-  }
-
-  /**
-   * Edits device propertities
-   */
-  editDevice(deviceForm) {
-    this.deviceService.editDevice(deviceForm.value);
-  }
-
   /**
    * Removes a device from the system
+   * @param deviceId;
    */
   removeDevice(deviceId) {
     let deviceObject: any;
@@ -360,6 +268,85 @@ export class SettingsComponent implements OnInit {
   }
 
   /**
+   * Retrieves list of all system users
+   */
+  getUserList() {
+    console.log('getting user list');
+    this.userService.getAllUsers().pipe(
+        map( response => {
+            this.userArray =  response,
+            JSON.stringify(this.userArray);
+            console.log(this.userArray);
+            this.isDataAvailable = true;
+        })
+    ).subscribe();
+  }
+
+  /**
+   * change user details
+   * @param id: table id
+   * @param property: user property being changed
+   * @param event: click | key press
+   */
+  updateUserList(id: number, property: string, event: any) {
+      // change users' type:
+      if (property === 'userType') {
+        console.log(this.userArray[id].userName);
+        if (this.userArray[id].userType === 'ROLE_RESIDENT') {
+          const userUpdate = {
+            userId: this.userArray[id].userId ,
+            userType:  'ROLE_GUEST'
+           };
+          this.userService.changeUserType(userUpdate);
+
+        } else {
+          const userUpdate = {
+            userId: this.userArray[id].userId ,
+            userType:  'ROLE_RESIDENT'
+
+           };
+          this.userService.changeUserType(userUpdate);
+          this.getUserList();
+        }
+
+      } else {
+        // change users' expiration:
+        const editField = event.target.textContent;
+        const userUpdate = {
+          userId: this.userArray[id].userId,
+          nrDays: editField
+        };
+        this.userService.changeUserExpiration(userUpdate);
+        this.getUserList();
+      }
+    }
+
+  /**
+   * Find user type of user within the array
+   * @param userType: user role
+   * @returns Boolean
+   */
+  resolveUserType(userType) {
+    if (userType === 'ROLE_RESIDENT') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Remove user from system
+   * @param id: users' id
+   */
+  removeUser(id: any) {
+      this.userRemoveFailed = false;
+      this.userService.removeUser(id).subscribe();
+      this.userArray.splice(id, 1);
+      return;
+  }
+
+  // Generator Functions
+  /**
    * Add new power generator to system
    */
   addPowerGenerator(genForm) {
@@ -378,5 +365,53 @@ export class SettingsComponent implements OnInit {
    */
   removePowerGenerator(generatorId) {
     this.generatorService.removePowerGenerator(generatorId);
+  }
+
+  // Additional Helper Functions
+  /**
+   * Helper function
+   * Function used when key up event is triggered
+   * @param id: table index
+   * @param property;
+   * @param event: key up
+   */
+    changeValue(id: number, property: string, event: any) {
+      this.editField = event.target.textContent;
+
+    }
+
+    /**
+     * Helper function
+     * Opens modal for device or generator form
+     * @param modalName: name of which modal to open
+     */
+    openDialog(modalName) {
+
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.autoFocus = true;
+      dialogConfig.disableClose = true;
+      dialogConfig.width = '400px';
+
+      let dialogRef;
+      if (modalName === 'DeviceModalComponent') {
+        dialogRef = this.dialog.open(DeviceModalComponent, dialogConfig);
+      } else {
+        dialogRef = this.dialog.open(GeneratorModalComponent, dialogConfig);
+      }
+
+      // Does this work ??? What does it do?
+      dialogRef.afterClosed().subscribe(
+        data => {this.formData = data; }
+      );
+  }
+
+  /**
+   * Helper function
+   * Filters device array during search
+   * @param value: string searched for in array
+   */
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.deviceNames.filter(option => option.toLowerCase().includes(filterValue));
   }
 }
