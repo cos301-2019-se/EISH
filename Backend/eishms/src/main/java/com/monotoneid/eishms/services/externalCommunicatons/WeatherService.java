@@ -48,7 +48,7 @@ public class WeatherService {
     // private String iconURL = "http://openweathermap.org/img/wn/";
     private String parameters = "city=Pretoria,ZA&key=a3c3c82616b444acad57349c4ad64cbd";
     private String api = "https://api.weatherbit.io/v2.0/current?" + parameters;
-    private final long rate = 25000;
+    private final long rate = 900000;
     private final long delay = 30000;
 
     /** 

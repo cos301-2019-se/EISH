@@ -53,8 +53,15 @@ public class UserPresenceEndPointController {
     * @return an object with the presence of the user
     */
     @GetMapping(value = "/presence", params = {"userId"})
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public ResponseEntity<Object> getUserPresence(
         @RequestParam(value = "userId", required = true) long userId) {
         return userPresenceService.getCurrentUserPresence(userId);
+    }
+
+    @GetMapping(value = "/presences")
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    public List<HomeUserPresence> retrieveAllPresentUsers() {
+        return userPresenceService.findHomeUsersThatArePresent();
     }
 }

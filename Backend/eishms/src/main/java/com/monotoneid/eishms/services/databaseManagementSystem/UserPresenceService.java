@@ -7,6 +7,7 @@ import com.monotoneid.eishms.datapersistence.repositories.Users;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minidev.json.JSONObject;
@@ -31,7 +32,8 @@ public class UserPresenceService {
      * @param newHomeUserPresence
      * @param newHomeUserPresenceTimestamp
      */
-    public void addUserPresence(long referenceUserId, boolean newHomeUserPresence, 
+    public void addUserPresence(long referenceUserId, 
+        boolean newHomeUserPresence, 
         Timestamp newHomeUserPresenceTimestamp) {
         try {            
             HomeUser foundHomeUser = usersRepository.findById(referenceUserId)
@@ -140,11 +142,10 @@ public class UserPresenceService {
             boolean isPresent = foundHomeUserPresence.getHomeUserPresence();
             JSONObject responseObject = new JSONObject();
             if (isPresent) {
-                responseObject.put("homeUserPresence",  "User is home!");
+                responseObject.put("homeUserPresence", true);
                 return new ResponseEntity<>(responseObject,HttpStatus.OK);
             } else {
-                
-                responseObject.put("message","User is not at home!");
+                responseObject.put("homeUserPresence", false);
                 return new ResponseEntity<>(responseObject,HttpStatus.OK);
             }
         } catch (Exception e) {
@@ -153,5 +154,26 @@ public class UserPresenceService {
         }
 
     }
+
+    public List<HomeUserPresence> findHomeUsersThatArePresent() {
+        try {
+            List<HomeUser> currentHomeUsers = usersRepository.findAll();
+            List<HomeUserPresence> currentUserPresence = new ArrayList<HomeUserPresence>();
+            for(int i = 0; i < currentHomeUsers.size(); i++) {
+                HomeUserPresence tempUserPresence = userPresenceRespository.findCurrentHomeUserPresence(
+                    currentHomeUsers.get(i).getUserId())
+                            .orElseThrow(() -> new ResourceNotFoundException("one or more users presence does not exist!"));
+                if (tempUserPresence != null) {
+                    if (tempUserPresence.getHomeUserPresence() == true) {
+                        currentUserPresence.add(tempUserPresence);
+                    }
+                }
+            } 
+            return currentUserPresence;
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage() + "!");
+            throw e;
+        }  
+     }
 
 }

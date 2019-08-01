@@ -46,6 +46,7 @@ public interface GeneratorGenerations extends JpaRepository<GeneratorGeneration,
 
     //current till fixed end
     //this hour 
+    //@SupressWarning()
     @Query(value = "select  * from generatorgeneration where generatorid= ?1 and generatorgenerationtimestamp between date_trunc('hour',now()) and now() order by generatorgenerationtimestamp asc", nativeQuery = true)
     public Optional<List<GeneratorGeneration>> findByGeneratorGenerationIdForThisHour(long generatorId);
     
@@ -64,5 +65,9 @@ public interface GeneratorGenerations extends JpaRepository<GeneratorGeneration,
     //this year
     @Query(value = "select  * from generatorgeneration where generatorid= ?1 and generatorgenerationtimestamp between date_trunc('year',now()) and now()  order by generatorgenerationtimestamp asc", nativeQuery = true)
     public Optional<List<GeneratorGeneration>> findByGeneratorGenerationIdForThisYear(long generatorId);
+
+    //average of device consumptions every minute
+    @Query(value="select AVG(generatorgeneration) from generatorgeneration where generatorgenerationtimestamp  between now()- interval '1 minutes' and now() group by generatorid", nativeQuery = true)
+    public List<Float> findAverageEveryOneMinutes();
 
 }

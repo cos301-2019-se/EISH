@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+/**
+ * CLASS WEATHER. 
+ */
 
 @Entity(name = "weather")
 @Table(name = "weather")
@@ -19,37 +22,71 @@ public class Weather {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "weatherid", columnDefinition = "serial", updatable = false, nullable = false)
+    @Column(name = "weatherid", 
+            columnDefinition = "serial", 
+            updatable = false, 
+            nullable = false)
     private long weatherid;
 
-    @Column(name = "weatherlocation", columnDefinition = "text", updatable = true, nullable = false)
+    @Column(name = "weatherlocation", 
+            columnDefinition = "text", 
+            updatable = true, 
+            nullable = false)
     private String weatherLocation;
 
-    @Column(name = "weatherdescription", columnDefinition = "text", updatable = true, nullable = false)
+    @Column(name = "weatherdescription", 
+            columnDefinition = "text", 
+            updatable = true, 
+            nullable = false)
     private String weatherDescription;
 
-    @Column(name = "weathericon", columnDefinition = "text", updatable = true, nullable = false)
+    @Column(name = "weathericon", 
+            columnDefinition = "text", 
+            updatable = true, 
+            nullable = false)
     private String weatherIcon;
 
-    @Column(name = "weathertemperature", columnDefinition = "float", updatable = true, nullable = false)
+    @Column(name = "weathertemperature", 
+            columnDefinition = "float", 
+            updatable = true, 
+            nullable = false)
     private float weatherTemperature;
     
-    @Column(name = "weatherhumidity", columnDefinition = "int", updatable = true, nullable = false)
+    @Column(name = "weatherhumidity", 
+            columnDefinition = "int", 
+            updatable = true, 
+            nullable = false)
     private int weatherHumidity;
     
-    @Column(name = "weatherwindspeed", columnDefinition = "float", updatable = true, nullable = false)
+    @Column(name = "weatherwindspeed", 
+            columnDefinition = "float", 
+            updatable = true, 
+            nullable = false)
     private float weatherWindSpeed;
 
-    @Column(name = "weatherpressure", columnDefinition = "float", updatable = true, nullable = false)
+    @Column(name = "weatherpressure", 
+            columnDefinition = "float", 
+            updatable = true, 
+            nullable = false)
     private float weatherPressure;
 
-    @Column(name = "weatherlastobtime", columnDefinition = "timestamp", updatable = true, nullable = false)
-    private Timestamp weatherLastOBTime;
+    @Column(name = "weatherlastobtime", 
+            columnDefinition = "timestamp", 
+            updatable = true, 
+            nullable = false)
+    private Timestamp weatherLastObTime;
     
     public Weather() {}
 
-    public Weather(String newLocation, String newDescription, String newIcon, float newTemp, int newHumidity, float newWindSpeed,
-    float newPressure, Timestamp newWeatherLastOBTime) {
+    /**. */
+    public Weather(String newLocation, 
+        String newDescription, 
+        String newIcon, 
+        float newTemp, 
+        int newHumidity, 
+        float newWindSpeed,
+        float newPressure, 
+        Timestamp newWeatherLastObTime) {
         setWeatherLocation(newLocation);
         setWeatherDescription(newDescription);
         setWeatherIcon(newIcon);
@@ -57,7 +94,7 @@ public class Weather {
         setWeatherHumidity(newHumidity);
         setWeatherWindSpeed(newWindSpeed);
         setWeatherPressure(newPressure);
-        setWeatherLastOBTime(newWeatherLastOBTime);
+        setWeatherLastObTime(newWeatherLastObTime);
     }
 
     //Getters
@@ -89,8 +126,8 @@ public class Weather {
         return this.weatherPressure;
     }
 
-    public Timestamp getWeatherLastOBTime() {
-        return this.weatherLastOBTime;
+    public Timestamp getWeatherLastObTime() {
+        return this.weatherLastObTime;
     }
 
     //Setters
@@ -98,7 +135,7 @@ public class Weather {
         this.weatherLocation = newWeatherLocation;
     }
 
-    public void setWeatherDescription (String newWeatherDescription) {
+    public void setWeatherDescription(String newWeatherDescription) {
         this.weatherDescription = newWeatherDescription;
     }
 
@@ -122,7 +159,7 @@ public class Weather {
         this.weatherPressure = newWeatherPressure;
     }
 
-    public void setWeatherLastOBTime(Timestamp newWeatherLastOBTime) {
-        this.weatherLastOBTime = newWeatherLastOBTime;
+    public void setWeatherLastObTime(Timestamp newWeatherLastObTime) {
+        this.weatherLastObTime = newWeatherLastObTime;
     }
 }
