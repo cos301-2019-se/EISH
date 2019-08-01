@@ -1,19 +1,15 @@
-package com.monotoneid.eishms.services.mqttCommunications.mqttLocation;
+package com.monotoneid.eishms.services.mqttcommunications.mqttlocation;
 
-public class MQTTLocation {
-    String serverUrl = "ssl://serverip:1883";
+public class MqttLocation {
+    String serverUrl = "tcp://127.0.0.1:1883";
     /* This Requires no ssl */
     //String caFilePath = "/your_ssl/cacert.pem";
     //String clientCrtFilePath = "/your_ssl/client.pem";
     //String clientKeyFilePath = "/your_ssl/client.key";
-    String mqttUserName = "guest";
-    String mqttPassword = "123123";
+    String mqttUserName = "eishms";
+    String mqttPassword = "eishms";
 
-    //User Presence Repository
-
-    //User Model
-
-    public MQTTLocation() {
+    public MqttLocation() {
 
     }
 } 

@@ -1,5 +1,7 @@
-package com.monotoneid.eishms.services.mqttCommunications.mqttLocation;
+package com.monotoneid.eishms.services.mqttcommunications.mqttlocation;
 
-public class MQTTLocationManager {
-    
+public class MqttLocationManager {
+    public MqttLocationManager() {
+        
+    }
 }
