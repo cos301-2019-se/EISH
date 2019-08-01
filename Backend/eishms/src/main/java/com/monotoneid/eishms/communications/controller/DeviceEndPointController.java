@@ -2,7 +2,7 @@ package com.monotoneid.eishms.communications.controller;
 
 import com.monotoneid.eishms.datapersistence.models.Device;
 import com.monotoneid.eishms.services.databaseManagementSystem.DeviceService;
-import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MqttDeviceManager;
+import com.monotoneid.eishms.services.mqttcommunications.mqttdevices.MqttDeviceManager;
 
 import java.util.List;
 import javax.validation.Valid;
