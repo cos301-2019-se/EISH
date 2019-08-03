@@ -44,6 +44,7 @@ import { GenerationComponent } from './pages/generation/generation.component';
 import { GenerationChartComponent } from './pages/generation/generation-chart/generation-chart.component';
 import { SingleDeviceComponent } from './pages/devices/single-device/single-device.component';
 import { GeneratorModalComponent } from './templates/forms/generator-modal/generator-modal.component';
+import { NotificationsComponent } from './pages/notifications/notifications.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { GeneratorModalComponent } from './templates/forms/generator-modal/gener
     GenerationComponent,
     GenerationChartComponent,
     SingleDeviceComponent,
-    GeneratorModalComponent
+    GeneratorModalComponent,
+    NotificationsComponent
   ],
   imports: [
     BrowserModule,

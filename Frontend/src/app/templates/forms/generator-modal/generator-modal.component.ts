@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import {MatDialogRef} from '@angular/material';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GeneratorService } from 'src/app/services/generators/generator.service';
+import {map, startWith} from 'rxjs/operators';
 @Component({
   selector: 'app-generator-modal',
   templateUrl: './generator-modal.component.html',
@@ -35,13 +36,18 @@ export class GeneratorModalComponent implements OnInit {
     } else {
       const generator = {
         generatorName: this.addGeneratorForm.get('generatorName').value,
-        generatorURL: this.addGeneratorForm.get('generatorURL').value, // small case url?
-        generatorPriority: this.addGeneratorForm.get('generatorPriorityType').value,
+        generatorUrl: this.addGeneratorForm.get('generatorURL').value, // small case url?
+        generatorPriorityType: this.addGeneratorForm.get('generatorPriorityType').value,
         // tslint:disable-next-line: quotemark
         generatorStates: ["ONLINE", "OFFLINE"]
       };
       console.log(generator);
       this.generatorService.addPowerGenerator(generator);
+      this.generatorService.getAllPowerGenerators().pipe(
+        map( response => {
+          console.log(response);
+        })
+      ).subscribe();
       this.dialogRef.close(this.addGeneratorForm.value);
     }
   }

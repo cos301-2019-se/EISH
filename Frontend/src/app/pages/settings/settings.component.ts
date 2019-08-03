@@ -350,6 +350,7 @@ export class SettingsComponent implements OnInit {
    * Add new power generator to system
    */
   addPowerGenerator(genForm) {
+
     this.generatorService.addPowerGenerator(genForm.value);
   }
 

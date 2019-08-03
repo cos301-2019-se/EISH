@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MAT_DRAWER_DEFAULT_AUTOSIZE } from '@angular/material';
 import { UserAccessControlService } from '../services/user/user-access-control.service';
+import { NotificationsService } from '../services/notifications/notifications.service';
+import { Message } from '@stomp/stompjs';
 
 @Component({
   selector: 'app-side-nav',
@@ -19,14 +21,18 @@ export class SideNavComponent implements OnInit {
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches)
-    );
+  );
 
-  constructor(private breakpointObserver: BreakpointObserver, private userService: UserAccessControlService) {
+  constructor(private breakpointObserver: BreakpointObserver,
+              private userService: UserAccessControlService,
+              private notificationService: NotificationsService) {
     this.initials = 'EU';
   }
 
   ngOnInit() {
     this.initials = 'EU';
+    this.notificationService.notificationSocket().subscribe();
+
   }
 
   toggle(drawer) {
@@ -39,10 +45,11 @@ export class SideNavComponent implements OnInit {
   }
 
   getUserPresence() {
-    this.userService.getUserPresence(); /* .pipe(
+    this.userService.getUserPresence().pipe(
       map(response => {
-          userList  = response;
-      )
-    ).subscribe*/
+          console.log(response);
+          this.userList  = response;
+      })
+    ).subscribe();
   }
 }

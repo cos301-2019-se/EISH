@@ -14,7 +14,7 @@ export class UserAccessControlService {
    */
 
  /* Variables: */
-  ROOT_URL = 'http://192.168.8.111:8080/api/';
+  ROOT_URL = 'http://192.168.8.100:8080/api/';
   data: any;
   JSON_URL = 'assets/data/';
   constructor( private http: HttpClient) { }
@@ -173,7 +173,8 @@ export class UserAccessControlService {
    */
   getUserPresence(): Observable<User []> {
     console.log('user presence');
-    return this.http.get<User []>(this.ROOT_URL + '');
+    return this.http.get<User []>(this.ROOT_URL + 'user/presences');
+    // user/presence/userid: for specific user presence
   }
 
   /**
