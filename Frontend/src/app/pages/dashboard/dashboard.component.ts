@@ -7,6 +7,7 @@ import { Weather } from 'src/app/models/weather-model';
 import { GeneratorService } from 'src/app/services/generators/generator.service';
 import { pipe } from 'rxjs';
 import { ConsumptionService } from 'src/app/services/consumption/consumption.service';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -24,8 +25,28 @@ export class DashboardComponent implements OnInit {
   batteryObject: any;
   weather: any;
 
-  constructor(private rxStompService: RxStompService, private weatherService: WeatherService,
-              private generatorService: GeneratorService, private consumptionService: ConsumptionService) {
+  // weather:Weather;
+  thresholdConfig = {
+    0: {color: 'red'},
+    5: {color: 'orange'},
+    15: {color: 'yellow'},
+    49: {color: 'yellowgreen'},
+    80: {color: 'green'}
+  };
+
+  // for battery
+   gaugeMin = 0;
+   gaugemax = 100;
+   gaugeCap = 'round';
+   gaugeType = 'full';
+   gaugeValue = 25;
+   gaugeAppendText = '%';
+   gaugeThickness = 8;
+   state = 'Charging';
+  constructor(private rxStompService: RxStompService,
+              private weatherService: WeatherService,
+              private generatorService: GeneratorService,
+              private consumptionService: ConsumptionService) {
     this.weather = {
       weatherTemperature: null,
       weatherIcon: null,

@@ -9,6 +9,7 @@ import { UserAccessControlService } from 'src/app/services/user/user-access-cont
 import { GeneratorService } from 'src/app/services/generators/generator.service';
 import { DeviceService } from 'src/app/services/devices/device.service';
 import { Response } from 'selenium-webdriver/http';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'app-settings',
@@ -47,7 +48,23 @@ export class SettingsComponent implements OnInit {
   deviceChangeFailed: boolean;
   deviceArray: any;
   userArray: any;
+  private notifier: NotifierService;
 
+  /**
+   * Functions:
+   */
+
+  /**
+   * Default constuctor
+   */
+  constructor(private generatorService: GeneratorService,
+              private userService: UserAccessControlService,
+              private deviceService: DeviceService,
+              private dialog: MatDialog,
+              private notifierService: NotifierService) { }
+  /**
+   * default function executed on intialisation of page
+   */
   ngOnInit() {
     this.deviceService.getAllDevices().pipe(
       map( response => {
@@ -76,6 +93,13 @@ export class SettingsComponent implements OnInit {
     this.userChangeFailed = false;
     this.deviceRemoveFailed = false;
     this.deviceChangeFailed = false;
+
+    this.notifier = this.notifierService;
+    this.notifier.notify( 'success', 'You are awesome! I mean it!' );
+    this.notifier.notify( 'warning', 'What it do babbbbyyyyyyy!!!' );
+    this.notifier.notify( 'error', 'Damn!' );
+
+
   }
 
   getDeviceList() {
