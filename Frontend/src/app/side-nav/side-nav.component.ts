@@ -37,7 +37,7 @@ export class SideNavComponent implements OnInit {
   ngOnInit() {
     this.initials = 'EU';
     this.notificationService.notificationSocket().subscribe();
-    sessionStorage.setItem('userType', 'ROLE_GUEST');
+    sessionStorage.setItem('userType', 'ROLE_ADMIN');
     if (sessionStorage.getItem('userType') === 'ROLE_ADMIN') {
       this.isAdmin = true;
     } else {
