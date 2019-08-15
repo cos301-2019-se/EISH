@@ -32,7 +32,7 @@ import { MatProgressBarModule, MatCardModule,
         MatListModule } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { DeviceModalComponent } from './pages/settings/device-modal/device-modal.component';
+import { DeviceModalComponent } from './templates/forms/device-modal/device-modal.component';
 import 'hammerjs';
 import { MDBBootstrapModule, WavesModule, InputsModule, ButtonsModule } from 'node_modules/angular-bootstrap-md';
 import {DeviceService} from './services/devices/device.service';
@@ -108,7 +108,9 @@ const customNotifierOptions: NotifierOptions = {
     DailyPlannerComponent,
     GenerationComponent,
     GenerationChartComponent,
-    SingleDeviceComponent
+    SingleDeviceComponent,
+    GeneratorModalComponent,
+    NotificationsComponent
   ],
   imports: [
     BrowserModule,
@@ -159,7 +161,7 @@ const customNotifierOptions: NotifierOptions = {
     deps: [InjectableRxStompConfig]
   }],
   bootstrap: [AppComponent],
-  entryComponents: [DeviceModalComponent ]
+  entryComponents: [DeviceModalComponent, GeneratorModalComponent]
 })
 
 export class AppModule {}

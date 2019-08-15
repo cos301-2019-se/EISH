@@ -11,7 +11,7 @@
       <a mat-list-item routerLink="/homepage/consumption" (click)="toggle(drawer)">Consumption</a>
       <!-- <a mat-list-item routerLink="/homepage/forecast" (click)="toggle(drawer)">Forecasting</a> -->
       <a mat-list-item routerLink="/homepage/generation" (click)="toggle(drawer)">Generation</a>
-      <a mat-list-item routerLink="/homepage/settings" (click)="toggle(drawer)">Settings</a>
+      <a mat-list-item routerLink="/homepage/settings" (click)="toggle(drawer)" *ngIf="isAdmin">Settings</a>
     </mat-nav-list>
   </mat-sidenav>
 
@@ -38,6 +38,7 @@
       <mat-menu #whosHome="matMenu">
         <button mat-menu-item *ngFor="let user of users" ><img style="width:20px; height: 20px; padding-right: 5px" src="../../assets/icons/whosHome.png"> {{user}} </button>
       </mat-menu>
+
       <mat-menu #profileMenu="matMenu">
           <button mat-menu-item routerLink="/register/Change">Edit credentials</button>
           <button mat-menu-item routerLink="">Logout</button>

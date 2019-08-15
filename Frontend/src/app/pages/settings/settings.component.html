@@ -10,7 +10,7 @@
           add, remove and edit device properties
         </mat-panel-description>
       </mat-expansion-panel-header>
-        <button mat-raised-button (click)="openDialog()" >Add Device</button>
+        <button mat-raised-button (click)="openDialog('DeviceModalComponent')" >Add Device</button>
         <br>
         <br>
         <div class="searchDiv">
@@ -129,7 +129,16 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div>
+          <button mat-raised-button (click)="openDialog('GeneratorModalComponent')" >Add Generator</button>
       </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel (opened)="panelOpenState = true"
+                         (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Home Details
+        </mat-panel-title>
+      </mat-expansion-panel-header>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

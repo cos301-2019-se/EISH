@@ -7,7 +7,7 @@ import { Weather } from 'src/app/models/weather-model';
 })
 export class WeatherService {
 
-  WEATHER_API = 'http://192.168.8.111:8080/api/weather';
+  WEATHER_API = 'http://192.168.8.100:8080/api/weather';
   constructor(private http: HttpClient) { }
 
   getWeather(): Observable<Weather[]> {
