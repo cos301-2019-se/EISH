@@ -132,5 +132,13 @@
           <button mat-raised-button (click)="openDialog('GeneratorModalComponent')" >Add Generator</button>
       </div>
     </mat-expansion-panel>
+    <mat-expansion-panel (opened)="panelOpenState = true"
+                         (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Home Details
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
   </mat-accordion>
 </div>

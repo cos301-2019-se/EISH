@@ -22,17 +22,24 @@ export class SideNavComponent implements OnInit {
     .pipe(
       map(result => result.matches)
   );
+  isAdmin: boolean;
 
   constructor(private breakpointObserver: BreakpointObserver,
               private userService: UserAccessControlService,
               private notificationService: NotificationsService) {
     this.initials = 'EU';
+
   }
 
   ngOnInit() {
     this.initials = 'EU';
     this.notificationService.notificationSocket().subscribe();
-
+    sessionStorage.setItem('userType', 'ROLE_GUEST');
+    if (sessionStorage.getItem('userType') === 'ROLE_ADMIN') {
+      this.isAdmin = true;
+    } else {
+     this.isAdmin = false;
+    }
   }
 
   toggle(drawer) {

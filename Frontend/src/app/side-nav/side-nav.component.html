@@ -11,7 +11,7 @@
       <a mat-list-item routerLink="/homepage/consumption" (click)="toggle(drawer)">Consumption</a>
       <!-- <a mat-list-item routerLink="/homepage/forecast" (click)="toggle(drawer)">Forecasting</a> -->
       <a mat-list-item routerLink="/homepage/generation" (click)="toggle(drawer)">Generation</a>
-      <a mat-list-item routerLink="/homepage/settings" (click)="toggle(drawer)">Settings</a>
+      <a mat-list-item routerLink="/homepage/settings" (click)="toggle(drawer)" *ngIf="isAdmin">Settings</a>
     </mat-nav-list>
   </mat-sidenav>
 

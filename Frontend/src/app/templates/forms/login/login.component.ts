@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
 
   }
 
-  error(): void {
+  loginError(): void {
     this.incorrectCredentials = true;
     // this.loginForm;
   }
