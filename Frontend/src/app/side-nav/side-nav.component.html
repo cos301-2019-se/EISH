@@ -33,7 +33,12 @@
       <span class="example-fill-remaining-space"></span>
 
       <!---toolbar buttons-->
-      <button mat-button (click)="getUserPresence()">Who's Home?</button>
+      <button mat-button [matMenuTriggerFor]="whosHome">Who's Home?</button>
+
+      <mat-menu #whosHome="matMenu">
+        <button mat-menu-item *ngFor="let user of users" ><img style="width:20px; height: 20px; padding-right: 5px" src="../../assets/icons/whosHome.png"> {{user}} </button>
+      </mat-menu>
+
       <mat-menu #profileMenu="matMenu">
           <button mat-menu-item routerLink="/register/Change">Edit credentials</button>
           <button mat-menu-item routerLink="">Logout</button>
@@ -44,8 +49,8 @@
     <!--CONTENT OF PAGE-->
     
     <div class="pageContent">
-        <!-- <router-outlet name="navOutlet"></router-outlet> -->
         <router-outlet></router-outlet>
-    </div>
+        <notifier-container></notifier-container>
+   </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
