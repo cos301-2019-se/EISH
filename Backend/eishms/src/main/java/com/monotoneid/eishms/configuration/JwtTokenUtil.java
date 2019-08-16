@@ -5,10 +5,13 @@ import io.jsonwebtoken.*;
 import java.util.Date;
 
 import com.monotoneid.eishms.datapersistence.models.HomeUserDetails;
+import com.monotoneid.eishms.datapersistence.repositories.Blacklist;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +24,9 @@ public class JwtTokenUtil {
  
     @Value("${eishms.jwtExpiration}")
     private int jwtExpiration;
+
+    @Autowired
+    private Blacklist blacklist;
  
     public String generateJwtToken(Authentication authentication) {
  
@@ -43,6 +49,11 @@ public class JwtTokenUtil {
  
     public boolean validateJwtToken(String authToken) {
         try {
+            try {
+                if (blacklist.isTokenBlacklisted(authToken)) {
+                    return false;
+                }                
+            } catch(NotFoundException nfe) {}
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {

@@ -3,7 +3,7 @@ package com.monotoneid.eishms.services.mqttcommunications.mqttdevices;
 import com.monotoneid.eishms.datapersistence.models.Device;
 import com.monotoneid.eishms.datapersistence.repositories.Devices;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
-import com.monotoneid.eishms.services.databaseManagementSystem.DeviceConsumptionService;
+import com.monotoneid.eishms.services.databasemanagementsystem.DeviceConsumptionService;
 
 import java.util.ArrayList;
 import java.util.List;

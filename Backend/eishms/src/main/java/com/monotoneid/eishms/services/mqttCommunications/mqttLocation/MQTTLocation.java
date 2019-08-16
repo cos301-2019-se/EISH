@@ -7,9 +7,11 @@ import java.util.concurrent.CountDownLatch;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.monotoneid.eishms.datapersistence.models.HomeDetails;
 import com.monotoneid.eishms.datapersistence.models.HomeUser;
 import com.monotoneid.eishms.datapersistence.repositories.UserPresences;
-import com.monotoneid.eishms.services.databaseManagementSystem.UserPresenceService;
+import com.monotoneid.eishms.services.databasemanagementsystem.UserPresenceService;
+import com.monotoneid.eishms.services.filemanagement.HomeDetailsService;
 import com.monotoneid.eishms.services.mqttcommunications.mqttlocation.MqttLocationManager;
 
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
@@ -24,10 +26,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class MqttLocation {
     private String serverUrl = "tcp://127.0.0.1:1883";
-    /* This Requires no ssl */
-    //String caFilePath = "/your_ssl/cacert.pem";
-    //String clientCrtFilePath = "/your_ssl/client.pem";
-    //String clientKeyFilePath = "/your_ssl/client.key";
+    
+    @Autowired
+    private HomeDetailsService homeDetailsService;
+
     private String mqttUserName = "eishms";
     private String mqttPassword = "eishms";
     private HomeUser homeUser;
@@ -38,6 +40,7 @@ public class MqttLocation {
     private int[] qoss;
     private String[] subscriptionTopics;
     private CountDownLatch countDownLatch;
+    private boolean isPresent;
 
     @Autowired 
     private UserPresenceService userPresenceService; 
@@ -47,7 +50,8 @@ public class MqttLocation {
         this.locationManager = locationManager;
         this.asyncClientId = UUID.randomUUID().toString();
         this.receivedLocation = false;
-        this.countDownLatch = new CountDownLatch(1);
+        this.isPresent = false;
+        //this.countDownLatch = new CountDownLatch(1);
 
         try {
             this.asyncClient = new MqttAsyncClient(serverUrl, asyncClientId);
@@ -63,7 +67,7 @@ public class MqttLocation {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     String strMessage;
-                    if (topic.matches("owntracks/eishms/" + homeUser.getUserLocationTopic())) {
+                    if (topic.matches("owntracks/eishms/" + homeUser.getUserLocationTopic() + "/event")) {
                         strMessage = new String(message.getPayload().toString());
                         handleLocationMessage(strMessage);
                         countDownLatch.countDown();
@@ -126,7 +130,16 @@ public class MqttLocation {
         }
 
         //Get home details!!!
+        try {
+            HomeDetails homeDetails = homeDetailsService.readFromFile();
+            homeName = homeDetails.getHomeName();
+            homeLatitude = homeDetails.getHomeLatitude();
+            homeLongitude = homeDetails.getHomeLongitude();
+            radius = homeDetails.getHomeRadius();
+        } catch(Exception e) {
 
+        }
+        
         String tmpRegionName = "";
         for (int i = 0; i < regions.size(); i++) {
             tmpRegionName = regions.get(i).getAsString();
@@ -143,14 +156,16 @@ public class MqttLocation {
             distanceFromHome = distance(homeLongitude, homeLatitude, longitude, latitude);
             if (distanceFromHome <= radius) {
                 presencTimestamp = new Timestamp(timeOfEvent);
-                userPresenceService.addUserPresence(homeUser.getUserId(), true, presencTimestamp);
+                this.isPresent = true;
+                userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presencTimestamp);
             }
         }
 
         if (regionName.matches("") && jsonContent.has("tst")) {
             if (userName.matches(homeUser.getUserLocationTopic())) {
                 presencTimestamp = new Timestamp(timeOfEvent);
-                userPresenceService.addUserPresence(homeUser.getUserId(), false, presencTimestamp);
+                this.isPresent = false;
+                userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presencTimestamp);
             }
         }
     }
@@ -178,5 +193,15 @@ public class MqttLocation {
         return (degrees * Math.PI / 180.0);
     }
 
-    public 
+    public boolean getCurrentPresence() {
+        try {
+            this.countDownLatch = new CountDownLatch(1);
+            this.asyncClient.publish("", "".getBytes(), 2, false).waitForCompletion();  
+            this.countDownLatch.await();
+            //this.countDownLatch.await(timeout, unit);     
+        } catch (Exception e) {}
+
+        return this.isPresent;
+    }
+
 } 
