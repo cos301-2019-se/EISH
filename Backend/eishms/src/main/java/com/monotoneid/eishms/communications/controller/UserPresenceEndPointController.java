@@ -1,7 +1,7 @@
 package com.monotoneid.eishms.communications.controller;
 
 import com.monotoneid.eishms.datapersistence.models.HomeUserPresence;
-import com.monotoneid.eishms.services.databaseManagementSystem.UserPresenceService;
+import com.monotoneid.eishms.services.databasemanagementsystem.UserPresenceService;
 
 import java.util.List;
 

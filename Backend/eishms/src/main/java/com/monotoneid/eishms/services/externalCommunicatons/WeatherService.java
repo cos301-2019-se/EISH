@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.externalCommunicatons;
+package com.monotoneid.eishms.services.externalcommunicatons;
 
 
 import java.io.BufferedReader;

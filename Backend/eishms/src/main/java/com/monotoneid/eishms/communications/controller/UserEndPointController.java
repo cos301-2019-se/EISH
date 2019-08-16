@@ -3,7 +3,7 @@ package com.monotoneid.eishms.communications.controller;
 import com.monotoneid.eishms.datapersistence.models.HomeKey;
 import com.monotoneid.eishms.datapersistence.models.HomeUser;
 import com.monotoneid.eishms.datapersistence.repositories.HomeKeys;
-import com.monotoneid.eishms.services.databaseManagementSystem.UserService;
+import com.monotoneid.eishms.services.databasemanagementsystem.UserService;
 
 import java.util.ArrayList;
 import java.util.List;

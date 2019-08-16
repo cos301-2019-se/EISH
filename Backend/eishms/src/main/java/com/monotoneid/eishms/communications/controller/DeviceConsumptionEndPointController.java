@@ -1,7 +1,7 @@
 package com.monotoneid.eishms.communications.controller;
 
 import com.monotoneid.eishms.datapersistence.models.DeviceConsumption;
-import com.monotoneid.eishms.services.databaseManagementSystem.DeviceConsumptionService;
+import com.monotoneid.eishms.services.databasemanagementsystem.DeviceConsumptionService;
 
 import java.util.List;
 

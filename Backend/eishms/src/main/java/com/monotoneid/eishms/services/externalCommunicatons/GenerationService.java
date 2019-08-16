@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.externalCommunicatons;
+package com.monotoneid.eishms.services.externalcommunicatons;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -8,7 +8,7 @@ import com.google.gson.JsonParser;
 import com.monotoneid.eishms.datapersistence.models.Generator;
 import com.monotoneid.eishms.datapersistence.models.GeneratorGeneration;
 import com.monotoneid.eishms.datapersistence.repositories.GeneratorGenerations;
-import com.monotoneid.eishms.services.databaseManagementSystem.GeneratorService;
+import com.monotoneid.eishms.services.databasemanagementsystem.GeneratorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
