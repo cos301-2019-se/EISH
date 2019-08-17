@@ -68,9 +68,18 @@ public class MqttLocation {
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     String strMessage;
                     if (topic.matches("owntracks/eishms/" + homeUser.getUserLocationTopic() + "/event")) {
+                        System.out.println("About to handle location event");
                         strMessage = new String(message.getPayload().toString());
-                        handleLocationMessage(strMessage);
-                        countDownLatch.countDown();
+                        System.out.println("Payload: " + strMessage);
+                        handleLocationEvent(strMessage);
+                    }
+                    if (topic.matches("owntracks/eishms/" + homeUser.getUserLocationTopic())) {
+                        System.out.println("About to handle location");
+                        strMessage = new String(message.getPayload().toString());
+                        System.out.println("Payload: " + strMessage);
+                        handleLocationEvent(strMessage);
+                        if (countDownLatch.getCount() > 0)
+                            countDownLatch.countDown();
                     }
                 }
             
@@ -91,6 +100,81 @@ public class MqttLocation {
 
     private void initializeTopics() {
         // topics to subscribe to...
+    }
+
+
+    private void handleLocationEvent(String message) {
+        JsonObject jsonContent = new JsonParser().parse(message)
+                                                        .getAsJsonObject();
+        String deviceHomeName = "";
+        String regionName = "";
+        boolean inRegion = false;
+        String userName = "";
+        long timeOfEvent = 0;
+        double longitude = 0;
+        double latitude = 0;
+        String homeName = "";
+        double homeLongitude = 0;
+        double homeLatitude = 0;
+        double radius = 0; //In kilometers
+        double distanceFromHome = 0;                                                        
+
+        if (jsonContent.has("desc")) {
+            deviceHomeName = jsonContent.get("desc").getAsString();
+        }
+        
+        if (jsonContent.has("event")) {
+            String locationEvent = "";
+            locationEvent = jsonContent.get("event").getAsString();
+            inRegion = locationEvent.matches("enter");
+        }
+
+        if (jsonContent.has("lat")) {
+            longitude = jsonContent.get("lat").getAsDouble();
+        }
+
+        if (jsonContent.has("lon")) {
+            latitude = jsonContent.get("lon").getAsDouble();
+        }
+
+        // if (jsonContent.has("tid")) {
+        //     userName = jsonContent.get("tid").getAsString();
+        // }
+
+        if (jsonContent.has("tst")) {
+            timeOfEvent = jsonContent.get("tst").getAsLong();
+        }
+
+        try {
+            HomeDetails homeDetails = homeDetailsService.readFromFile();
+            homeName = homeDetails.getHomeName();
+            homeLatitude = homeDetails.getHomeLatitude();
+            homeLongitude = homeDetails.getHomeLongitude();
+            radius = homeDetails.getHomeRadius();
+        } catch(Exception e) {
+
+        }
+
+        Timestamp presencTimestamp;
+        if ((longitude != 0) && (latitude != 0) 
+            && (homeName.matches(deviceHomeName)) 
+            && homeUser.getUserLocationTopic().matches(userName)) {
+            distanceFromHome = distance(homeLongitude, homeLatitude, longitude, latitude);
+            if (distanceFromHome <= radius) {
+                presencTimestamp = new Timestamp(timeOfEvent);
+                this.isPresent = true;
+                userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presencTimestamp);
+            }
+        }
+
+        if (regionName.matches("") && jsonContent.has("tst")) {
+            if (userName.matches(homeUser.getUserLocationTopic())) {
+                presencTimestamp = new Timestamp(timeOfEvent);
+                this.isPresent = false;
+                userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presencTimestamp);
+            }
+        }
+
     }
 
     private void handleLocationMessage(String message) {

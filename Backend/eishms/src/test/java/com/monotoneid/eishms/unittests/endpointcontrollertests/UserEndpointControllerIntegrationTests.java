@@ -2,7 +2,7 @@ package com.monotoneid.eishms.unittests.endpointcontrollertests;
 
 import com.monotoneid.eishms.communications.controller.UserEndPointController;
 import com.monotoneid.eishms.datapersistence.repositories.Users;
-import com.monotoneid.eishms.services.databaseManagementSystem.UserService;
+import com.monotoneid.eishms.services.databasemanagementsystem.UserService;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
