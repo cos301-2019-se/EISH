@@ -133,6 +133,8 @@ public class MqttLocation {
         double radius = 0; //In kilometers
         double distanceFromHome = 0;  
         
+        System.out.println("......\\\\......\\\\\\.....\\\\\\\\....inside locationEvent() ....////..../////.....////.....");
+
 
         if (jsonContent.has("desc")) {
             deviceHomeName = jsonContent.get("desc").getAsString();
@@ -142,14 +144,6 @@ public class MqttLocation {
             String locationEvent = "";
             locationEvent = jsonContent.get("event").getAsString();
             inRegion = locationEvent.matches("enter");
-        }
-
-        if (jsonContent.has("lat")) {
-            longitude = jsonContent.get("lat").getAsDouble();
-        }
-
-        if (jsonContent.has("lon")) {
-            latitude = jsonContent.get("lon").getAsDouble();
         }
 
         if (jsonContent.has("tst")) {
@@ -167,17 +161,14 @@ public class MqttLocation {
         }
 
         Timestamp presencTimestamp;
-        if ((longitude != 0) && (latitude != 0) 
-            && (homeName.matches(deviceHomeName))) {
-            distanceFromHome = distance(homeLongitude, homeLatitude, longitude, latitude);
-            if (distanceFromHome <= radius) {
-                presencTimestamp = new Timestamp(timeOfEvent);
-                this.isPresent = true;
-                locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presencTimestamp);
-            }
+        if (homeName.matches(deviceHomeName)) {
+            presencTimestamp = new Timestamp(timeOfEvent);
+            this.isPresent = true;
+            System.out.println("......\\\\......\\\\\\.....\\\\\\\\....transition occurredd ....////..../////.....////.....");
+            locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presencTimestamp);
         }
 
-        if (regionName.matches("") && jsonContent.has("tst")) {
+        if (regionName.matches("")) {
             presencTimestamp = new Timestamp(timeOfEvent);
             this.isPresent = false;
             locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presencTimestamp);
@@ -203,10 +194,7 @@ public class MqttLocation {
                     currHomeDetails.setHomeLatitude(currWaypoint.get("lat").getAsDouble());
                     currHomeDetails.setHomeLongitude(currWaypoint.get("lon").getAsDouble());
                     currHomeDetails.setHomeRadius(currWaypoint.get("rad").getAsInt());
-                    currHomeDetails.setHomeAltitude(124);
-                    currHomeDetails.setHomeLocation("Pretoria");
                     newHomeDetails.add(currHomeDetails);
-                    System.out.println("Location Added it to the list");
                 }
             }
         }                                                        
@@ -217,109 +205,48 @@ public class MqttLocation {
                                                         .getAsJsonObject();
         JsonArray regions = null;
         String regionName = "";
-        boolean inRegion = false;
-        String userName = "";
-        long timeOfEvent = 0;
-        double longitude = 0;
-        double latitude = 0;
         String homeName = "";
-        double homeLongitude = 0;
-        double homeLatitude = 0;
-        double radius = 0; //In kilometers
-        double distanceFromHome = 0;
 
-        System.out.println("handleLocationMessage() is called ....????....(()))____+++ ");
-
-        if (jsonContent.has("inregions")) {
-            regions = jsonContent.getAsJsonArray("inregions");
-        }
-        
-        if (jsonContent.has("lat")) {
-            longitude = jsonContent.get("lat").getAsDouble();
+        String messageType = "";
+        if (jsonContent.has("_type")) {
+            messageType = jsonContent.get("_type").getAsString();
         }
 
-        if (jsonContent.has("lon")) {
-            latitude = jsonContent.get("lon").getAsDouble();
-        }
-
-        if (jsonContent.has("tid")) {
-            userName = jsonContent.get("tid").getAsString();
-        }
-
-        if (jsonContent.has("tst")) {
-            timeOfEvent = jsonContent.get("tst").getAsLong();
-        }
-
-        //Get home details!!!
-        try {
-            HomeDetails homeDetails = locationManager.homeDetailsService.readFromFile();
-            homeName = homeDetails.getHomeName();
-            System.out.println("Our House is named " + homeName + "__++++___++_)(***(");
-            homeLatitude = homeDetails.getHomeLatitude();
-            homeLongitude = homeDetails.getHomeLongitude();
-            radius = homeDetails.getHomeRadius();
-        } catch(Exception e) {
-
-        }
-        
-        String tmpRegionName = "";
-        for (int i = 0; i < regions.size(); i++) {
-            tmpRegionName = regions.get(i).getAsString();
-            if (tmpRegionName.matches(homeName)) {
-                regionName = tmpRegionName;
-                inRegion = true; 
-                
+        if (messageType.matches("location")) {
+            if (jsonContent.has("inregions")) {
+                regions = jsonContent.getAsJsonArray("inregions");
             }
-        }
-
-        Timestamp presencTimestamp;
-        if ((longitude != 0) && (latitude != 0) 
-            && (homeName.matches(regionName)) ) {
-
-            System.out.println("$$$$$$$$$$$$$$ First if statement is Passed $$$$$$$$$$$$$$$");    
-            distanceFromHome = distance(homeLongitude, homeLatitude, longitude, latitude);
-            if (distanceFromHome <= radius) {
-                presencTimestamp = new Timestamp(timeOfEvent);
+    
+            //Get home details!!!
+            try {
+                HomeDetails homeDetails = locationManager.homeDetailsService.readFromFile();
+                homeName = homeDetails.getHomeName();
+            } catch(Exception e) {
+    
+            }
+            
+            String tmpRegionName = "";
+            for (int i = 0; i < regions.size(); i++) {
+                tmpRegionName = regions.get(i).getAsString();
+                if (tmpRegionName.matches(homeName)) {
+                    regionName = tmpRegionName; 
+                }
+            }
+    
+            Timestamp presenceTimestamp;
+            if (homeName.matches(regionName)) {
+                presenceTimestamp = new Timestamp(System.currentTimeMillis());
                 this.isPresent = true;
-                locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presencTimestamp);
-                System.out.println("****()_+_)*in the house Saved to DATABASE******&^%$%^&&***");
-            } else {
-                System.out.println("%%%%%%%%% Not the same radius %%%%%%%%%%%%%%");
+                locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presenceTimestamp);
             }
-        } else {
-            System.out.println("^^^^^^^^^^^^ First if statement is Failed ^^^^^^^^^^^^^^^^^^");    
+    
+            if (regionName.matches("")) {
+                presenceTimestamp = new Timestamp(System.currentTimeMillis());
+                this.isPresent = false;
+                locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presenceTimestamp);
+            }
         }
 
-        if (regionName.matches("") && jsonContent.has("tst")) {
-            System.out.println("{{{{{{{{{{............. Second if statement is Passed ..............}}}}}}}}");    
-            presencTimestamp = new Timestamp(timeOfEvent);
-            this.isPresent = false;
-            locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presencTimestamp);
-            System.out.println("****()_+_)*NOt in the house Saved to DATABASE******&^%$%^&&***");
-        }
-    }
-
-    private double distance(double homeLongitude, double homeLatitude, 
-                            double yourLongitude, double yourLatitude) {
-        double theta = homeLongitude - yourLongitude;
-        double dist = Math.sin(degToRad(homeLatitude)) 
-                        * Math.sin(degToRad(yourLatitude)) 
-                        + Math.cos(degToRad(homeLatitude)) 
-                        * Math.cos(degToRad(yourLatitude)) 
-                        * Math.cos(degToRad(theta));
-        dist = Math.acos(dist);
-        dist = radToDeg(dist);
-        dist = dist * 60 * 1.1515;
-
-        return dist * 1.609344; // Returns distances in kilometers.
-    }
-
-    private double radToDeg(double radians) {
-        return (radians * 180.0 / Math.PI);
-    }
-
-    private double degToRad(double degrees) {
-        return (degrees * Math.PI / 180.0);
     }
 
     public boolean getCurrentPresence() {
