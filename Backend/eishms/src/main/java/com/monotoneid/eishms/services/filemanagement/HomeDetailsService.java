@@ -31,52 +31,6 @@ public class HomeDetailsService {
     //  File("HomeDetails.json");
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public ResponseEntity<Object> addHomeDetails(HomeDetails homeDetails) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            if (homeDetails == null) {
-                throw null;
-            } else if (homeDetails.getHomeName().isEmpty()
-                    || homeDetails.getHomeLocation().isEmpty()
-                    || homeDetails.getHomeAltitude() == 0
-                    || homeDetails.getHomeLongitude() == 0
-                    || homeDetails.getHomeLatitude() == 0
-                    || homeDetails.getHomeRadius() == 0) {
-                throw null;
-            } else {
-                writeToFile(homeDetails);
-                jsonObject.put("Success", "Home Details saved!");
-                return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-            }
-        } catch(Exception e) {
-            jsonObject.put("Error", "Failed to save Home Details!");
-            return new ResponseEntity<>(jsonObject, HttpStatus.PRECONDITION_FAILED);
-        }
-    }
-
-    public ResponseEntity<Object> updateHomeDetails(HomeDetails homeDetails) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            if (homeDetails == null) {
-                throw null;
-            } else if (homeDetails.getHomeName().isEmpty()
-                    || homeDetails.getHomeLocation().isEmpty()
-                    || homeDetails.getHomeAltitude() == 0
-                    || homeDetails.getHomeLongitude() == 0
-                    || homeDetails.getHomeLatitude() == 0
-                    || homeDetails.getHomeRadius() == 0) {
-                throw null;
-            } else {
-                writeToFile(homeDetails);
-                jsonObject.put("Success", "Home Details updated!");
-                return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-            }
-        } catch(Exception e) {
-            jsonObject.put("Error", "Failed to update Home Details!");
-            return new ResponseEntity<>(jsonObject, HttpStatus.PRECONDITION_FAILED);
-        }
-    }
-
     public ResponseEntity<Object> retrieveHomeDetails() {
         try {
             return new ResponseEntity<>(readFromFile(), HttpStatus.OK);
@@ -94,16 +48,12 @@ public class HomeDetailsService {
         fw.close();
     }
 
-    public HomeDetails readFromFile() throws FileNotFoundException {
-        try {
-            filePath  = new ClassPathResource("HomeDetails.json").getFile();
-            FileReader fr = new FileReader(filePath);
-            JsonReader reader = new JsonReader(fr);
-            HomeDetails homeDetails = gson.fromJson(reader, REVIEW_TYPE);
-            fr.close();
-            return homeDetails;
-        } catch(IOException e) {
-            throw new FileNotFoundException();
-        }
+    public HomeDetails readFromFile() throws FileNotFoundException, IOException {
+        filePath  = new ClassPathResource("HomeDetails.json").getFile();
+        FileReader fr = new FileReader(filePath);
+        JsonReader reader = new JsonReader(fr);
+        HomeDetails homeDetails = gson.fromJson(reader, REVIEW_TYPE);
+        fr.close();
+        return homeDetails;
     }
 }
