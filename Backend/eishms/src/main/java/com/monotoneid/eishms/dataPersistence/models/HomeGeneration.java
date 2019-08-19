@@ -31,7 +31,9 @@ public class HomeGeneration {
             nullable = true)
     private Float homeGeneration;
 
-    public HomeGeneration(){}
+    public HomeGeneration() {
+        
+    }
 
     /**. */
     public HomeGeneration(Timestamp newHomeGenerationTimeStamp, Float newHomeGeneration) {

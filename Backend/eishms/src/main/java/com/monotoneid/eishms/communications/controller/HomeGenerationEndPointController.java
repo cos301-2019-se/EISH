@@ -4,7 +4,6 @@ import com.monotoneid.eishms.datapersistence.models.HomeGeneration;
 import com.monotoneid.eishms.services.databaseManagementSystem.HomeGenerationService;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,7 @@ public class HomeGenerationEndPointController {
     private HomeGenerationService HomeGenerationService;
 
     @GetMapping(value = "/generation", params = {"startTimeStamp","endTimeStamp"})
-    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public List<HomeGeneration> retrieveHomeGenerationCases(
         @RequestParam(value = "startTimeStamp", required = true) String startTimeStamp,
         @RequestParam(value = "endTimeStamp", required = true) String endTimeStamp) {
@@ -35,26 +34,26 @@ public class HomeGenerationEndPointController {
     }
 
     @GetMapping(value = "/generation", params = {"interval"})
-    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public List<HomeGeneration> retrieveHomeGenerationBetweenInterval(
         @RequestParam(value = "interval", required = true) String interval) {
         return HomeGenerationService.retrieveBetweenInterval(interval);
     }
 
     @GetMapping(value = "/generation/week")
-    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public ResponseEntity<Object> retrieveTotalHomeGenerationWeek() {
         return HomeGenerationService.retrieveWeekHomeGeneration();
     }
 
     @GetMapping(value = "/generation/day")
-    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public ResponseEntity<Object> retrieveTotalHomeGenerationDay() {
         return HomeGenerationService.retrieveDayHomeGeneration();
     }
 
     @GetMapping(value = "/generation/month")
-    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public ResponseEntity<Object> retrieveTotalHomeGenerationMonth() {
         return HomeGenerationService.retrieveMonthHomeGeneration();
     }

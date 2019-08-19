@@ -1,16 +1,6 @@
 package com.monotoneid.eishms.services.externalCommunicatons;
 
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,12 +30,6 @@ public class WeatherService {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
-    // private String iconURL = "http://openweathermap.org/img/wn/";
-    // private String apiKey = "895db04440e712db9d40e21003d6eff9";
-    // private String city = "Pretoria,za";
-    // private String api = "http://api.openweathermap.org/data/2.5/weather?q="+city+"&APPID="+apiKey;
-
-    // private String iconURL = "http://openweathermap.org/img/wn/";
     private String parameters = "city=Pretoria,ZA&key=a3c3c82616b444acad57349c4ad64cbd";
     private String api = "https://api.weatherbit.io/v2.0/current?" + parameters;
     private final long rate = 900000;

@@ -1,5 +1,6 @@
 package com.monotoneid.eishms.datapersistence.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,6 +19,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * CLASS HOMEUSERPRESENCE. 
  */
 
+@JsonIgnoreProperties({"homeUserPresenceTimestamp"})
 @Entity(name = "homeuserpresence")
 @Table(name = "homeuserpresence")
 @EntityListeners(AuditingEntityListener.class)
@@ -70,10 +72,12 @@ public class HomeUserPresence {
         return homeuser;
     }
 
+    @JsonIgnore
     public Timestamp getHomeUserPresenceTimeStamp() {
         return homeUserPresenceTimestamp;
     }
 
+    @JsonIgnore
     public boolean getHomeUserPresence() {
         return homeUserPresence;
     }

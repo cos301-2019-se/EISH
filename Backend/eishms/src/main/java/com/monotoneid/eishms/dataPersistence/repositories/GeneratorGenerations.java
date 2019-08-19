@@ -67,7 +67,7 @@ public interface GeneratorGenerations extends JpaRepository<GeneratorGeneration,
     public Optional<List<GeneratorGeneration>> findByGeneratorGenerationIdForThisYear(long generatorId);
 
     //average of device consumptions every minute
-    @Query(value="select AVG(generatorgeneration) from generatorgeneration where generatorgenerationtimestamp  between now()- interval '1 minutes' and now() group by generatorid", nativeQuery = true)
+    @Query(value = "select AVG(generatorgeneration) from generatorgeneration where generatorgenerationtimestamp  between now()- interval '1 minutes' and now() group by generatorid", nativeQuery = true)
     public List<Float> findAverageEveryOneMinutes();
 
 }
