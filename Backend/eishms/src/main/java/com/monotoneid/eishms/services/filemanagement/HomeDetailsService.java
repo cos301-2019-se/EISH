@@ -48,7 +48,7 @@ public class HomeDetailsService {
         fw.close();
     }
 
-    public HomeDetails readFromFile() throws FileNotFoundException {
+    public HomeDetails readFromFile() throws FileNotFoundException, IOException {
         filePath  = new ClassPathResource("HomeDetails.json").getFile();
         FileReader fr = new FileReader(filePath);
         JsonReader reader = new JsonReader(fr);
