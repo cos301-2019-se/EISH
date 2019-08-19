@@ -13,19 +13,22 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.monotoneid.eishms.datapersistence.models.HomeDetails;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import net.minidev.json.JSONObject;
 
-@Service
+@Service()
 public class HomeDetailsService {
 
-    private static final Type REVIEW_TYPE = new TypeToken<HomeDetails>() {}.getType();
+    private static final TypeToken<HomeDetails> tToken = new TypeToken<HomeDetails>() {};
+    private static final Type REVIEW_TYPE = tToken.getType();
 
-    //private String cwd = System.getProperty("user.dir");
-    private File filePath = new File("HomeDetails.json");
+    private File filePath;
+    
+    //  File("HomeDetails.json");
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public ResponseEntity<Object> retrieveHomeDetails() {
@@ -39,13 +42,18 @@ public class HomeDetailsService {
     }
 
     public void writeToFile(HomeDetails homeDetails) throws IOException {
-        FileWriter writer = new FileWriter(filePath);
-        gson.toJson(homeDetails, writer);
+        filePath  = new ClassPathResource("HomeDetails.json").getFile();
+        FileWriter fw = new FileWriter(filePath);
+        gson.toJson(homeDetails, fw);
+        fw.close();
     }
 
     public HomeDetails readFromFile() throws FileNotFoundException {
-        JsonReader reader = new JsonReader(new FileReader(filePath));
+        filePath  = new ClassPathResource("HomeDetails.json").getFile();
+        FileReader fr = new FileReader(filePath);
+        JsonReader reader = new JsonReader(fr);
         HomeDetails homeDetails = gson.fromJson(reader, REVIEW_TYPE);
+        fr.close();
         return homeDetails;
     }
 }

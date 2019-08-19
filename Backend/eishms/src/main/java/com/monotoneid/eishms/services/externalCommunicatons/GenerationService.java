@@ -57,7 +57,7 @@ public class GenerationService {
                 //(generator.getGeneratorUrl() + "/current");
                 StringBuffer content = connection.getContentFromURL(apiCurrent);
                 GeneratorGeneration newGeneratorGeneration;
-                System.out.println("Return from the HttpConnection");
+                // System.out.println("Return from the HttpConnection");
                 if (content == null) {
                     newGeneratorGeneration = new GeneratorGeneration(
                         0, generator, currentTimestamp1, "OFFLINE");
@@ -79,7 +79,7 @@ public class GenerationService {
                     generation.put("generatorGenerationTimestamp", currentTimestamp.toString());
                     generation.put("generatorGeneration", newGeneratorGeneration.getGeneratorGeneration());
                     simpMessagingTemplate.convertAndSend("/generator/" + generator.getGeneratorId() + "/generation", generation);
-                    System.out.println("Published generation of generator " + generator.getGeneratorId() + " at " + currentTimestamp);
+                    // System.out.println("Published generation of generator " + generator.getGeneratorId() + " at " + currentTimestamp);
                     generationValue += newGeneratorGeneration.getGeneratorGeneration();
                 }
                 generationRepository.save(newGeneratorGeneration);
@@ -87,7 +87,7 @@ public class GenerationService {
             generation.put("generatorGenerationTimestamp", currentTimestamp1.toString());
             generation.put("generatorGeneration", generationValue);
             simpMessagingTemplate.convertAndSend("/home/generation", generation);
-            System.out.println("Published home generation at " + currentTimestamp1.toString());
+            // System.out.println("Published home generation at " + currentTimestamp1.toString());
         } catch (Exception e) {
             System.out.println("Couldn't get generation data!");
             System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
