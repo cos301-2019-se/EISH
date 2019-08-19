@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  *CLASS USER END POINT CONTROLLER. 
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600000)
 @RestController()
 @RequestMapping("/api")
 public class UserEndPointController {
@@ -49,7 +49,7 @@ public class UserEndPointController {
     * @return keyList
     */
     @GetMapping("/keys")
-    @PreAuthorize("hasRole('ADMIN')") 
+    //@PreAuthorize("hasRole('ADMIN')") 
     public List<HomeKey> getKeys() {
         List<HomeKey> keyList = new ArrayList<HomeKey>();
         keyList.add(myHouseKeys.findByKeyName("general"));

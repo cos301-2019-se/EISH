@@ -172,8 +172,11 @@ public class UserService{
      */
     public ResponseEntity<Object> removeUser(long userId) {
         try {
-            usersRepository.findById(userId)
+            HomeUser foundUser = usersRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+            if (foundUser.getUserType() == UserType.ROLE_ADMIN) {
+                throw null;
+            }    
             usersRepository.deleteById(userId);
             JSONObject responseObject = new JSONObject();
             responseObject.put("message","Success: User has been deleted!");
@@ -206,9 +209,16 @@ public class UserService{
             if (UserType.valueOf(role) == null || userId <= 0) {
                 throw null;
             }
-                    
+            
+            if (UserType.valueOf(role) == UserType.ROLE_ADMIN) {
+                System.out.println("changin admin");
+                throw null;
+            }
             HomeUser foundUser = usersRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+            if (foundUser.getUserType() == UserType.ROLE_ADMIN) {
+                throw null;
+            }
             foundUser.setUserType(UserType.valueOf(role));
             usersRepository.save(foundUser);
             if (foundUser.getUserType() == UserType.ROLE_GUEST) {

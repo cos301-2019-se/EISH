@@ -5,32 +5,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class HomeDetails {
 
     private String homeName;
-    private double homeAltitude;
     private double homeLongitude;
     private double homeLatitude;
     private int homeRadius;
 
-    public HomeDetails(@JsonProperty("homeName") String homeName,
-            @JsonProperty("homeAltitude") double homeAltitude,
-            @JsonProperty("homeLongitude") double homeLongitude,
-            @JsonProperty("homeLatitude") double homeLatitude,
-            @JsonProperty("homeRadius") int homeRadius) {
-        setHomeName(homeName);
-        setHomeAltitude(homeAltitude);
-        setHomeLongitude(homeLongitude);
-        setHomeLatitude(homeLatitude);
-        setHomeRadius(homeRadius);
-    }
+    // public HomeDetails(@JsonProperty("homeName") String homeName,
+    //         @JsonProperty("homeAltitude") double homeAltitude,
+    //         @JsonProperty("homeLongitude") double homeLongitude,
+    //         @JsonProperty("homeLatitude") double homeLatitude,
+    //         @JsonProperty("homeRadius") int homeRadius) {
+    //     setHomeName(homeName);
+    //     setHomeAltitude(homeAltitude);
+    //     setHomeLongitude(homeLongitude);
+    //     setHomeLatitude(homeLatitude);
+    //     setHomeRadius(homeRadius);
+    // }
 
     public HomeDetails() {}
 
     //gette
     public String getHomeName() {
         return this.homeName;
-    }
-
-    public double getHomeAltitude() {
-        return this.homeAltitude;
     }
 
     public double getHomeLongitude() {
@@ -48,10 +43,6 @@ public class HomeDetails {
     //setter
     public void setHomeName(String homeName) {
         this.homeName = homeName;
-    }
-
-    public void setHomeAltitude(double homeAltitude) {
-        this.homeAltitude = homeAltitude;
     }
 
     public void setHomeLongitude(double homeLongitude) {
