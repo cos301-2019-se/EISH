@@ -5,20 +5,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class HomeDetails {
 
     private String homeName;
-    private String homeLocation;
     private double homeAltitude;
     private double homeLongitude;
     private double homeLatitude;
     private int homeRadius;
 
     public HomeDetails(@JsonProperty("homeName") String homeName,
-            @JsonProperty("homeLocation") String homeLocation,
             @JsonProperty("homeAltitude") double homeAltitude,
             @JsonProperty("homeLongitude") double homeLongitude,
             @JsonProperty("homeLatitude") double homeLatitude,
             @JsonProperty("homeRadius") int homeRadius) {
         setHomeName(homeName);
-        setHomeLocation(homeLocation);
         setHomeAltitude(homeAltitude);
         setHomeLongitude(homeLongitude);
         setHomeLatitude(homeLatitude);
@@ -28,10 +25,6 @@ public class HomeDetails {
     //gette
     public String getHomeName() {
         return this.homeName;
-    }
-
-    public String getHomeLocation() {
-        return this.homeLocation;
     }
 
     public double getHomeAltitude() {
@@ -53,10 +46,6 @@ public class HomeDetails {
     //setter
     public void setHomeName(String homeName) {
         this.homeName = homeName;
-    }
-
-    public void setHomeLocation(String homeLocation) {
-        this.homeLocation = homeLocation;
     }
 
     public void setHomeAltitude(double homeAltitude) {

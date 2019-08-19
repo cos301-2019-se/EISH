@@ -2,7 +2,7 @@ package com.monotoneid.eishms;
 
 import com.monotoneid.eishms.datapersistence.models.HomeUser;
 import com.monotoneid.eishms.datapersistence.repositories.Users;
-import com.monotoneid.eishms.services.databaseManagementSystem.UserService;
+import com.monotoneid.eishms.services.databasemanagementsystem.UserService;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
