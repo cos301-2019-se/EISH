@@ -25,6 +25,8 @@ public class HomeDetails {
         setHomeRadius(homeRadius);
     }
 
+    public HomeDetails() {}
+
     //gette
     public String getHomeName() {
         return this.homeName;

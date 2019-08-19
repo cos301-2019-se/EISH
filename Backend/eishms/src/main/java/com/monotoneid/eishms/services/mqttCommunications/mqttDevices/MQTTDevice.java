@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 //@Service
 public class MqttDevice {
     // String serverUrl = "tcp://eishms.ddns.net:1883";
-    private String serverUrl = "tcp://192.168.8.110:1883";
+    private String serverUrl = "tcp://127.0.0.1:1883";
     //private String serverUrl = "tcp://localhost:1883";
     /* This Requires no ssl */
     //String caFilePath = "/your_ssl/cacert.pem";

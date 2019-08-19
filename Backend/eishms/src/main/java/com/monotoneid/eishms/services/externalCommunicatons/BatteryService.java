@@ -49,7 +49,7 @@ public class BatteryService {
             BatteryCapacity newBatteryCapacity;
 
             if (content == null) {
-                System.out.println("Content from api is null!");
+                // System.out.println("Content from api is null!");
                 //newBatteryCapacity = new BatteryCapacity(
                   //  0, 0,"POWERSTATE_OFFLINE", "CHARGINGSTATE_OFFLINE", currentTimestamp, 0);
             } else {
@@ -70,7 +70,7 @@ public class BatteryService {
                 batteryCapacityRepository.save(newBatteryCapacity);
                 batteryCapacity.put("batteryCapacityPowerPercentage", 
                             newBatteryCapacity.getBatteryCapacityPowerPercentage());
-                System.out.println("Published battery power percentage at " + currentTimestamp);
+                // System.out.println("Published battery power percentage at " + currentTimestamp);
                 simpMessagingTemplate.convertAndSend("/battery", batteryCapacity);
             }
         } catch (Exception e) {
@@ -91,7 +91,7 @@ public class BatteryService {
             
             batteryCapacity.put("batteryCapacityPowerPercentage", 
                         lastBatteryCapacity.getBatteryCapacityPowerPercentage());
-            System.out.println("Last battery capacity: " + batteryCapacity);
+            // System.out.println("Last battery capacity: " + batteryCapacity);
             return new ResponseEntity<>(batteryCapacity, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("Error: There is no Battery Level!");

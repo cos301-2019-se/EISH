@@ -42,7 +42,7 @@ public class HttpConnection {
                 return content;
             } else {
                 streamReader = new InputStreamReader(connection.getErrorStream());
-                System.out.println("Stream Reader: " + streamReader.toString() + "Weather status: " + status);
+                // System.out.println("Stream Reader: " + streamReader.toString() + "Weather status: " + status);
                 connection.disconnect();
                 return content;
             }
