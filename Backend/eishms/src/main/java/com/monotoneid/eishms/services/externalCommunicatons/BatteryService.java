@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,8 @@ import net.minidev.json.JSONObject;
  * CLASS BATTERY SERVICE.
  */
 @Service
+@EnableScheduling
+@EnableAsync
 public class BatteryService {
 
     @Autowired
@@ -39,6 +44,7 @@ public class BatteryService {
     /**
      * The funtion returns JSONobject with the current information of the battery.
      */
+    @Async
     @Scheduled(fixedRate = rate, initialDelay = delay)
     public void getBatteryCapacity() {
         JSONObject batteryCapacity = new JSONObject();

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.monotoneid.eishms.datapersistence.models.HomeUser;
 import com.monotoneid.eishms.datapersistence.models.UserType;
+import com.monotoneid.eishms.datapersistence.repositories.Blacklist;
 import com.monotoneid.eishms.datapersistence.repositories.Users;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 
@@ -29,6 +30,9 @@ public class UserService{
 
     @Autowired
     private Users usersRepository;
+
+    @Autowired
+    private Blacklist blacklist;
 
     public void setDefaulNumberOfDays(int newDefualtNumberofDays) {
         this.defaultNumberOfDays = newDefualtNumberofDays;
@@ -178,6 +182,7 @@ public class UserService{
                 throw null;
             }    
             usersRepository.deleteById(userId);
+            blacklist.blacklistUser(foundUser.getUserName());
             JSONObject responseObject = new JSONObject();
             responseObject.put("message","Success: User has been deleted!");
             return new ResponseEntity<>(responseObject,HttpStatus.OK);

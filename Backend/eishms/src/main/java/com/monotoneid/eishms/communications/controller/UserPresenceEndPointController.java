@@ -72,24 +72,5 @@ public class UserPresenceEndPointController {
     public ResponseEntity<Object> getUserPresence(
         @RequestParam(value = "userId", required = true) long userId) {
         return userPresenceService.getCurrentUserPresence(userId);
-    }
-
-    @GetMapping(value = "/discover", params = {"homeName"})
-    public ResponseEntity<Object> discoverHomeLocation(
-        @RequestParam(value = "homeName", required = true) String homeName) {
-
-        JSONObject jsonObject = new JSONObject();
-        // jsonObject.put("Success", "This endpoint works");
-        // return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-        
-        if (locationManager.discoverLocation(homeName)) {
-            //return new location
-            jsonObject.put("Success", "Home Details updated!");
-            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-        } else {
-            //return error message
-            jsonObject.put("Error", "Failed to update Home Details!");
-            return new ResponseEntity<>(jsonObject, HttpStatus.PRECONDITION_FAILED);
-        }
-    }
+    }   
 }

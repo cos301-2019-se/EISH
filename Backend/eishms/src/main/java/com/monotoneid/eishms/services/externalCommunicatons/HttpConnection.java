@@ -38,6 +38,7 @@ public class HttpConnection {
                     content.append(inputLine);
                 }
                 in.close();
+                System.out.println("Success: Received data from api: " + api);
                 connection.disconnect();
                 return content;
             } else {
@@ -47,7 +48,7 @@ public class HttpConnection {
                 return content;
             }
         } catch (Exception e) {
-            System.out.println("Failed to connect to weather api!");
+            System.out.println("Failed to connect to api!" + api);
             System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
             return null;
         }
