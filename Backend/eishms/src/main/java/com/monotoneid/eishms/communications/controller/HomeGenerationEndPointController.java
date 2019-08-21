@@ -1,7 +1,7 @@
 package com.monotoneid.eishms.communications.controller;
 
-import com.monotoneid.eishms.datapersistence.models.HomeConsumption;
-import com.monotoneid.eishms.services.databasemanagementsystem.HomeConsumptionService;
+import com.monotoneid.eishms.datapersistence.models.HomeGeneration;
+import com.monotoneid.eishms.services.databaseManagementSystem.HomeGenerationService;
 
 import java.util.List;
 
@@ -15,47 +15,47 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *CLASS HOME CONSUMPTION ENDPOINT CONTROLLER. 
+ *CLASS HOME GENERATION ENDPOINT CONTROLLER. 
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/home")
-public class HomeConsumptionEndPointController {
+public class HomeGenerationEndPointController {
 
     @Autowired
-    private HomeConsumptionService homeConsumptionService;
+    private HomeGenerationService HomeGenerationService;
 
-    @GetMapping(value = "/consumption", params = {"startTimeStamp","endTimeStamp"})
+    @GetMapping(value = "/generation", params = {"startTimeStamp","endTimeStamp"})
     @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-    public List<HomeConsumption> retrieveHomeConsumptionCases(
+    public List<HomeGeneration> retrieveHomeGenerationCases(
         @RequestParam(value = "startTimeStamp", required = true) String startTimeStamp,
         @RequestParam(value = "endTimeStamp", required = true) String endTimeStamp) {
-        return homeConsumptionService.retrieveAllHomeConsumptionCases(startTimeStamp, endTimeStamp);
+        return HomeGenerationService.retrieveAllHomeGenerationCases(startTimeStamp, endTimeStamp);
     }
 
-    @GetMapping(value = "/consumption", params = {"interval"})
+    @GetMapping(value = "/generation", params = {"interval"})
     @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-    public List<HomeConsumption> retrieveHomeConsumptionBetweenInterval(
+    public List<HomeGeneration> retrieveHomeGenerationBetweenInterval(
         @RequestParam(value = "interval", required = true) String interval) {
-        return homeConsumptionService.retrieveBetweenInterval(interval);
+        return HomeGenerationService.retrieveBetweenInterval(interval);
     }
 
-    @GetMapping(value = "/consumption/week")
+    @GetMapping(value = "/generation/week")
     @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-    public ResponseEntity<Object> retrieveTotalHomeConsumptionWeek() {
-        return homeConsumptionService.retrieveWeekHomeConsumption();
+    public ResponseEntity<Object> retrieveTotalHomeGenerationWeek() {
+        return HomeGenerationService.retrieveWeekHomeGeneration();
     }
 
-    @GetMapping(value = "/consumption/day")
+    @GetMapping(value = "/generation/day")
     @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-    public ResponseEntity<Object> retrieveTotalHomeConsumptionDay() {
-        return homeConsumptionService.retrieveDayHomeConsumption();
+    public ResponseEntity<Object> retrieveTotalHomeGenerationDay() {
+        return HomeGenerationService.retrieveDayHomeGeneration();
     }
 
-    @GetMapping(value = "/consumption/month")
+    @GetMapping(value = "/generation/month")
     @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
-    public ResponseEntity<Object> retrieveTotalHomeConsumptionMonth() {
-        return homeConsumptionService.retrieveMonthHomeConsumption();
+    public ResponseEntity<Object> retrieveTotalHomeGenerationMonth() {
+        return HomeGenerationService.retrieveMonthHomeGeneration();
     }
 
 }

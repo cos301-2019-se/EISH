@@ -11,8 +11,6 @@ import com.monotoneid.eishms.datapersistence.repositories.GeneratorGenerations;
 import com.monotoneid.eishms.services.databasemanagementsystem.GeneratorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -42,7 +40,7 @@ public class GenerationService {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
-    private String apiCurrent = "http://192.168.8.110:3001/v2/installations/0/SolarCharger/current";
+    private String apiCurrent = "http://192.168.8.101:3001/v2/installations/0/SolarCharger/current";
     //private String apiAll = "http://localhost:6000/v2/installations/0/all";
     private final long rate = 20000;
     private final long delay = 30000;

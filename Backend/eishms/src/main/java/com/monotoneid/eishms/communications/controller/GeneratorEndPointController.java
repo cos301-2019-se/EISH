@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GeneratorEndPointController {
 
     @Autowired
-   private GeneratorService generatorService;
+    private GeneratorService generatorService;
 
    
     /**
@@ -40,7 +40,7 @@ public class GeneratorEndPointController {
     * @return the status message
     */
     @PostMapping("/generator")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> addGenerator(@Valid @RequestBody Generator newGenerator) {
         return generatorService.addGenerator(newGenerator);
     }
@@ -52,7 +52,7 @@ public class GeneratorEndPointController {
      * @return object message
      */
     @PutMapping("/generator")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> updateGenerator(@Valid @RequestBody Generator newGenerator) {
         return generatorService.updateGenerator(newGenerator);
     }
@@ -63,7 +63,7 @@ public class GeneratorEndPointController {
      * @return an object with all generators 
      */
     @GetMapping("/generators")
-    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public List<Generator> retrieveAllGenerators() {
         return generatorService.retrieveAllGenerators();
     }

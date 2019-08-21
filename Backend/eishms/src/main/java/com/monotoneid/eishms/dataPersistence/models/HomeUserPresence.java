@@ -1,5 +1,6 @@
 package com.monotoneid.eishms.datapersistence.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -14,7 +15,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+/**
+ * CLASS HOMEUSERPRESENCE. 
+ */
 
+@JsonIgnoreProperties({"homeUserPresenceTimestamp"})
 @Entity(name = "homeuserpresence")
 @Table(name = "homeuserpresence")
 @EntityListeners(AuditingEntityListener.class)
@@ -25,18 +30,28 @@ public class HomeUserPresence {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "userid", insertable = false, updatable = false, nullable = false)
+    @JoinColumn(name = "userid", 
+                insertable = false, 
+                updatable = false, 
+                nullable = false)
     private HomeUser homeuser;
 
-    @Column(name = "homeuserpresence", columnDefinition = "boolean", updatable = true, nullable = false)
+    @Column(name = "homeuserpresence", 
+            columnDefinition = "boolean", 
+            updatable = true, 
+            nullable = false)
     private boolean homeUserPresence;
 
-    //@Id
-    @Column(name = "homeuserpresencetimestamp", columnDefinition = "TIMESTAMP", insertable = false, updatable = false, nullable = false)
+    @Column(name = "homeuserpresencetimestamp", 
+            columnDefinition = "TIMESTAMP", 
+            insertable = false, 
+            updatable = false, 
+            nullable = false)
     private Timestamp homeUserPresenceTimestamp;
 
     public HomeUserPresence() {}
-
+    
+    /**. */
     public HomeUserPresence(boolean newHomeUserPresence, 
         HomeUser newHomeUser, 
         Timestamp newHomeUserPresenceTimestamp) {
@@ -57,10 +72,12 @@ public class HomeUserPresence {
         return homeuser;
     }
 
+    @JsonIgnore
     public Timestamp getHomeUserPresenceTimeStamp() {
         return homeUserPresenceTimestamp;
     }
 
+    @JsonIgnore
     public boolean getHomeUserPresence() {
         return homeUserPresence;
     }
