@@ -37,8 +37,8 @@ public class BatteryService {
     @Autowired
     private BatteryCapacities batteryCapacityRepository;
 
-    private String api = "http://192.168.8.110:3001/v2/installations/0/Battery";
-    private final long rate = 15000;
+    private String api = "http://192.168.8.101:3001/v2/installations/0/Battery";
+    private final long rate = 17000;
     private final long delay = 30000;
     
     /**
@@ -65,6 +65,7 @@ public class BatteryService {
                 time = time.replace("T", " ");
                 time = time.replace("Z",  "");
                 currentTimestamp = Timestamp.valueOf(time);
+                System.out.println("baterycapacity");
                 newBatteryCapacity = new BatteryCapacity(
                     jsonContent.get("storageCapacity").getAsInt(),
                     jsonContent.get("currentPower").getAsInt(),
@@ -73,6 +74,7 @@ public class BatteryService {
                     currentTimestamp,
                     jsonContent.get("powerPercentage").getAsInt()
                 );
+                System.out.println(newBatteryCapacity.getBatteryCapacityChargingState());
                 batteryCapacityRepository.save(newBatteryCapacity);
                 batteryCapacity.put("batteryCapacityPowerPercentage", 
                             newBatteryCapacity.getBatteryCapacityPowerPercentage());

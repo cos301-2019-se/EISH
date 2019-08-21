@@ -43,7 +43,7 @@ public class DeviceEndPointController {
     * @return the status message
     */
     @PostMapping("/device")
-   //@PreAuthorize("hasRole('ADMIN')")
+   @PreAuthorize("hasRole('ADMIN')")
    public ResponseEntity<Object> addDevice(@RequestBody Device newDevice) {
         return deviceService.addDevice(newDevice);
     }
@@ -55,7 +55,7 @@ public class DeviceEndPointController {
     * @return object message
     */
     @PutMapping("/device")
-   //@PreAuthorize("hasRole('ADMIN')")
+   @PreAuthorize("hasRole('ADMIN')")
    public ResponseEntity<Object> updateDevice(@Valid @RequestBody Device device) {
         return deviceService.updateDevice(device);
     }
@@ -66,7 +66,7 @@ public class DeviceEndPointController {
     * @return an object with all devices 
     */
     @GetMapping("/devices")
-   //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+   @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
    public List<Device> retrieveAllDevices() {
         return deviceService.retrieveAllDevices();
     }
@@ -78,7 +78,7 @@ public class DeviceEndPointController {
     * @return a the valid Device
     */
     @GetMapping(value = "/device",params = {"deviceId"})
-    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public ResponseEntity<Device> retriveDevice(
         @Valid @RequestParam(value = "deviceId") long deviceId) {
         return deviceService.retrieveDevice(deviceId);
@@ -91,7 +91,7 @@ public class DeviceEndPointController {
     * @return an object with deleted device
     */
     @DeleteMapping("/device/{deviceId}")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> removeDevice(@PathVariable long deviceId) {
         return deviceService.removeDevice(deviceId);
     }
@@ -104,7 +104,7 @@ public class DeviceEndPointController {
     * @return device state
     */
     @PatchMapping("/device/{deviceId}/{deviceState}")
-    //@PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
     public ResponseEntity<Object> controlDevice(@PathVariable long deviceId,
          @PathVariable String deviceState) {
         return deviceManager.controlDevice(deviceId,deviceState);
