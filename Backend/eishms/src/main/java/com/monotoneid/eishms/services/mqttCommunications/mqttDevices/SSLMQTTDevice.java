@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.mqttCommunications.mqttDevices;
+package com.monotoneid.eishms.services.mqttcommunications.mqttdevices;
 
 import java.util.UUID;
 
@@ -6,7 +6,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 import com.monotoneid.eishms.datapersistence.models.Device;
 import com.monotoneid.eishms.datapersistence.repositories.DeviceConsumptions;
-import com.monotoneid.eishms.services.mqttCommunications.SSLSocketUtility;
+import com.monotoneid.eishms.services.mqttcommunications.SSLSocketUtility;
 
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;

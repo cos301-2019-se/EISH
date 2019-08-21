@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.mqttCommunications;
+package com.monotoneid.eishms.services.mqttcommunications;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;

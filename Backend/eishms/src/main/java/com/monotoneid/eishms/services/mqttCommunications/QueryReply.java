@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.mqttCommunications;
+package com.monotoneid.eishms.services.mqttcommunications;
 
 public class QueryReply {
     private String queryTopic;

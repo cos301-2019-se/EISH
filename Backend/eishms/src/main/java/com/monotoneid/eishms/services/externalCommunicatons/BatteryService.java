@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.externalCommunicatons;
+package com.monotoneid.eishms.services.externalcommunicatons;
 
 import java.sql.Timestamp;
 
@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,8 @@ import net.minidev.json.JSONObject;
  * CLASS BATTERY SERVICE.
  */
 @Service
+@EnableScheduling
+@EnableAsync
 public class BatteryService {
 
     @Autowired
@@ -39,6 +44,7 @@ public class BatteryService {
     /**
      * The funtion returns JSONobject with the current information of the battery.
      */
+    @Async
     @Scheduled(fixedRate = rate, initialDelay = delay)
     public void getBatteryCapacity() {
         JSONObject batteryCapacity = new JSONObject();
@@ -49,7 +55,7 @@ public class BatteryService {
             BatteryCapacity newBatteryCapacity;
 
             if (content == null) {
-                System.out.println("Content from api is null!");
+                // System.out.println("Content from api is null!");
                 //newBatteryCapacity = new BatteryCapacity(
                   //  0, 0,"POWERSTATE_OFFLINE", "CHARGINGSTATE_OFFLINE", currentTimestamp, 0);
             } else {
@@ -72,7 +78,7 @@ public class BatteryService {
                 batteryCapacityRepository.save(newBatteryCapacity);
                 batteryCapacity.put("batteryCapacityPowerPercentage", 
                             newBatteryCapacity.getBatteryCapacityPowerPercentage());
-                System.out.println("Published battery power percentage at " + currentTimestamp);
+                // System.out.println("Published battery power percentage at " + currentTimestamp);
                 simpMessagingTemplate.convertAndSend("/battery", batteryCapacity);
             }
         } catch (Exception e) {
@@ -93,7 +99,7 @@ public class BatteryService {
             
             batteryCapacity.put("batteryCapacityPowerPercentage", 
                         lastBatteryCapacity.getBatteryCapacityPowerPercentage());
-            System.out.println("Last battery capacity: " + batteryCapacity);
+            // System.out.println("Last battery capacity: " + batteryCapacity);
             return new ResponseEntity<>(batteryCapacity, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("Error: There is no Battery Level!");

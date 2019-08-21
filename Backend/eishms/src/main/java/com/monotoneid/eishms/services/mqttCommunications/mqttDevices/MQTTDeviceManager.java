@@ -1,9 +1,9 @@
-package com.monotoneid.eishms.services.mqttCommunications.mqttDevices;
+package com.monotoneid.eishms.services.mqttcommunications.mqttdevices;
 
 import com.monotoneid.eishms.datapersistence.models.Device;
 import com.monotoneid.eishms.datapersistence.repositories.Devices;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
-import com.monotoneid.eishms.services.databaseManagementSystem.DeviceConsumptionService;
+import com.monotoneid.eishms.services.databasemanagementsystem.DeviceConsumptionService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +28,11 @@ public class MqttDeviceManager {
     @Autowired
     protected SimpMessagingTemplate simpMessagingTemplate;
     
-    private ArrayList<MQTTDevice> mqttDevices;
+    private ArrayList<MqttDevice> mqttDevices;
 
     public MqttDeviceManager(Devices devicesRepository) {
         List<Device> deviceModels = devicesRepository.findAll();
-        mqttDevices = new ArrayList<MQTTDevice>();
+        mqttDevices = new ArrayList<MqttDevice>();
         for (int i = 0; i < deviceModels.size(); i++) {
             addDevice(deviceModels.get(i));
         }
@@ -43,12 +43,13 @@ public class MqttDeviceManager {
 
     public void addDevice(Device newDevice) {
         try {
-            MQTTDevice newMqttDevice = new MQTTDevice(newDevice, this); 
+            MqttDevice newMqttDevice = new MqttDevice(newDevice, this); 
             if (newMqttDevice != null) {
                 mqttDevices.add(newMqttDevice);
-            } else {
-                System.out.println("new Mqtt device doesnt exist");
             }
+            //  else {
+            //     System.out.println("new Mqtt device doesnt exist");
+            // }
             
         } catch (Exception e) {
             //e.printStackTrace();
@@ -69,7 +70,7 @@ public class MqttDeviceManager {
     
     public ResponseEntity<Object> controlDevice(long deviceId, String deviceState) {
         try {
-            MQTTDevice foundDevice = null;
+            MqttDevice foundDevice = null;
             for (int i = 0; i < mqttDevices.size()
                 && (foundDevice = mqttDevices.get(i)).getId() != deviceId; i++) {}
             if (foundDevice != null) {
@@ -104,7 +105,7 @@ public class MqttDeviceManager {
      */
 
     public String getDeviceStateById(long deviceId) {
-        MQTTDevice foundDevice = mqttDevices.get(0);
+        MqttDevice foundDevice = mqttDevices.get(0);
         for (int i = 0; i < mqttDevices.size() 
             && (foundDevice = mqttDevices.get(i)).getId() != deviceId; i++) {}
         return foundDevice.getCurrentState();

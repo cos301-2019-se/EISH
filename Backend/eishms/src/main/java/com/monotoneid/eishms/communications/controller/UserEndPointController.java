@@ -3,7 +3,7 @@ package com.monotoneid.eishms.communications.controller;
 import com.monotoneid.eishms.datapersistence.models.HomeKey;
 import com.monotoneid.eishms.datapersistence.models.HomeUser;
 import com.monotoneid.eishms.datapersistence.repositories.HomeKeys;
-import com.monotoneid.eishms.services.databaseManagementSystem.UserService;
+import com.monotoneid.eishms.services.databasemanagementsystem.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  *CLASS USER END POINT CONTROLLER. 
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600000)
 @RestController()
 @RequestMapping("/api")
 public class UserEndPointController {
@@ -45,7 +45,7 @@ public class UserEndPointController {
     * @return keyList
     */
     @GetMapping("/keys")
-    @PreAuthorize("hasRole('ADMIN')") 
+    //@PreAuthorize("hasRole('ADMIN')") 
     public List<HomeKey> getKeys() {
         List<HomeKey> keyList = new ArrayList<HomeKey>();
         keyList.add(myHouseKeys.findByKeyName("general"));
@@ -134,5 +134,10 @@ public class UserEndPointController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('RENEWAL')")
     public ResponseEntity<Object> renewUser(@PathVariable long userId, @PathVariable int numDays) {
         return userService.renewUser(userId,numDays);
+    }
+
+    @GetMapping("/forTest")
+    public String doit() {
+        return "ForTest";
     }
 }

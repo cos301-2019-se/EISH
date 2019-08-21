@@ -1,7 +1,7 @@
 package com.monotoneid.eishms.communications.controller;
 
 import com.monotoneid.eishms.datapersistence.models.HomeConsumption;
-import com.monotoneid.eishms.services.databaseManagementSystem.HomeConsumptionService;
+import com.monotoneid.eishms.services.databasemanagementsystem.HomeConsumptionService;
 
 import java.util.List;
 

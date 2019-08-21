@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.mqttCommunications.mqttDevices;
+package com.monotoneid.eishms.services.mqttcommunications.mqttdevices;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import com.monotoneid.eishms.datapersistence.models.Device;
-import com.monotoneid.eishms.services.mqttCommunications.QueryReplyManager;
+import com.monotoneid.eishms.services.mqttcommunications.QueryReplyManager;
 
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -22,9 +22,9 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 //@Service
-public class MQTTDevice {
+public class MqttDevice {
     // String serverUrl = "tcp://eishms.ddns.net:1883";
-    private String serverUrl = "tcp://192.168.8.101:1883";
+    private String serverUrl = "tcp://127.0.0.1:1883";
     //private String serverUrl = "tcp://localhost:1883";
     /* This Requires no ssl */
     //String caFilePath = "/your_ssl/cacert.pem";
@@ -52,7 +52,7 @@ public class MQTTDevice {
 
     private boolean isAvailable;
 
-    public MQTTDevice(Device device, MqttDeviceManager deviceManager) {
+    public MqttDevice(Device device, MqttDeviceManager deviceManager) {
         this.device = device;
         //this.asyncClientId = device.getDeviceName();
         this.asyncClientId = UUID.randomUUID().toString();

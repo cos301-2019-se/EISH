@@ -1,11 +1,16 @@
 package com.monotoneid.eishms.communications.controller;
 
+import com.monotoneid.eishms.datapersistence.models.HomeUserDetails;
 import com.monotoneid.eishms.datapersistence.models.HomeUserPresence;
-import com.monotoneid.eishms.services.databaseManagementSystem.UserPresenceService;
+import com.monotoneid.eishms.datapersistence.repositories.Users;
+import com.monotoneid.eishms.services.databasemanagementsystem.UserPresenceService;
+import com.monotoneid.eishms.services.filemanagement.HomeDetailsService;
+import com.monotoneid.eishms.services.mqttcommunications.mqttlocation.MqttLocationManager;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.minidev.json.JSONObject;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/user")
@@ -21,6 +28,15 @@ public class UserPresenceEndPointController {
 
     @Autowired
     private UserPresenceService userPresenceService;
+
+    @Autowired
+    private Users users;
+
+    @Autowired
+    private MqttLocationManager locationManager;
+
+    @Autowired
+    private HomeDetailsService homeDetailsService;
 
     /**
     * GET METHOD
