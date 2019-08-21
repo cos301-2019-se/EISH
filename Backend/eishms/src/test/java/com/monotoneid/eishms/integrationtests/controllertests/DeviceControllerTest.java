@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.integrationTests.controllertests;
+package com.monotoneid.eishms.integrationtests.controllertests;
 
 // import static org.junit.Assert.assertTrue;
 

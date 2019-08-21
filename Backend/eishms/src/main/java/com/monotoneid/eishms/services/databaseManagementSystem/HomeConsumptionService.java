@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.databaseManagementSystem;
+package com.monotoneid.eishms.services.databasemanagementsystem;
 
 import com.monotoneid.eishms.datapersistence.models.HomeConsumption;
 import com.monotoneid.eishms.datapersistence.repositories.DeviceConsumptions;

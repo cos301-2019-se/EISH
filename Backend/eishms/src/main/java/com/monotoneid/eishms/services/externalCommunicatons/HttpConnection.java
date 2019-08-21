@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.externalCommunicatons;
+package com.monotoneid.eishms.services.externalcommunicatons;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -38,16 +38,17 @@ public class HttpConnection {
                     content.append(inputLine);
                 }
                 in.close();
+                System.out.println("Success: Received data from api: " + api);
                 connection.disconnect();
                 return content;
             } else {
                 streamReader = new InputStreamReader(connection.getErrorStream());
-                System.out.println("Stream Reader: " + streamReader.toString() + "Weather status: " + status);
+                // System.out.println("Stream Reader: " + streamReader.toString() + "Weather status: " + status);
                 connection.disconnect();
                 return content;
             }
         } catch (Exception e) {
-            System.out.println("Failed to connect to weather api!");
+            System.out.println("Failed to connect to api!" + api);
             System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
             return null;
         }

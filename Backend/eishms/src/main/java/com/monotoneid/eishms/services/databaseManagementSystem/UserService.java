@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.databaseManagementSystem;
+package com.monotoneid.eishms.services.databasemanagementsystem;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.monotoneid.eishms.datapersistence.models.HomeUser;
 import com.monotoneid.eishms.datapersistence.models.UserType;
+import com.monotoneid.eishms.datapersistence.repositories.Blacklist;
 import com.monotoneid.eishms.datapersistence.repositories.Users;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 
@@ -29,6 +30,9 @@ public class UserService{
 
     @Autowired
     private Users usersRepository;
+
+    @Autowired
+    private Blacklist blacklist;
 
     public void setDefaulNumberOfDays(int newDefualtNumberofDays) {
         this.defaultNumberOfDays = newDefualtNumberofDays;
@@ -172,9 +176,13 @@ public class UserService{
      */
     public ResponseEntity<Object> removeUser(long userId) {
         try {
-            usersRepository.findById(userId)
+            HomeUser foundUser = usersRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+            if (foundUser.getUserType() == UserType.ROLE_ADMIN) {
+                throw null;
+            }    
             usersRepository.deleteById(userId);
+            blacklist.blacklistUser(foundUser.getUserName());
             JSONObject responseObject = new JSONObject();
             responseObject.put("message","Success: User has been deleted!");
             return new ResponseEntity<>(responseObject,HttpStatus.OK);
@@ -206,9 +214,16 @@ public class UserService{
             if (UserType.valueOf(role) == null || userId <= 0) {
                 throw null;
             }
-                    
+            
+            if (UserType.valueOf(role) == UserType.ROLE_ADMIN) {
+                System.out.println("changin admin");
+                throw null;
+            }
             HomeUser foundUser = usersRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist"));
+            if (foundUser.getUserType() == UserType.ROLE_ADMIN) {
+                throw null;
+            }
             foundUser.setUserType(UserType.valueOf(role));
             usersRepository.save(foundUser);
             if (foundUser.getUserType() == UserType.ROLE_GUEST) {

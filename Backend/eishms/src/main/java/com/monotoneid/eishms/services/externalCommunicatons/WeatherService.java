@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.externalCommunicatons;
+package com.monotoneid.eishms.services.externalcommunicatons;
 
 
 import java.io.BufferedReader;
@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +32,8 @@ import com.monotoneid.eishms.datapersistence.repositories.Weathers;
  * .
  */
 @Service
+@EnableScheduling
+@EnableAsync
 public class WeatherService {
 
     @Autowired
@@ -54,6 +59,7 @@ public class WeatherService {
     /** 
      * Sends the current weather after 15 mins through the socket "weather".
      */
+    @Async
     @Scheduled(fixedRate = rate, initialDelay = delay)
     public void getCurrentWeather() {
         try {

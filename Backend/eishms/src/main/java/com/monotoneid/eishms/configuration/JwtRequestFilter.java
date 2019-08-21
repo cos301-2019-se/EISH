@@ -7,7 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.monotoneid.eishms.services.databaseManagementSystem.JwtUserDetailsService;
+import com.monotoneid.eishms.services.databasemanagementsystem.JwtUserDetailsService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

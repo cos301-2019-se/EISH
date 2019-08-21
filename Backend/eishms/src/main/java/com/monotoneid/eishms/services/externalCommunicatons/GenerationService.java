@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.externalCommunicatons;
+package com.monotoneid.eishms.services.externalcommunicatons;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -8,12 +8,15 @@ import com.google.gson.JsonParser;
 import com.monotoneid.eishms.datapersistence.models.Generator;
 import com.monotoneid.eishms.datapersistence.models.GeneratorGeneration;
 import com.monotoneid.eishms.datapersistence.repositories.GeneratorGenerations;
-import com.monotoneid.eishms.services.databaseManagementSystem.GeneratorService;
+import com.monotoneid.eishms.services.databasemanagementsystem.GeneratorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,8 @@ import net.minidev.json.JSONObject;
  * CLASS GENERATION SERVICE.
  */
 @Service
+@EnableScheduling
+@EnableAsync
 public class GenerationService {
     
     @Autowired
@@ -45,6 +50,7 @@ public class GenerationService {
     /**
      * .
      */
+    @Async
     @Scheduled(fixedRate = rate, initialDelay = delay)
     public void getCurrentGeneration() {
         try {
@@ -57,7 +63,7 @@ public class GenerationService {
                 //(generator.getGeneratorUrl() + "/current");
                 StringBuffer content = connection.getContentFromURL(apiCurrent);
                 GeneratorGeneration newGeneratorGeneration;
-                System.out.println("Return from the HttpConnection");
+                // System.out.println("Return from the HttpConnection");
                 if (content == null) {
                     newGeneratorGeneration = new GeneratorGeneration(
                         0, generator, currentTimestamp1, "OFFLINE");
@@ -79,7 +85,7 @@ public class GenerationService {
                     generation.put("generatorGenerationTimestamp", currentTimestamp.toString());
                     generation.put("generatorGeneration", newGeneratorGeneration.getGeneratorGeneration());
                     simpMessagingTemplate.convertAndSend("/generator/" + generator.getGeneratorId() + "/generation", generation);
-                    System.out.println("Published generation of generator " + generator.getGeneratorId() + " at " + currentTimestamp);
+                    // System.out.println("Published generation of generator " + generator.getGeneratorId() + " at " + currentTimestamp);
                     generationValue += newGeneratorGeneration.getGeneratorGeneration();
                 }
                 generationRepository.save(newGeneratorGeneration);
@@ -87,7 +93,7 @@ public class GenerationService {
             generation.put("generatorGenerationTimestamp", currentTimestamp1.toString());
             generation.put("generatorGeneration", generationValue);
             simpMessagingTemplate.convertAndSend("/home/generation", generation);
-            System.out.println("Published home generation at " + currentTimestamp1.toString());
+            // System.out.println("Published home generation at " + currentTimestamp1.toString());
         } catch (Exception e) {
             System.out.println("Couldn't get generation data!");
             System.out.println("Error:  " + e.getMessage() + " " + e.getCause());
