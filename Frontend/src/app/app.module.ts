@@ -26,10 +26,11 @@ import { MatProgressBarModule, MatCardModule,
         MatAutocompleteModule, MatFormFieldModule,
         MatSelectModule, MatInputModule,
         MatCheckboxModule, MatDialogModule,
-        MatTableModule, MatMenuModule,
+        MatTableModule, MatMenuModule,MatTooltipModule,
         MatToolbarModule, MatButtonModule,
         MatSidenavModule, MatIconModule, MatPaginatorModule,
-        MatListModule } from '@angular/material';
+        MatListModule, MatBadgeModule, MatProgressSpinnerModule,
+        MatTabsModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { DeviceModalComponent } from './templates/forms/device-modal/device-modal.component';
@@ -43,8 +44,8 @@ import { eishmsRxStompConfig } from './services/stomp/rx-stomp.config';
 import { GenerationComponent } from './pages/generation/generation.component';
 import { GenerationChartComponent } from './pages/generation/generation-chart/generation-chart.component';
 import { SingleDeviceComponent } from './pages/devices/single-device/single-device.component';
-import { GeneratorModalComponent } from './templates/forms/generator-modal/generator-modal.component';
-import { NotificationsComponent } from './pages/notifications/notifications.component';
+// import { GeneratorModalComponent } from './templates/forms/generator-modal/generator-modal.component';
+// import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 
 const customNotifierOptions: NotifierOptions = {
@@ -129,7 +130,10 @@ const customNotifierOptions: NotifierOptions = {
     MatAutocompleteModule,
     MatFormFieldModule,
     FormsModule,
+    MatTooltipModule,
     MatInputModule,
+    MatBadgeModule,
+    MatProgressSpinnerModule,
     MatSelectModule,
     NotifierModule.withConfig(customNotifierOptions),
     MatTableModule,
@@ -140,7 +144,7 @@ const customNotifierOptions: NotifierOptions = {
     MatPaginatorModule,
     NgxGaugeModule,
     WavesModule, InputsModule, ButtonsModule,
-    MatProgressBarModule
+    MatProgressBarModule,MatTabsModule
   ],
   exports: [
     BrowserAnimationsModule

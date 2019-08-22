@@ -21,7 +21,11 @@ export class SideNavComponent implements OnInit {
   userList: any;
 
   users = [ 'Koki', 'Lebo', 'Aviwe' ];
-
+  notificationsArray = ['WHAT it do babbyyyyy!',
+                   'We are up annd running!!!',
+                   'Okay quit playing bro',
+                   'Just some extra stuff man',
+                   'Don\'t mind me I\'m not supposed to appear' ];
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches)

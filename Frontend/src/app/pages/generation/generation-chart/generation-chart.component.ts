@@ -13,7 +13,7 @@ export class GenerationChartComponent implements OnInit {
   heading: string;
   chart: Chart;
   currentDevice = null;
-
+  socketOnline: boolean;
   chartConfigration = null;
 
   constructor() {

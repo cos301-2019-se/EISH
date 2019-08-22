@@ -23,7 +23,7 @@
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
-                <button mat-stroked-button color="primary" (click)="returnDevice()">Search</button>
+                <button style="margin-left:1%"mat-stroked-button color="primary" (click)="returnDevice()">Search</button>
               </form>
                 <div *ngIf=deviceFound >
                   <table mdbTable striped="true" responsive="true" hover="true" small="true">
@@ -68,7 +68,7 @@
           Manage Users
         </mat-panel-title>
         <mat-panel-description>
-          remove users and edit user credentials
+          remove and edit user credentials
         </mat-panel-description>
       </mat-expansion-panel-header>
       <br>
@@ -126,7 +126,7 @@
                          (closed)="panelOpenState = false">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Manage Power Generators
+          Manage Generators
         </mat-panel-title>
         <mat-panel-description>
           add, remove and edit generators

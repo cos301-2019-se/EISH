@@ -20,9 +20,6 @@ import { environment } from 'src/environments/environment';
 })
 
 export class SettingsComponent implements OnInit {
-  /**
-   * Variables:
-   */
 
    // for user table
   formData: any;
