@@ -15,8 +15,10 @@ import org.springframework.stereotype.Service;
 import com.google.gson.*;
 import net.minidev.json.*;
 
+import com.monotoneid.eishms.datapersistence.models.HomeDetails;
 import com.monotoneid.eishms.datapersistence.models.Weather;
 import com.monotoneid.eishms.datapersistence.repositories.Weathers;
+import com.monotoneid.eishms.services.filemanagement.HomeDetailsService;
 
 /**
  * .
@@ -35,10 +37,14 @@ public class WeatherService {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
-    private String parameters = "city=Pretoria,ZA&key=a3c3c82616b444acad57349c4ad64cbd";
-    private String api = "https://api.weatherbit.io/v2.0/current?" + parameters;
+    @Autowired
+    private HomeDetailsService homeDetailsService;
+
+    private String parameters = "&key=a3c3c82616b444acad57349c4ad64cbd";
+    private String location;
+    private String api = "https://api.weatherbit.io/v2.0/current?";
     private final long rate = 900000;
-    private final long delay = 30000;
+    private final long delay = 15000;
 
     /** 
      * Sends the current weather after 15 mins through the socket "weather".
@@ -47,6 +53,10 @@ public class WeatherService {
     @Scheduled(fixedRate = rate, initialDelay = delay)
     public void getCurrentWeather() {
         try {
+            HomeDetails homeDetails = homeDetailsService.readFromFile();
+            location = "lat=" + Double.toString(homeDetails.getHomeLatitude());
+            location += "&lon=" + Double.toString(homeDetails.getHomeLongitude());
+            api += location + parameters;
             StringBuffer content = connection.getContentFromURL(api);
             if (content != null) {
                 JsonObject jsonContent = new JsonParser().parse(content.toString())
@@ -57,7 +67,7 @@ public class WeatherService {
                 String lastOBTime = weatherObject.get("last_ob_time").getAsString();
                 lastOBTime = lastOBTime.replace("T", " ");
 
-                String location = weatherObject.get("city_name").getAsString();
+                location = weatherObject.get("city_name").getAsString();
                 JsonObject weatherJson = weatherObject.get("weather").getAsJsonObject();
                 float temp = weatherObject.get("temp").getAsFloat();
                 int humidity = weatherObject.get("rh").getAsInt();

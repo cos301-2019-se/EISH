@@ -16,6 +16,9 @@ import javax.validation.constraints.Size;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ *CLASS GENERATORGENERATION. 
+ */
 @Entity(name = "generatorgeneration")
 @Table(name = "generatorgeneration")
 @EntityListeners(AuditingEntityListener.class)
@@ -38,7 +41,6 @@ public class GeneratorGeneration {
             nullable = true)
     private Float generatorGeneration;
 
-    //@Id
     @Column(name = "generatorgenerationtimestamp", 
             columnDefinition = "TIMESTAMP", 
             insertable = false, 
@@ -55,6 +57,7 @@ public class GeneratorGeneration {
 
     public GeneratorGeneration() {}
 
+    /**. */
     public GeneratorGeneration(float newGeneratorGeneration, 
         Generator newGenerator, 
         Timestamp newGeneratorGenerationTimestamp, 

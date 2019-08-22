@@ -7,8 +7,11 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+/**
+ *CLASS GENERATORGENERATIONID. 
+ */
 @Embeddable
-public class GeneratorGenerationId implements Serializable{
+public class GeneratorGenerationId implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -21,25 +24,34 @@ public class GeneratorGenerationId implements Serializable{
     public GeneratorGenerationId(){
 
     }
-    public GeneratorGenerationId(long newGeneratorId, Timestamp newGeneratorGenerationTimestamp){
+
+    public GeneratorGenerationId(long newGeneratorId,
+         Timestamp newGeneratorGenerationTimestamp) {
         this.generatorId = newGeneratorId;
         this.generatorGenerationTimestamp = newGeneratorGenerationTimestamp;
     }
+
     //getters
-   public long getGeneratorId(){
+    public long getGeneratorId() {
         return generatorId;
     }
-    public Timestamp getGeneratorGenerationTimeStamp(){
+
+    public Timestamp getGeneratorGenerationTimeStamp() {
         return generatorGenerationTimestamp;
     }
         
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof GeneratorGenerationId)) return false;
+        if (this == o) {
+            return true;
+        } 
+        if (!(o instanceof GeneratorGenerationId)) {
+            return false;
+        } 
         GeneratorGenerationId that = (GeneratorGenerationId) o;
-        return Objects.equals(getGeneratorId(), that.getGeneratorId()) &&
-                Objects.equals(getGeneratorGenerationTimeStamp(), that.getGeneratorGenerationTimeStamp());
+        return Objects.equals(getGeneratorId(), that.getGeneratorId())
+            && Objects.equals(getGeneratorGenerationTimeStamp(),
+                 that.getGeneratorGenerationTimeStamp());
     }
  
     @Override

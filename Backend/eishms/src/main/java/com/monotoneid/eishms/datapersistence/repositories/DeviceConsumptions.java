@@ -67,6 +67,5 @@ public interface DeviceConsumptions extends JpaRepository<DeviceConsumption,Devi
 
     //average of device consumptions every minute
     @Query(value="select AVG(deviceconsumption) from deviceconsumption where deviceconsumptiontimestamp  between now()- interval '1 minutes' and now() group by deviceid", nativeQuery = true)
-    //public Optional<List<Float>> findAverageEveryOneMinutes();
     public List<Float> findAverageEveryOneMinutes();
 }
