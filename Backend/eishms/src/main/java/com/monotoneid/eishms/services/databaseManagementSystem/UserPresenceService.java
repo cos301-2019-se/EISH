@@ -155,6 +155,23 @@ public class UserPresenceService {
 
     }
 
+    public boolean getPreviousUserPresence(long userId) {
+        try {
+            usersRepository.findById(userId)
+                        .orElseThrow(() -> new ResourceNotFoundException("user does not exist!"));
+           
+            HomeUserPresence foundHomeUserPresence = 
+                userPresenceRespository.findCurrentHomeUserPresence(userId)
+                        .orElseThrow(() 
+                            -> new ResourceNotFoundException("presence does not exist!"));
+            boolean isPresent = foundHomeUserPresence.getHomeUserPresence();
+            return isPresent;
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage() + "!");
+            throw e;
+        }
+    }
+
     public List<HomeUserPresence> findHomeUsersThatArePresent() {
         try {
             List<HomeUser> currentHomeUsers = usersRepository.findAll();

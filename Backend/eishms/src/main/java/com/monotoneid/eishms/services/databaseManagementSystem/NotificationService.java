@@ -60,15 +60,13 @@ public class NotificationService {
 
    public boolean addNotification(String newNotificationDescription,
    String newNotificationPriorityType,
-   String newNotificationStateType,
    Timestamp newNotificationTimeStamp) {
     if (!newNotificationDescription.isEmpty() && 
         !newNotificationPriorityType.isEmpty() &&
-        !newNotificationStateType.isEmpty() &&
         !newNotificationTimeStamp.toString().isEmpty()) {
     Notification newNotification = new Notification(newNotificationDescription, 
             newNotificationPriorityType, 
-            newNotificationStateType, 
+            NotificationStateType.NOTIFICATION_UNREAD.toString(), 
             newNotificationTimeStamp);
     
         notificationsRepository.save(newNotification); 

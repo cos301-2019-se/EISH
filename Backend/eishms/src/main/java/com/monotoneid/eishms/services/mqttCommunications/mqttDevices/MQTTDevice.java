@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import com.monotoneid.eishms.datapersistence.models.Device;
+import com.monotoneid.eishms.datapersistence.models.NotificationPriorityType;
 import com.monotoneid.eishms.services.mqttcommunications.QueryReplyManager;
 
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
@@ -82,7 +83,7 @@ public class MqttDevice {
             setPublishTopics();
             //this.asyncClient.setManualAcks(false);
             this.asyncClient.subscribe(subscribeTopics, deviceQos).waitForCompletion();
-            this.asyncClient.setCallback(new MqttCallback(){
+            this.asyncClient.setCallback(new MqttCallback() {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     String jsonMessage = new String(message.getPayload());
@@ -102,14 +103,25 @@ public class MqttDevice {
             
                 @Override
                 public void connectionLost(Throwable cause) {
-                    System.out.println("Connection to MQTT Broker lost.");
+                    JSONObject notificationObject = new JSONObject();
+                    Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+                    notificationObject.put("priority", NotificationPriorityType.PRIORITY_CRITICAL.toString());
+                    notificationObject.put("message", "Lost Connection to MQTT Broker.");
+                    deviceManager.notificationService.addNotification("Lost Connection to MQTT Broker.", NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
+                    deviceManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
                 }
             });
         } catch (MqttException me) {
             // me.printStackTrace();
             //Handle the exception appropriate
-            System.out.println( "connection error");
+            // System.out.println( "connection error");
             //throw new Exception("Connection error mqtt device");
+            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            JSONObject notificationObject = new JSONObject();
+            notificationObject.put("priority", NotificationPriorityType.PRIORITY_CRITICAL.toString());
+            notificationObject.put("message", "Could not connect to MQTT Broker.");
+            deviceManager.notificationService.addNotification("Could not connect to MQTT Broker.", NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
+            deviceManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
         }
         configureDevice();
     }
@@ -152,7 +164,14 @@ public class MqttDevice {
         try {
             asyncClient.publish(publishTopics[0], "OFF".getBytes(), 0, false);
         } catch (MqttException me) {
-            me.printStackTrace();
+            //me.printStackTrace();
+            JSONObject notificationObject = new JSONObject();
+            notificationObject.put("priority", NotificationPriorityType.PRIORITY_CRITICAL.toString());
+            String message = "Could not turn off device." + getName();
+            notificationObject.put("message", message);
+            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            deviceManager.notificationService.addNotification(message, NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
+            deviceManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
         }
     }
 
@@ -160,7 +179,14 @@ public class MqttDevice {
         try {
             asyncClient.publish(publishTopics[0], "ON".getBytes(), 0, false);
         } catch (MqttException me) {
-            me.printStackTrace();
+            // me.printStackTrace();
+            JSONObject notificationObject = new JSONObject();
+            notificationObject.put("priority", NotificationPriorityType.PRIORITY_CRITICAL.toString());
+            String message = "Could not turn on device." + getName();
+            notificationObject.put("message", message);
+            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            deviceManager.notificationService.addNotification(message, NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
+            deviceManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
         }
     }
 
