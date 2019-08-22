@@ -5,8 +5,11 @@ import java.sql.Timestamp;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.monotoneid.eishms.datapersistence.models.BatteryCapacity;
+import com.monotoneid.eishms.datapersistence.models.ChargingStateType;
+import com.monotoneid.eishms.datapersistence.models.PowerStateType;
 import com.monotoneid.eishms.datapersistence.repositories.BatteryCapacities;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
+import com.monotoneid.eishms.services.databasemanagementsystem.NotificationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +40,15 @@ public class BatteryService {
     @Autowired
     private BatteryCapacities batteryCapacityRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     private String api = "http://127.0.0.1:3001/v2/installations/0/Battery";
+    private boolean apiStatus = true;
+    private boolean fullStatus = true;
+    private boolean lowStatus = true;
+    private boolean criticalStatus = true;
+    private boolean emptyStatus = true;
     private final long rate = 15000;
     private final long delay = 10000;
     
@@ -48,7 +59,6 @@ public class BatteryService {
     @Scheduled(fixedRate = rate, initialDelay = delay)
     public void getBatteryCapacity() {
         JSONObject batteryCapacity = new JSONObject();
-
         try {
             Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
             StringBuffer content = connection.getContentFromURL(api);
@@ -56,8 +66,13 @@ public class BatteryService {
 
             if (content == null) {
                 // System.out.println("Content from api is null!");
-                //newBatteryCapacity = new BatteryCapacity(
-                  //  0, 0,"POWERSTATE_OFFLINE", "CHARGINGSTATE_OFFLINE", currentTimestamp, 0);
+                newBatteryCapacity = new BatteryCapacity(
+                  0, 0,PowerStateType.POWERSTATE_OFFLINE.toString(), 
+                  ChargingStateType.CHARGINGSTATE_OFFLINE.toString(), currentTimestamp, 0);
+                if (apiStatus == true) {
+                    notifyBatteryStatus(PowerStateType.POWERSTATE_OFFLINE);    
+                }
+                apiStatus = false;
             } else {
                 JsonObject jsonContent = new JsonParser().parse(content.toString())
                                                         .getAsJsonObject();
@@ -78,8 +93,9 @@ public class BatteryService {
                 batteryCapacityRepository.save(newBatteryCapacity);
                 batteryCapacity.put("batteryCapacityPowerPercentage", 
                             newBatteryCapacity.getBatteryCapacityPowerPercentage());
-                // System.out.println("Published battery power percentage at " + currentTimestamp);
                 simpMessagingTemplate.convertAndSend("/battery", batteryCapacity);
+                apiStatus = true;
+                notifyBatteryStatus(newBatteryCapacity.getBatteryCapacityPowerState());
             }
         } catch (Exception e) {
             System.out.println("Could'nt get data from battery!");
@@ -106,5 +122,58 @@ public class BatteryService {
             batteryCapacity.put("batteryCapacityPowerPercentage", 0);
             return new ResponseEntity<>(batteryCapacity, HttpStatus.OK);
         }
+    }
+
+    private void notifyBatteryStatus(PowerStateType powerState) {
+        JSONObject notificationObject = new  JSONObject();
+        if (powerState == PowerStateType.POWERSTATE_FULL) {
+            if (fullStatus == true) {
+                notificationObject.put("priority","PRIORITY_MINOR");
+                notificationObject.put("message","Battery Full!");
+                simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                fullStatus = false;
+                lowStatus = true;
+                criticalStatus = true;
+                emptyStatus = true;
+            }
+        } else if (powerState == PowerStateType.POWERSTATE_LOW) {
+            if (lowStatus == true) {
+                notificationObject.put("priority","PRIORITY_WARNING");
+                notificationObject.put("message","WARNING: Battery Low!");
+                simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                fullStatus = true;
+                lowStatus = false;
+                criticalStatus = true;
+                emptyStatus = true;
+            }
+        } else if (powerState == PowerStateType.POWERSTATE_CRITICALLYLOW) {
+            if(criticalStatus == true) {
+                notificationObject.put("priority","PRIORITY_CRITICAL");
+                notificationObject.put("message","CRITICAL: Battery Critically Low!");
+                simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                fullStatus = true;
+                lowStatus = true;
+                criticalStatus = false;
+                emptyStatus = true;
+            }
+        } else if (powerState == PowerStateType.POWERSTATE_EMPTY) {
+            if(emptyStatus == true) {
+                notificationObject.put("priority","PRIORITY_CRITICAL");
+                notificationObject.put("message","CRITICAL: Battery Critically Low!");
+                simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                fullStatus = true;
+                lowStatus = true;
+                criticalStatus = true;
+                emptyStatus = false;
+            }
+        } else if (powerState == PowerStateType.POWERSTATE_OFFLINE) {
+            notificationObject.put("priority","PRIORITY_CRITICAL");
+            notificationObject.put("message","ERROR: Failure to connect to battery api!");
+            simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+        }
+
+        notificationService.addNotification(notificationObject.getAsString("message"),
+                    notificationObject.getAsString("priority"),
+                    new Timestamp(System.currentTimeMillis()));
     }
 }

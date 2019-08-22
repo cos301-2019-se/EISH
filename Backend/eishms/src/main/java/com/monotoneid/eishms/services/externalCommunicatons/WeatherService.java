@@ -53,6 +53,7 @@ public class WeatherService {
     @Scheduled(fixedRate = rate, initialDelay = delay)
     public void getCurrentWeather() {
         try {
+            api = "https://api.weatherbit.io/v2.0/current?";
             HomeDetails homeDetails = homeDetailsService.readFromFile();
             location = "lat=" + Double.toString(homeDetails.getHomeLatitude());
             location += "&lon=" + Double.toString(homeDetails.getHomeLongitude());
