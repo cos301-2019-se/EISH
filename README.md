@@ -13,7 +13,7 @@ monitoring the consumption of the energy.
 
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/User_Manual.pdf" target="_blank">User Manual Demo 4</a>
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/CodingStandard.pdf" target="_blank">Coding Standards Demo 4</a>
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/CodingStandarddemo4.pdf" target="_blank">Coding Standards Demo 4</a>
 
 
 
