@@ -18,13 +18,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
+//import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ *CLASS DEVICE. 
+ */
 @JsonIgnoreProperties({"deviceConsumption"})
 @Entity(name = "device")
 @Table(name = "device")
@@ -43,25 +46,42 @@ public class Device {
         
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "deviceid", columnDefinition = "serial", updatable = false, nullable = false)
+    @Column(name = "deviceid", 
+            columnDefinition = "serial", 
+            updatable = false, 
+            nullable = false)
     private long deviceId;
     
     //@Size(min = 4, max = 30, message = "Device Name must be between 4 and 30 characters")
-    @Column(name = "devicename", columnDefinition = "text", updatable = true, unique = true, nullable = false)
+    @Column(name = "devicename", 
+            columnDefinition = "text", 
+            updatable = true, 
+            unique = true, 
+            nullable = false)
     private String deviceName;
 
     //@Size(min = 4, max = 30, message = "Device Topic must be between 4 and 30 characters")
-    @Column(name = "devicetopic", columnDefinition = "text", updatable = true, unique = true, nullable = false)
+    @Column(name = "devicetopic", 
+            columnDefinition = "text", 
+            updatable = true, 
+            unique = true, 
+            nullable = false)
     private String deviceTopic;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "devicepriority", columnDefinition = "devicePriorityType", updatable = true, nullable = false)
+    @Column(name = "devicepriority", 
+            columnDefinition = "devicePriorityType", 
+            updatable = true, 
+            nullable = false)
     @Type(type = "pgsql_enum")
     private DevicePriorityType devicePriority;
 
     //@Size(min = 1, message = "number of device states must be one or more")
     @Type(type = "string-array")
-    @Column(name = "devicestates", columnDefinition = "text[]", updatable = true, nullable = false)
+    @Column(name = "devicestates", 
+            columnDefinition = "text[]", 
+            updatable = true, 
+            nullable = false)
     private String[] deviceStates;
     
    

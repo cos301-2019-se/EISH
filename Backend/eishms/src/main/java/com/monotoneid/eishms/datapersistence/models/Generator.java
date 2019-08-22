@@ -24,6 +24,9 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ *CLASS GENERATOR. 
+ */
 @Entity(name = "generator")
 @Table(name = "generator")
 @EntityListeners(AuditingEntityListener.class)
@@ -88,7 +91,8 @@ public class Generator {
     private List<GeneratorGeneration> generatorGeneration = new ArrayList<GeneratorGeneration>();
 
     public Generator(){}
-
+    
+    /**. */
     public Generator(@JsonProperty("generatorName") String newGeneratorName,
         @JsonProperty("generatorUrl") String newGeneratorUrl,
         @JsonProperty("generatorPriorityType") String newGeneratorPriorityType,

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.minidev.json.JSONObject;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 36000)
 @RestController
 @RequestMapping("/api/user")
 public class UserPresenceEndPointController {
@@ -76,7 +76,7 @@ public class UserPresenceEndPointController {
     }
 
     @GetMapping(value = "/presences")
-    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public List<HomeUserPresence> retrieveAllPresentUsers() {
         return userPresenceService.findHomeUsersThatArePresent();
     }

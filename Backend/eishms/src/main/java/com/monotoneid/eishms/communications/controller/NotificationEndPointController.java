@@ -3,7 +3,7 @@ package com.monotoneid.eishms.communications.controller;
 import java.util.List;
 
 import com.monotoneid.eishms.datapersistence.models.Notification;
-import com.monotoneid.eishms.services.databaseManagementSystem.NotificationService;
+import com.monotoneid.eishms.services.databasemanagementsystem.NotificationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

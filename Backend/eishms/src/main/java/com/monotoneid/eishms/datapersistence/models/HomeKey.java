@@ -2,12 +2,16 @@ package com.monotoneid.eishms.datapersistence.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ *CLASS HOMEKEY MODEL. 
+ */
 public class HomeKey {
     private String keyName;
     private String userKey;
     private String unencryptedKey;
     private UserType userType;
 
+    /**. */
     public HomeKey(String keyname, String userkey, UserType usertype) {
         setKeyName(keyname);
         setUserkey(userkey);

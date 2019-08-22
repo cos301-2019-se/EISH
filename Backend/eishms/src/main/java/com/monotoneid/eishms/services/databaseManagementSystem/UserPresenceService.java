@@ -159,10 +159,16 @@ public class UserPresenceService {
         try {
             List<HomeUser> currentHomeUsers = usersRepository.findAll();
             List<HomeUserPresence> currentUserPresence = new ArrayList<HomeUserPresence>();
+            HomeUserPresence tempUserPresence;
             for(int i = 0; i < currentHomeUsers.size(); i++) {
-                HomeUserPresence tempUserPresence = userPresenceRespository.findCurrentHomeUserPresence(
-                    currentHomeUsers.get(i).getUserId())
-                            .orElseThrow(() -> new ResourceNotFoundException("one or more users presence does not exist!"));
+                if (userPresenceRespository.findCurrentHomeUserPresence(
+                    currentHomeUsers.get(i).getUserId()).isPresent()) {
+                        tempUserPresence = userPresenceRespository.findCurrentHomeUserPresence(
+                            currentHomeUsers.get(i).getUserId())
+                                                .orElseThrow(() -> new ResourceNotFoundException("One or more user presence does not exist!"));
+                } else {
+                    tempUserPresence = null;
+                }
                 if (tempUserPresence != null) {
                     if (tempUserPresence.getHomeUserPresence() == true) {
                         currentUserPresence.add(tempUserPresence);

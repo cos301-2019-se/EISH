@@ -19,7 +19,11 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import net.minidev.json.JSONObject;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 //@Service
 public class MqttDevice {
@@ -59,7 +63,6 @@ public class MqttDevice {
         System.out.println("uuid :" + this.asyncClientId);
 
         this.deviceManager = deviceManager;
-        queryReplyManager = new QueryReplyManager();
         consumptionBacklog = new ArrayList<String>();
         deviceState = "";
         try {
@@ -172,49 +175,13 @@ public class MqttDevice {
     /* Device Query */
 
     public String getCurrentState() {
-        String mqttReply;
-
         try {
-            queryReplyManager.register(publishTopics[0], subscribeTopics[1]);
             asyncClient.publish(publishTopics[0], "".getBytes(), 2, false).waitForCompletion();
-            if (queryReplyManager.replyExists(publishTopics[0])) {
-                mqttReply = queryReplyManager.getReply(publishTopics[0]);
-                //decode mqttReply and set deviceState
-                deviceState = mqttReply;
-            }
         } catch (MqttException me) {
-            //It failed to publish a message so handle the error appropiately.
             me.printStackTrace();
         }
 
         return deviceState;
-    }
-
-    /* Helper Methods */
-    private Map<String, Map<String, Float>> jsonToMap(String strJSON) {
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Map<String, Float>> jsonMap = null;
-        
-        try {
-            jsonMap = mapper.readValue(strJSON, Map.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return jsonMap;
-    }
-
-    private Map<String, String> jsonToMapString(String strJSON) {
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, String> jsonMap = null;
-        
-        try {
-            jsonMap = mapper.readValue(strJSON, Map.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return jsonMap;
     }
 
     /* Handler Functions */
@@ -238,22 +205,24 @@ public class MqttDevice {
     }
 
     private void parseAndSaveConsumption(String message) {
-        Map<String, Map<String, Float>> telemetryObject = jsonToMap(message);
-        String hack = new String("" + telemetryObject.get("ENERGY").get("Power") + "");
-        float consumption = Float.parseFloat(hack);
-        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-        //Remember to use the timestamp from the device not the server one
-        deviceManager.deviceConsumptionService.addDeviceConsumption(
-            device.getDeviceId(), 
-            currentTimestamp, deviceState, consumption);
+        JsonObject jsonContent = new JsonParser().parse(message)
+                                                        .getAsJsonObject();
 
-        Map<String, String> jsonConsumption = new HashMap<>();
-        jsonConsumption.put("deviceConsumptionTimestamp", currentTimestamp.toString());
-        jsonConsumption.put("deviceConsumption", Float.toString(consumption));
-        deviceManager.simpMessagingTemplate.convertAndSend("/device/" 
-            + device.getDeviceTopic() 
-            + "/consumption", jsonConsumption);
-        System.out.println("Inserted Consumption in Database.");
+        if (jsonContent.has("ENERGY")) {
+            JsonObject energyObject = jsonContent.get("ENERGGY").getAsJsonObject();
+            float consumption = energyObject.get("Power").getAsFloat();
+            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            deviceManager.deviceConsumptionService.addDeviceConsumption(
+                device.getDeviceId(), 
+                currentTimestamp, deviceState, consumption);
+    
+            JSONObject consumptionObject = new JSONObject();
+            consumptionObject.put("deviceConsumptionTimestamp", currentTimestamp.toString());
+            consumptionObject.put("deviceConsumption", Float.toString(consumption));
+            deviceManager.simpMessagingTemplate.convertAndSend("/device/" 
+                + device.getDeviceTopic() 
+                + "/consumption", consumptionObject);
+        }         
     }
 
     private void handleState(String subscribeTopic, String message) {
@@ -262,10 +231,9 @@ public class MqttDevice {
         }
             
         deviceState = message;
-        Map<String, String> jsonDeviceState = new HashMap<>();
-        jsonDeviceState.put("state", deviceState);
-        deviceManager.simpMessagingTemplate.convertAndSend("/device/" + device.getDeviceTopic() + "/state", jsonDeviceState);
-        System.out.println("Device State is now: " + deviceState);
+        JSONObject stateObject = new JSONObject();
+        stateObject.put("state", deviceState);
+        deviceManager.simpMessagingTemplate.convertAndSend("/device/" + device.getDeviceTopic() + "/state", stateObject);
     }
 
     private void handleWill(String subscribeTopic, String message) {
@@ -274,11 +242,9 @@ public class MqttDevice {
         }
             
         isAvailable = message.toLowerCase().matches("online");
-        Map<String, Boolean> jsonDeviceState = new HashMap<>();
-        jsonDeviceState.put("available", isAvailable);
-        //deviceManager.simpMessagingTemplate.convertAndSend("/device/" + device.getDeviceTopic() + "/available", jsonDeviceState);
-        //System.out.println("Device isAvailable: " + isAvailable);
-        //Inform websocket of the current availability state
+        JSONObject stateObject = new JSONObject();
+        stateObject.put("available", isAvailable);
+        deviceManager.simpMessagingTemplate.convertAndSend("/device/" + device.getDeviceTopic() + "/state", stateObject);
     }
 
     private void configureDevice() {
