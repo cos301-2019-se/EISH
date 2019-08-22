@@ -26,13 +26,14 @@ import { MatProgressBarModule, MatCardModule,
         MatAutocompleteModule, MatFormFieldModule,
         MatSelectModule, MatInputModule,
         MatCheckboxModule, MatDialogModule,
-        MatTableModule, MatMenuModule,
+        MatTableModule, MatMenuModule,MatTooltipModule,
         MatToolbarModule, MatButtonModule,
         MatSidenavModule, MatIconModule, MatPaginatorModule,
-        MatListModule } from '@angular/material';
+        MatListModule, MatBadgeModule, MatProgressSpinnerModule,
+        MatTabsModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { DeviceModalComponent } from './pages/settings/device-modal/device-modal.component';
+import { DeviceModalComponent } from './templates/forms/device-modal/device-modal.component';
 import 'hammerjs';
 import { MDBBootstrapModule, WavesModule, InputsModule, ButtonsModule } from 'node_modules/angular-bootstrap-md';
 import {DeviceService} from './services/devices/device.service';
@@ -43,6 +44,50 @@ import { eishmsRxStompConfig } from './services/stomp/rx-stomp.config';
 import { GenerationComponent } from './pages/generation/generation.component';
 import { GenerationChartComponent } from './pages/generation/generation-chart/generation-chart.component';
 import { SingleDeviceComponent } from './pages/devices/single-device/single-device.component';
+// import { GeneratorModalComponent } from './templates/forms/generator-modal/generator-modal.component';
+// import { NotificationsComponent } from './pages/notifications/notifications.component';
+import { NotifierModule, NotifierOptions } from 'angular-notifier';
+
+const customNotifierOptions: NotifierOptions = {
+  position: {
+  horizontal: {
+  position: 'right',
+  distance: 12
+  },
+  vertical: {
+  position: 'bottom',
+  distance: 12,
+  gap: 10
+  }
+  },
+  theme: 'material',
+  behaviour: {
+    autoHide: 5000,
+    onClick: 'hide',
+    onMouseover: 'pauseAutoHide',
+    showDismissButton: true,
+    stacking: 4
+  },
+  animations: {
+    enabled: true,
+    show: {
+      preset: 'slide',
+      speed: 300,
+      easing: 'ease'
+    },
+    hide: {
+      preset: 'fade',
+      speed: 300,
+      easing: 'ease',
+      offset: 50
+    },
+    shift: {
+      speed: 300,
+      easing: 'ease'
+    },
+    overlap: 150
+  }
+};
 
 @NgModule({
   declarations: [
@@ -64,7 +109,9 @@ import { SingleDeviceComponent } from './pages/devices/single-device/single-devi
     DailyPlannerComponent,
     GenerationComponent,
     GenerationChartComponent,
-    SingleDeviceComponent
+    SingleDeviceComponent,
+    GeneratorModalComponent,
+    NotificationsComponent
   ],
   imports: [
     BrowserModule,
@@ -83,8 +130,12 @@ import { SingleDeviceComponent } from './pages/devices/single-device/single-devi
     MatAutocompleteModule,
     MatFormFieldModule,
     FormsModule,
+    MatTooltipModule,
     MatInputModule,
+    MatBadgeModule,
+    MatProgressSpinnerModule,
     MatSelectModule,
+    NotifierModule.withConfig(customNotifierOptions),
     MatTableModule,
     MatCheckboxModule, MatDialogModule,
     BrowserAnimationsModule,
@@ -93,7 +144,7 @@ import { SingleDeviceComponent } from './pages/devices/single-device/single-devi
     MatPaginatorModule,
     NgxGaugeModule,
     WavesModule, InputsModule, ButtonsModule,
-    MatProgressBarModule
+    MatProgressBarModule,MatTabsModule
   ],
   exports: [
     BrowserAnimationsModule
@@ -114,7 +165,7 @@ import { SingleDeviceComponent } from './pages/devices/single-device/single-devi
     deps: [InjectableRxStompConfig]
   }],
   bootstrap: [AppComponent],
-  entryComponents: [DeviceModalComponent ]
+  entryComponents: [DeviceModalComponent, GeneratorModalComponent]
 })
 
 export class AppModule {}

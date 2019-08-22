@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import {MatDialogModule, MatDialogConfig} from '@angular/material/dialog';
+import { MatDialogConfig} from '@angular/material/dialog';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {map, startWith, catchError} from 'rxjs/operators';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import { DeviceModalComponent } from './device-modal/device-modal.component';
+import {map, startWith} from 'rxjs/operators';
+import {MatDialog} from '@angular/material';
+import { DeviceModalComponent } from 'src/app/templates/forms/device-modal/device-modal.component';
+import { GeneratorModalComponent } from 'src/app/templates/forms/generator-modal/generator-modal.component';
 import { UserAccessControlService } from 'src/app/services/user/user-access-control.service';
 import { GeneratorService } from 'src/app/services/generators/generator.service';
 import { DeviceService } from 'src/app/services/devices/device.service';
 import { Response } from 'selenium-webdriver/http';
+import { NotifierService } from 'angular-notifier';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-settings',
@@ -17,12 +20,8 @@ import { Response } from 'selenium-webdriver/http';
 })
 
 export class SettingsComponent implements OnInit {
-  constructor(private generatorService: GeneratorService,
-              private userService: UserAccessControlService,
-              private deviceService: DeviceService,
-              private dialog: MatDialog) { }
 
-  // for user table
+   // for user table
   formData: any;
   isDataAvailable: boolean;
   userRemoveFailed: boolean;
@@ -40,7 +39,8 @@ export class SettingsComponent implements OnInit {
   devicePriority: string;
   deviceResult: any;
   deviceTableHeaders = ['Device Name ', 'Device Topic', 'Device Priority' ];
-  userTableHeaders = ['Name', 'Email', 'Current Expiry Date', 'Extend Expiry Date', 'Resident', 'Remove'];
+  userTableHeaders = ['Name', 'Email', 'Days Until Expiry', 'Extend Expiry Date Days', 'Resident', 'Remove'];
+  generatorTableHeaders = ['Generator Name ', 'Generator URL', 'Generator Priority' ];
   editField: string;
   deviceNames: string[];
   deviceRemoveFailed: boolean;
@@ -48,37 +48,53 @@ export class SettingsComponent implements OnInit {
   deviceArray: any;
   userArray: any;
 
+  //  for generators
+  generatorArray: any;
+
+  // for notifications
+  private notifier: NotifierService;
+  generatorChangeFailed: boolean;
+  generatorPriority: any;
+
+  /**
+   * Functions:
+   */
+
+  /**
+   * Default constuctor
+   */
+  constructor(private generatorService: GeneratorService,
+              private userService: UserAccessControlService,
+              private deviceService: DeviceService,
+              private dialog: MatDialog,
+              private notifierService: NotifierService) { }
+  /**
+   * default function executed on intialisation of page
+   */
   ngOnInit() {
-    this.deviceService.getAllDevices().pipe(
-      map( response => {
-          this.deviceArray =  response,
-          JSON.stringify(this.deviceArray);
-
-          let devices: string[];
-          devices = [];
-          for (let index = 0; index < this.deviceArray.length; index++) {
-              devices[index] = this.deviceArray[index].deviceName;
-            }
-          this.deviceNames = devices;
-
-          this.filteredOptions = this.userDeviceName.valueChanges
-            .pipe(
-              startWith(''),
-              map(value => this._filter(value))
-
-            );
-
-          })
-     ).subscribe();
+    this.getDeviceList();
+    this.getAllGenerators();
     this.getUserList();
     this.deviceFound = false;
     this.userRemoveFailed = false;
     this.userChangeFailed = false;
     this.deviceRemoveFailed = false;
     this.deviceChangeFailed = false;
+
+    this.notifier = this.notifierService;
+    this.notifier.notify( 'success', 'You are awesome! I mean it!' );
+    this.notifier.notify( 'warning', 'What it do babbbbyyyyyyy!!!' );
+    this.notifier.notify( 'error', 'Damn!' );
+
+
   }
 
-  getDeviceList() {
+  // Device Functions //
+  /**
+   * Retrieves list of system devices
+   */
+  getDeviceList() { // getDeviceJSONArray
+    console.log('getting device list');
     this.deviceService.getAllDevices().pipe(
       map( response => {
           this.deviceArray =  response,
@@ -102,90 +118,78 @@ export class SettingsComponent implements OnInit {
      ).subscribe();
   }
 
-    updateUserList(id: number, property: string, event: any) {
-      if (property === 'userType') {
-        console.log(this.userArray[id].userName);
-        if (this.userArray[id].userType === 'ROLE_RESIDENT') {
-          console.log('i am a ');
-          const userUpdate = {
-            userId: this.userArray[id].userId ,
-            userType:  'ROLE_GUEST'
-           };
-          this.userService.changeUserType(userUpdate);
+  /**
+   * Helper function
+   * Stores selected value from device select list
+   * @param priority: selected priority from list
+   */
+  changeSelectValue(priority: string) {
+      console.log('priority selected: ' + priority);
+      this.devicePriority = priority;
+  }
 
-        } else {
-          const userUpdate = {
-            userId: this.userArray[id].userId ,
-            userType:  'ROLE_RESIDENT'
+  /**
+   * Helper function
+   * Stores selected value from generator select list
+   * @param priority: selected priority from list
+   */
+  changeGeneratorSelectValue(priority: string) {
+    console.log('priority selected: ' + priority);
+    this.generatorPriority = priority;
+}
 
-           };
-          this.userService.changeUserType(userUpdate);
-          this.getUserList();
-        }
+  /**
+   * Update device properties
+   * @param id: device id
+   * @param property: device property being changed
+   * @param event: click | key press
+   */
+  updateDeviceList(id: number, property: string, event: any) {
+    // change device name
+    if (property === 'deviceName') {
+      console.log('in changing device name');
+      const editField = event.target.textContent;
+      console.log('edit field: ' + editField);
+      const deviceUpdate = {
+      deviceId: this.deviceResult[id].deviceId,
+      deviceName: editField,
+      deviceTopic: this.deviceResult[id].deviceTopic,
+      devicePriorityType: this.deviceResult[id].devicePriority,
+      // tslint:disable-next-line: quotemark
+      deviceStates: ["ON", "OFF", "OFFLINE"]
+    };
 
-      } else {
-        const editField = event.target.textContent;
-
-        // console.log(this.editField);
-        const userUpdate = {
-          userId: this.userArray[id].userId,
-          nrDays: editField
-        };
-        this.userService.changeUserExpiration(userUpdate);
-        this.getUserList();
-      }
-    }
-
-
-    updateDeviceList(id: number, property: string, event: any) {
-      if (property === 'deviceName') {
-
-          console.log('in changing device name');
-          const editField = event.target.textContent;
-          console.log('edit field: ' + editField);
-          const deviceUpdate = {
-          deviceId: this.deviceResult[id].deviceId,
-          deviceName: editField,
-          deviceTopic: this.deviceResult[id].deviceTopic,
-          devicePriorityType: this.deviceResult[id].devicePriority,
-          // tslint:disable-next-line: quotemark
-          deviceStates: ["ON", "OFF", "OFFLINE"]
-          };
-
-          console.log('object: ' + JSON.stringify(deviceUpdate));
-          this.deviceService.editDevice(deviceUpdate).subscribe(
-            ( res: Response) => {
-              if (res.status !== 200) {
+      console.log('object: ' + JSON.stringify(deviceUpdate));
+      this.deviceService.editDevice(deviceUpdate).subscribe(
+        ( res: Response) => {
+          if (res.status !== 200) {
                 this.deviceChangeFailed = true;
               }
-           });
+          });
 
-      } else if (property === 'deviceTopic') {
-          console.log('in changing device topic');
+    } else if (property === 'deviceTopic') {
+        // changing device topic
 
-          const editField = event.target.textContent;
-          const deviceUpdate = {
+        const editField = event.target.textContent;
+        const deviceUpdate = {
           deviceId: this.deviceResult[id].deviceId,
           deviceName: this.deviceResult[id].deviceName,
           deviceTopic: editField,
           devicePriorityType: this.deviceResult[id].devicePriority,
           // tslint:disable-next-line: quotemark
           deviceStates: ["ON", "OFF", "OFFLINE"]
-          };
+        };
 
-          console.log('object: ' + JSON.stringify(deviceUpdate));
-          this.deviceService.editDevice(deviceUpdate).subscribe(
-            ( res: Response) => {
+        this.deviceService.editDevice(deviceUpdate).subscribe(
+          ( res: Response) => {
               if (res.status !== 200) {
                 this.deviceChangeFailed = true;
               }
            });
 
       } else {
-          console.log('changing device priortity');
+          // changing device priortity
 
-          console.log('priority type change: ' + this.devicePriority);
-          console.log(this.deviceResult[id]);
           const deviceUpdate = {
           deviceId: this.deviceResult[id].deviceId,
           deviceName: this.deviceResult[id].deviceName,
@@ -194,7 +198,7 @@ export class SettingsComponent implements OnInit {
           // tslint:disable-next-line: quotemark
           deviceStates: ["ON", "OFF", "OFFLINE"]
           };
-          console.log('object: ' + JSON.stringify(deviceUpdate));
+          // console.log('object: ' + JSON.stringify(deviceUpdate));
           this.deviceService.editDevice(deviceUpdate).subscribe(
             ( res: Response) => {
               if (res.status !== 200) {
@@ -202,55 +206,82 @@ export class SettingsComponent implements OnInit {
               }
            });
       }
-    }
+  }
 
-    resolveUserType(userType) {
-      if (userType === 'ROLE_RESIDENT') {
-        return true;
+  /**
+   * Update generator properties
+   * @param id: generator id
+   * @param property: generator property being changed
+   * @param event: click | key press
+   */
+  updateGeneratorList(id: number, property: string, event: any) {
+    // change generator name
+    if (property === 'generatorName') {
+      console.log('in changing generator name');
+      const editField = event.target.textContent;
+      console.log('edit field: ' + editField);
+      const generatorUpdate = {
+      generatorId: this.generatorArray[id].generatorId,
+      generatorName: editField,
+      generatorUrl: this.generatorArray[id].generatorURL,
+      // tslint:disable-next-line: quotemark
+      generatorStates: ["ONLINE", "OFFLINE"]
+    };
+
+      console.log('object: ' + JSON.stringify(generatorUpdate));
+      this.generatorService.editPowerGenerator(generatorUpdate).subscribe(
+        ( res: Response) => {
+          if (res.status !== 200) {
+            this.generatorChangeFailed = true;
+          }
+       });
+
+    } else if (property === 'generatorURL') {
+        // changing generator URL
+
+        const editField = event.target.textContent;
+        const generatorUpdate = {
+          generatorId: this.generatorArray[id].generatorId,
+          generatorName: this.generatorArray[id].generatorName,
+          generatorUrl: editField,
+          // tslint:disable-next-line: quotemark
+          generatorStates: ["ONLINE", "OFFLINE"]
+        };
+
+        console.log('object: ' + JSON.stringify(generatorUpdate));
+        this.generatorService.editPowerGenerator(generatorUpdate).subscribe(
+          ( res: Response) => {
+            if (res.status !== 200) {
+              this.generatorChangeFailed = true;
+            }
+         });
+
       } else {
-        return false;
+          // changing generator priortity
 
+          const generatorUpdate = {
+            generatorId: this.generatorArray[id].generatorId,
+            generatorName: this.generatorArray[id].generatorName,
+            generatorUrl: this.generatorArray[id].generatorURL,
+            generatorPriorityType: this.generatorPriority,
+            // tslint:disable-next-line: quotemark
+            generatorStates: ["ONLINE", "OFFLINE"]
+          };
+
+          console.log('object: ' + JSON.stringify(generatorUpdate));
+          this.generatorService.editPowerGenerator(generatorUpdate).subscribe(
+            ( res: Response) => {
+              if (res.status !== 200) {
+                this.generatorChangeFailed = true;
+              }
+           });
       }
-    }
-
-    removeUser(id: any) {
-      this.userRemoveFailed = false;
-      this.userService.removeUser(id).subscribe();
-      this.userArray.splice(id, 1);
-      return;
-    }
-
-    changeValue(id: number, property: string, event: any) {
-      this.editField = event.target.textContent;
-
-    }
-
-    changeSelectValue(priority: string) {
-      console.log('priority selected: ' + priority);
-      this.devicePriority = priority;
-    }
-
-  openDialog() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.autoFocus = true;
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '400px';
-
-    const dialogRef = this.dialog.open(DeviceModalComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(
-      data => {this.formData = data; }
-    );
   }
 
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.deviceNames.filter(option => option.toLowerCase().includes(filterValue));
-  }
-
+  /**
+   * Returns all details of searched / selected device
+   */
   returnDevice() {
-
     if (this.userDeviceName.value === null || this.userDeviceName.value == null) {
       return;
     }
@@ -268,12 +299,6 @@ export class SettingsComponent implements OnInit {
           arrayIndex++;
         }
       }
-    JSON.stringify(this.deviceResult);
-
-    console.log(this.deviceResult);
-
-      // JSON.parse(this.deviceResult)
-
       /* WHAT HAPPENS IF NOT FOUND
       if(this.deviceResult == ''){
         console.log('Not Found')
@@ -283,41 +308,9 @@ export class SettingsComponent implements OnInit {
     return;
   }
 
-  getUserList() {
-    console.log('getting user list');
-    this.userService.getAllUsers().pipe(
-        map( response => {
-            this.userArray =  response,
-            JSON.stringify(this.userArray);
-            console.log(this.userArray);
-            this.isDataAvailable = true;
-        })
-    ).subscribe();
-  }
-
-  /**
-   * Changes guest users' expiry date
-   */
-  editUserExpiry(userForm) {
-    this.userService.changeUserExpiration(userForm);
-  }
-
-  /**
-   * Changes users Type between Guest and Resident
-   */
-  editUserType(userForm) {
-    this.userService.changeUserType(userForm.value);
-  }
-
-  /**
-   * Edits device propertities
-   */
-  editDevice(deviceForm) {
-    this.deviceService.editDevice(deviceForm.value);
-  }
-
   /**
    * Removes a device from the system
+   * @param deviceId;
    */
   removeDevice(deviceId) {
     let deviceObject: any;
@@ -353,23 +346,167 @@ export class SettingsComponent implements OnInit {
   }
 
   /**
-   * Add new power generator to system
+   * Retrieves list of all system users
    */
-  addPowerGenerator(genForm) {
-    this.generatorService.addPowerGenerator(genForm.value);
+  getUserList() {
+    console.log('getting user list'); // getAllUsers || getUserJSONArray
+    this.userService.getAllUsers().pipe(
+        map( response => {
+            this.userArray =  response,
+            JSON.stringify(this.userArray);
+            console.log(this.userArray);
+            this.isDataAvailable = true;
+        })
+    ).subscribe();
   }
 
   /**
-   * Edit a power generators' properties
+   * change user details
+   * @param id: table id
+   * @param property: user property being changed
+   * @param event: click | key press
    */
-  editPowerGenerator(genForm) {
-    this.generatorService.editPowerGenerator(genForm.value);
+  updateUserList(id: number, property: string, event: any) {
+      // change users' type:
+      if (property === 'userType') {
+        console.log(this.userArray[id].userName);
+        if (this.userArray[id].userType === 'ROLE_RESIDENT') {
+          const userUpdate = {
+            userId: this.userArray[id].userId ,
+            userType:  'ROLE_GUEST'
+           };
+          this.userService.changeUserType(userUpdate);
+
+        } else {
+          const userUpdate = {
+            userId: this.userArray[id].userId ,
+            userType:  'ROLE_RESIDENT'
+
+           };
+          this.userService.changeUserType(userUpdate);
+          this.getUserList();
+        }
+
+      } else {
+        // change users' expiration:
+        const editField = event.target.textContent;
+        const userUpdate = {
+          userId: this.userArray[id].userId,
+          nrDays: editField
+        };
+        this.userService.changeUserExpiration(userUpdate);
+        this.getUserList();
+      }
+    }
+
+  /**
+   * Find user type of user within the array
+   * @param userType: user role
+   * @returns Boolean
+   */
+  resolveUserType(userType) {
+    if (userType === 'ROLE_RESIDENT') {
+      return true;
+    } else {
+      return false;
+    }
   }
+
+  /**
+   * Remove user from system
+   * @param id: users' id
+   */
+  removeUser(id: any) {
+      this.userRemoveFailed = false;
+      this.userService.removeUser(id).subscribe();
+      this.userArray.splice(id, 1);
+      return;
+  }
+
+  // Generator Functions
+  /**
+   * Get all generators of the system
+   */
+  getAllGenerators() {
+    this.generatorService.getGeneratorJSONArray().pipe(
+      map( response => {
+          this.generatorArray =  response,
+          JSON.stringify(this.generatorArray);
+          console.log(JSON.stringify(this.generatorArray));
+        })
+      ).subscribe();
+  }
+  /**
+   * Add new power generator to system
+   */
+  addPowerGenerator(genForm) {
+
+    this.generatorService.addPowerGenerator(genForm.value);
+  }
+
 
   /**
    * Remove power generator from system
    */
   removePowerGenerator(generatorId) {
     this.generatorService.removePowerGenerator(generatorId);
+  }
+
+  // Additional Helper Functions
+  /**
+   * Helper function
+   * Function used when key up event is triggered
+   * @param id: table index
+   * @param property;
+   * @param event: key up
+   */
+    changeValue(id: number, property: string, event: any) {
+      this.editField = event.target.textContent;
+
+    }
+
+    /**
+     * Helper function
+     * Opens modal for device or generator form
+     * @param modalName: name of which modal to open
+     */
+    openDialog(modalName) {
+
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.autoFocus = true;
+      dialogConfig.disableClose = true;
+      dialogConfig.width = '400px';
+
+      let dialogRef;
+      if (modalName === 'DeviceModalComponent') {
+        dialogRef = this.dialog.open(DeviceModalComponent, dialogConfig);
+      } else {
+        dialogRef = this.dialog.open(GeneratorModalComponent, dialogConfig);
+      }
+
+      // Does this work ??? What does it do?
+      dialogRef.afterClosed().subscribe(
+        data => {this.formData = data; }
+      );
+  }
+
+  /**
+   * Helper function
+   * Filters device array during search
+   * @param value: string searched for in array
+   */
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.deviceNames.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+  daysToExpiry(userId) {
+      const time = new Date(this.userArray[userId].userExpiryDate).getTime() - new Date().getTime();
+      const days = Math.floor(time / (1000 * 60 * 60 * 24));
+      return  days;
+  }
+
+  discoverHomeLocation() {
+    console.log('discovering home loaction');
   }
 }

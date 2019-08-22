@@ -10,12 +10,13 @@ import { ConsumptionComponent } from './pages/consumption/consumption.component'
 import { ForecastComponent } from './pages/forecast/forecast.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { GenerationComponent } from './pages/generation/generation.component';
+import { UserAccessControlService } from './services/user/user-access-control.service';
 
 const routes: Routes = [
   { path: '', component: LoginComponent},
   {path: 'homepage', component: SideNavComponent, children: [
-    {path: 'settings', component: SettingsComponent},
     {path: 'dashboard', component: DashboardComponent},
+    {path: 'settings', component: SettingsComponent, canActivate: [ UserAccessControlService ]},
     {path: 'devices', component: DevicesComponent},
     {path: 'consumption', component: ConsumptionComponent},
     {path: 'forecast', component: ForecastComponent},
@@ -28,6 +29,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [UserAccessControlService]
 })
 export class AppRoutingModule { }

@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Consumption } from 'src/app/models/consumption-model';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import { Device } from 'src/app/models/device-model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class ConsumptionService {
   /**
    * Variables:
    */
-  ROOT_URL = 'http://192.168.8.111:8080/api/';
+  ROOT_URL = environment.ROOT_URL;
   JSON_URL = 'assets/data/';
 
   constructor(private http: HttpClient) {}
@@ -40,7 +41,7 @@ export class ConsumptionService {
     return this.http.get(this.ROOT_URL + 'home/consumption/week');
   }
 
-  gethMontTotalConsumption(): Observable<any> {
+  getMonthTotalConsumption(): Observable<any> {
     return this.http.get(this.ROOT_URL + 'home/consumption/month');
   }
 

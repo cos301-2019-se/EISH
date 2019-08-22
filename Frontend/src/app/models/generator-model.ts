@@ -3,7 +3,7 @@ export class Generator {
     generatorUrl: string;
     generatorStates: [];
     generatorId: number;
-    generatorPriority: string;
+    generatorPriorityType: string;
 }
 
 export class Battery {

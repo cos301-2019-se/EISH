@@ -6,3 +6,13 @@ h1.gen-heading {
 .chart-controls {
     padding-left: 20px;
 }
+
+.spinner{
+    align-content: center;
+    margin-top: 20%;
+    margin-left: 40%;
+}
+
+mat-progress-spinner{
+    color: red;
+}
