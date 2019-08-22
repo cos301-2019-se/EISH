@@ -16,3 +16,11 @@
 .on{
     background-color: transparent;
 }
+
+.priority mat-select {
+    border-bottom: 1px solid;
+    border-color: grey;
+    width: 20%;
+    margin-left: 2%;
+}
+
