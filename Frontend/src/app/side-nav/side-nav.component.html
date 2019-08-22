@@ -33,15 +33,15 @@
       <span class="example-fill-remaining-space"></span>
 
       <!---toolbar buttons-->
-      <button mat-button [matMenuTriggerFor]="whosHome">Who's Home?</button>
+      <button mat-button [matMenuTriggerFor]="whosHome" (click)="getUserPresence()">Who's Home?</button>
 
       <mat-menu #whosHome="matMenu">
-        <button mat-menu-item *ngFor="let user of users" ><img style="width:20px; height: 20px; padding-right: 5px" src="../../assets/icons/whosHome.png"> {{user}} </button>
+        <button mat-menu-item *ngFor="let user of userList" ><img style="width:20px; height: 20px; padding-right: 5px" src="../../assets/icons/whosHome.png"> {{user.homeUser.userName}} </button>
       </mat-menu>
 
       <mat-menu #profileMenu="matMenu">
           <button mat-menu-item routerLink="/register/Change">Edit credentials</button>
-          <button mat-menu-item routerLink="">Logout</button>
+          <button mat-menu-item (click)="logout()" routerLink="">Logout</button>
         </mat-menu>
       <button mat-mini-fab color="primary" [matMenuTriggerFor]="profileMenu">{{initials}}</button>
     </mat-toolbar>

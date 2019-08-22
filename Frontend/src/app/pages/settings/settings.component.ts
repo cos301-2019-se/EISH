@@ -11,6 +11,7 @@ import { GeneratorService } from 'src/app/services/generators/generator.service'
 import { DeviceService } from 'src/app/services/devices/device.service';
 import { Response } from 'selenium-webdriver/http';
 import { NotifierService } from 'angular-notifier';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-settings',
@@ -41,14 +42,22 @@ export class SettingsComponent implements OnInit {
   devicePriority: string;
   deviceResult: any;
   deviceTableHeaders = ['Device Name ', 'Device Topic', 'Device Priority' ];
-  userTableHeaders = ['Name', 'Email', 'Current Expiry Date', 'Extend Expiry Date', 'Resident', 'Remove'];
+  userTableHeaders = ['Name', 'Email', 'Days Until Expiry', 'Extend Expiry Date Days', 'Resident', 'Remove'];
+  generatorTableHeaders = ['Generator Name ', 'Generator URL', 'Generator Priority' ];
   editField: string;
   deviceNames: string[];
   deviceRemoveFailed: boolean;
   deviceChangeFailed: boolean;
   deviceArray: any;
   userArray: any;
+
+  //  for generators
+  generatorArray: any;
+
+  // for notifications
   private notifier: NotifierService;
+  generatorChangeFailed: boolean;
+  generatorPriority: any;
 
   /**
    * Functions:
@@ -66,27 +75,8 @@ export class SettingsComponent implements OnInit {
    * default function executed on intialisation of page
    */
   ngOnInit() {
-    this.deviceService.getAllDevices().pipe(
-      map( response => {
-          this.deviceArray =  response,
-          JSON.stringify(this.deviceArray);
-
-          let devices: string[];
-          devices = [];
-          for (let index = 0; index < this.deviceArray.length; index++) {
-              devices[index] = this.deviceArray[index].deviceName;
-            }
-          this.deviceNames = devices;
-
-          this.filteredOptions = this.userDeviceName.valueChanges
-            .pipe(
-              startWith(''),
-              map(value => this._filter(value))
-
-            );
-
-          })
-     ).subscribe();
+    this.getDeviceList();
+    this.getAllGenerators();
     this.getUserList();
     this.deviceFound = false;
     this.userRemoveFailed = false;
@@ -106,7 +96,8 @@ export class SettingsComponent implements OnInit {
   /**
    * Retrieves list of system devices
    */
-  getDeviceList() {
+  getDeviceList() { // getDeviceJSONArray
+    console.log('getting device list');
     this.deviceService.getAllDevices().pipe(
       map( response => {
           this.deviceArray =  response,
@@ -132,13 +123,23 @@ export class SettingsComponent implements OnInit {
 
   /**
    * Helper function
-   * Stores selected value from select list
+   * Stores selected value from device select list
    * @param priority: selected priority from list
    */
   changeSelectValue(priority: string) {
       console.log('priority selected: ' + priority);
       this.devicePriority = priority;
   }
+
+  /**
+   * Helper function
+   * Stores selected value from generator select list
+   * @param priority: selected priority from list
+   */
+  changeGeneratorSelectValue(priority: string) {
+    console.log('priority selected: ' + priority);
+    this.generatorPriority = priority;
+}
 
   /**
    * Update device properties
@@ -205,6 +206,76 @@ export class SettingsComponent implements OnInit {
             ( res: Response) => {
               if (res.status !== 200) {
                 this.deviceChangeFailed = true;
+              }
+           });
+      }
+  }
+
+  /**
+   * Update generator properties
+   * @param id: generator id
+   * @param property: generator property being changed
+   * @param event: click | key press
+   */
+  updateGeneratorList(id: number, property: string, event: any) {
+    // change generator name
+    if (property === 'generatorName') {
+      console.log('in changing generator name');
+      const editField = event.target.textContent;
+      console.log('edit field: ' + editField);
+      const generatorUpdate = {
+      generatorId: this.generatorArray[id].generatorId,
+      generatorName: editField,
+      generatorUrl: this.generatorArray[id].generatorURL,
+      // tslint:disable-next-line: quotemark
+      generatorStates: ["ONLINE", "OFFLINE"]
+    };
+
+      console.log('object: ' + JSON.stringify(generatorUpdate));
+      this.generatorService.editPowerGenerator(generatorUpdate).subscribe(
+        ( res: Response) => {
+          if (res.status !== 200) {
+            this.generatorChangeFailed = true;
+          }
+       });
+
+    } else if (property === 'generatorURL') {
+        // changing generator URL
+
+        const editField = event.target.textContent;
+        const generatorUpdate = {
+          generatorId: this.generatorArray[id].generatorId,
+          generatorName: this.generatorArray[id].generatorName,
+          generatorUrl: editField,
+          // tslint:disable-next-line: quotemark
+          generatorStates: ["ONLINE", "OFFLINE"]
+        };
+
+        console.log('object: ' + JSON.stringify(generatorUpdate));
+        this.generatorService.editPowerGenerator(generatorUpdate).subscribe(
+          ( res: Response) => {
+            if (res.status !== 200) {
+              this.generatorChangeFailed = true;
+            }
+         });
+
+      } else {
+          // changing generator priortity
+
+          const generatorUpdate = {
+            generatorId: this.generatorArray[id].generatorId,
+            generatorName: this.generatorArray[id].generatorName,
+            generatorUrl: this.generatorArray[id].generatorURL,
+            generatorPriorityType: this.generatorPriority,
+            // tslint:disable-next-line: quotemark
+            generatorStates: ["ONLINE", "OFFLINE"]
+          };
+
+          console.log('object: ' + JSON.stringify(generatorUpdate));
+          this.generatorService.editPowerGenerator(generatorUpdate).subscribe(
+            ( res: Response) => {
+              if (res.status !== 200) {
+                this.generatorChangeFailed = true;
               }
            });
       }
@@ -281,7 +352,7 @@ export class SettingsComponent implements OnInit {
    * Retrieves list of all system users
    */
   getUserList() {
-    console.log('getting user list');
+    console.log('getting user list'); // getAllUsers || getUserJSONArray
     this.userService.getAllUsers().pipe(
         map( response => {
             this.userArray =  response,
@@ -357,6 +428,18 @@ export class SettingsComponent implements OnInit {
 
   // Generator Functions
   /**
+   * Get all generators of the system
+   */
+  getAllGenerators() {
+    this.generatorService.getGeneratorJSONArray().pipe(
+      map( response => {
+          this.generatorArray =  response,
+          JSON.stringify(this.generatorArray);
+          console.log(JSON.stringify(this.generatorArray));
+        })
+      ).subscribe();
+  }
+  /**
    * Add new power generator to system
    */
   addPowerGenerator(genForm) {
@@ -364,12 +447,6 @@ export class SettingsComponent implements OnInit {
     this.generatorService.addPowerGenerator(genForm.value);
   }
 
-  /**
-   * Edit a power generators' properties
-   */
-  editPowerGenerator(genForm) {
-    this.generatorService.editPowerGenerator(genForm.value);
-  }
 
   /**
    * Remove power generator from system
@@ -424,5 +501,15 @@ export class SettingsComponent implements OnInit {
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.deviceNames.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+  daysToExpiry(userId) {
+      const time = new Date(this.userArray[userId].userExpiryDate).getTime() - new Date().getTime();
+      const days = Math.floor(time / (1000 * 60 * 60 * 24));
+      return  days;
+  }
+
+  discoverHomeLocation() {
+    console.log('discovering home loaction');
   }
 }

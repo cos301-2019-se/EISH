@@ -8,13 +8,13 @@ body {
   width: 100%;
 }
 
-.container {
-  width: 30%;
+.loginCard {
+  width: 20%;
   margin-left: auto;
   margin-right: auto;
   border: 0px;
   border-radius: 5px;
-  background-color:white;
+  background-color:whitesmoke;
   box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.2);
 }
 
@@ -80,6 +80,7 @@ p {
   border-radius: .3em;
   border: 0px;
   background-color: #40c4ff;
+  /* nice orange background-color: #f93312; */
   /* background-color: #5dd95d; */
   font-size: 16px;
   font-weight: bold;
@@ -152,9 +153,10 @@ a:hover {
   width: 70px;
   float: left;
   font-size: 20px;
-  font-weight: bold;
   padding-top: 15px;
   padding-bottom: 10px;
+  font-family: 'Raleway';
+  font-weight: bold;
 }
 
 .header-logo {
@@ -174,4 +176,11 @@ a:hover {
   padding-top: 10px;
   padding-bottom: 10px;
   color: #1b1b1b;
+}
+
+.formCard {
+  text-align: center;
+  background-color: white;
+  padding-left: 0;
+  padding-right: 0;
 }

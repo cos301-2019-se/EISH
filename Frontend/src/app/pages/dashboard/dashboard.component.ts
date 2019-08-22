@@ -43,7 +43,7 @@ export class DashboardComponent implements OnInit {
    gaugemax = 100;
    gaugeCap = 'round';
    gaugeType = 'full';
-   gaugeValue = 25;
+   gaugeValue = 85;
    gaugeAppendText = '%';
    gaugeThickness = 8;
    state = 'Charging';
@@ -53,15 +53,20 @@ export class DashboardComponent implements OnInit {
               private generatorService: GeneratorService,
               private consumptionService: ConsumptionService) {
     this.weather = {
-      weatherTemperature: null,
-      weatherIcon: null,
-      weatherDescription: null,
-      weatherLocation: null
+      weatherTemperature: 22,
+      weatherIcon: 'c01d',
+      weatherDescription: 'Sunny',
+      weatherLocation: 'Pretoria'
     };
   }
 
   ngOnInit() {
-    this.weatherService.getWeather().pipe(
+    this.dayConsumption = 18;
+    this.weekConsumption = 105;
+    this.monthConsumption = 3652;
+    this.batteryGaugeMessage();
+
+    /*this.weatherService.getWeather().pipe(
       map(response => {
           this.weather = response,
           this.weather.weatherTemperature = Math.ceil(this.weather.weatherTemperature);
@@ -86,7 +91,7 @@ export class DashboardComponent implements OnInit {
 
     this.batteryGaugeMessage(); // to be removed
     this.getConsumptionCardValues();
-    this.batterySubscription();
+    this.batterySubscription();*/
   }
   /**
    * Resolve battery gauage message

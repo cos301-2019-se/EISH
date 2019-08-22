@@ -90,11 +90,15 @@
                    <span contenteditable="false">{{person.userEmail}}</span>
                  </td>
                  <td>
-                   <span>{{person.userExpiryDate}}</span>
+                   <span *ngIf="person.userType == 'ROLE_GUEST'">{{daysToExpiry(userId)}} </span>
+                   <span *ngIf="person.userType != 'ROLE_GUEST'">N/A </span>
                  </td>
+
                  <td >
-                    <span contenteditable="true" (keyup)="changeValue(userId, 'expiryDate', $event)" (blur)="updateUserList(userId, 'expiryDate', $event)">0</span>
+                    <span *ngIf="person.userType == 'ROLE_ADMIN'" contenteditable="false" >0</span>
+                    <span *ngIf="person.userType != 'ROLE_ADMIN'" contenteditable="true" (keyup)="changeValue(userId, 'expiryDate', $event)" (blur)="updateUserList(userId, 'expiryDate', $event)">0</span>
                   </td>
+                
                  <td >
                    <span contenteditable="true" (keyup)="changeValue(userId, 'resident', $event)" (blur)="updateUserList(userId, 'resident', $event)">
                     <mat-slide-toggle [checked]=resolveUserType(person.userType) (change)="updateUserList(userId, 'userType', $event)"></mat-slide-toggle>
@@ -102,7 +106,7 @@
                  </td>
                  <td>
                    <span class="table-remove">
-                     <button type="button" mdbBtn color="danger" rounded="true" size="sm" class="my-0" (click)="removeUser(person.userId)">Remove</button>
+                     <button type="button" mdbBtn class="submitButton" [disabled]="person.userType == 'ROLE_ADMIN'"  color="danger" rounded="true" size="sm" class="my-0" (click)="removeUser(person.userId)">Remove</button>
                    </span>
                  </td>
               </tr>
@@ -131,6 +135,39 @@
       <div>
           <button mat-raised-button (click)="openDialog('GeneratorModalComponent')" >Add Generator</button>
       </div>
+      <div>
+          <table mdbTable striped="true" responsive="true" hover="true" small="true">
+              <thead>
+                 <th *ngFor="let head of  generatorTableHeaders" scope="col">{{head}}</th>
+              </thead>
+              <tbody>
+                 <tr *ngFor="let gen of generatorArray; let generatorId = index">
+                     <td>
+                       <span  contenteditable="true" (keyup)="changeValue(generatorId, 'generatorName', $event)" (blur)="updateGeneratorList(deviceId, 'deviceName', $event)">{{gen.generatorName}}</span>
+                     </td>
+                     <td>
+                       <span  contenteditable="true" (keyup)="changeValue(deviceId, 'generatorURL', $event)" (blur)="updateGeneratorList(deviceId, 'generatorURL', $event)">{{gen.generatorUrl}}</span>
+                     </td>
+                     <td>
+                       <span  contenteditable="true" (blur)="updateGeneratorList(deviceId, 'generatorPriorityType', $event)">
+                          <mat-select [value]="gen.generatorPriorityType">
+                              <mat-option value="PRIORITY_USEWHENEMPTY" (mouseenter)="changeGeneratorSelectValue('PRIORITY_USEWHENEMPTY')">Use When Empty</mat-option>
+                              <mat-option value="PRIORITY_USEWHENCRITICAL" (mouseenter)="changeGeneratorSelectValue('PRIORITY_USEWHENCRITICAL')">Use When Critical</mat-option>
+                              <mat-option value="PRIORITY_ALWAYSUSE" (mouseenter)="changeGeneratorSelectValue('PRIORITY_ALWAYSUSE')">Always Use</mat-option>
+                              <mat-option value="PRIORITY_NEUTRAL" (mouseenter)="changeGeneratorSelectValue('PRIORITY_NEUTRAL')">Neutral</mat-option>
+                      </mat-select>
+                       </span>
+                     </td>
+                     
+                     <td>
+                       <span class="table-remove">
+                         <button type="button" mdbBtn color="danger" rounded="true" size="sm" class="my-0" (click)="removeDevice(device.deviceId)">Remove</button>
+                       </span>
+                     </td>
+                   </tr>
+              </tbody>
+             </table> 
+      </div>
     </mat-expansion-panel>
     <mat-expansion-panel (opened)="panelOpenState = true"
                          (closed)="panelOpenState = false">
@@ -138,7 +175,17 @@
         <mat-panel-title>
           Home Details
         </mat-panel-title>
+        <mat-panel-description>
+            home location details
+          </mat-panel-description>
       </mat-expansion-panel-header>
+      <form [formGroup]="homeLocation">
+          <mat-form-field> 
+            <mat-label> Home Location</mat-label>
+            <input type="text" matInput placeholder="home Location" formControlName="homeLocation">
+          </mat-form-field>
+          <button mat-button class="submit" (click)="discoverHomeLocation()">Discover</button>
+      </form>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

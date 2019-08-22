@@ -5,6 +5,7 @@ import { map, catchError } from 'rxjs/operators';
 import {Observable, pipe} from 'rxjs';
 import { User } from 'src/app/models/user-model';
 import { CanActivate, Route, Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class UserAccessControlService implements CanActivate {
    */
 
  /* Variables: */
-  ROOT_URL = 'http://192.168.8.100:8080/api/';
+  ROOT_URL = environment.ROOT_URL;
   data: any;
   JSON_URL = 'assets/data/';
   constructor( private http: HttpClient, private router: Router) { }
@@ -105,9 +106,10 @@ export class UserAccessControlService implements CanActivate {
     this.http.put(this.ROOT_URL + 'user/', userCredentials).subscribe(
      ( res: Response) => {
        if (res.ok) {
-        credentialInstance.route('dashboard', '');
+        this.router.navigate(['/homepage/dashboard']);
        } else {
-        credentialInstance.route('register', 'Change');
+
+        this.router.navigate(['/register/Change']);
        } // error message?
     });
   }

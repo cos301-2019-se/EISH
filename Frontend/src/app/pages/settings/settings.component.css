@@ -14,3 +14,14 @@ table{
 mat-dialog-close{
   background-color: red;
 }
+
+button[disabled] {
+  background-color: grey;
+  color: white;
+}
+
+.submit{
+ margin-left: 60px;
+  background-color: #51d651;
+  color: white;
+}

@@ -6,6 +6,7 @@ import { MAT_DRAWER_DEFAULT_AUTOSIZE } from '@angular/material';
 import { UserAccessControlService } from '../services/user/user-access-control.service';
 import { NotificationsService } from '../services/notifications/notifications.service';
 import { Message } from '@stomp/stompjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-side-nav',
@@ -29,7 +30,8 @@ export class SideNavComponent implements OnInit {
 
   constructor(private breakpointObserver: BreakpointObserver,
               private userService: UserAccessControlService,
-              private notificationService: NotificationsService) {
+              private notificationService: NotificationsService,
+              private route: Router) {
     this.initials = 'EU';
 
   }
@@ -43,6 +45,7 @@ export class SideNavComponent implements OnInit {
     } else {
      this.isAdmin = false;
     }
+    this.getUserPresence();
   }
 
   toggle(drawer) {
@@ -55,11 +58,21 @@ export class SideNavComponent implements OnInit {
   }
 
   getUserPresence() {
+    console.log('getting user presence');
     this.userService.getUserPresence().pipe(
       map(response => {
           console.log(response);
           this.userList  = response;
       })
     ).subscribe();
+  }
+
+  logout() {
+    console.log('logging out');
+    this.userService.userLogOut();
+  }
+
+  routeToChange() {
+    this.route.navigate(['register', 'Change']);
   }
 }

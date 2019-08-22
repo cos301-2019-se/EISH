@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user-model';
 import { UserAccessControlService} from 'src/app/services/user/user-access-control.service';
 import {Router, ActivatedRoute} from '@angular/router';
+import { pipe } from 'rxjs';
+import 'rxjs/add/operator/map';
+import { map, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-change-credentials',
@@ -21,6 +24,7 @@ export class ChangeCredentialsComponent implements OnInit {
   Action: string;
   user = new User();
   incorrectCredentials: boolean;
+  retrievedDetails: any;
 
 
   constructor(private router: ActivatedRoute,
@@ -30,30 +34,39 @@ export class ChangeCredentialsComponent implements OnInit {
     if (this.router.snapshot.paramMap.get('regType') === 'Register') {
       this.formHeading = 'Register';
       this.credentialsForm = this.fb.group({
-        userName: [null, [Validators.required]],
-        userEmail: [null, [Validators.required, Validators.email]],
-        userPassword: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(40)]],
-        userDeviceName: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(25)]]
+        userName: ['', [Validators.required]],
+        userEmail: ['', [Validators.required, Validators.email]],
+        userPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(40)]],
+        userLocationTopic: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]]
       });
       this.Action = 'Submit';
     } else {
-      this.formHeading = 'Change Credentials';
-      const theForm = this;
-      const observable = this.authenticationServices.getUser().subscribe(res => {
-        theForm.user.userId = res.userId;
-        theForm.credentialsForm = this.fb.group({
-          userName: [res.userName, [Validators.required]],
-          userEmail: [res.userEmail, [Validators.required, Validators.email]],
-          userPassword: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(40)]],
-          userDeviceName: [res.userLocationTopic, [Validators.required, Validators.minLength(3), Validators.maxLength(25)]]
+        this.formHeading = 'Change Credentials';
+
+        this.credentialsForm = this.fb.group({
+          userName: ['', [Validators.required]],
+          userEmail: ['', [Validators.required, Validators.email]],
+          userPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(40)]],
+          userLocationTopic: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]]
+
+         /* userName: [this.retrievedDetails.userName, [Validators.required]],
+          userEmail: [this.retrievedDetails.userEmail, [Validators.required, Validators.email]],
+          userPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(40)]],
+          userLocationTopic: [this.retrievedDetails.userLocationTopic,
+            [Validators.required, Validators.minLength(3), Validators.maxLength(25)]]*/
         });
-      });
-      this.Action = 'Submit';
+        this.Action = 'Submit';
     }
    }
 
   ngOnInit() {
     this.Action = 'Submit';
+    this.authenticationServices.getUser().pipe(
+      map(  res => {
+        this.retrievedDetails = res;
+        JSON.stringify(this.retrievedDetails);
+      })).subscribe();
+
   }
 
   route(route, routeLocation) {
@@ -64,19 +77,15 @@ export class ChangeCredentialsComponent implements OnInit {
   }
 
   /**
-   * Called upon button click. Chooses which function to call based on submissionType
+   * Called upon button click. Chooses which function to call based on login status
    */
-  submit(formData): void {
+  submit(): void {
     if (!this.credentialsForm.invalid) {
       const userLoggedIn = this.authenticationServices.isUserLoggedIn();
       if (userLoggedIn) {
-        this.user.userName = formData.value.userName;
-        this.user.userEmail = formData.value.userEmail;
-        this.user.userPassword = formData.value.userPassword;
-        this.user.userLocationTopic = formData.value.userDeviceName;
-        this.editCredentials(this.user);
+        this.editCredentials(this.credentialsForm.value);
       } else {
-        this.registerCredentials(formData.value);
+        this.registerCredentials(this.credentialsForm);
       }
     }
 
@@ -98,6 +107,10 @@ export class ChangeCredentialsComponent implements OnInit {
   }
 
   error() {
+
+  }
+
+  routeToChange() {
 
   }
 }

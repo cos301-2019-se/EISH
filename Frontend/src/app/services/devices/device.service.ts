@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import {Device} from 'src/app/models/device-model';
+import { environment } from 'src/environments/environment';
 // import { Socket } from "ngx-socket-io";
 @Injectable({
   providedIn: 'root'
@@ -11,10 +12,12 @@ export class DeviceService {
 /**
  * Variables
  */
-  ROOT_URL = 'http://192.168.8.100:8080/api/';
+  ROOT_URL = environment.ROOT_URL;
   JSON_URL = 'assets/data/';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    console.log(environment.ROOT_URL);
+  }
 
   getDeviceJSONArray(): Observable<Device[]> {
     console.log('inside getDeviceArray');
@@ -39,13 +42,6 @@ export class DeviceService {
   getDevice(deviceId): Observable<Device[]> {
     const params = new HttpParams().set('deviceId', deviceId);
     return this.http.get<Device[]>(this.ROOT_URL + 'device', {params});
-  }
-
-  /**
-   * Get devices' current power/consumption state
-   */
-  getCurrentState() {
-    return this.http.get(this.ROOT_URL + '');
   }
 
   /**

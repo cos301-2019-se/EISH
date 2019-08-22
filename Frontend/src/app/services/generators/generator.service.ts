@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Generator, Battery } from 'src/app/models/generator-model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class GeneratorService {
   /**
    * Variables:
    */
-  ROOT_URL = 'http://192.168.8.100:8080/api/';
+  ROOT_URL = environment.ROOT_URL;
+  JSON_URL = 'assets/data/';
 
   constructor(private http: HttpClient) { }
   /**
@@ -59,7 +61,7 @@ export class GeneratorService {
    * PUT Request
    */
   editPowerGenerator(generatorForm) {
-    this.http.put(this.ROOT_URL + '', generatorForm);
+    return this.http.put(this.ROOT_URL + '', generatorForm);
   }
 
   /**
@@ -106,6 +108,11 @@ export class GeneratorService {
 
   getMonthTotalGeneration(): Observable<any> {
     return this.http.get(this.ROOT_URL + 'home/generation/month');
+  }
+
+  getGeneratorJSONArray(): Observable<Generator []> {
+    console.log('getting JSON Generator');
+    return this.http.get<Generator []>(this.JSON_URL + 'generator.json');
   }
 }
 
