@@ -80,5 +80,12 @@ public class JwtAuthenticationController {
         System.out.println("User is authorized!");
         return ResponseEntity.ok(new JwtResponse(jwt));
     }
-    
+
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> userLogout(@Valid @RequestBody HomeUser homeUser) {
+        blacklist.blacklistUser(homeUser.getUserName());
+        String message = "Successfully Logged Out";
+        return ResponseEntity.ok().body(message);
+    }
 }
