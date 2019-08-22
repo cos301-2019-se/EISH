@@ -37,9 +37,9 @@ public class BatteryService {
     @Autowired
     private BatteryCapacities batteryCapacityRepository;
 
-    private String api = "http://192.168.8.101:3001/v2/installations/0/Battery";
-    private final long rate = 17000;
-    private final long delay = 30000;
+    private String api = "http://127.0.0.1:3001/v2/installations/0/Battery";
+    private final long rate = 15000;
+    private final long delay = 10000;
     
     /**
      * The funtion returns JSONobject with the current information of the battery.

@@ -6,6 +6,9 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+/**
+ * CLASS HOMEUSERPRESENCEID. 
+ */
 
 @Embeddable
 public class HomeUserPresenceId implements Serializable {

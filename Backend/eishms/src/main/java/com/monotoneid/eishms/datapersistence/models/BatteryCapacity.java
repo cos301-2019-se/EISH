@@ -17,6 +17,9 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ *CLASS BATTERYCAPACITY. 
+ */
 @Entity(name = "batterycapacity")
 @Table(name = "batterycapacity")
 @EntityListeners(AuditingEntityListener.class)
@@ -76,6 +79,7 @@ public class BatteryCapacity {
 
     public BatteryCapacity() {}
 
+    /**. */
     public BatteryCapacity(int newBatteryCapacityStorage,
         int newBatteryCapacityCurrentPower,
         String newBatteryCapacityPowerState,
