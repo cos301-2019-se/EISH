@@ -1,4 +1,5 @@
 package com.monotoneid.eishms.datapersistence.models;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -9,7 +10,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
+/**
+ * CLASS HOMEUSERDETAILS. 
+ */
 
 public class HomeUserDetails implements UserDetails {
     private static final long serialVersionUID = 1L;
@@ -17,24 +20,24 @@ public class HomeUserDetails implements UserDetails {
     private String userPassword;
     private Collection<? extends GrantedAuthority> authorities;
 
+    /**. */
     public HomeUserDetails(HomeKey homeKey) {
         this.userName = homeKey.getKeyName();
         this.userPassword = homeKey.getUserkey();
         Set<UserType> userTypes = new HashSet<>();
         userTypes.add(homeKey.getUsertype());
-        this.authorities = userTypes.stream().map(role -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList());
+        this.authorities = userTypes.stream()
+                .map(role -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList());
     }
 
+    /**. */
     public HomeUserDetails(HomeUser homeUser) {
-        //this.userId = homeUser.getUserId();
         this.userName = homeUser.getUserName();
-        //this.userEmail = homeUser.getUserEmail();
-        //this.userLocationTopic = homeUser.getUserLocationTopic();
         this.userPassword = homeUser.getUserPassword();
-        //this.authorities = new ArrayList<>();
         Set<UserType> userTypes = new HashSet<>();
         userTypes.add(homeUser.getUserType());
-        this.authorities = userTypes.stream().map(role -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList());
+        this.authorities = userTypes.stream()
+                .map(role -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList());
     }
  
     @Override
@@ -74,9 +77,12 @@ public class HomeUserDetails implements UserDetails {
  
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        
+        if (this == o) {
+            return true;
+        } 
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        } 
         HomeUserDetails user = (HomeUserDetails) o;
         return Objects.equals(userName, user.userName);
     }
