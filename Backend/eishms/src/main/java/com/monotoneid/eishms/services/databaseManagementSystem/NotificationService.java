@@ -59,20 +59,20 @@ public class NotificationService {
    }
 
    public boolean addNotification(String newNotificationDescription,
-   String newNotificationPriorityType,
-   Timestamp newNotificationTimeStamp) {
-    if (!newNotificationDescription.isEmpty() && 
-        !newNotificationPriorityType.isEmpty() &&
-        !newNotificationTimeStamp.toString().isEmpty()) {
-    Notification newNotification = new Notification(newNotificationDescription, 
-            newNotificationPriorityType, 
-            NotificationStateType.NOTIFICATION_UNREAD.toString(), 
-            newNotificationTimeStamp);
-    
-        notificationsRepository.save(newNotification); 
-        return true; 
-    }
-          return false;
+        String newNotificationPriorityType,
+        Timestamp newNotificationTimeStamp) {
+        if (!newNotificationDescription.isEmpty() && 
+            !newNotificationPriorityType.isEmpty() &&
+            !newNotificationTimeStamp.toString().isEmpty()) {
+            Notification newNotification = new Notification(newNotificationDescription, 
+                newNotificationPriorityType, 
+                NotificationStateType.NOTIFICATION_UNREAD.toString(), 
+                newNotificationTimeStamp);
+        
+            notificationsRepository.save(newNotification); 
+            return true; 
+        }
+            return false;
    }
 
    public ResponseEntity<Object> updateNotificationState(long notificationId, String newNotificationState) {

@@ -80,7 +80,6 @@ public class BatteryService {
                 time = time.replace("T", " ");
                 time = time.replace("Z",  "");
                 currentTimestamp = Timestamp.valueOf(time);
-                System.out.println("baterycapacity");
                 newBatteryCapacity = new BatteryCapacity(
                     jsonContent.get("storageCapacity").getAsInt(),
                     jsonContent.get("currentPower").getAsInt(),
@@ -89,6 +88,7 @@ public class BatteryService {
                     currentTimestamp,
                     jsonContent.get("powerPercentage").getAsInt()
                 );
+                System.out.println(newBatteryCapacity.getBatteryCapacityPowerState());
                 System.out.println(newBatteryCapacity.getBatteryCapacityChargingState());
                 batteryCapacityRepository.save(newBatteryCapacity);
                 batteryCapacity.put("batteryCapacityPowerPercentage", 
@@ -170,10 +170,22 @@ public class BatteryService {
             notificationObject.put("priority","PRIORITY_CRITICAL");
             notificationObject.put("message","ERROR: Failure to connect to battery api!");
             simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+            fullStatus = true;
+            lowStatus = true;
+            criticalStatus = true;
+            emptyStatus = true;
         }
 
-        notificationService.addNotification(notificationObject.getAsString("message"),
+        if (powerState != PowerStateType.POWERSTATE_NORMAL && notificationObject.getAsString("message") != null) {
+            System.out.println("Message: " + notificationObject.getAsString("message") + " Priority: " + notificationObject.getAsString("priority") + " Time: " + new Timestamp(System.currentTimeMillis()));
+            notificationService.addNotification(notificationObject.getAsString("message"),
                     notificationObject.getAsString("priority"),
                     new Timestamp(System.currentTimeMillis()));
+        } else {
+            fullStatus = true;
+            lowStatus = true;
+            criticalStatus = true;
+            emptyStatus = true;
+        }
     }
 }
