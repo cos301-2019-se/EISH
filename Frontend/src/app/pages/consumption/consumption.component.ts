@@ -22,15 +22,18 @@ export class ConsumptionComponent implements OnInit {
   consumptionType = 'home';
   custom = false;
   topicSubscription = null;
+  socketOnline: boolean;
+  mode = 'indeterminate';
 
   constructor(private consumptionService: ConsumptionService, private rxStompService: RxStompService) {
     this.startTime = this.toDateString(new Date());
     this.endTime = this.toDateString(new Date());
+    this.socketOnline = false;
   }
 
   ngOnInit() {
     this.getDevices();
-    this.consumptionChart.setHeading('Home Consumption');
+    // this.consumptionChart.setHeading('Home Consumption');
   }
 
   private toDateString(date: Date): string {
@@ -108,6 +111,7 @@ export class ConsumptionComponent implements OnInit {
     this.topicSubscription = this.rxStompService.watch('/device/' + deviceTopic + '/consumption').subscribe((message: Message) => {
       const consumptionData = JSON.parse(message.body);
         // add data point to chart
+      this.socketOnline = true;
       this.consumptionChart.addDataPoint(consumptionData);
       this.consumptionChart.updateChart();
     });

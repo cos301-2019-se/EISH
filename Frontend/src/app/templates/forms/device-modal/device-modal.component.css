@@ -8,6 +8,11 @@
     color: white;
 }
 
-.modal{
+.dialogHeader{
     text-align: center;
+}
+
+mat-form-field{
+    width:100%;
+    
 }
