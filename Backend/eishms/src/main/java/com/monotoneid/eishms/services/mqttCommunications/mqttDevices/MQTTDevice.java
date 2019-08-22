@@ -82,7 +82,7 @@ public class MqttDevice {
             setSubscriptionTopics();
             setPublishTopics();
             //this.asyncClient.setManualAcks(false);
-            this.asyncClient.subscribe(subscribeTopics, deviceQos).waitForCompletion();
+            this.asyncClient.subscribe(subscribeTopics, deviceQos);//.waitForCompletion();
             this.asyncClient.setCallback(new MqttCallback() {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
@@ -108,7 +108,7 @@ public class MqttDevice {
                     notificationObject.put("priority", NotificationPriorityType.PRIORITY_CRITICAL.toString());
                     notificationObject.put("message", "Lost Connection to MQTT Broker.");
                     deviceManager.notificationService.addNotification("Lost Connection to MQTT Broker.", NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
-                    deviceManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                    deviceManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
                 }
             });
         } catch (MqttException me) {
@@ -121,7 +121,7 @@ public class MqttDevice {
             notificationObject.put("priority", NotificationPriorityType.PRIORITY_CRITICAL.toString());
             notificationObject.put("message", "Could not connect to MQTT Broker.");
             deviceManager.notificationService.addNotification("Could not connect to MQTT Broker.", NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
-            deviceManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+            deviceManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
         }
         configureDevice();
     }
@@ -171,7 +171,7 @@ public class MqttDevice {
             notificationObject.put("message", message);
             Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
             deviceManager.notificationService.addNotification(message, NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
-            deviceManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+            deviceManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
         }
     }
 
@@ -186,7 +186,7 @@ public class MqttDevice {
             notificationObject.put("message", message);
             Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
             deviceManager.notificationService.addNotification(message, NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
-            deviceManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+            deviceManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
         }
     }
 

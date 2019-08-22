@@ -41,7 +41,7 @@ public class Notification {
     @Column(name = "notificationdescription", 
             columnDefinition = "text",
             updatable = true, 
-            unique = true, 
+            unique = false, 
             nullable = false)
     private String notificationDescription;
 
