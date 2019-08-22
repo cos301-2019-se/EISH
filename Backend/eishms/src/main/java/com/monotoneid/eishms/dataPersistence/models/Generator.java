@@ -1,5 +1,6 @@
 package com.monotoneid.eishms.datapersistence.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
@@ -27,6 +28,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 /**
  *CLASS GENERATOR. 
  */
+@JsonIgnoreProperties({"generatorGeneration"})
 @Entity(name = "generator")
 @Table(name = "generator")
 @EntityListeners(AuditingEntityListener.class)

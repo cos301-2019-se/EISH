@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.databaseManagementSystem;
+package com.monotoneid.eishms.services.databasemanagementsystem;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -142,8 +142,13 @@ public class UserService{
                     || newHomeUser.getUserEmail().isEmpty() == true) {
                     throw null;
                 }
+                
                 HomeUser foundUser = usersRepository.findById(newHomeUser.getUserId())
                         .orElseThrow(() -> new ResourceNotFoundException("HomeUser does not exist!"));
+                if (foundUser.getUserType() == UserType.ROLE_ADMIN ) {
+                    throw null;
+
+                }        
                 foundUser.setUserEmail(newHomeUser.getUserEmail());
                 foundUser.setUserLocationTopic(newHomeUser.getUserLocationTopic());
                 foundUser.setUserName(newHomeUser.getUserName());

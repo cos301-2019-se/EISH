@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.mqttCommunications.mqttLocation;
+package com.monotoneid.eishms.services.mqttcommunications.mqttlocation;
 
 public class MQTTLocation {
     String serverUrl = "ssl://serverip:1883";

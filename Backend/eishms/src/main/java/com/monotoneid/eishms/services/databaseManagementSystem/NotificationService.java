@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.databaseManagementSystem;
+package com.monotoneid.eishms.services.databasemanagementsystem;
 
 import static com.monotoneid.eishms.datapersistence.models.NotificationStateType.NOTIFICATION_UNREAD;
 import static com.monotoneid.eishms.datapersistence.models.NotificationStateType.NOTIFICATION_READ;

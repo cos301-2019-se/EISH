@@ -154,5 +154,6 @@ create table notification(
 	notificationstatetype notificationStateType not null,
 	notificationprioritytype notificationPriorityType not null,
 	notificationtimestamp timestamp not null
-
 );
+insert into notification(notificationdescription,notificationstatetype,notificationprioritytype,notificationtimestamp)
+values('Battery full','NOTIFICATION_UNREAD','PRIORITY_MINOR',now());

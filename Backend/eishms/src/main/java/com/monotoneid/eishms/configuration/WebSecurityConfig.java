@@ -1,6 +1,6 @@
 package com.monotoneid.eishms.configuration;
 
-import com.monotoneid.eishms.services.databaseManagementSystem.JwtUserDetailsService;
+import com.monotoneid.eishms.services.databasemanagementsystem.JwtUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

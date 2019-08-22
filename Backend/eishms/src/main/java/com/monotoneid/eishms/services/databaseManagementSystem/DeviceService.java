@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.databaseManagementSystem;
+package com.monotoneid.eishms.services.databasemanagementsystem;
 
 import static com.monotoneid.eishms.datapersistence.models.DevicePriorityType.PRIORITY_ALWAYSON;
 import static com.monotoneid.eishms.datapersistence.models.DevicePriorityType.PRIORITY_MUSTHAVE;
@@ -8,7 +8,7 @@ import static com.monotoneid.eishms.datapersistence.models.DevicePriorityType.PR
 import com.monotoneid.eishms.datapersistence.models.Device;
 import com.monotoneid.eishms.datapersistence.repositories.Devices;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
-import com.monotoneid.eishms.services.mqttCommunications.mqttDevices.MqttDeviceManager;
+import com.monotoneid.eishms.services.mqttcommunications.mqttdevices.MqttDeviceManager;
 
 import java.util.List;
 

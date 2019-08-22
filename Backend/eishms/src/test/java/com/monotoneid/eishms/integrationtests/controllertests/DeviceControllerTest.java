@@ -1,34 +1,34 @@
 package com.monotoneid.eishms.integrationtests.controllertests;
 
-// import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-// import com.monotoneid.eishms.communications.controller.DeviceEndPointController;
+import com.monotoneid.eishms.datapersistence.models.Device;
 
-// import org.junit.Test;
-// import org.junit.runner.RunWith;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.boot.autoconfigure.SpringBootApplication;
-// import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-// import org.springframework.boot.test.context.SpringBootTest;
-// import org.springframework.boot.test.mock.mockito.MockBean;
-// import org.springframework.boot.test.web.client.TestRestTemplate;
-// import org.springframework.boot.web.server.LocalServerPort;
-// import org.springframework.http.HttpEntity;
-// import org.springframework.http.HttpHeaders;
-// import org.springframework.http.HttpMethod;
-// import org.springframework.http.ResponseEntity;
-// import org.springframework.test.context.junit4.SpringRunner;
-// import org.springframework.test.web.servlet.MockMvc;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-// @RunWith(SpringRunner.class)
-// @WebMvcTest(value = DeviceEndPointController.class, secure = false)
+public class DeviceControllerTest extends AbstractTest {
+    @Override
+    @Before
+    public void setUp() {
+        super.setUp();
+    }
+    
+    @Test
+    public void retrieveAllDevicesTest() throws Exception {
+        String uri = "/devices";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
+            .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
 
-public class DeviceControllerTest {
-
-    // @Autowired
-    // private MockMvc mockMvc;
-    // @MockBean
-    // private DeviceEndPointController deviceEndPointController;
-
+        int status =mvcResult.getResponse().getStatus();
+        assertEquals(200, status);
+        String content =mvcResult.getResponse().getContentAsString();
+        Device[] deviceList = super.mapFromJson(content, Device[].class);
+        assertTrue(deviceList.length > 0);    
+    }
 }
 

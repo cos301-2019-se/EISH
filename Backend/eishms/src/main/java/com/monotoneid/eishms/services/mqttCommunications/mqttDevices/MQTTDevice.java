@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.mqttCommunications.mqttDevices;
+package com.monotoneid.eishms.services.mqttcommunications.mqttdevices;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import com.monotoneid.eishms.datapersistence.models.Device;
-import com.monotoneid.eishms.services.mqttCommunications.QueryReplyManager;
+import com.monotoneid.eishms.services.mqttcommunications.QueryReplyManager;
 
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -213,7 +213,6 @@ public class MQTTDevice {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return jsonMap;
     }
 
