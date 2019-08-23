@@ -29,7 +29,7 @@ public class HomeKeys {
     }
 
     public HomeKey findByKeyName(String keyname) {
-        for (int i=0; i < homeKeys.size(); i++) {
+        for (int i=0; homeKeys != null && i < homeKeys.size(); i++) {
             if (homeKeys.get(i).getKeyName().matches(keyname))
                 return homeKeys.get(i);
         }

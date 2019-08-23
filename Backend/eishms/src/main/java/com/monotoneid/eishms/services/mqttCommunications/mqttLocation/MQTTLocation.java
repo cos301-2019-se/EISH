@@ -46,7 +46,9 @@ public class MqttLocation {
     public MqttLocation(HomeUser user, MqttLocationManager locationManager) {
         this.homeUser = user;
         this.locationManager = locationManager;
-        this.asyncClientId = UUID.randomUUID().toString();
+        String idss = UUID.randomUUID().toString();
+        this.asyncClientId = idss;
+        System.out.println(idss);
         this.newHomeDetails = null;
         this.isPresent = false;
         this.locationCountdown = null;
@@ -95,7 +97,7 @@ public class MqttLocation {
             
                 @Override
                 public void connectionLost(Throwable cause) {
-                    
+                    System.out.println("%%%%%%%%%%%%%%%%%% Location connection also lost %%%%%%%%%%%%%%");
                 }
             });
         } catch (MqttException me) {
@@ -106,16 +108,16 @@ public class MqttLocation {
 
     private void initializeTopics() {
         // topics to subscribe to...
-        String[] topics = new String[3];
+        String[] topics = new String[2];
         topics[0] = new String("owntracks/eishms/" + homeUser.getUserLocationTopic() + "/event");
-        topics[1] = new String("owntracks/eishms/" + homeUser.getUserLocationTopic());
-        topics[2] = new String("owntracks/eishms/" + homeUser.getUserLocationTopic() + "/waypoint");
+        //topics[1] = new String("owntracks/eishms/" + homeUser.getUserLocationTopic());
+        topics[1] = new String("owntracks/eishms/" + homeUser.getUserLocationTopic() + "/waypoint");
         subscriptionTopics = topics;
 
-        int[] qos = new int[3];
+        int[] qos = new int[2];
         qos[0] = 0;
         qos[1] = 0;
-        qos[2] = 0;
+        // qos[2] = 0;
 
         qoss = qos;
     }
@@ -148,7 +150,10 @@ public class MqttLocation {
             notificationObject.put("priority", NotificationPriorityType.PRIORITY_CRITICAL.toString());
             notificationObject.put("message", "Could not find home details.");
             locationManager.notificationService.addNotification("Could not find home details.", NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
-            locationManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+            if (locationManager.simpMessagingTemplate != null) {
+                locationManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+            }
+            
         }
         
         if (jsonContent.has("event")) {
@@ -170,8 +175,9 @@ public class MqttLocation {
                 notificationObject.put("priority", NotificationPriorityType.PRIORITY_MINOR.toString());
                 notificationObject.put("message", notificationMessage);
                 locationManager.notificationService.addNotification(notificationMessage, NotificationPriorityType.PRIORITY_MINOR.toString(), currentTimestamp);
-                locationManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
-
+                if (locationManager.simpMessagingTemplate != null) {
+                    locationManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                }
                 locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presenceTimestamp);
             } else  {
                 presenceTimestamp = new Timestamp(System.currentTimeMillis());
@@ -185,9 +191,10 @@ public class MqttLocation {
                 notificationObject.put("priority", NotificationPriorityType.PRIORITY_MINOR.toString());
                 notificationObject.put("message", notificationMessage);
                 locationManager.notificationService.addNotification(notificationMessage, NotificationPriorityType.PRIORITY_MINOR.toString(), currentTimestamp);
-                locationManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
-
-                if (homeUser.getUserType() == UserType.ROLE_GUEST){
+                if (locationManager.simpMessagingTemplate != null) {
+                    locationManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
+                }
+                if (locationManager.blacklist != null && homeUser.getUserType() == UserType.ROLE_GUEST){
                     locationManager.blacklist.blacklistUser(homeUser.getUserName());
                 }
 
@@ -297,7 +304,7 @@ public class MqttLocation {
                 System.out.println("| Inserted into database: " + this.isPresent + "           |");
                 System.out.println("| Time:       " + presenceTimestamp + "           |");
 
-                if (homeUser.getUserType() == UserType.ROLE_GUEST){
+                if (locationManager.blacklist != null && homeUser.getUserType() == UserType.ROLE_GUEST){
                     locationManager.blacklist.blacklistUser(homeUser.getUserName());
                 }
 
@@ -341,7 +348,6 @@ public class MqttLocation {
             if (newHomeDetails != null) {
                 for (int i=0; i < newHomeDetails.size(); i++) {
                     if (newHomeDetails.get(i).getHomeName().matches(homeName)) {
-                        
                         return newHomeDetails.get(i);
                     }
                 }
