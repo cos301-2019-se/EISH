@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.databaseManagementSystem;
+package com.monotoneid.eishms.services.databasemanagementsystem;
 
 import com.monotoneid.eishms.datapersistence.models.HomeUser;
 import com.monotoneid.eishms.datapersistence.models.HomeUserPresence;
@@ -7,6 +7,7 @@ import com.monotoneid.eishms.datapersistence.repositories.Users;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minidev.json.JSONObject;
@@ -31,7 +32,8 @@ public class UserPresenceService {
      * @param newHomeUserPresence
      * @param newHomeUserPresenceTimestamp
      */
-    public void addUserPresence(long referenceUserId, boolean newHomeUserPresence, 
+    public void addUserPresence(long referenceUserId, 
+        boolean newHomeUserPresence, 
         Timestamp newHomeUserPresenceTimestamp) {
         try {            
             HomeUser foundHomeUser = usersRepository.findById(referenceUserId)
@@ -140,11 +142,10 @@ public class UserPresenceService {
             boolean isPresent = foundHomeUserPresence.getHomeUserPresence();
             JSONObject responseObject = new JSONObject();
             if (isPresent) {
-                responseObject.put("homeUserPresence",  "User is home!");
+                responseObject.put("homeUserPresence", true);
                 return new ResponseEntity<>(responseObject,HttpStatus.OK);
             } else {
-                
-                responseObject.put("message","User is not at home!");
+                responseObject.put("homeUserPresence", false);
                 return new ResponseEntity<>(responseObject,HttpStatus.OK);
             }
         } catch (Exception e) {
@@ -153,5 +154,49 @@ public class UserPresenceService {
         }
 
     }
+
+    public boolean getPreviousUserPresence(long userId) {
+        try {
+            usersRepository.findById(userId)
+                        .orElseThrow(() -> new ResourceNotFoundException("user does not exist!"));
+           
+            HomeUserPresence foundHomeUserPresence = 
+                userPresenceRespository.findCurrentHomeUserPresence(userId)
+                        .orElseThrow(() 
+                            -> new ResourceNotFoundException("presence does not exist!"));
+            boolean isPresent = foundHomeUserPresence.getHomeUserPresence();
+            return isPresent;
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage() + "!");
+            throw e;
+        }
+    }
+
+    public List<HomeUserPresence> findHomeUsersThatArePresent() {
+        try {
+            List<HomeUser> currentHomeUsers = usersRepository.findAll();
+            List<HomeUserPresence> currentUserPresence = new ArrayList<HomeUserPresence>();
+            HomeUserPresence tempUserPresence;
+            for(int i = 0; i < currentHomeUsers.size(); i++) {
+                if (userPresenceRespository.findCurrentHomeUserPresence(
+                    currentHomeUsers.get(i).getUserId()).isPresent()) {
+                        tempUserPresence = userPresenceRespository.findCurrentHomeUserPresence(
+                            currentHomeUsers.get(i).getUserId())
+                                                .orElseThrow(() -> new ResourceNotFoundException("One or more user presence does not exist!"));
+                } else {
+                    tempUserPresence = null;
+                }
+                if (tempUserPresence != null) {
+                    if (tempUserPresence.getHomeUserPresence() == true) {
+                        currentUserPresence.add(tempUserPresence);
+                    }
+                }
+            } 
+            return currentUserPresence;
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage() + "!");
+            throw e;
+        }  
+     }
 
 }

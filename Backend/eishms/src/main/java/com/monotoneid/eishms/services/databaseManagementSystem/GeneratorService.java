@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.databaseManagementSystem;
+package com.monotoneid.eishms.services.databasemanagementsystem;
 
 import static com.monotoneid.eishms.datapersistence.models.GeneratorPriorityType.PRIORITY_ALWAYSUSE;
 import static com.monotoneid.eishms.datapersistence.models.GeneratorPriorityType.PRIORITY_NEUTRAL;
@@ -142,7 +142,8 @@ public class GeneratorService {
      */
     public ResponseEntity<Object> removeGenerator(long generatorId) {
         try {
-            generatorsRepository.findById(generatorId).orElseThrow(() -> new ResourceNotFoundException("Generator does not exist"));
+             generatorsRepository.findById(generatorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Generator does not exist"));
             generatorsRepository.deleteById(generatorId);
             JSONObject responseObject = new JSONObject();
             responseObject.put("message", "Success: Generator has been deleted!");

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 
 public interface UserPresences extends JpaRepository<HomeUserPresence,HomeUserPresenceId> {
 
-    @Query(value = "select * from homeuserpresence where userid= ?1 and homeuserpresencetimestamp between now() - interval '2 minutes' and now() order by homeuserpresencetimestamp desc limit 1", nativeQuery = true)
+    @Query(value = "select * from homeuserpresence where userid= ?1 order by homeuserpresencetimestamp desc limit 1", nativeQuery = true)
     public Optional<HomeUserPresence> findCurrentHomeUserPresence(long userId);
 
     //custom query
@@ -27,7 +27,7 @@ public interface UserPresences extends JpaRepository<HomeUserPresence,HomeUserPr
     @Query(value = "select * from homeuserpresence where userid= ?1 and homeuserpresencetimestamp between now() - interval '10 minutes' and now() order by homeuserpresencetimestamp asc", nativeQuery = true)
     public Optional<List<HomeUserPresence>> findHomeUserPresenceLastTenMinutes(long userId);
 
-    //last 1 hours
+    //last 1 hours 
     @Query(value = "select * from homeuserpresence where userid= ?1 and homeuserpresencetimestamp between now() - interval '1 hours' and now() order by homeuserpresencetimestamp asc", nativeQuery = true)
     public Optional<List<HomeUserPresence>> findHomeUserPresenceLastHour(long userId);
 

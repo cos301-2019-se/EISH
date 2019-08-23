@@ -1,4 +1,4 @@
-package com.monotoneid.eishms.services.databaseManagementSystem;
+package com.monotoneid.eishms.services.databasemanagementsystem;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -52,15 +52,15 @@ public class DeviceConsumptionService{
     }  
     
     public List<DeviceConsumption> retrieveBetweenInterval(long deviceId,String interval) {
-        try{
+        try {
             
             devicesRepository.findById(deviceId).orElseThrow(() -> new ResourceNotFoundException("device does not exist!"));
-              if(interval.matches("last10minutes")){
+              if(interval.matches("last10minutes")) {
                 List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findDeviceConsumptionLastTenMinutes(deviceId)
                         .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
                 return foundDeviceConsumptionList;
 
-              }else if(interval.matches("lasthour")){
+              }else if(interval.matches("lasthour")) {
                 List<DeviceConsumption> foundDeviceConsumptionList =  deviceConsumptionRepository.findDeviceConsumptionLastHour(deviceId)
                         .orElseThrow(() -> new ResourceNotFoundException("List does not exist!"));
                 return foundDeviceConsumptionList;

@@ -1,7 +1,7 @@
 package com.monotoneid.eishms.communications.controller;
 
 import com.monotoneid.eishms.datapersistence.models.GeneratorGeneration;
-import com.monotoneid.eishms.services.databaseManagementSystem.GeneratorGenerationService;
+import com.monotoneid.eishms.services.databasemanagementsystem.GeneratorGenerationService;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class GeneratorGenerationEndPointController {
     */
      
     @GetMapping(value = "/generation", params = {"generatorId","startTimeStamp","endTimeStamp"})
-    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public List<GeneratorGeneration> retrieveGeneratorGenerationCases(
         @RequestParam(value = "generatorId", required = true) long generatorId,
         @RequestParam(value = "startTimeStamp", required = true) String startTimeStamp,
@@ -42,7 +42,7 @@ public class GeneratorGenerationEndPointController {
     }
 
     @GetMapping(value = "/generation", params = {"generatorId","interval"})
-    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public List<GeneratorGeneration> retrieveGeneratorGenerationBetweenInterval(
         @RequestParam(value = "generatorId", required = true) long generatorId,
         @RequestParam(value = "interval", required = true) String interval) {

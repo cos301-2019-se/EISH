@@ -7,8 +7,11 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+/**
+ *CLASS DEVICECONSUMPTIONID. 
+ */
 @Embeddable
-public class DeviceConsumptionId implements Serializable{
+public class DeviceConsumptionId implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -21,25 +24,33 @@ public class DeviceConsumptionId implements Serializable{
     public DeviceConsumptionId(){
 
     }
-    public DeviceConsumptionId(long newDeviceId, Timestamp newDeviceConsumptionTimestamp){
+
+    public DeviceConsumptionId(long newDeviceId, Timestamp newDeviceConsumptionTimestamp) {
         this.deviceId = newDeviceId;
         this.deviceConsumptionTimestamp = newDeviceConsumptionTimestamp;
     }
+
     //getters
-   public long getDeviceId(){
+    public long getDeviceId() {
         return deviceId;
     }
-    public Timestamp getDeviceConsumptionTimeStamp(){
+
+    public Timestamp getDeviceConsumptionTimeStamp() {
         return deviceConsumptionTimestamp;
     }
         
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof DeviceConsumptionId)) return false;
+        if (this == o) {
+            return true;
+        } 
+        if (!(o instanceof DeviceConsumptionId)) {
+            return false;
+        } 
         DeviceConsumptionId that = (DeviceConsumptionId) o;
-        return Objects.equals(getDeviceId(), that.getDeviceId()) &&
-                Objects.equals(getDeviceConsumptionTimeStamp(), that.getDeviceConsumptionTimeStamp());
+        return Objects.equals(getDeviceId(), that.getDeviceId()) 
+            && Objects.equals(getDeviceConsumptionTimeStamp(),
+            that.getDeviceConsumptionTimeStamp());
     }
  
     @Override

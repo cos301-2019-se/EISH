@@ -138,3 +138,21 @@ CREATE TABLE weather(
     weatherwindspeed float not null,
     weatherlastobtime timestamp not null
 );
+/*
+
+NOTIFICATION AND ENTITIES RELATED TO NOTIFICATION
+*/
+CREATE TYPE notificationStateType AS ENUM ('NOTIFICATION_UNREAD','NOTIFICATION_READ');
+CREATE TYPE notificationPriorityType AS ENUM ('PRIORITY_CRITICAL','PRIORITY_WARNING','PRIORITY_NEUTRAL','PRIORITY_MINOR');
+ 
+
+
+
+create table notification(
+	notificationid serial primary key,
+	notificationdescription text not null,
+	notificationstatetype notificationStateType not null,
+	notificationprioritytype notificationPriorityType not null,
+	notificationtimestamp timestamp not null
+
+);

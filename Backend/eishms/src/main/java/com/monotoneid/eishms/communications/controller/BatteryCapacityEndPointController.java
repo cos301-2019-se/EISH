@@ -1,8 +1,8 @@
 package com.monotoneid.eishms.communications.controller;
 
 import com.monotoneid.eishms.datapersistence.models.BatteryCapacity;
-import com.monotoneid.eishms.services.databaseManagementSystem.BatteryCapacityService;
-import com.monotoneid.eishms.services.externalCommunicatons.BatteryService;
+import com.monotoneid.eishms.services.databasemanagementsystem.BatteryCapacityService;
+import com.monotoneid.eishms.services.externalcommunicatons.BatteryService;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class BatteryCapacityEndPointController {
     }
 
     @GetMapping(value = "/capacity", params = {"startTimeStamp","endTimeStamp"})
-    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public List<BatteryCapacity> retrieveBatteryCapacityCases(
         @RequestParam(value = "startTimeStamp", required = true) String startTimeStamp,
         @RequestParam(value = "endTimeStamp", required = true) String endTimeStamp) {
@@ -44,7 +44,7 @@ public class BatteryCapacityEndPointController {
     }
 
     @GetMapping(value = "/capacity", params = {"interval"})
-    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public List<BatteryCapacity> retrieveBatteryCapacityBetweenInterval(
         @RequestParam(value = "interval", required = true) String interval) {
         return batteryCapacityService.retrieveBetweenInterval(interval);

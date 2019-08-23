@@ -1,11 +1,16 @@
 package com.monotoneid.eishms.communications.controller;
 
+import com.monotoneid.eishms.datapersistence.models.HomeUserDetails;
 import com.monotoneid.eishms.datapersistence.models.HomeUserPresence;
-import com.monotoneid.eishms.services.databaseManagementSystem.UserPresenceService;
+import com.monotoneid.eishms.datapersistence.repositories.Users;
+import com.monotoneid.eishms.services.databasemanagementsystem.UserPresenceService;
+import com.monotoneid.eishms.services.filemanagement.HomeDetailsService;
+import com.monotoneid.eishms.services.mqttcommunications.mqttlocation.MqttLocationManager;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,13 +19,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+import net.minidev.json.JSONObject;
+
+@CrossOrigin(origins = "*", maxAge = 36000)
 @RestController
 @RequestMapping("/api/user")
 public class UserPresenceEndPointController {
 
     @Autowired
     private UserPresenceService userPresenceService;
+
+    @Autowired
+    private Users users;
+
+    @Autowired
+    private MqttLocationManager locationManager;
+
+    @Autowired
+    private HomeDetailsService homeDetailsService;
 
     /**
     * GET METHOD
@@ -53,8 +69,15 @@ public class UserPresenceEndPointController {
     * @return an object with the presence of the user
     */
     @GetMapping(value = "/presence", params = {"userId"})
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public ResponseEntity<Object> getUserPresence(
         @RequestParam(value = "userId", required = true) long userId) {
         return userPresenceService.getCurrentUserPresence(userId);
+    }
+
+    @GetMapping(value = "/presences")
+    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    public List<HomeUserPresence> retrieveAllPresentUsers() {
+        return userPresenceService.findHomeUsersThatArePresent();
     }
 }

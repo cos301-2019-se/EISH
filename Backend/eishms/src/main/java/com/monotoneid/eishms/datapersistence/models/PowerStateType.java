@@ -1,5 +1,9 @@
 package com.monotoneid.eishms.datapersistence.models;
 
+/**
+ *ENUM POWERSTATETYPE. 
+ */
+
 public enum PowerStateType {
     POWERSTATE_FULL, 
     POWERSTATE_NORMAL, 
