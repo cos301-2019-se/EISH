@@ -19,6 +19,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import net.minidev.json.JSONObject;
 
@@ -53,8 +54,6 @@ public class MqttDevice {
 
     private IMqttAsyncClient asyncClient;
 
-    private QueryReplyManager queryReplyManager;
-
     private boolean isAvailable;
 
     public MqttDevice(Device device, MqttDeviceManager deviceManager) {
@@ -64,7 +63,6 @@ public class MqttDevice {
         System.out.println("uuid :" + this.asyncClientId);
 
         this.deviceManager = deviceManager;
-        consumptionBacklog = new ArrayList<String>();
         deviceState = "";
         try {
             this.asyncClient = new MqttAsyncClient(serverUrl, asyncClientId);
@@ -74,27 +72,24 @@ public class MqttDevice {
             options.setPassword(mqttPassword.toCharArray());
             options.setCleanSession(false);
             options.setAutomaticReconnect(true);
-
+            
             this.asyncClient.connect(options).waitForCompletion();
-
-            //System.out.println("is connected: "+this.asyncClient.isConnected());
 
             setSubscriptionTopics();
             setPublishTopics();
-            //this.asyncClient.setManualAcks(false);
-            this.asyncClient.subscribe(subscribeTopics, deviceQos);//.waitForCompletion();
+            //this.asyncClient.setManual1Acks(false);
+            this.asyncClient.subscribe(subscribeTopics, deviceQos).waitForCompletion();
             this.asyncClient.setCallback(new MqttCallback() {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     String jsonMessage = new String(message.getPayload());
-                    queryReplyManager.setReply(topic, jsonMessage);
                     handleWill(topic, jsonMessage);
                     handleState(topic, jsonMessage);
-                    if (topic.matches(subscribeTopics[0]) && deviceState.length() == 0) {
-                        consumptionBacklog.add(jsonMessage);
-                    } else {
+                    //if (topic.matches(subscribeTopics[0]) && deviceState.length() == 0) {
+                      //  consumptionBacklog.add(jsonMessage);
+                    //} else {
                         handleConsumption(topic, jsonMessage);   
-                    }                        
+                    //}                        
                     //System.out.println( jsonMessage + "jsonMessage Handled"); 
                 }
             
@@ -103,12 +98,16 @@ public class MqttDevice {
             
                 @Override
                 public void connectionLost(Throwable cause) {
+                    cause.printStackTrace();
+
                     JSONObject notificationObject = new JSONObject();
                     Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
                     notificationObject.put("priority", NotificationPriorityType.PRIORITY_CRITICAL.toString());
                     notificationObject.put("message", "Lost Connection to MQTT Broker.");
                     deviceManager.notificationService.addNotification("Lost Connection to MQTT Broker.", NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
-                    deviceManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
+                    if (deviceManager.simpMessagingTemplate != null)  {
+                        deviceManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
+                    }
                 }
             });
         } catch (MqttException me) {
@@ -121,9 +120,11 @@ public class MqttDevice {
             notificationObject.put("priority", NotificationPriorityType.PRIORITY_CRITICAL.toString());
             notificationObject.put("message", "Could not connect to MQTT Broker.");
             deviceManager.notificationService.addNotification("Could not connect to MQTT Broker.", NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
-            deviceManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
+            if (deviceManager.simpMessagingTemplate != null)  {
+                deviceManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
+            }
         }
-        configureDevice();
+        //configureDevice();
     }
 
     public long getId() {
@@ -164,14 +165,15 @@ public class MqttDevice {
         try {
             asyncClient.publish(publishTopics[0], "OFF".getBytes(), 0, false);
         } catch (MqttException me) {
-            //me.printStackTrace();
             JSONObject notificationObject = new JSONObject();
             notificationObject.put("priority", NotificationPriorityType.PRIORITY_CRITICAL.toString());
             String message = "Could not turn off device." + getName();
             notificationObject.put("message", message);
             Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
             deviceManager.notificationService.addNotification(message, NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
-            deviceManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
+            if (deviceManager.simpMessagingTemplate != null)  {
+                deviceManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
+            }
         }
     }
 
@@ -186,7 +188,9 @@ public class MqttDevice {
             notificationObject.put("message", message);
             Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
             deviceManager.notificationService.addNotification(message, NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
-            deviceManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
+            if (deviceManager.simpMessagingTemplate != null)  {
+                deviceManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
+            }
         }
     }
 
@@ -225,8 +229,8 @@ public class MqttDevice {
         if (!subscribeTopic.matches(subscribeTopics[0])) {
             return;
         }
-            
-        processConsumptionBacklog();
+    
+        // processConsumptionBacklog();
         parseAndSaveConsumption(message);
     }
 
@@ -245,9 +249,11 @@ public class MqttDevice {
             JSONObject consumptionObject = new JSONObject();
             consumptionObject.put("deviceConsumptionTimestamp", currentTimestamp.toString());
             consumptionObject.put("deviceConsumption", Float.toString(consumption));
-            deviceManager.simpMessagingTemplate.convertAndSend("/device/" 
-                + device.getDeviceTopic() 
-                + "/consumption", consumptionObject);
+            if (deviceManager.simpMessagingTemplate != null)  {
+                deviceManager.simpMessagingTemplate.convertAndSend("/device/" 
+                    + device.getDeviceTopic() 
+                    + "/consumption", consumptionObject);
+            }
         }         
     }
 
@@ -259,7 +265,9 @@ public class MqttDevice {
         deviceState = message;
         JSONObject stateObject = new JSONObject();
         stateObject.put("state", deviceState);
-        deviceManager.simpMessagingTemplate.convertAndSend("/device/" + device.getDeviceTopic() + "/state", stateObject);
+        if (deviceManager.simpMessagingTemplate != null)  {
+            deviceManager.simpMessagingTemplate.convertAndSend("/device/" + device.getDeviceTopic() + "/state", stateObject);
+        }
     }
 
     private void handleWill(String subscribeTopic, String message) {
@@ -270,16 +278,18 @@ public class MqttDevice {
         isAvailable = message.toLowerCase().matches("online");
         JSONObject stateObject = new JSONObject();
         stateObject.put("available", isAvailable);
-        deviceManager.simpMessagingTemplate.convertAndSend("/device/" + device.getDeviceTopic() + "/state", stateObject);
-    }
-
-    private void configureDevice() {
-        //configure telemetry
-        try {
-            asyncClient.publish(publishTopics[0], "".getBytes(), 0, false).waitForCompletion();
-        } catch (MqttException me) {
-            me.printStackTrace();
+        if (deviceManager.simpMessagingTemplate != null)  {
+            deviceManager.simpMessagingTemplate.convertAndSend("/device/" + device.getDeviceTopic() + "/state", stateObject);
         }
     }
+
+    // private void configureDevice() {
+    //     //configure telemetry
+    //     try {
+    //         asyncClient.publish(publishTopics[0], "".getBytes(), 0, false).waitForCompletion();
+    //     } catch (MqttException me) {
+    //         me.printStackTrace();
+    //     }
+    // }
 
 }

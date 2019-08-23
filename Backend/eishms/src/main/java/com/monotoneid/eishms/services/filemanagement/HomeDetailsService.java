@@ -40,7 +40,7 @@ public class HomeDetailsService {
         JSONObject jsonObject = new JSONObject();
         // jsonObject.put("Success", "This endpoint works");
         // return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-        
+    
         if (locationManager.discoverLocation(homeName)) {
             //return new location
             jsonObject.put("Success", "Home Details updated!");
