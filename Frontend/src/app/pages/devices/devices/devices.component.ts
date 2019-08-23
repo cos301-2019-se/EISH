@@ -27,7 +27,7 @@ export class DevicesComponent implements OnInit {
 
   ngOnInit() {
 
-      this.deviceService.getDeviceJSONArray().pipe(
+      this.deviceService.getAllDevices().pipe(
         map( response => {
             this.deviceList =  response;
             JSON.stringify(this.deviceList);

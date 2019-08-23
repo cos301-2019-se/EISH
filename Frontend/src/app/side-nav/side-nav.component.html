@@ -1,106 +1,121 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" 
-      fixedInViewport
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="(isHandset$ | async) === false">
-    <mat-toolbar> MENU</mat-toolbar>
-    <mat-nav-list>
-      <a mat-list-item routerLink="/homepage/dashboard" (click)="toggle(drawer)">
-        <img style="margin-right: 4px;height:36px; width:36px;" src="../../assets/icons/home_icon.png">
-        Dashboard
-      </a>
-      <a mat-list-item routerLink="/homepage/devices" (click)="toggle(drawer)">
-        <img style="margin-right: 4px;height:36px; width:36px;" src="../../assets/icons/devices_icon.png">
-        Devices
-      </a>
-      <a mat-list-item routerLink="/homepage/consumption" (click)="toggle(drawer)">
-        <img style="margin-right: 4px;height:36px; width:36px;" src="../../assets/icons/trend_icon.png">
-        Energy Monitoring
-      </a>
-      <!-- <a mat-list-item routerLink="/homepage/forecast" (click)="toggle(drawer)">Forecasting</a> -->
-      <!-- <a mat-list-item routerLink="/homepage/generation" (click)="toggle(drawer)">
-        <img style="margin-right: 4px;height:36px; width:36px;"src="../../assets/icons/bulb_icon.png">
-        Generation
-      </a> -->
-      <a mat-list-item routerLink="/homepage/settings" (click)="toggle(drawer)">
-        <img style="margin-right: 4px;height:36px; width:36px; " height="48px" width="48px" src="../../assets/icons/settings_icon.png">
-        Settings
-      </a>
-    </mat-nav-list>
-  </mat-sidenav>
-
-  <mat-sidenav-content>
-    <mat-toolbar class="navHeader">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
-        <h1>&#9776;</h1>
-      </button>
-
-      <!-----HEADING----->
-      <span class="logo"><img src="../../assets/logo/eishLogo.png"></span>
-      <span>EISHMS</span>
-      <!-----Padding----->
-      <span class="example-fill-remaining-space"></span>
-
-      <!---toolbar buttons-->
-      <button mat-button [matMenuTriggerFor]="notifications">
-      <mat-icon style="margin-right: 2%" matBadge="2" matBadgeColor="warn">
-      <img style="height: 25px; width: 25px" src="../../assets/icons/bell_icon.png">  
-      </mat-icon>
-      </button>      
-      <button style="margin-right: 2% ; padding-right: 0px;" mat-stroked-button color="primary" [matMenuTriggerFor]="whosHome" (click)="getUserPresence()">
-        Who's Home?
-        <img style="height:25px; width: 25px; padding: 0px;" src="../../assets/icons/dropdownIcon.png">
-      </button>
-
-      <mat-menu #notifications="matMenu">
-      <mat-list>
-          <mat-list-item role="listitem" *ngFor="let notif of notificationsArray; let i=index" >
-            <div class="notificationContent" *ngIf="i<5">
-                <div class="notifMessage">{{notif}}</div>
-                <div class="notifSeen">
-                  <button mat-button matTooltip="Mark as read" >
-                    &#10003;
-                  </button>
-                </div>
-            </div>
-          </mat-list-item>
-          <mat-list-item>
-              <div class="viewAll">
-                  <button  mat-stroked-button (click)="alert('Going to notifications page')">
-                     View All Notifications 
-                  </button>
-                </div>
-          </mat-list-item>
-        </mat-list>
-      </mat-menu>
-      <mat-menu #whosHome="matMenu">
-        <button mat-menu-item *ngFor="let user of userList" ><img style="width:20px; height: 20px; padding-right: 5px" src="../../assets/icons/whosHome.png"> {{user.homeUser.userName}} </button>
-      </mat-menu>
-
-      <mat-menu #profileMenu="matMenu">
-          <button mat-menu-item routerLink="/register/Change">
-            <img style="height:15px; width: 15px;  padding-left: 0px;" src="../../assets/icons/edit_icon.png">
-            Edit credentials
-          </button>
-          <button mat-menu-item (click)="logout()" routerLink="">
-            <img style="height:18px; width: 15px; padding-left: 0px;" src="../../assets/icons/exitt_icon.png">
-            Logout
-          </button>
+    <mat-sidenav #drawer class="sidenav" 
+        fixedInViewport
+        [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+        [mode]="(isHandset$ | async) ? 'over' : 'side'"
+        [opened]="(isHandset$ | async) === false">
+      <mat-toolbar> MENU</mat-toolbar>
+      <mat-nav-list>
+        <a mat-list-item routerLink="/homepage/dashboard" (click)="toggle(drawer)">
+          <img style="margin-right: 4px;height:36px; width:36px;" src="../../assets/icons/home_icon.png">
+          Dashboard
+        </a>
+        <a mat-list-item routerLink="/homepage/devices" (click)="toggle(drawer)">
+          <img style="margin-right: 4px;height:36px; width:36px;" src="../../assets/icons/devices_icon.png">
+          Devices
+        </a>
+        <a mat-list-item routerLink="/homepage/consumption" (click)="toggle(drawer)">
+          <img style="margin-right: 4px;height:36px; width:36px;" src="../../assets/icons/trend_icon.png">
+          Consumption
+        </a>
+        <!-- <a mat-list-item routerLink="/homepage/forecast" (click)="toggle(drawer)">Forecasting</a> -->
+         <a mat-list-item routerLink="/homepage/generation" (click)="toggle(drawer)">
+          <img style="margin-right: 4px;height:36px; width:36px;"src="../../assets/icons/bulb_icon.png">
+          Generation
+        </a> 
+        <a mat-list-item routerLink="/homepage/settings" (click)="toggle(drawer)">
+          <img style="margin-right: 4px;height:36px; width:36px; " height="48px" width="48px" src="../../assets/icons/settings_icon.png">
+          Settings
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+  
+    <mat-sidenav-content>
+      <mat-toolbar class="navHeader">
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle()"
+          *ngIf="isHandset$ | async">
+          <h1>&#9776;</h1>
+        </button>
+  
+        <!-----HEADING----->
+        <span class="logo"><img src="../../assets/logo/eishLogo.png"></span>
+        <span>EISHMS</span>
+        <!-----Padding----->
+        <span class="example-fill-remaining-space"></span>
+  
+        <!---toolbar buttons-->
+        <button mat-button [matMenuTriggerFor]="notifications">
+        <mat-icon style="margin-right: 2%" matBadge="2" matBadgeColor="warn">
+        <img style="height: 25px; width: 25px" src="../../assets/icons/bell_icon.png">  
+        </mat-icon>
+        </button>  
+        <mat-menu #whosHome="matMenu">
+            <!--  <button mat-menu-item *ngIf="userList === undefined">
+                <div><h4> No one's home</h4> </div>
+              </button>-->
+              <button mat-menu-item *ngFor="let user of userList">
+                <img style="width:20px; height: 20px; padding-right: 5px" src="../../assets/icons/whosHome.png"> {{user.homeUser.userName}} 
+              </button>
+        </mat-menu>    
+        <button style="margin-right: 2% ; padding-right: 0px;" mat-stroked-button color="primary" [matMenuTriggerFor]="whosHome" (click)="getUserPresence()">
+          Who's Home?
+          <img style="height:25px; width: 25px; padding: 0px;" src="../../assets/icons/dropdownIcon.png">
+        </button>
+        <mat-menu #whosHome="matMenu">
+            <!--  <button mat-menu-item *ngIf="userList === undefined">
+                <div><h4> No one's home</h4> </div>
+              </button>-->
+              <button mat-menu-item *ngFor="let user of userList">
+                <img style="width:20px; height: 20px; padding-right: 5px" src="../../assets/icons/whosHome.png"> {{user.homeUser.userName}} 
+              </button>
         </mat-menu>
-      <button mat-mini-fab color="primary" [matMenuTriggerFor]="profileMenu">{{initials}}</button>
-    </mat-toolbar>
-
-    <!--CONTENT OF PAGE-->
-    
-    <div class="pageContent">
-        <router-outlet></router-outlet>
-        <notifier-container></notifier-container>
-   </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+        <mat-menu #notifications="matMenu">
+        <mat-list>
+            <mat-list-item role="listitem" *ngFor="let notif of notificationsArray; let i=index" >
+              <div class="notificationContent" *ngIf="i<5">
+                  <div class="notifMessage">{{notif}}</div>
+                  <div class="notifSeen">
+                    <button mat-button matTooltip="Mark as read" >
+                      &#10003;
+                    </button>
+                  </div>
+              </div>
+            </mat-list-item>
+            <mat-list-item>
+                <div class="viewAll">
+                    <button  mat-stroked-button (click)="alert('Going to notifications page')">
+                       View All Notifications 
+                    </button>
+                  </div>
+            </mat-list-item>
+          </mat-list>
+        </mat-menu>
+        <mat-menu #whosHome="matMenu">
+          <button mat-menu-item *ngFor="let user of userList" ><img style="width:20px; height: 20px; padding-right: 5px" src="../../assets/icons/whosHome.png"> {{user.homeUser.userName}} </button>
+        </mat-menu>
+  
+        <mat-menu #profileMenu="matMenu">
+            <button mat-menu-item routerLink="/register/Change">
+              <img style="height:15px; width: 15px;  padding-left: 0px;" src="../../assets/icons/edit_icon.png">
+              Edit credentials
+            </button>
+            <button mat-menu-item (click)="logout()" routerLink="">
+              <img style="height:18px; width: 15px; padding-left: 0px;" src="../../assets/icons/exitt_icon.png">
+              Logout
+            </button>
+          </mat-menu>
+        <button mat-mini-fab color="primary" [matMenuTriggerFor]="profileMenu">{{initials}}</button>
+      </mat-toolbar>
+  
+      <!--CONTENT OF PAGE-->
+      
+      <div class="pageContent">
+          <router-outlet></router-outlet>
+          <notifier-container></notifier-container>
+     </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>

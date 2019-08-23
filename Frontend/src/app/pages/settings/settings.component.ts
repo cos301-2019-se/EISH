@@ -12,7 +12,7 @@ import { DeviceService } from 'src/app/services/devices/device.service';
 import { Response } from 'selenium-webdriver/http';
 import { NotifierService } from 'angular-notifier';
 import { environment } from 'src/environments/environment';
-
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
@@ -56,6 +56,8 @@ export class SettingsComponent implements OnInit {
   generatorChangeFailed: boolean;
   generatorPriority: any;
 
+  homeLocation: FormGroup;
+
   /**
    * Functions:
    */
@@ -80,11 +82,6 @@ export class SettingsComponent implements OnInit {
     this.userChangeFailed = false;
     this.deviceRemoveFailed = false;
     this.deviceChangeFailed = false;
-
-    this.notifier = this.notifierService;
-    this.notifier.notify( 'success', 'You are awesome! I mean it!' );
-    this.notifier.notify( 'warning', 'What it do babbbbyyyyyyy!!!' );
-    this.notifier.notify( 'error', 'Damn!' );
 
 
   }

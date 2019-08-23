@@ -1,8 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConsumptionService } from 'src/app/services/consumption/consumption.service';
+import { DeviceService } from 'src/app/services/devices/device.service';
 import { ConsumptionChartComponent } from './consumption-chart/consumption-chart.component';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { Message } from '@stomp/stompjs';
+import { GenerationComponent } from '../generation/generation.component';
+
 
 @Component({
   selector: 'app-consumption',
@@ -11,6 +14,8 @@ import { Message } from '@stomp/stompjs';
 })
 export class ConsumptionComponent implements OnInit {
   @ViewChild(ConsumptionChartComponent, {static: true}) consumptionChart: ConsumptionChartComponent;
+  @ViewChild(GenerationComponent, {static: true}) generationPage: GenerationComponent;
+
 
   deviceIds = [];
   devices = [];
@@ -25,7 +30,7 @@ export class ConsumptionComponent implements OnInit {
   socketOnline: boolean;
   mode = 'indeterminate';
 
-  constructor(private consumptionService: ConsumptionService, private rxStompService: RxStompService) {
+  constructor(private consumptionService: ConsumptionService, private rxStompService: RxStompService, private deviceService: DeviceService) {
     this.startTime = this.toDateString(new Date());
     this.endTime = this.toDateString(new Date());
     this.socketOnline = false;
@@ -50,7 +55,7 @@ export class ConsumptionComponent implements OnInit {
   }
 
   getDevices() {
-    this.consumptionService.getAllDevices().subscribe(
+    this.deviceService.getAllDevices().subscribe(
       (res) => {
         res.forEach((device) => {
           this.devices.push(device.deviceName);

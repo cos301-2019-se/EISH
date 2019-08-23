@@ -18,10 +18,6 @@ export class ConsumptionService {
 
   constructor(private http: HttpClient) {}
 
-  getAllDevices(): Observable<Device[]> {
-    return this.http.get<Device[]>(this.ROOT_URL + 'devices');
-  }
-
   getCustomDeviceConsumption(deviceId, startTimeStamp, endTimeStamp): Observable<[]> {
     const params = new HttpParams().set('deviceId', deviceId).set('startTimeStamp', startTimeStamp).set('endTimeStamp', endTimeStamp);
     return this.http.get<[]>(this.ROOT_URL + 'device/consumption', { params });

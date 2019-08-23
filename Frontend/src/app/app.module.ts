@@ -44,8 +44,8 @@ import { eishmsRxStompConfig } from './services/stomp/rx-stomp.config';
 import { GenerationComponent } from './pages/generation/generation.component';
 import { GenerationChartComponent } from './pages/generation/generation-chart/generation-chart.component';
 import { SingleDeviceComponent } from './pages/devices/single-device/single-device.component';
-// import { GeneratorModalComponent } from './templates/forms/generator-modal/generator-modal.component';
-// import { NotificationsComponent } from './pages/notifications/notifications.component';
+import { GeneratorModalComponent } from './templates/forms/generator-modal/generator-modal.component';
+import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 
 const customNotifierOptions: NotifierOptions = {

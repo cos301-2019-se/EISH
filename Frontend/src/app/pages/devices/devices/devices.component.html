@@ -1,10 +1,18 @@
 
   <h1>Consumption Heavy Devices</h1>
   <div class="topDevices">
-  <div class="device" *ngFor="let device of lastHour">
-    <span class="deviceName">{{device.deviceName}} </span>
-    <span ><p>{{device.deviceConsumption}} %</p></span>
-    <div class="deviceConsumptionBar"><mat-progress-bar mode="determinate" [value]="device.deviceConsumption"></mat-progress-bar></div>
+  <div class="device">
+    <span class="deviceName">Laptop Charger</span>
+    <div class="deviceConsumptionBar"><mat-progress-bar mode="determinate" [value]="25"></mat-progress-bar></div>
+    <span ><p>25 %</p></span> 
+
+    <span class="deviceName">Sonoff Light</span>
+    <div class="deviceConsumptionBar"><mat-progress-bar mode="determinate" [value]="60"></mat-progress-bar></div>
+    <span ><p>60 %</p></span> 
+
+    <span class="deviceName">Panasonic TV</span>
+    <div class="deviceConsumptionBar"><mat-progress-bar mode="determinate" [value]="15"></mat-progress-bar></div>
+    <span><p>15 %</p></span> 
   </div>
 </div>
 <div>

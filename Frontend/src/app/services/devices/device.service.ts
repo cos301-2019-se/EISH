@@ -102,5 +102,8 @@ export class DeviceService {
     */
 
   }
+  getState(deviceId): any {
+    return this.http.get(this.ROOT_URL + 'devicestate/' +deviceId )
+  }
 
 }

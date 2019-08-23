@@ -27,26 +27,29 @@
     <br><br>
     <mat-card class="graphContainer">
         <mat-card-content>
-            <mat-tab-group mat-stretch-tabs mat-align-tabs="center" dynamicHeight="true">
+                <div >
+                        <app-consumption-chart #consumptionChart></app-consumption-chart>
+                        </div>
+            <!-- <mat-tab-group mat-stretch-tabs mat-align-tabs="center" dynamicHeight="true">
                 <mat-tab label="Consumption" >
                     <div *ngIf="socketOnline">
                     <app-consumption-chart #consumptionChart></app-consumption-chart>
                     </div>
                 </mat-tab>
                 <mat-tab label="Generation">
-                    <div class="graphContainer" *ngIf="socketOnline">
-                        <app-generation-chart #generationChart></app-generation-chart>
+                    <div class="graphContainer" >
+                        <app-generation #generationChart></app-generation>
                     </div>
                 </mat-tab>
-            </mat-tab-group>
-            <div *ngIf="!socketOnline">
+            </mat-tab-group> -->
+            <!-- <div *ngIf="!socketOnline">
                 <mat-progress-spinner
                     class="spinner"
                     [color]="warning"
                     [mode]="mode"
                     [value]="indeterminate">
                 </mat-progress-spinner>
-            </div>
+            </div> -->
         </mat-card-content>
     </mat-card>
     

@@ -12,7 +12,6 @@ export class WeatherService {
   constructor(private http: HttpClient) { }
 
   getWeather(): Observable<Weather[]> {
-    console.log('heeeeeeeyyyyyyyyyyyy');
-    return this.http.get<Weather[]>(this.WEATHER_API);
+    return this.http.get<Weather[]>(this.WEATHER_API + 'weather');
   }
 }

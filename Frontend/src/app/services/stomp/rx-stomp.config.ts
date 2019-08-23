@@ -1,9 +1,10 @@
 import { InjectableRxStompConfig } from '@stomp/ng2-stompjs';
+import { environment } from 'src/environments/environment';
 // import * as SockJS from 'sockjs-client';
 
 export const eishmsRxStompConfig: InjectableRxStompConfig = {
   // Which server?
-  brokerURL: 'ws://192.168.8.111:8080/deviceStatus',
+  brokerURL: environment.SOCKET_URL,
 
   // Headers
   // Typical keys: login, passcode, host
