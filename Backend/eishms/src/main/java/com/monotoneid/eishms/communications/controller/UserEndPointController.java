@@ -3,7 +3,7 @@ package com.monotoneid.eishms.communications.controller;
 import com.monotoneid.eishms.datapersistence.models.HomeKey;
 import com.monotoneid.eishms.datapersistence.models.HomeUser;
 import com.monotoneid.eishms.datapersistence.repositories.HomeKeys;
-import com.monotoneid.eishms.services.databaseManagementSystem.UserService;
+import com.monotoneid.eishms.services.databasemanagementsystem.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,13 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  *CLASS USER END POINT CONTROLLER. 
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600000)
 @RestController()
 @RequestMapping("/api")
 public class UserEndPointController {
-    //@Autowired
-    //private PasswordEncoder encoder;
-
     @Autowired
     private UserService userService;
 
@@ -49,7 +45,7 @@ public class UserEndPointController {
     * @return keyList
     */
     @GetMapping("/keys")
-    @PreAuthorize("hasRole('ADMIN')") 
+    //@PreAuthorize("hasRole('ADMIN')") 
     public List<HomeKey> getKeys() {
         List<HomeKey> keyList = new ArrayList<HomeKey>();
         keyList.add(myHouseKeys.findByKeyName("general"));
@@ -64,7 +60,7 @@ public class UserEndPointController {
     * @return the status message
     */
     @PostMapping("/user")
-   // @PreAuthorize("hasRole('ADMIN') or hasRole('GENERAL')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('GENERAL')")
     public ResponseEntity<Object> addUser(@Valid @RequestBody HomeUser newHomeUser) {
         return userService.addUser(newHomeUser);
     }
@@ -76,7 +72,7 @@ public class UserEndPointController {
     * @return a the valid homeUser
     */
     @GetMapping(value = "/user",params = {"userName"})
-    //@PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('RESIDENT') or hasRole('GUEST')")
     public ResponseEntity<HomeUser> retriveUser(
         @Valid @RequestParam(value = "userName") String homeUserName) {
         return userService.retrieveUser(homeUserName);
@@ -88,7 +84,7 @@ public class UserEndPointController {
      * @return an object with all users 
      */
     @GetMapping("/users")
-    // @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public List<HomeUser> retriveAllUsers() {
         return userService.retrieveAllUsers();
     }
@@ -99,7 +95,7 @@ public class UserEndPointController {
     * @return object message
     */
     @PutMapping("/user")
-    //@PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
+    @PreAuthorize("hasRole('RESIDENT') or hasRole('ADMIN') or hasRole('GUEST')")
     public ResponseEntity<Object> updateUser(@Valid @RequestBody HomeUser homeUser) {
         return userService.updateUser(homeUser);
     }
@@ -111,7 +107,7 @@ public class UserEndPointController {
     * @return an object with all the remaining users
     */
     @DeleteMapping("/user/{userId}")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
    public ResponseEntity<Object> removeUser(@PathVariable long userId) {
         return userService.removeUser(userId);
     }
@@ -123,7 +119,7 @@ public class UserEndPointController {
     * @return Object message
     */
     @PatchMapping("/user/usertype/{userId}/{userType}")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> updateUserType(
         @PathVariable long userId, @PathVariable String userType) {
         return userService.updateUserType(userId,userType);
@@ -135,8 +131,13 @@ public class UserEndPointController {
     * @return object message
     */
     @PatchMapping("/user/expiration/{userId}/{numDays}")
-    //@PreAuthorize("hasRole('ADMIN') or hasRole('RENEWAL')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('RENEWAL')")
     public ResponseEntity<Object> renewUser(@PathVariable long userId, @PathVariable int numDays) {
         return userService.renewUser(userId,numDays);
+    }
+
+    @GetMapping("/forTest")
+    public String doit() {
+        return "ForTest";
     }
 }

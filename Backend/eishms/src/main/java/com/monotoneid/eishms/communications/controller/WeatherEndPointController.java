@@ -1,6 +1,6 @@
 package com.monotoneid.eishms.communications.controller;
 
-import com.monotoneid.eishms.services.externalCommunicatons.WeatherService;
+import com.monotoneid.eishms.services.externalcommunicatons.WeatherService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
