@@ -18,6 +18,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         config.enableSimpleBroker("/battery");
         //config.enableSimpleBroker("/generation");
         config.enableSimpleBroker("/generator");
+        config.enableSimpleBroker("/notification");
         config.enableSimpleBroker("");
         config.setApplicationDestinationPrefixes("/app");
     }

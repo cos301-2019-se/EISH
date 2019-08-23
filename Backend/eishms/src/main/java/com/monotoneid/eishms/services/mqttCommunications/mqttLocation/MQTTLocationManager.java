@@ -1,19 +1,25 @@
 package com.monotoneid.eishms.services.mqttcommunications.mqttlocation;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.monotoneid.eishms.datapersistence.models.HomeDetails;
 import com.monotoneid.eishms.datapersistence.models.HomeUser;
+import com.monotoneid.eishms.datapersistence.models.NotificationPriorityType;
 import com.monotoneid.eishms.datapersistence.models.UserType;
+import com.monotoneid.eishms.datapersistence.repositories.Blacklist;
 import com.monotoneid.eishms.datapersistence.repositories.Users;
+import com.monotoneid.eishms.services.databasemanagementsystem.NotificationService;
 import com.monotoneid.eishms.services.databasemanagementsystem.UserPresenceService;
 import com.monotoneid.eishms.services.filemanagement.HomeDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+
+import net.minidev.json.JSONObject;
 
 @Service
 public class MqttLocationManager {
@@ -24,8 +30,14 @@ public class MqttLocationManager {
     @Autowired 
     protected UserPresenceService userPresenceService; 
 
+    @Autowired 
+    protected NotificationService notificationService;
+
     @Autowired
     protected HomeDetailsService homeDetailsService;
+
+    @Autowired
+    protected Blacklist blacklist;
     
     private ArrayList<MqttLocation> userLocations;
 
@@ -49,7 +61,7 @@ public class MqttLocationManager {
             }
         } catch (Exception e) {
             System.out.println("Error adding user");
-            //throw e;
+            e.printStackTrace();
         }
     }
 
@@ -84,9 +96,24 @@ public class MqttLocationManager {
         //update home location file with new details
         try {
             homeDetailsService.writeToFile(homeDetails);
+            JSONObject notificationObject = new JSONObject();
+            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            notificationObject.put("priority", NotificationPriorityType.PRIORITY_MINOR.toString());
+            notificationObject.put("message", "Updated new home details.");
+            notificationService.addNotification("Updated new home details.", NotificationPriorityType.PRIORITY_MINOR.toString(), currentTimestamp);
+            if (simpMessagingTemplate != null) {
+                simpMessagingTemplate.convertAndSend("/notification", notificationObject);
+            } 
+    
         } catch(IOException ioe) {
-            //send to notification socket
-            //add exception to logger
+            JSONObject notificationObject = new JSONObject();
+            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            notificationObject.put("priority", NotificationPriorityType.PRIORITY_CRITICAL.toString());
+            notificationObject.put("message", "Could not update new home details.");
+            notificationService.addNotification("Could not update new home details.", NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
+            if (simpMessagingTemplate != null) {
+                simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+            }
         }
         
         //return true if successful

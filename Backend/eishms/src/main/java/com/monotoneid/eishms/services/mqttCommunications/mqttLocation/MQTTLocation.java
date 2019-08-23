@@ -12,6 +12,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.monotoneid.eishms.datapersistence.models.HomeDetails;
 import com.monotoneid.eishms.datapersistence.models.HomeUser;
+import com.monotoneid.eishms.datapersistence.models.NotificationPriorityType;
+import com.monotoneid.eishms.datapersistence.models.UserType;
 import com.monotoneid.eishms.services.mqttcommunications.mqttlocation.MqttLocationManager;
 
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
@@ -21,6 +23,8 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+
+import net.minidev.json.JSONObject;
 
 
 public class MqttLocation {
@@ -42,7 +46,9 @@ public class MqttLocation {
     public MqttLocation(HomeUser user, MqttLocationManager locationManager) {
         this.homeUser = user;
         this.locationManager = locationManager;
-        this.asyncClientId = UUID.randomUUID().toString();
+        String idss = UUID.randomUUID().toString();
+        this.asyncClientId = idss;
+        System.out.println(idss);
         this.newHomeDetails = null;
         this.isPresent = false;
         this.locationCountdown = null;
@@ -68,12 +74,14 @@ public class MqttLocation {
                         strMessage = new String(message.getPayload());
                         handleLocationEvent(strMessage);
                     }
+
                     if (topic.matches("owntracks/eishms/" + homeUser.getUserLocationTopic())) {
                         strMessage = new String(message.getPayload());
                         handleLocationMessage(strMessage);
                         if (locationCountdown != null && locationCountdown.getCount() > 0)
                             locationCountdown.countDown();
                     }
+
                     if (topic.matches("owntracks/eishms/" + homeUser.getUserLocationTopic() + "/waypoint")) {
                         strMessage = new String(message.getPayload());
                         handleWaypointMessage(strMessage);
@@ -82,17 +90,15 @@ public class MqttLocation {
                         }
                             
                     }
-
                 }
             
                 @Override
-                public void deliveryComplete(IMqttDeliveryToken token) {
-                    
-                }
+                public void deliveryComplete(IMqttDeliveryToken token) {}
             
                 @Override
                 public void connectionLost(Throwable cause) {
-                    
+                    cause.printStackTrace();
+                    // System.out.println("%%%%%%%%%%%%%%%%%% Location connection also lost %%%%%%%%%%%%%%");
                 }
             });
         } catch (MqttException me) {
@@ -121,59 +127,93 @@ public class MqttLocation {
         JsonObject jsonContent = new JsonParser().parse(message)
                                                         .getAsJsonObject();
         String deviceHomeName = "";
-        String regionName = "";
         boolean inRegion = false;
-        String userName = "";
-        long timeOfEvent = 0;
-        double longitude = 0;
-        double latitude = 0;
-        String homeName = "";
-        double homeLongitude = 0;
-        double homeLatitude = 0;
-        double radius = 0; //In kilometers
-        double distanceFromHome = 0;  
+        String homeName = "";  
         
-        System.out.println("......\\\\......\\\\\\.....\\\\\\\\....inside locationEvent() ....////..../////.....////.....");
+        System.out.println("------------Location Event-------------");
 
-
+        System.out.println("| The device topic: " + homeUser.getUserLocationTopic() + "               |");
         if (jsonContent.has("desc")) {
             deviceHomeName = jsonContent.get("desc").getAsString();
+            System.out.println("| The device region: " + deviceHomeName + "               |");
+        }
+
+        try {
+            HomeDetails homeDetails = locationManager.homeDetailsService.readFromFile();
+            homeName = homeDetails.getHomeName();
+            System.out.println("| The house region: " + homeName + "               |");
+            // homeLatitude = homeDetails.getHomeLatitude();
+            // homeLongitude = homeDetails.getHomeLongitude();
+            // radius = homeDetails.getHomeRadius();
+        } catch(Exception e) {
+            JSONObject notificationObject = new JSONObject();
+            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            notificationObject.put("priority", NotificationPriorityType.PRIORITY_CRITICAL.toString());
+            notificationObject.put("message", "Could not find home details.");
+            locationManager.notificationService.addNotification("Could not find home details.", NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
+            if (locationManager.simpMessagingTemplate != null) {
+                locationManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
+            }
+            
         }
         
         if (jsonContent.has("event")) {
             String locationEvent = "";
             locationEvent = jsonContent.get("event").getAsString();
             inRegion = locationEvent.matches("enter");
+            System.out.println("| The device inside: " + inRegion + "             |");
+
+            Timestamp presenceTimestamp;
+            if (homeName.matches(deviceHomeName)) {
+                presenceTimestamp = new Timestamp(System.currentTimeMillis());
+                this.isPresent = inRegion;
+                System.out.println("| Inserted into database: " + this.isPresent + "           |");
+                System.out.println("| Time:       " + presenceTimestamp + "           |");
+
+                JSONObject notificationObject = new JSONObject();
+                String notificationMessage = homeUser.getUserName() + " is Home.";
+                Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+                notificationObject.put("priority", NotificationPriorityType.PRIORITY_MINOR.toString());
+                notificationObject.put("message", notificationMessage);
+                locationManager.notificationService.addNotification(notificationMessage, NotificationPriorityType.PRIORITY_MINOR.toString(), currentTimestamp);
+                if (locationManager.simpMessagingTemplate != null) {
+                    locationManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
+                }
+                locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presenceTimestamp);
+            } else  {
+                presenceTimestamp = new Timestamp(System.currentTimeMillis());
+                this.isPresent = false;
+                System.out.println("| Inserted into database: " + this.isPresent + "           |");
+                System.out.println("| Time:       " + presenceTimestamp + "           |");
+
+                JSONObject notificationObject = new JSONObject();
+                String notificationMessage = homeUser.getUserName() + " left.";
+                Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+                notificationObject.put("priority", NotificationPriorityType.PRIORITY_MINOR.toString());
+                notificationObject.put("message", notificationMessage);
+                locationManager.notificationService.addNotification(notificationMessage, NotificationPriorityType.PRIORITY_MINOR.toString(), currentTimestamp);
+                if (locationManager.simpMessagingTemplate != null) {
+                    locationManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
+                }
+                if (locationManager.blacklist != null && homeUser.getUserType() == UserType.ROLE_GUEST){
+                    locationManager.blacklist.blacklistUser(homeUser.getUserName());
+                }
+
+                locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presenceTimestamp);
+            }
+
         }
 
-        if (jsonContent.has("tst")) {
-            timeOfEvent = jsonContent.get("tst").getAsLong();
-        }
+        
+        // if (regionName.matches("")) {
+        //     presencTimestamp = new Timestamp(System.currentTimeMillis());
+        //     this.isPresent = false;
+        //     System.out.println("| Inserted into database: " + this.isPresent + "           |");
+        //     System.out.println("| Time:       " + presencTimestamp + "           |");
+        //     locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presencTimestamp);
+        // }
 
-        try {
-            HomeDetails homeDetails = locationManager.homeDetailsService.readFromFile();
-            homeName = homeDetails.getHomeName();
-            homeLatitude = homeDetails.getHomeLatitude();
-            homeLongitude = homeDetails.getHomeLongitude();
-            radius = homeDetails.getHomeRadius();
-        } catch(Exception e) {
-
-        }
-
-        Timestamp presencTimestamp;
-        if (homeName.matches(deviceHomeName)) {
-            presencTimestamp = new Timestamp(timeOfEvent);
-            this.isPresent = true;
-            System.out.println("......\\\\......\\\\\\.....\\\\\\\\....transition occurredd ....////..../////.....////.....");
-            locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presencTimestamp);
-        }
-
-        if (regionName.matches("")) {
-            presencTimestamp = new Timestamp(timeOfEvent);
-            this.isPresent = false;
-            locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presencTimestamp);
-        }
-
+        System.out.println("---------------------------------------");
     }
 
     private void handleWaypointMessage(String message) {
@@ -208,44 +248,74 @@ public class MqttLocation {
         String homeName = "";
 
         String messageType = "";
+        
         if (jsonContent.has("_type")) {
             messageType = jsonContent.get("_type").getAsString();
+            System.out.println("_type = " + messageType);
+        }
+
+        System.out.println("------------Location Message-------------");
+
+        try {
+            HomeDetails homeDetails = locationManager.homeDetailsService.readFromFile();
+            homeName = homeDetails.getHomeName();
+            System.out.println("| The device topic: " + homeUser.getUserLocationTopic() + "               |");
+            System.out.println("| The house region: " + homeName + "               |");
+        } catch(Exception e) {
+            // JSONObject notificationObject = new JSONObject();
+            // Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            // notificationObject.put("priority", NotificationPriorityType.PRIORITY_CRITICAL.toString());
+            // notificationObject.put("message", "Could not find home location details.");
+            // locationManager.notificationService.addNotification("Could not find home location details.", NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
+            // locationManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
         }
 
         if (messageType.matches("location")) {
-            if (jsonContent.has("inregions")) {
+            if (jsonContent.has("inregions") ) {
                 regions = jsonContent.getAsJsonArray("inregions");
             }
-    
-            //Get home details!!!
-            try {
-                HomeDetails homeDetails = locationManager.homeDetailsService.readFromFile();
-                homeName = homeDetails.getHomeName();
-            } catch(Exception e) {
-    
-            }
-            
+
+            //System.out.println("region array size = " + regions.size());
+        
             String tmpRegionName = "";
-            for (int i = 0; i < regions.size(); i++) {
-                tmpRegionName = regions.get(i).getAsString();
-                if (tmpRegionName.matches(homeName)) {
-                    regionName = tmpRegionName; 
-                }
+            if (regions != null) {
+                for (int i = 0; i < regions.size(); i++) {
+                    tmpRegionName = regions.get(i).getAsString();
+                    if (tmpRegionName.matches(homeName)) {
+                        regionName = tmpRegionName;
+                    }
+                }    
             }
-    
+            System.out.println("| The device region: " + regionName + "               |");
+
             Timestamp presenceTimestamp;
             if (homeName.matches(regionName)) {
                 presenceTimestamp = new Timestamp(System.currentTimeMillis());
                 this.isPresent = true;
-                locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presenceTimestamp);
+                System.out.println("| Inserted into database: " + this.isPresent + "           |");
+                System.out.println("| Time:       " + presenceTimestamp + "           |");
+                if (locationManager.userPresenceService != null && this.isPresent != locationManager.userPresenceService.getPreviousUserPresence(homeUser.getUserId())) {
+                    locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presenceTimestamp);
+                }
             }
     
             if (regionName.matches("")) {
                 presenceTimestamp = new Timestamp(System.currentTimeMillis());
                 this.isPresent = false;
-                locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presenceTimestamp);
+                System.out.println("| Inserted into database: " + this.isPresent + "           |");
+                System.out.println("| Time:       " + presenceTimestamp + "           |");
+
+                if (locationManager.blacklist != null && homeUser.getUserType() == UserType.ROLE_GUEST){
+                    locationManager.blacklist.blacklistUser(homeUser.getUserName());
+                }
+
+                if (locationManager.userPresenceService != null && this.isPresent != locationManager.userPresenceService.getPreviousUserPresence(homeUser.getUserId())) {
+                    locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presenceTimestamp);
+                }
             }
         }
+
+        System.out.println("-----------------------------------------");
 
     }
 
@@ -267,7 +337,7 @@ public class MqttLocation {
         //if no deatils were found return null
         try {
             this.waypointCountdown = new CountDownLatch(1);
-            System.out.println("Requesting waypoints ...");
+            // System.out.println("Requesting waypoints ...");
             this.asyncClient.publish("owntracks/eishms/" 
                                     + homeUser.getUserLocationTopic() + "/cmd"
                                     , "{\"_type\":\"cmd\",\"action\":\"waypoints\"}".getBytes()

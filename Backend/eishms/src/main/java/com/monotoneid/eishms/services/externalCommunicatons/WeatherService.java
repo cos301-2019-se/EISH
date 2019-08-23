@@ -53,6 +53,7 @@ public class WeatherService {
     @Scheduled(fixedRate = rate, initialDelay = delay)
     public void getCurrentWeather() {
         try {
+            api = "https://api.weatherbit.io/v2.0/current?";
             HomeDetails homeDetails = homeDetailsService.readFromFile();
             location = "lat=" + Double.toString(homeDetails.getHomeLatitude());
             location += "&lon=" + Double.toString(homeDetails.getHomeLongitude());
@@ -93,7 +94,9 @@ public class WeatherService {
                 weather.put("weatherIcon", weatherJson.get("icon").getAsString());
                 weather.put("weatherTemperature", temp);
                 System.out.println("About to send the current weather!");
-                simpMessagingTemplate.convertAndSend("/weather", weather);
+                if (simpMessagingTemplate != null) {
+                    simpMessagingTemplate.convertAndSend("/weather", weather);
+                }
                 System.out.println("Success: Send the current weather!");
             } else {
                 System.out.println("Weather is null!");

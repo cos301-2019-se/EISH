@@ -1,8 +1,10 @@
 package com.monotoneid.eishms.communications.controller;
 
 import com.monotoneid.eishms.configuration.JwtTokenUtil;
+import com.monotoneid.eishms.datapersistence.models.BlacklistItem;
 import com.monotoneid.eishms.datapersistence.models.HomeUser;
 import com.monotoneid.eishms.datapersistence.models.UserType;
+import com.monotoneid.eishms.datapersistence.repositories.Blacklist;
 import com.monotoneid.eishms.datapersistence.repositories.HomeKeys;
 import com.monotoneid.eishms.datapersistence.repositories.Users;
 import com.monotoneid.eishms.messages.JwtRequest;
@@ -44,6 +46,9 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtTokenUtil jwtProvider;
 
+    @Autowired
+    private Blacklist blacklist;
+
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody JwtRequest loginRequest) {
         myHouseKeys.updateKeys();
@@ -66,7 +71,21 @@ public class JwtAuthenticationController {
         }
        
         String jwt = jwtProvider.generateJwtToken(authentication);
+        
+        if (!loginRequest.getUsername().matches("general") && !loginRequest.getUsername().matches("renewal")) {
+            BlacklistItem blacklistItem = new BlacklistItem(loginRequest.getUsername(), jwt);
+            blacklist.addBlacklistItem(blacklistItem);
+        }
+        
         System.out.println("User is authorized!");
         return ResponseEntity.ok(new JwtResponse(jwt));
+    }
+
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> userLogout(@Valid @RequestBody HomeUser homeUser) {
+        blacklist.blacklistUser(homeUser.getUserName());
+        String message = "Successfully Logged Out";
+        return ResponseEntity.ok().body(message);
     }
 }

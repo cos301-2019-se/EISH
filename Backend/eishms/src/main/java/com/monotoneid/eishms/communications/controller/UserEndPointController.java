@@ -84,7 +84,7 @@ public class UserEndPointController {
      * @return an object with all users 
      */
     @GetMapping("/users")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public List<HomeUser> retriveAllUsers() {
         return userService.retrieveAllUsers();
     }

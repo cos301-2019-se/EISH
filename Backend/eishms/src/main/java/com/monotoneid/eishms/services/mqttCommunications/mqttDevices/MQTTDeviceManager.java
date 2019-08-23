@@ -4,6 +4,7 @@ import com.monotoneid.eishms.datapersistence.models.Device;
 import com.monotoneid.eishms.datapersistence.repositories.Devices;
 import com.monotoneid.eishms.exceptions.ResourceNotFoundException;
 import com.monotoneid.eishms.services.databasemanagementsystem.DeviceConsumptionService;
+import com.monotoneid.eishms.services.databasemanagementsystem.NotificationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,9 @@ public class MqttDeviceManager {
     
     @Autowired
     protected DeviceConsumptionService deviceConsumptionService;
+
+    @Autowired 
+    protected NotificationService notificationService;
 
     @Autowired
     protected SimpMessagingTemplate simpMessagingTemplate;

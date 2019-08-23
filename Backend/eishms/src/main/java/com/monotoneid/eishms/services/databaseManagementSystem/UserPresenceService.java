@@ -155,14 +155,37 @@ public class UserPresenceService {
 
     }
 
+    public boolean getPreviousUserPresence(long userId) {
+        try {
+            usersRepository.findById(userId)
+                        .orElseThrow(() -> new ResourceNotFoundException("user does not exist!"));
+           
+            HomeUserPresence foundHomeUserPresence = 
+                userPresenceRespository.findCurrentHomeUserPresence(userId)
+                        .orElseThrow(() 
+                            -> new ResourceNotFoundException("presence does not exist!"));
+            boolean isPresent = foundHomeUserPresence.getHomeUserPresence();
+            return isPresent;
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage() + "!");
+            throw e;
+        }
+    }
+
     public List<HomeUserPresence> findHomeUsersThatArePresent() {
         try {
             List<HomeUser> currentHomeUsers = usersRepository.findAll();
             List<HomeUserPresence> currentUserPresence = new ArrayList<HomeUserPresence>();
+            HomeUserPresence tempUserPresence;
             for(int i = 0; i < currentHomeUsers.size(); i++) {
-                HomeUserPresence tempUserPresence = userPresenceRespository.findCurrentHomeUserPresence(
-                    currentHomeUsers.get(i).getUserId())
-                            .orElseThrow(() -> new ResourceNotFoundException("one or more users presence does not exist!"));
+                if (userPresenceRespository.findCurrentHomeUserPresence(
+                    currentHomeUsers.get(i).getUserId()).isPresent()) {
+                        tempUserPresence = userPresenceRespository.findCurrentHomeUserPresence(
+                            currentHomeUsers.get(i).getUserId())
+                                                .orElseThrow(() -> new ResourceNotFoundException("One or more user presence does not exist!"));
+                } else {
+                    tempUserPresence = null;
+                }
                 if (tempUserPresence != null) {
                     if (tempUserPresence.getHomeUserPresence() == true) {
                         currentUserPresence.add(tempUserPresence);
