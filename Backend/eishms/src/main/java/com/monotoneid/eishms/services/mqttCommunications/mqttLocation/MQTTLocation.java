@@ -97,7 +97,8 @@ public class MqttLocation {
             
                 @Override
                 public void connectionLost(Throwable cause) {
-                    System.out.println("%%%%%%%%%%%%%%%%%% Location connection also lost %%%%%%%%%%%%%%");
+                    cause.printStackTrace();
+                    // System.out.println("%%%%%%%%%%%%%%%%%% Location connection also lost %%%%%%%%%%%%%%");
                 }
             });
         } catch (MqttException me) {
@@ -151,7 +152,7 @@ public class MqttLocation {
             notificationObject.put("message", "Could not find home details.");
             locationManager.notificationService.addNotification("Could not find home details.", NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
             if (locationManager.simpMessagingTemplate != null) {
-                locationManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                locationManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
             }
             
         }
@@ -176,7 +177,7 @@ public class MqttLocation {
                 notificationObject.put("message", notificationMessage);
                 locationManager.notificationService.addNotification(notificationMessage, NotificationPriorityType.PRIORITY_MINOR.toString(), currentTimestamp);
                 if (locationManager.simpMessagingTemplate != null) {
-                    locationManager.simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                    locationManager.simpMessagingTemplate.convertAndSend("/notification", notificationObject);
                 }
                 locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presenceTimestamp);
             } else  {
@@ -293,7 +294,7 @@ public class MqttLocation {
                 this.isPresent = true;
                 System.out.println("| Inserted into database: " + this.isPresent + "           |");
                 System.out.println("| Time:       " + presenceTimestamp + "           |");
-                if (this.isPresent != locationManager.userPresenceService.getPreviousUserPresence(homeUser.getUserId())) {
+                if (locationManager.userPresenceService != null && this.isPresent != locationManager.userPresenceService.getPreviousUserPresence(homeUser.getUserId())) {
                     locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presenceTimestamp);
                 }
             }
@@ -308,7 +309,7 @@ public class MqttLocation {
                     locationManager.blacklist.blacklistUser(homeUser.getUserName());
                 }
 
-                if (this.isPresent != locationManager.userPresenceService.getPreviousUserPresence(homeUser.getUserId())) {
+                if (locationManager.userPresenceService != null && this.isPresent != locationManager.userPresenceService.getPreviousUserPresence(homeUser.getUserId())) {
                     locationManager.userPresenceService.addUserPresence(homeUser.getUserId(), this.isPresent, presenceTimestamp);
                 }
             }
