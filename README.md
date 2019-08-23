@@ -2,15 +2,22 @@
 # MonoToneID
 ### EISH: Energy Intrinsic Smart Home
 The Energy Intrinsic Smart Home Management System (EISHMS) is a software solution
-that aims to connect the generation and consumption management of home automation sys-
-tems. EISHMS should be able to monitor a smart homes' energy generation capacity, while also
-monitoring the consumption of the energy. Additionally it will incorporate an intelligent system
-that will be able to measure and predict the energy generation capacity, while also learning the
-usage patterns of specific devices to prioritize devices and optimize energy consumption.
+that aims to connect the generation and consumption management of home automation systems. EISHMS should be able to monitor a smart homes' energy generation capacity, while also
+monitoring the consumption of the energy.
 
 ### Documentation
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/admin/Documentation/SRS_EISHDemo3.pdf" target="_blank">Software Requirement Specification AND Architectural Design Demo 3</a>
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISHv2Demo4.pdf" target="_blank">Software Requirement Specification AND Architectural Design Demo 4</a>
+
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/testingPolicyVersion2demo4.pdf" target="_blank">Testing Policy Demo 4</a>
+
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/usermanual v2.pdf" target="_blank">User Manual Demo 4</a>
+
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/CodingStandarddemo4.pdf" target="_blank">Coding Standards Demo 4</a>
+
+
+
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISHDemo3.pdf" target="_blank">Software Requirement Specification AND Architectural Design Demo 3</a>
 
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH_Demo2.pdf" target="_blank">Software Requirement Specification AND Architectural Design Demo 2</a>
 
