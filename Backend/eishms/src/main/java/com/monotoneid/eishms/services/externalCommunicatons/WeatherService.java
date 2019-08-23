@@ -94,7 +94,9 @@ public class WeatherService {
                 weather.put("weatherIcon", weatherJson.get("icon").getAsString());
                 weather.put("weatherTemperature", temp);
                 System.out.println("About to send the current weather!");
-                simpMessagingTemplate.convertAndSend("/weather", weather);
+                if (simpMessagingTemplate != null) {
+                    simpMessagingTemplate.convertAndSend("/weather", weather);
+                }
                 System.out.println("Success: Send the current weather!");
             } else {
                 System.out.println("Weather is null!");

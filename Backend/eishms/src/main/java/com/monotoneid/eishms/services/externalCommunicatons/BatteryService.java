@@ -93,7 +93,9 @@ public class BatteryService {
                 batteryCapacityRepository.save(newBatteryCapacity);
                 batteryCapacity.put("batteryCapacityPowerPercentage", 
                             newBatteryCapacity.getBatteryCapacityPowerPercentage());
-                simpMessagingTemplate.convertAndSend("/battery", batteryCapacity);
+                if (simpMessagingTemplate != null) {
+                    simpMessagingTemplate.convertAndSend("/battery", batteryCapacity);
+                }
                 apiStatus = true;
                 notifyBatteryStatus(newBatteryCapacity.getBatteryCapacityPowerState());
             }
@@ -125,67 +127,69 @@ public class BatteryService {
     }
 
     private void notifyBatteryStatus(PowerStateType powerState) {
-        JSONObject notificationObject = new  JSONObject();
-        if (powerState == PowerStateType.POWERSTATE_FULL) {
-            if (fullStatus == true) {
-                notificationObject.put("priority","PRIORITY_MINOR");
-                notificationObject.put("message","Battery Full!");
-                simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
-                fullStatus = false;
-                lowStatus = true;
-                criticalStatus = true;
-                emptyStatus = true;
-            }
-        } else if (powerState == PowerStateType.POWERSTATE_LOW) {
-            if (lowStatus == true) {
-                notificationObject.put("priority","PRIORITY_WARNING");
-                notificationObject.put("message","WARNING: Battery Low!");
-                simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
-                fullStatus = true;
-                lowStatus = false;
-                criticalStatus = true;
-                emptyStatus = true;
-            }
-        } else if (powerState == PowerStateType.POWERSTATE_CRITICALLYLOW) {
-            if(criticalStatus == true) {
+        if (simpMessagingTemplate != null) {
+            JSONObject notificationObject = new  JSONObject();
+            if (powerState == PowerStateType.POWERSTATE_FULL) {
+                if (fullStatus == true) {
+                    notificationObject.put("priority","PRIORITY_MINOR");
+                    notificationObject.put("message","Battery Full!");
+                    simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                    fullStatus = false;
+                    lowStatus = true;
+                    criticalStatus = true;
+                    emptyStatus = true;
+                }
+            } else if (powerState == PowerStateType.POWERSTATE_LOW) {
+                if (lowStatus == true) {
+                    notificationObject.put("priority","PRIORITY_WARNING");
+                    notificationObject.put("message","WARNING: Battery Low!");
+                    simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                    fullStatus = true;
+                    lowStatus = false;
+                    criticalStatus = true;
+                    emptyStatus = true;
+                }
+            } else if (powerState == PowerStateType.POWERSTATE_CRITICALLYLOW) {
+                if(criticalStatus == true) {
+                    notificationObject.put("priority","PRIORITY_CRITICAL");
+                    notificationObject.put("message","CRITICAL: Battery Critically Low!");
+                    simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                    fullStatus = true;
+                    lowStatus = true;
+                    criticalStatus = false;
+                    emptyStatus = true;
+                }
+            } else if (powerState == PowerStateType.POWERSTATE_EMPTY) {
+                if(emptyStatus == true) {
+                    notificationObject.put("priority","PRIORITY_CRITICAL");
+                    notificationObject.put("message","CRITICAL: Battery Empty!");
+                    simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                    fullStatus = true;
+                    lowStatus = true;
+                    criticalStatus = true;
+                    emptyStatus = false;
+                }
+            } else if (powerState == PowerStateType.POWERSTATE_OFFLINE) {
                 notificationObject.put("priority","PRIORITY_CRITICAL");
-                notificationObject.put("message","CRITICAL: Battery Critically Low!");
-                simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
-                fullStatus = true;
-                lowStatus = true;
-                criticalStatus = false;
-                emptyStatus = true;
-            }
-        } else if (powerState == PowerStateType.POWERSTATE_EMPTY) {
-            if(emptyStatus == true) {
-                notificationObject.put("priority","PRIORITY_CRITICAL");
-                notificationObject.put("message","CRITICAL: Battery Critically Low!");
+                notificationObject.put("message","ERROR: Failure to connect to battery api!");
                 simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
                 fullStatus = true;
                 lowStatus = true;
                 criticalStatus = true;
-                emptyStatus = false;
+                emptyStatus = true;
             }
-        } else if (powerState == PowerStateType.POWERSTATE_OFFLINE) {
-            notificationObject.put("priority","PRIORITY_CRITICAL");
-            notificationObject.put("message","ERROR: Failure to connect to battery api!");
-            simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
-            fullStatus = true;
-            lowStatus = true;
-            criticalStatus = true;
-            emptyStatus = true;
-        }
 
-        if (powerState != PowerStateType.POWERSTATE_NORMAL && notificationObject.getAsString("message") != null) {
-            System.out.println("Message: " + notificationObject.getAsString("message") + " Priority: " + notificationObject.getAsString("priority") + " Time: " + new Timestamp(System.currentTimeMillis()));
-            notificationService.addNotification(notificationObject.getAsString("message"),
-                    notificationObject.getAsString("priority"),
-                    new Timestamp(System.currentTimeMillis()));
-        } else {
-            fullStatus = true;
-            lowStatus = true;
-            criticalStatus = true;
-            emptyStatus = true;
+            if (powerState != PowerStateType.POWERSTATE_NORMAL && notificationObject.getAsString("message") != null) {
+                System.out.println("Message: " + notificationObject.getAsString("message") + " Priority: " + notificationObject.getAsString("priority") + " Time: " + new Timestamp(System.currentTimeMillis()));
+                notificationService.addNotification(notificationObject.getAsString("message"),
+                        notificationObject.getAsString("priority"),
+                        new Timestamp(System.currentTimeMillis()));
+            } else {
+                fullStatus = true;
+                lowStatus = true;
+                criticalStatus = true;
+                emptyStatus = true;
+            }
         }
     }
 }

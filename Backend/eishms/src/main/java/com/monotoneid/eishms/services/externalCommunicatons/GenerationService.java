@@ -82,7 +82,9 @@ public class GenerationService {
                     );
                     generation.put("generatorGenerationTimestamp", currentTimestamp.toString());
                     generation.put("generatorGeneration", newGeneratorGeneration.getGeneratorGeneration());
-                    simpMessagingTemplate.convertAndSend("/generator/" + generator.getGeneratorId() + "/generation", generation);
+                    if (simpMessagingTemplate != null) {
+                        simpMessagingTemplate.convertAndSend("/generator/" + generator.getGeneratorId() + "/generation", generation);
+                    }
                     // System.out.println("Published generation of generator " + generator.getGeneratorId() + " at " + currentTimestamp);
                     generationValue += newGeneratorGeneration.getGeneratorGeneration();
                 }
@@ -90,7 +92,9 @@ public class GenerationService {
             }
             generation.put("generatorGenerationTimestamp", currentTimestamp1.toString());
             generation.put("generatorGeneration", generationValue);
-            simpMessagingTemplate.convertAndSend("/home/generation", generation);
+            if (simpMessagingTemplate != null) {
+                simpMessagingTemplate.convertAndSend("/home/generation", generation);
+            }
             // System.out.println("Published home generation at " + currentTimestamp1.toString());
         } catch (Exception e) {
             System.out.println("Couldn't get generation data!");
