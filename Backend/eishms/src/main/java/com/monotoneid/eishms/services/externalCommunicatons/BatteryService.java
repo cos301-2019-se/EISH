@@ -133,7 +133,7 @@ public class BatteryService {
                 if (fullStatus == true) {
                     notificationObject.put("priority","PRIORITY_MINOR");
                     notificationObject.put("message","Battery Full!");
-                    simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                    simpMessagingTemplate.convertAndSend("/notification", notificationObject);
                     fullStatus = false;
                     lowStatus = true;
                     criticalStatus = true;
@@ -143,7 +143,7 @@ public class BatteryService {
                 if (lowStatus == true) {
                     notificationObject.put("priority","PRIORITY_WARNING");
                     notificationObject.put("message","WARNING: Battery Low!");
-                    simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                    simpMessagingTemplate.convertAndSend("/notification", notificationObject);
                     fullStatus = true;
                     lowStatus = false;
                     criticalStatus = true;
@@ -153,7 +153,7 @@ public class BatteryService {
                 if(criticalStatus == true) {
                     notificationObject.put("priority","PRIORITY_CRITICAL");
                     notificationObject.put("message","CRITICAL: Battery Critically Low!");
-                    simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                    simpMessagingTemplate.convertAndSend("/notification", notificationObject);
                     fullStatus = true;
                     lowStatus = true;
                     criticalStatus = false;
@@ -163,7 +163,7 @@ public class BatteryService {
                 if(emptyStatus == true) {
                     notificationObject.put("priority","PRIORITY_CRITICAL");
                     notificationObject.put("message","CRITICAL: Battery Empty!");
-                    simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                    simpMessagingTemplate.convertAndSend("/notification", notificationObject);
                     fullStatus = true;
                     lowStatus = true;
                     criticalStatus = true;
@@ -172,7 +172,7 @@ public class BatteryService {
             } else if (powerState == PowerStateType.POWERSTATE_OFFLINE) {
                 notificationObject.put("priority","PRIORITY_CRITICAL");
                 notificationObject.put("message","ERROR: Failure to connect to battery api!");
-                simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+                simpMessagingTemplate.convertAndSend("/notification", notificationObject);
                 fullStatus = true;
                 lowStatus = true;
                 criticalStatus = true;
