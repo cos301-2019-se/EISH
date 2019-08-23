@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import com.monotoneid.eishms.datapersistence.models.Device;
 import com.monotoneid.eishms.datapersistence.models.NotificationPriorityType;
@@ -43,6 +45,7 @@ public class MqttDevice {
     private String[] subscribeTopics;
     private String[] publishTopics;
     private int[] deviceQos; 
+    private CountDownLatch stateCountdown;
 
     private String deviceState;
 
@@ -63,7 +66,8 @@ public class MqttDevice {
         System.out.println("uuid :" + this.asyncClientId);
 
         this.deviceManager = deviceManager;
-        deviceState = "";
+        deviceState = "OFF";
+        this.stateCountdown = null;
         try {
             this.asyncClient = new MqttAsyncClient(serverUrl, asyncClientId);
             MqttConnectOptions options = new MqttConnectOptions();
@@ -206,9 +210,12 @@ public class MqttDevice {
 
     public String getCurrentState() {
         try {
-            asyncClient.publish(publishTopics[0], "".getBytes(), 2, false).waitForCompletion();
-        } catch (MqttException me) {
-            me.printStackTrace();
+            this.stateCountdown = new CountDownLatch(1);
+            asyncClient.publish(publishTopics[0], "".getBytes(), 2, false).waitForCompletion();  
+            //this.locationCountdown.await();
+            this.stateCountdown.await(10, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return deviceState;
@@ -239,7 +246,7 @@ public class MqttDevice {
                                                         .getAsJsonObject();
 
         if (jsonContent.has("ENERGY")) {
-            JsonObject energyObject = jsonContent.get("ENERGGY").getAsJsonObject();
+            JsonObject energyObject = jsonContent.get("ENERGY").getAsJsonObject();
             float consumption = energyObject.get("Power").getAsFloat();
             Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
             deviceManager.deviceConsumptionService.addDeviceConsumption(
@@ -263,6 +270,9 @@ public class MqttDevice {
         }
             
         deviceState = message;
+        if (stateCountdown != null && stateCountdown.getCount() > 0) {
+            stateCountdown.countDown();
+        }
         JSONObject stateObject = new JSONObject();
         stateObject.put("state", deviceState);
         if (deviceManager.simpMessagingTemplate != null)  {

@@ -121,4 +121,11 @@ public class DeviceEndPointController {
         deviceManager.controlDevice(1, "OFF");
         return "Device should be OFF";
     }
+
+
+
+    @GetMapping("/devicestate/{deviceId}")
+    public String retrieveDeviceState(@PathVariable long deviceId) {
+        return deviceManager.getDeviceStateById(deviceId);
+    }
 }

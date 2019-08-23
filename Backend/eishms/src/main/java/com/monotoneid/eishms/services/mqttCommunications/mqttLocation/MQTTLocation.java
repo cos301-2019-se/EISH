@@ -108,16 +108,16 @@ public class MqttLocation {
 
     private void initializeTopics() {
         // topics to subscribe to...
-        String[] topics = new String[2];
+        String[] topics = new String[3];
         topics[0] = new String("owntracks/eishms/" + homeUser.getUserLocationTopic() + "/event");
-        //topics[1] = new String("owntracks/eishms/" + homeUser.getUserLocationTopic());
-        topics[1] = new String("owntracks/eishms/" + homeUser.getUserLocationTopic() + "/waypoint");
+        topics[1] = new String("owntracks/eishms/" + homeUser.getUserLocationTopic());
+        topics[2] = new String("owntracks/eishms/" + homeUser.getUserLocationTopic() + "/waypoint");
         subscriptionTopics = topics;
 
-        int[] qos = new int[2];
+        int[] qos = new int[3];
         qos[0] = 0;
         qos[1] = 0;
-        // qos[2] = 0;
+        qos[2] = 0;
 
         qoss = qos;
     }
