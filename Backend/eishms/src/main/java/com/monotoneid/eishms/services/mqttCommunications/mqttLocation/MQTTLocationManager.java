@@ -101,14 +101,19 @@ public class MqttLocationManager {
             notificationObject.put("priority", NotificationPriorityType.PRIORITY_MINOR.toString());
             notificationObject.put("message", "Updated new home details.");
             notificationService.addNotification("Updated new home details.", NotificationPriorityType.PRIORITY_MINOR.toString(), currentTimestamp);
-            simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+            if (simpMessagingTemplate != null) {
+                simpMessagingTemplate.convertAndSend("/notification", notificationObject);
+            } 
+    
         } catch(IOException ioe) {
             JSONObject notificationObject = new JSONObject();
             Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
             notificationObject.put("priority", NotificationPriorityType.PRIORITY_CRITICAL.toString());
             notificationObject.put("message", "Could not update new home details.");
             notificationService.addNotification("Could not update new home details.", NotificationPriorityType.PRIORITY_CRITICAL.toString(), currentTimestamp);
-            simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+            if (simpMessagingTemplate != null) {
+                simpMessagingTemplate.convertAndSend("/notification/", notificationObject);
+            }
         }
         
         //return true if successful
