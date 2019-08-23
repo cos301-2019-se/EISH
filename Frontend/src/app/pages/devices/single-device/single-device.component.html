@@ -3,7 +3,9 @@
     <mat-card-content>
         <div class="deviceCard">
             <div class="toggleButton">
-                    <button mat-stroked-button (click)="toggleState()">{{ deviceState }}</button>
+                    <mat-slide-toggle [checked]="deviceState=== 'ON'" (change)="toggleState()"></mat-slide-toggle>
+                    <!-- <button mat-stroked-button (click)="toggleState()">{{ deviceState }}</button> -->
+                    <p>{{ deviceState }} </p>
             </div>  
             <div class="deviceInfo">
                 <h4>{{ device.deviceName }}</h4>

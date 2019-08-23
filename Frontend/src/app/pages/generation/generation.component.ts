@@ -21,15 +21,18 @@ export class GenerationComponent implements OnInit {
   generationType = 'home';
   custom = false;
   topicSubscription = null;
+  socketOnline: boolean;
+  mode = 'indeterminate';
 
   constructor(private generationService: GeneratorService, private rxStompService: RxStompService) {
     this.startTime = this.toDateString(new Date());
     this.endTime = this.toDateString(new Date());
+    this.socketOnline = false;
   }
 
   ngOnInit() {
     this.getGenerators();
-    this.generationChart.setHeading('Home Generation');
+    // this.generationChart.setHeading('Home Generation');
   }
 
   private toDateString(date: Date): string {
@@ -106,6 +109,7 @@ export class GenerationComponent implements OnInit {
     this.topicSubscription = this.rxStompService.watch('/generator/' + generatorId + '/generation').subscribe((message: Message) => {
       const generationData = JSON.parse(message.body);
         // add data point to chart
+      this.socketOnline = true;
       this.generationChart.addDataPoint(generationData);
       this.generationChart.updateChart();
     });
@@ -130,7 +134,7 @@ export class GenerationComponent implements OnInit {
   selectGenerator(dropDownValue) {
     console.log(dropDownValue);
     this.selectedGenerator = dropDownValue;
-    this.generationType = (dropDownValue == 'Home') ? 'home' : 'generator';
+    this.generationType = (dropDownValue === 'Home') ? 'home' : 'generator';
     if (!this.custom) {
       this.updateSpecial();
     } else {

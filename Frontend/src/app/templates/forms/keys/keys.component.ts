@@ -42,8 +42,8 @@ export class KeysComponent implements OnInit {
   /**
    * Determines which action to take depending on keyType
    */
-  handleKey(formData) {
-    this.authenticationService.authenticateKey('general', formData.value, this);
+  handleKey() {
+    this.authenticationService.authenticateKey('general',  this.keyForm.value, this);
  }
 
 }

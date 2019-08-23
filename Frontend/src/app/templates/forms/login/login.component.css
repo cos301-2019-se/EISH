@@ -8,18 +8,16 @@ body {
   width: 100%;
 }
 
-.container {
-  width: 30%;
+.loginCard {
+  width: 350px;
   margin-left: auto;
   margin-right: auto;
   border: 0px;
   border-radius: 5px;
   background-color:white;
   box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.2);
-}
-
-.formContainer {
   text-align: center;
+  background-color: whitesmoke;
 }
 
 label {
@@ -30,11 +28,6 @@ label {
 
 input{
   text-indent: 2%;
-}
-
-.heading{
-  /* interface blue #40c4ff   */
-  /* whitesmoke */
 }
 
 .form-control {
@@ -56,7 +49,14 @@ input{
 }
 
 p {
+  padding-top: 0px;
   margin: 0px;
+  font-size: 10px;
+  text-align: center;
+}
+
+mat-form-field {
+  padding-bottom: 0px;
 }
 
 .form-control-feedback{
@@ -133,15 +133,10 @@ a:hover {
   border-bottom: 1px solid lightgray;
 }
 
-.logo-img {
-  width: 50px;
-  height: 50px;
-  float: left;
-}
-
 .logo-img img {
   width: 50px;
   height: 50px;
+  padding-left: 80px;
 }
 
 .logo-title {
@@ -149,9 +144,10 @@ a:hover {
   width: 70px;
   float: left;
   font-size: 20px;
-  font-weight: bold;
   padding-top: 15px;
   padding-bottom: 10px;
+  font-family: 'Raleway';
+  font-weight: bold;
 }
 
 .header-logo {
@@ -164,6 +160,8 @@ a:hover {
 
 .heading-title {
   text-align: center;
+  font-family: 'Raleway';
+  font-size: 12px;
 }
 
 .heading-title h2 {
@@ -171,4 +169,12 @@ a:hover {
   padding-top: 10px;
   padding-bottom: 10px;
   color: #1b1b1b;
+}
+
+.formCard {
+  padding-top: 0;
+  margin-top: 0;
+  background-color: white;
+  padding-left: 0;
+  padding-right: 0;
 }

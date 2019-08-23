@@ -40,12 +40,12 @@ export class DevicesComponent implements OnInit {
                 devices[index] = this.deviceList[index].deviceName;
               }
             this.deviceNames = devices;
-            //console.log(this.deviceNames);
+            // console.log(this.deviceNames);
             this.filteredOptions = this.userDeviceName.valueChanges
               .pipe(
                 startWith(' '),
                 map(value => this._filter(value))
-  
+
               );
 
           })
@@ -56,29 +56,36 @@ export class DevicesComponent implements OnInit {
           map( response => {
               this.consumptionArray =  response,
               JSON.stringify(this.consumptionArray);
-              //console.log(this.consumptionArray);
+              // console.log(this.consumptionArray);
               this.progressBarAgregation();
             })
           ).subscribe();
       // this.progressBarAgregation();
   }
 
-  sortByPriority(value: string){
-    console.log('Sorting now')
+  sortByPriority(value: string) {
+    console.log('Sorting now');
     console.log(value);
     const option = value.toLowerCase();
     this.deviceResult = null;
     this.deviceResult = [];
     let arrayIndex = 0;
-    for (let index = 0; index < this.deviceList.length; index++) {
-        if (this.deviceList[index].devicePriorityType.toLowerCase().includes(option) ) {
-          //console.log('device result: ' + this.deviceResult);
-          this.deviceResult[arrayIndex] = this.deviceList[index];
-          arrayIndex++;
-        }
+
+    for (const device of this.deviceList) {
+      if (device.devicePriorityType.toLowerCase().includes(option)) {
+        this.deviceResult[arrayIndex] = device;
+        arrayIndex++;
       }
+    }
+    // for (let index = 0; index < this.deviceList.length; index++) {
+    //     if (this.deviceList[index].devicePriorityType.toLowerCase().includes(option) ) {
+    //       // console.log('device result: ' + this.deviceResult);
+    //       this.deviceResult[arrayIndex] = this.deviceList[index];
+    //       arrayIndex++;
+    //     }
+    //   }
     JSON.stringify(this.deviceResult);
-    //console.log(this.deviceResult);
+    // console.log(this.deviceResult);
     return;
   }
   /**
@@ -113,14 +120,14 @@ export class DevicesComponent implements OnInit {
       }
       // tslint:disable-next-line: prefer-for-of
       for (let index = 0; index < this.deviceList.length; index++) {
-       if (this.deviceList[index].deviceId === element){
+       if (this.deviceList[index].deviceId === element) {
         deviceName = this.deviceList[index].deviceName;
        }
       }
       consumptions.push(
         {
           deviceId: element,
-          deviceName : deviceName,
+          deviceName,
           deviceConsumption : (sum / total) * 100
         }
       );
@@ -148,15 +155,22 @@ export class DevicesComponent implements OnInit {
     this.deviceResult = null;
     this.deviceResult = [];
     let arrayIndex = 0;
-    for (let index = 0; index < this.deviceList.length; index++) {
-        if (this.deviceList[index].deviceName.toLowerCase().includes(option) ) {
-          //console.log('device result: ' + this.deviceResult);
-          this.deviceResult[arrayIndex] = this.deviceList[index];
-          arrayIndex++;
-        }
+
+    for (const device of this.deviceList) {
+      if (device.deviceName.toLowerCase().includes(option)) {
+        this.deviceResult[arrayIndex] = device;
+        arrayIndex++;
       }
+    }
+    // for (let index = 0; index < this.deviceList.length; index++) {
+    //     if (this.deviceList[index].deviceName.toLowerCase().includes(option) ) {
+    //       // console.log('device result: ' + this.deviceResult);
+    //       this.deviceResult[arrayIndex] = this.deviceList[index];
+    //       arrayIndex++;
+    //     }
+    //   }
     JSON.stringify(this.deviceResult);
-    //console.log(this.deviceResult);
+    // console.log(this.deviceResult);
     return;
   }
 
