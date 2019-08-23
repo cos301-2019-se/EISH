@@ -61,7 +61,7 @@ public class MqttLocationManager {
             }
         } catch (Exception e) {
             System.out.println("Error adding user");
-            //throw e;
+            e.printStackTrace();
         }
     }
 
