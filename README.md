@@ -7,27 +7,32 @@ monitoring the consumption of the energy.
 
 ### Documentation
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISHv2Demo4.pdf" target="_blank">Software Requirement Specification AND Architectural Design Demo 4</a>
+### Demo 4
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISHv2Demo4.pdf" target="_blank"> Demo 4 Software Requirement Specification AND Architectural Design</a>
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/testingPolicyVersion2demo4.pdf" target="_blank">Testing Policy Demo 4</a>
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/testingPolicyVersion2demo4.pdf" target="_blank">  Demo 4Testing Policy</a>
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/usermanual v2.pdf" target="_blank">User Manual Demo 4</a>
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/usermanual v2.pdf" target="_blank"> Demo 4 User Manual</a>
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/CodingStandarddemo4.pdf" target="_blank">Coding Standards Demo 4</a>
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/CodingStandarddemo4.pdf" target="_blank">Demo 4 Coding Standards </a>
 
+### Demo 3
 
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISHDemo3.pdf" target="_blank"> Demo 3 Software Requirement Specification AND Architectural Design</a>
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISHDemo3.pdf" target="_blank">Software Requirement Specification AND Architectural Design Demo 3</a>
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/usermanual.pdf" target="_blank"> Demo 3 User Manual</a>
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH_Demo2.pdf" target="_blank">Software Requirement Specification AND Architectural Design Demo 2</a>
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/CodingStandard.pdf" target="_blank"> Demo 3 Coding Standards</a>
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH.pdf" target="_blank">Software Requirement Specification Demo1</a>
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/testingPolicyVersion2.pdf" target="_blank"> Demo 3 Testing Policy</a>
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/usermanual.pdf" target="_blank">User Manual</a>
+### Demo 2
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/CodingStandard.pdf" target="_blank">Coding Standards</a>
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH_Demo2.pdf" target="_blank"> Demo 2 Software Requirement Specification AND Architectural Design</a>
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/testingPolicyVersion2.pdf" target="_blank">Testing Policy</a>
+### Demo 1
+
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH.pdf" target="_blank"> Demo1 Software Requirement Specification</a>
 
 ### Project Management Tools
 
