@@ -10,11 +10,11 @@ monitoring the consumption of the energy.
 ### Demo 4
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISHv2Demo4.pdf" target="_blank">Software Requirement Specification AND Architectural Design</a>
 
-### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/testingPolicyVersion2demo4.pdf" target="_blank">Testing Policy</a>
-
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/usermanual v2.pdf" target="_blank">User Manual</a>
 
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/CodingStandarddemo4.pdf" target="_blank">Coding Standards </a>
+
+### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/testingPolicyVersion2demo4.pdf" target="_blank">Testing Policy</a>
 
 ### Demo 3
 
