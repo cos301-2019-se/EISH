@@ -36,7 +36,7 @@ monitoring the consumption of the energy.
 
 
 <details><summary> Project Management Tools</summary><br>
-<a href="https://trello.com/b/HwwqggZa/monotoneid" target="_blank">Administration Management Board</a>
+<a href="https://trello.com/b/HwwqggZa/monotoneid" target="_blank">Administration Management Board</a> <br>
 <a href="https://trello.com/b/zj2DTdGW/project-development" target="_blank">Project Management Board</a>
 </details>
 
