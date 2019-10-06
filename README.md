@@ -8,7 +8,7 @@ monitoring the consumption of the energy.
 ### Documentation
 
 ### Demo 4
-<details><summary> Documents</summary><br>
+<details><summary> Select Document</summary><br>
  <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISHv2Demo4.pdf" target="_blank">Software Requirement Specification AND Architectural Design</a>
 <br>
  <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/usermanual v2.pdf" target="_blank">User Manual</a>
@@ -20,7 +20,7 @@ monitoring the consumption of the energy.
 
 ### Demo 3
 
-<details><summary> Documents</summary><br>
+<details><summary> Select Document</summary><br>
  <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISHDemo3.pdf" target="_blank">Software Requirement Specification AND Architectural Design</a>
 <br>
  <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/usermanual.pdf" target="_blank">User Manual</a>
@@ -32,17 +32,19 @@ monitoring the consumption of the energy.
 
 ### Demo 2
 
-<details><summary> Documents</summary><br>
+<details><summary>Select Document</summary><br>
 <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH_Demo2.pdf" target="_blank">Software Requirement Specification AND Architectural Design</a>
 </details>
 
 ### Demo 1
 
-<details><summary> Documents</summary><br>
+<details><summary> Select Document</summary><br>
 <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH.pdf" target="_blank">Software Requirement Specification</a>
 </details>
 
-<details><summary> Project Management Tools</summary><br>
+### Project Management Tools
+
+<details><summary> Select Project Management Tools</summary><br>
 <a href="https://trello.com/b/HwwqggZa/monotoneid" target="_blank">Administration Management Board</a> <br>
 <a href="https://trello.com/b/zj2DTdGW/project-development" target="_blank">Project Management Board</a>
 </details>
