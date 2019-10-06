@@ -1,7 +1,6 @@
 # EISH [![Build Status](https://travis-ci.org/cos301-2019-se/EISH.svg?branch=master)](https://travis-ci.org/cos301-2019-se/EISH)
 
-![eishms](https://drive.google.com/open?id=1Szybwyx4Sl2-s_FcU5jH1I7ESqzzp4z8)
-
+<img src="https://drive.google.com/open?id=1Szybwyx4Sl2-s_FcU5jH1I7ESqzzp4z8" alt="eishmsicon" style="float: left; margin-right: 10px;"/>
 
 
 
