@@ -35,14 +35,9 @@ monitoring the consumption of the energy.
 ### <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH.pdf" target="_blank">Software Requirement Specification</a>
 
 
-### <details><summary> Project Management Tools</summary>
-  <br>
-  
-### <a href="https://trello.com/b/HwwqggZa/monotoneid" target="_blank">Administration Management Board</a>
-
-### <a href="https://trello.com/b/zj2DTdGW/project-development" target="_blank">Project Management Board</a>
-
-
+<details><summary> Project Management Tools</summary><br>
+<a href="https://trello.com/b/HwwqggZa/monotoneid" target="_blank">Administration Management Board</a>
+<a href="https://trello.com/b/zj2DTdGW/project-development" target="_blank">Project Management Board</a>
 </details>
 
 
