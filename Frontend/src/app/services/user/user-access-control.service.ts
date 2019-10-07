@@ -4,20 +4,23 @@ import 'rxjs/add/operator/map';
 import { map, catchError } from 'rxjs/operators';
 import {Observable, pipe} from 'rxjs';
 import { User } from 'src/app/models/user-model';
+import { CanActivate, Route, Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserAccessControlService {
+export class UserAccessControlService implements CanActivate {
+
   /**
    * Class executes HTTP requests to EISHMS API
    */
 
  /* Variables: */
-  ROOT_URL = 'http://192.168.8.111:8080/api/';
+  ROOT_URL = environment.ROOT_URL;
   data: any;
   JSON_URL = 'assets/data/';
-  constructor( private http: HttpClient) { }
+  constructor( private http: HttpClient, private router: Router) { }
 
   /**
    * Sends username and password to endpoint and receives JWT upon success
@@ -39,19 +42,21 @@ export class UserAccessControlService {
             // check if details are admin if true:
             if (userCredentials.userName === 'admin') {
               loginInstance.routeToChange();
+              sessionStorage.setItem('userType', 'ROLE_ADMIN');
             } else { // else go to dashboard
               this.getUser().pipe(
                 // tslint:disable-next-line: no-shadowed-variable
                 map(res => {
                   const userType = res.userType;
+                  // console.log(userType);
                   sessionStorage.setItem('userType' , userType);
                 })
               ).subscribe();
-              loginInstance.routeToHomepage();
+              this.router.navigate(['/homepage/dashboard']);
             }
 
       }), catchError(error =>
-        loginInstance.error())
+        loginInstance.loginError())
         ).subscribe();
 
   }
@@ -101,9 +106,10 @@ export class UserAccessControlService {
     this.http.put(this.ROOT_URL + 'user/', userCredentials).subscribe(
      ( res: Response) => {
        if (res.ok) {
-        credentialInstance.route('dashboard', '');
+        this.router.navigate(['/homepage/dashboard']);
        } else {
-        credentialInstance.route('register', 'Change');
+
+        this.router.navigate(['/register/Change']);
        } // error message?
     });
   }
@@ -171,8 +177,10 @@ export class UserAccessControlService {
   /**
    * Retrieves users' presence
    */
-  getUserPresence(userName) {
-
+  getUserPresence(): Observable<User []> {
+    console.log('user presence');
+    return this.http.get<User []>(this.ROOT_URL + 'user/presences');
+    // user/presence/userid: for specific user presence
   }
 
   /**
@@ -184,7 +192,7 @@ export class UserAccessControlService {
     // console.log(userDetails.userType)
     const params = new HttpParams().set('userId', userDetails.userId);
     params.set('userType', userDetails.userType);
-    this.http.patch(this.ROOT_URL + 'user/usertype/'+ userDetails.userId + '/' + userDetails.userType, {}).subscribe();
+    this.http.patch(this.ROOT_URL + 'user/usertype/' + userDetails.userId + '/' + userDetails.userType, {}).subscribe();
   }
 
   /**
@@ -198,6 +206,20 @@ export class UserAccessControlService {
     const params = new HttpParams().set('userId', userDetails.userId);
     params.set('userType', userDetails.nrDays);
     this.http.patch(this.ROOT_URL + 'user/expiration/' + userDetails.userId + '/' + userDetails.nrDays, {}).subscribe();
+  }
+
+  /**
+   *  Implementation | Overriding of canActivate
+   *  Determines if the user has access to settings page
+   */
+  canActivate() {
+    if (sessionStorage.getItem('userType') === 'ROLE_ADMIN') {
+      return true;
+    } else {
+      this.router.navigate(['/homepage/dashboard']);
+      return false;
+    }
+
   }
 
   getUserJSONArray(): Observable<User []> {

@@ -1,0 +1,27 @@
+<div class="modal">
+    <h2 mat-dialog-title>Add Generator</h2>
+    <mat-dialog-content [formGroup]="addGeneratorForm">
+            <mat-form-field>
+                    <mat-label>generator Name*</mat-label>
+                    <input type="text" matInput placeholder="generator name" formControlName="generatorName">
+            </mat-form-field>
+            <mat-form-field>
+                    <mat-label>Generator URL*</mat-label>
+                    <input type="text" matInput placeholder="URL"
+                            formControlName="generatorURL">
+            </mat-form-field>
+            <mat-form-field>
+                    <mat-label>Generator Priority*</mat-label>
+                    <mat-select formControlName="generatorPriorityType">
+                            <mat-option value="PRIORITY_USEWHENEMPTY">Use When Empty</mat-option>
+                            <mat-option value="PRIORITY_USEWHENCRITICAL">Use When Critical</mat-option>
+                            <mat-option value="PRIORITY_ALWAYSUSE">Always Use</mat-option>
+                            <mat-option value="PRIORITY_NEUTRAL">Neutral</mat-option>
+                    </mat-select>
+            </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-button class="submit" (click)="addGenerator()">Submit</button>
+    </mat-dialog-actions>
+</div>

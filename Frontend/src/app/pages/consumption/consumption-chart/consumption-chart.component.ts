@@ -35,12 +35,13 @@ export class ConsumptionChartComponent implements OnInit {
     this.chartConfigration = {
       type: 'line',
       data: {
-        labels: [],
+        labels: ['16 Aug', '13:15', '13:16', '13:17', '13:18', '13:19', '13:20', '13:21', '13:22', '13:23', '13:24', '13:25'],
         datasets: [{
           label: 'Device Consumption',
           backgroundColor: 'rgba(93, 217, 93, 0.6)',
           borderColor: 'rgba(93, 217, 93, 1)',
           data: [
+            0, 25, 40, 30, 32, 22, 22, 22, 22, 30, 45, 40
           ],
           fill: true,
         }]
@@ -90,14 +91,14 @@ export class ConsumptionChartComponent implements OnInit {
   }
 
   addDataPoint(newData): void {
-    if (typeof newData.deviceConsumptionTimestamp != 'undefined') {
+    if (typeof newData.deviceConsumptionTimestamp !== 'undefined') {
       this.chartConfigration.data.labels.push(newData.deviceConsumptionTimestamp); // put timestamp here
     } else {
       this.chartConfigration.data.labels.push(newData.homeConsumptionTimeStamp);
     }
 
 
-    if (typeof newData.deviceConsumption != 'undefined') {
+    if (typeof newData.deviceConsumption !== 'undefined') {
       // tslint:disable-next-line: radix
       this.chartConfigration.data.datasets[0].data.push(parseInt(newData.deviceConsumption));
     } else {

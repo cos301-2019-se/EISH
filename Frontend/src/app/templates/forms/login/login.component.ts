@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserAccessControlService } from 'src/app/services/user/user-access-control.service';
 import { Router} from '@angular/router';
 
@@ -16,23 +16,19 @@ export class LoginComponent implements OnInit {
   formHeading: string;
   loginForm: FormGroup;
   incorrectCredentials: boolean;
-
+  userLoginForm: FormGroup;
   constructor(private route: Router, private fb: FormBuilder, private AuthenticationServices: UserAccessControlService) {
-    this.incorrectCredentials = false;
-    this.formHeading = 'Login';
-    this.loginForm = this.fb.group({
-      userName: [null, [Validators.required]],
-      userPassword: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(40)]]
-    });
+
   }
 
   ngOnInit() {
-    this.incorrectCredentials = false;
-    this.formHeading = 'Login';
-    this.loginForm = this.fb.group({
+
+    this.userLoginForm = this.fb.group({
       userName: [null, [Validators.required]],
       userPassword: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(40)]]
     });
+    this.incorrectCredentials = false;
+    this.formHeading = 'Login';
   }
 
   routeToChange(): void {
@@ -43,13 +39,13 @@ export class LoginComponent implements OnInit {
 
   }
 
-  error(): void {
+  loginError(): void {
     this.incorrectCredentials = true;
     // this.loginForm;
   }
 
   get getVariables() {
-    return this.loginForm;
+    return this.userLoginForm;
   }
 
   /**
@@ -57,9 +53,10 @@ export class LoginComponent implements OnInit {
    * if default admin credentials routes to changeCredentials
    * if guest has expired, route to keyPage
    */
-  login(formData) {
-    if (!this.loginForm.invalid) {
-      this.AuthenticationServices.authenticateUser(formData.value, this);
+  login() {
+    if (!this.userLoginForm.invalid) {
+      console.log(this.userLoginForm);
+      this.AuthenticationServices.authenticateUser(this.userLoginForm.value, this);
     }
 
     return;

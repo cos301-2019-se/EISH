@@ -1,8 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConsumptionService } from 'src/app/services/consumption/consumption.service';
+import { DeviceService } from 'src/app/services/devices/device.service';
 import { ConsumptionChartComponent } from './consumption-chart/consumption-chart.component';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { Message } from '@stomp/stompjs';
+import { GenerationComponent } from '../generation/generation.component';
+
 
 @Component({
   selector: 'app-consumption',
@@ -11,6 +14,8 @@ import { Message } from '@stomp/stompjs';
 })
 export class ConsumptionComponent implements OnInit {
   @ViewChild(ConsumptionChartComponent, {static: true}) consumptionChart: ConsumptionChartComponent;
+  @ViewChild(GenerationComponent, {static: true}) generationPage: GenerationComponent;
+
 
   deviceIds = [];
   devices = [];
@@ -22,15 +27,18 @@ export class ConsumptionComponent implements OnInit {
   consumptionType = 'home';
   custom = false;
   topicSubscription = null;
+  socketOnline: boolean;
+  mode = 'indeterminate';
 
-  constructor(private consumptionService: ConsumptionService, private rxStompService: RxStompService) {
+  constructor(private consumptionService: ConsumptionService, private rxStompService: RxStompService, private deviceService: DeviceService) {
     this.startTime = this.toDateString(new Date());
     this.endTime = this.toDateString(new Date());
+    this.socketOnline = false;
   }
 
   ngOnInit() {
     this.getDevices();
-    this.consumptionChart.setHeading('Home Consumption');
+    // this.consumptionChart.setHeading('Home Consumption');
   }
 
   private toDateString(date: Date): string {
@@ -47,7 +55,7 @@ export class ConsumptionComponent implements OnInit {
   }
 
   getDevices() {
-    this.consumptionService.getAllDevices().subscribe(
+    this.deviceService.getAllDevices().subscribe(
       (res) => {
         res.forEach((device) => {
           this.devices.push(device.deviceName);
@@ -108,6 +116,7 @@ export class ConsumptionComponent implements OnInit {
     this.topicSubscription = this.rxStompService.watch('/device/' + deviceTopic + '/consumption').subscribe((message: Message) => {
       const consumptionData = JSON.parse(message.body);
         // add data point to chart
+      this.socketOnline = true;
       this.consumptionChart.addDataPoint(consumptionData);
       this.consumptionChart.updateChart();
     });
@@ -132,7 +141,7 @@ export class ConsumptionComponent implements OnInit {
   selectDevice(dropDownValue) {
     console.log(dropDownValue);
     this.selectedDevice = dropDownValue;
-    this.consumptionType = (dropDownValue == 'Home') ? 'home' : 'device';
+    this.consumptionType = (dropDownValue === 'Home') ? 'home' : 'device';
     if (!this.custom) {
       this.updateSpecial();
     } else {

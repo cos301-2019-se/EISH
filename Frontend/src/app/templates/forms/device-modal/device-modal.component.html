@@ -1,14 +1,13 @@
 <div class="modal">
-        <h2 mat-dialog-title>Add Device</h2>
+        <div class="dialogHeader"><h2>Add Device</h2></div>
         <mat-dialog-content [formGroup]="addDeviceForm">
                 <mat-form-field>
                         <mat-label>Device Name*</mat-label>
-                        <input type="text" matInput placeholder="device name" formControlName="deviceName">
+                        <input type="text" matInput formControlName="deviceName">
                 </mat-form-field>
                 <mat-form-field>
                         <mat-label>Device Topic*</mat-label>
-                        <input type="text" matInput placeholder="Topic"
-                                formControlName="deviceTopic">
+                        <input type="text" matInput formControlName="deviceTopic">
                 </mat-form-field>
                 <mat-form-field>
                         <mat-label>Device Priority*</mat-label>

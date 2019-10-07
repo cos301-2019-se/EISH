@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Generator, Battery } from 'src/app/models/generator-model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class GeneratorService {
   /**
    * Variables:
    */
-  ROOT_URL = 'http://192.168.8.111:8080/api/';
+  ROOT_URL = environment.ROOT_URL;
+  JSON_URL = 'assets/data/';
 
   constructor(private http: HttpClient) { }
   /**
@@ -30,7 +32,7 @@ export class GeneratorService {
    * @returns Observable array of Generator Objects
    */
   getAllPowerGenerators(): Observable<Generator[]> {
-    return this.http.get<Generator[]>(this.ROOT_URL + '');
+    return this.http.get<Generator[]>(this.ROOT_URL + 'generators');
   }
 
   /**
@@ -49,7 +51,9 @@ export class GeneratorService {
    * @param generatorForm Information about the generator given by the user.
    */
   addPowerGenerator(generatorForm) {
-    this.http.post(this.ROOT_URL + '', generatorForm );
+    console.log(generatorForm);
+    console.log(this.ROOT_URL + 'generator');
+    this.http.post(this.ROOT_URL + 'generator', generatorForm ).subscribe();
   }
 
   /**
@@ -57,7 +61,7 @@ export class GeneratorService {
    * PUT Request
    */
   editPowerGenerator(generatorForm) {
-    this.http.put(this.ROOT_URL + '', generatorForm);
+    return this.http.put(this.ROOT_URL + '', generatorForm);
   }
 
   /**
@@ -92,6 +96,23 @@ export class GeneratorService {
   getSpecialHomeGeneration(specialRange): Observable<[]> {
     const params = new HttpParams().set('interval', specialRange);
     return this.http.get<[]>(this.ROOT_URL + 'home/generation', { params });
+  }
+
+  getDayTotalGeneration(): Observable<any> {
+    return this.http.get(this.ROOT_URL + 'home/generation/day');
+  }
+
+  getWeekTotalGeneration(): Observable<any> {
+    return this.http.get(this.ROOT_URL + 'home/generation/week');
+  }
+
+  getMonthTotalGeneration(): Observable<any> {
+    return this.http.get(this.ROOT_URL + 'home/generation/month');
+  }
+
+  getGeneratorJSONArray(): Observable<Generator []> {
+    console.log('getting JSON Generator');
+    return this.http.get<Generator []>(this.JSON_URL + 'generator.json');
   }
 }
 
