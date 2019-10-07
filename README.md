@@ -1,6 +1,6 @@
-# EISH [![Build Status](https://travis-ci.org/cos301-2019-se/EISH.svg?branch=master)](https://travis-ci.org/cos301-2019-se/EISH)
+# EISH: Energy Intrinsic Smart Home [![Build Status](https://travis-ci.org/cos301-2019-se/EISH.svg?branch=master)](https://travis-ci.org/cos301-2019-se/EISH)
 
-### EISH: Energy Intrinsic Smart Home
+### Description
 The Energy Intrinsic Smart Home Management System (EISHMS) is a software solution
 that aims to connect the generation and consumption management of home automation systems. EISHMS should be able to monitor a smart homes' energy generation capacity, while also
 monitoring the consumption of the energy.
