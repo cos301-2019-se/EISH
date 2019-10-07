@@ -19,8 +19,9 @@ monitoring the consumption of the energy.
 ### Project Management Tools
 
 <details><summary> Select Management Tool</summary><br>
+  
 - <a href="https://trello.com/b/HwwqggZa/monotoneid" target="_blank">Administration Management Board</a> <br>
-- <a href="https://trello.com/b/zj2DTdGW/project-development" target="_blank">Project Management Board</a>
+- <a href="https://trello.com/b/zj2DTdGW/project-development" target="_blank">Project Management Board</a> <br>
 </details>
 
 ### Profiles
@@ -29,7 +30,7 @@ monitoring the consumption of the energy.
 - <a href="https://github.com/FulelaMjali" target="_blank">Fulela Mjali</a> <br>
 - <a href="https://github.com/Given-Rakgoale" target="_blank">Given Rakgoale</a> <br>
 - <a href="https://github.com/u15321861" target="_blank">Koketso Molawa</a> <br>
-- <a href="https://github.com/KearabiloeNare" target="_blank">Kearabiloe Nare</a> 
+- <a href="https://github.com/KearabiloeNare" target="_blank">Kearabiloe Nare</a> <br>
 - <a href="https://github.com/NtlatlengL" target="_blank">Lebogang Ntlatleng</a> <br>
 </details>
 
