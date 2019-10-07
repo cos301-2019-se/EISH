@@ -1,15 +1,23 @@
 
-  <!-- <h1>Consumption Heavy Devices</h1>
+  <h1>Consumption Heavy Devices</h1>
   <div class="topDevices">
-  <div class="device" *ngFor="let device of lastHour">
-    <span class="deviceName">{{device.deviceName}} </span>
-    <span ><p>{{device.deviceConsumption}} %</p></span>
-    <div class="deviceConsumptionBar"><mat-progress-bar mode="determinate" [value]="device.deviceConsumption"></mat-progress-bar></div>
+  <div class="device">
+    <span class="deviceName">Laptop Charger</span>
+    <div class="deviceConsumptionBar"><mat-progress-bar mode="determinate" [value]="25"></mat-progress-bar></div>
+    <span ><p>25 %</p></span> 
+
+    <span class="deviceName">Sonoff Light</span>
+    <div class="deviceConsumptionBar"><mat-progress-bar mode="determinate" [value]="60"></mat-progress-bar></div>
+    <span ><p>60 %</p></span> 
+
+    <span class="deviceName">Panasonic TV</span>
+    <div class="deviceConsumptionBar"><mat-progress-bar mode="determinate" [value]="15"></mat-progress-bar></div>
+    <span><p>15 %</p></span> 
   </div>
-</div> -->
+</div>
 <div>
   <h1>All Devices</h1>
-  <div >
+  <div class="searchContainer">
       <form class="searchDevice">
           <mat-form-field class="searchBar">
             <input type="text" placeholder="Enter device name" aria-label="device name" matInput [formControl]="userDeviceName" [matAutocomplete]="auto">
@@ -19,14 +27,15 @@
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <button mat-button color="primary" (click)="returnDevice()">Search</button>
+          <button style="margin-left:1%;" mat-stroked-button color="primary" (click)="returnDevice()">Search</button>
         </form>
   </div>
+  <br>
   <div class="sortByPriority">
     <span> Sort By : </span>
-    <span>
       <mat-label>Priority</mat-label>
-          <mat-select >
+      <span class="priority">
+          <mat-select placeholder="None">
               <mat-option value="PRIORITY_ALWAYSON" (click)="sortByPriority('PRIORITY_ALWAYSON')">Always on</mat-option>
               <mat-option value="PRIORITY_MUSTHAVE" (click)="sortByPriority('PRIORITY_MUSTHAVE')">Must have</mat-option>
               <mat-option value="PRIORITY_NEUTRAL" (click)="sortByPriority('PRIORITY_NEUTRAL')">Neutral</mat-option>              

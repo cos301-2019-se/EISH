@@ -1,0 +1,26 @@
+<div class="modal">
+        <div class="dialogHeader"><h2>Add Device</h2></div>
+        <mat-dialog-content [formGroup]="addDeviceForm">
+                <mat-form-field>
+                        <mat-label>Device Name*</mat-label>
+                        <input type="text" matInput formControlName="deviceName">
+                </mat-form-field>
+                <mat-form-field>
+                        <mat-label>Device Topic*</mat-label>
+                        <input type="text" matInput formControlName="deviceTopic">
+                </mat-form-field>
+                <mat-form-field>
+                        <mat-label>Device Priority*</mat-label>
+                        <mat-select formControlName="devicePriorityType">
+                                <mat-option value="PRIORITY_ALWAYSON">Always on</mat-option>
+                                <mat-option value="PRIORITY_MUSTHAVE">Must have</mat-option>
+                                <mat-option value="PRIORITY_NICETOHAVE">Nice to have</mat-option>
+                                <mat-option value="PRIORITY_NEUTRAL">Neutral</mat-option>
+                        </mat-select>
+                </mat-form-field>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>Cancel</button>
+            <button mat-button class="submit" (click)="addDevice()">Submit</button>
+        </mat-dialog-actions>
+</div>

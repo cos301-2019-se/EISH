@@ -1,0 +1,18 @@
+[mat-dialog-close]{
+    background-color: #ff3547;
+    color: white;
+}
+
+.submit{
+    background-color: #51d651;
+    color: white;
+}
+
+.dialogHeader{
+    text-align: center;
+}
+
+mat-form-field{
+    width:100%;
+    
+}
