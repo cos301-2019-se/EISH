@@ -26,9 +26,9 @@ monitoring the consumption of the energy.
 ### Profiles
 <details><summary> Select Member</summary><br>
 - <a href="https://github.com/Given-Rakgoale" target="_blank">Given Rakgoale</a> <br>
-- <a href="https://github.com/FulelaMjali" target="_blank">Fulela Mjali</a>
-- <a href="https://github.com/u15321861" target="_blank">Koketso Molawa</a>
-- <a href="https://github.com/NtlatlengL" target="_blank">Lebogang Ntlatleng</a> 
+- <a href="https://github.com/FulelaMjali" target="_blank">Fulela Mjali</a> <br>
+- <a href="https://github.com/u15321861" target="_blank">Koketso Molawa</a> <br>
+- <a href="https://github.com/NtlatlengL" target="_blank">Lebogang Ntlatleng</a> <br>
 - <a href="https://github.com/KearabiloeNare" target="_blank">Kearabiloe Nare</a>  
 </details>
 
