@@ -1,4 +1,5 @@
-<h1> <img src="https://github.com/cos301-2019-se/EISH/blob/frontend/Frontend/src/assets/logo/eishLogo.png" alt="Kitten"	title="eishlogo" width="100" height="100" /> </h1>
+ <img src="https://github.com/cos301-2019-se/EISH/blob/frontend/Frontend/src/assets/logo/eishLogo.png" alt="Kitten"	title="eishlogo" width="75" height="75" /> 
+  
 # EISH: Energy Intrinsic Smart Home [![Build Status](https://travis-ci.org/cos301-2019-se/EISH.svg?branch=master)](https://travis-ci.org/cos301-2019-se/EISH) 
 
 ### Description
