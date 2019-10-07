@@ -5,7 +5,7 @@ The Energy Intrinsic Smart Home Management System (EISHMS) is a software solutio
 that aims to connect the generation and consumption management of home automation systems. EISHMS should be able to monitor a smart homes' energy generation capacity, while also
 monitoring the consumption of the energy.
 
-### Demo 4
+### Documents
 <details><summary> Select Document</summary><br>
 - <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISHv2Demo4.pdf" target="_blank">Software Requirement Specification AND Architectural Design</a>
 <br>
@@ -16,35 +16,20 @@ monitoring the consumption of the energy.
 - <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/testingPolicyVersion2demo4.pdf" target="_blank">Testing Policy</a>
 </details>
 
-### Demo 3
-
-<details><summary> Select Document</summary><br>
-- <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISHDemo3.pdf" target="_blank">Software Requirement Specification AND Architectural Design</a>
-<br>
-- <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/usermanual.pdf" target="_blank">User Manual</a>
-<br>
-- <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/CodingStandard.pdf" target="_blank">Coding Standards</a>
-<br>
-- <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/testingPolicyVersion2.pdf" target="_blank">Testing Policy</a>
-</details>
-
-### Demo 2
-
-<details><summary>Select Document</summary><br>
-- <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH_Demo2.pdf" target="_blank">Software Requirement Specification AND Architectural Design</a>
-</details>
-
-### Demo 1
-
-<details><summary> Select Document</summary><br>
-- <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISH.pdf" target="_blank">Software Requirement Specification</a>
-</details>
-
 ### Project Management Tools
 
 <details><summary> Select Management Tool</summary><br>
 - <a href="https://trello.com/b/HwwqggZa/monotoneid" target="_blank">Administration Management Board</a> <br>
 - <a href="https://trello.com/b/zj2DTdGW/project-development" target="_blank">Project Management Board</a>
+</details>
+
+### Profiles
+<details><summary> Select Member</summary><br>
+- <a href="https://github.com/Given-Rakgoale" target="_blank">Given Rakgoale</a> <br>
+- <a href="https://github.com/FulelaMjali" target="_blank">Fulela Mjali</a>
+- <a href="https://github.com/u15321861" target="_blank">Koketso Molawa</a>
+- <a href="https://github.com/NtlatlengL" target="_blank">Lebogang Ntlatleng</a> 
+- <a href="https://github.com/KearabiloeNare" target="_blank">Kearabiloe Nare</a>  
 </details>
 
 
