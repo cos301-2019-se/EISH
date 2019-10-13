@@ -9,6 +9,10 @@ import java.net.URL;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+/**
+ * CLASS HTTP CONNECTION SERVICE.
+ * Responsible for making http connection to external apis.
+ */
 @Service
 public class HttpConnection {
 
@@ -16,7 +20,9 @@ public class HttpConnection {
     private HttpURLConnection connection;
 
     /**
-     * .
+     * This function calls the api parsed in and the returns the information is gets.
+     * @param api
+     * @return StriingBuffer or null.
      */
     public StringBuffer getContentFromURL(String api) {
         try {
@@ -43,7 +49,6 @@ public class HttpConnection {
                 return content;
             } else {
                 streamReader = new InputStreamReader(connection.getErrorStream());
-                // System.out.println("Stream Reader: " + streamReader.toString() + "Weather status: " + status);
                 connection.disconnect();
                 return content;
             }

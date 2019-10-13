@@ -22,6 +22,7 @@ import net.minidev.json.JSONObject;
 
 /**
  * CLASS GENERATION SERVICE.
+ * Responsible for getting information related to the solar system.
  */
 @Service
 @EnableScheduling
@@ -41,12 +42,13 @@ public class GenerationService {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     private String apiCurrent = "http://127.0.0.1:3001/v2/installations/0/SolarCharger/current";
-    //private String apiAll = "http://localhost:6000/v2/installations/0/all";
     private final long rate = 20000;
     private final long delay = 20000;
 
     /**
-     * .
+     * This function is scheduled (at 20 seconds intervals) to:
+     * save the current information of the solar in the database.
+     * send the information through the socket (/generator/.../generation).
      */
     @Async
     @Scheduled(fixedRate = rate, initialDelay = delay)
@@ -57,11 +59,8 @@ public class GenerationService {
             float generationValue = 0;
             Timestamp currentTimestamp1 = new Timestamp(System.currentTimeMillis());
             for (Generator generator : generators) {
-                //StringBuffer content = connection.getContentFromURL
-                //(generator.getGeneratorUrl() + "/current");
                 StringBuffer content = connection.getContentFromURL(apiCurrent);
                 GeneratorGeneration newGeneratorGeneration;
-                // System.out.println("Return from the HttpConnection");
                 if (content == null) {
                     newGeneratorGeneration = new GeneratorGeneration(
                         0, generator, currentTimestamp1, "OFFLINE");
@@ -85,7 +84,6 @@ public class GenerationService {
                     if (simpMessagingTemplate != null) {
                         simpMessagingTemplate.convertAndSend("/generator/" + generator.getGeneratorId() + "/generation", generation);
                     }
-                    // System.out.println("Published generation of generator " + generator.getGeneratorId() + " at " + currentTimestamp);
                     generationValue += newGeneratorGeneration.getGeneratorGeneration();
                 }
                 generationRepository.save(newGeneratorGeneration);
@@ -95,7 +93,6 @@ public class GenerationService {
             if (simpMessagingTemplate != null) {
                 simpMessagingTemplate.convertAndSend("/home/generation", generation);
             }
-            // System.out.println("Published home generation at " + currentTimestamp1.toString());
         } catch (Exception e) {
             System.out.println("Couldn't get generation data!");
             System.out.println("Error:  " + e.getMessage() + " " + e.getCause());

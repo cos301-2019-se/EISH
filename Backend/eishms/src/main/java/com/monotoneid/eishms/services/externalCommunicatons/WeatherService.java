@@ -47,7 +47,9 @@ public class WeatherService {
     private final long delay = 15000;
 
     /** 
-     * Sends the current weather after 15 mins through the socket "weather".
+     * This function is scheduled (15 min intervals) to:
+     * save the current weather information in the databse;
+     * send the weather through the socket (weather).
      */
     @Async
     @Scheduled(fixedRate = rate, initialDelay = delay)
@@ -108,8 +110,8 @@ public class WeatherService {
     }
 
     /**
-     * .
-     * @return
+     * The function returns the last saved weather from the database.
+     * @return ResponseEntity<Object>
      */
     public ResponseEntity<Object> getLastWeather() {
         try {

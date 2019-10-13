@@ -25,6 +25,7 @@ import net.minidev.json.JSONObject;
 
 /**
  * CLASS BATTERY SERVICE.
+ * Responsible for getting information related to the solar charged battery.
  */
 @Service
 @EnableScheduling
@@ -53,7 +54,9 @@ public class BatteryService {
     private final long delay = 10000;
     
     /**
-     * The funtion returns JSONobject with the current information of the battery.
+     * This function is scheduled (at 15 seconds intervals) to:
+     * save the current information of the battery in the database;
+     * send the information through the socket (/battery).
      */
     @Async
     @Scheduled(fixedRate = rate, initialDelay = delay)
@@ -65,7 +68,6 @@ public class BatteryService {
             BatteryCapacity newBatteryCapacity;
 
             if (content == null) {
-                // System.out.println("Content from api is null!");
                 newBatteryCapacity = new BatteryCapacity(
                   0, 0,PowerStateType.POWERSTATE_OFFLINE.toString(), 
                   ChargingStateType.CHARGINGSTATE_OFFLINE.toString(), currentTimestamp, 0);
@@ -106,8 +108,8 @@ public class BatteryService {
     }
 
     /**
-     * .
-     * @return
+     * The function returns the last saved battery information from the database.
+     * @return ResponseEntity<Object>
      */
     public ResponseEntity<Object> getLastBatteryLevel() {
         JSONObject batteryCapacity = new JSONObject();
@@ -117,7 +119,6 @@ public class BatteryService {
             
             batteryCapacity.put("batteryCapacityPowerPercentage", 
                         lastBatteryCapacity.getBatteryCapacityPowerPercentage());
-            // System.out.println("Last battery capacity: " + batteryCapacity);
             return new ResponseEntity<>(batteryCapacity, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("Error: There is no Battery Level!");
@@ -126,6 +127,10 @@ public class BatteryService {
         }
     }
 
+    /**
+     * The function sends a notification of the battery status through the socket (/notification).
+     * @param powerState
+     */
     private void notifyBatteryStatus(PowerStateType powerState) {
         if (simpMessagingTemplate != null) {
             JSONObject notificationObject = new  JSONObject();
