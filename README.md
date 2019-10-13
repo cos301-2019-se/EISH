@@ -13,7 +13,7 @@ monitoring the consumption of the energy.
 - <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/SRS_EISHv2Demo4.pdf" target="_blank">SRS & Architectural Design</a> <br>
 - <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/usermanual v2.pdf" target="_blank">User Manual</a> <br>
 - <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/CodingStandarddemo4.pdf" target="_blank">Coding Standards </a> <br>
-- <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/testingPolicyVersion2demo4.pdf" target="_blank">Testing Policy</a> <br>
+- <a href="https://github.com/cos301-2019-se/EISH/blob/master/Documentation/testingPolicyVersion21.pdf" target="_blank">Testing Policy</a> <br>
 </details>
 
 ### Project Management Tools
