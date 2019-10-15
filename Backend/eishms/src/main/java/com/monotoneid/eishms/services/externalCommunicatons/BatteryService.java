@@ -189,7 +189,7 @@ public class BatteryService {
                 notificationService.addNotification(notificationObject.getAsString("message"),
                         notificationObject.getAsString("priority"),
                         new Timestamp(System.currentTimeMillis()));
-            } else {
+            } else if (powerState == PowerStateType.POWERSTATE_NORMAL){
                 fullStatus = true;
                 lowStatus = true;
                 criticalStatus = true;
