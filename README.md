@@ -34,6 +34,12 @@ monitoring the consumption of the energy.
 - <a href="https://github.com/NtlatlengL" target="_blank">Lebogang Ntlatleng</a> <br>
 </details>
 
+### Additional 
+<details><summary> Select Addition</summary><br>
+
+- <a href="https://drive.google.com/file/d/1EzaKPE_m-Wd-0axso32IMKPb2cHTxkbj/view?usp=sharing" target="_blank">Technologies</a> <br>
+</details>
+
 
 
 
