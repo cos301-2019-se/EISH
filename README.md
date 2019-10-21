@@ -1,6 +1,6 @@
  <img src="https://github.com/cos301-2019-se/EISH/blob/frontend/Frontend/src/assets/logo/eishLogo.png" alt="eishms"	title="eishlogo" width="100" height="100" /> 
   
-# EISH: Energy Intrinsic Smart Home [![Build Status](https://travis-ci.org/cos301-2019-se/EISH.svg?branch=master)](https://travis-ci.org/cos301-2019-se/EISH) 
+# EISH: Energy Intrinsic Smart Home
 
 ### Description
 The Energy Intrinsic Smart Home Management System (EISHMS) is a software solution
